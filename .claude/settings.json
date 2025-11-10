@@ -1,0 +1,69 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash",
+      "WebSearch",
+      "Write",
+      "Update",
+      "Edit"
+    ],
+    "deny": [],
+    "ask": []
+  },
+  "model": "sonnet",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude\\hooks\\bash_hook.py"
+          },
+          {
+            "type": "command",
+            "command": ".claude\\hooks\\venv_activator.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Read",
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude\\hooks\\file_size_conditional_hook.py"
+          }
+        ]
+      },
+      {
+        "matcher": "Grep",
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude\\hooks\\grep_block_hook.py"
+          }
+        ]
+      },
+      {
+        "matcher": "Task",
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude\\hooks\\pretask_subtask_flag.py"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Task",
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude\\hooks\\posttask_subtask_flag.py"
+          }
+        ]
+      }
+    ]
+  }
+}

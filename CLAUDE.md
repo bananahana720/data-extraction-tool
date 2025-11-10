@@ -1,0 +1,272 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## Project Overview
+
+**Data Extraction Tool** - Enterprise document processing pipeline for RAG workflows. Transforms messy corporate audit documents into AI-optimized outputs using a five-stage modular pipeline architecture.
+
+**Status**: Brownfield modernization (Epic 1 - Foundation in progress)
+**Python**: 3.12+ (mandatory enterprise requirement)
+**Architecture**: `Extract → Normalize → Chunk → Semantic → Output`
+
+## Core Architecture
+
+### Five-Stage Pipeline Pattern
+
+Each stage is a composable, testable component using frozen dataclasses and ABC interfaces:
+
+1. **Extract** (`src/data_extract/extract/`) - Document format-specific extraction (PDF, DOCX, XLSX, PPTX, CSV, images+OCR)
+2. **Normalize** (`src/data_extract/normalize/`) - Text cleaning, entity standardization
+3. **Chunk** (`src/data_extract/chunk/`) - Semantic-aware chunking (spaCy-based)
+4. **Semantic** (`src/data_extract/semantic/`) - Classical NLP analysis (TF-IDF, LSA - no transformers per enterprise constraints)
+5. **Output** (`src/data_extract/output/`) - Multiple formats (JSON, TXT, CSV)
+
+### Key Data Models (Immutable)
+
+- `ExtractionResult` - Stage 1 output with content blocks
+- `ContentBlock` - Individual unit (text/table/image) with type + position + metadata
+- `ProcessingResult` - Stages 2-4 output, preserves structure
+- `FormattedOutput` - Stage 5 final output
+
+### Design Principles
+
+- **Modularity**: Each stage independent, testable, replaceable
+- **Immutability**: Frozen dataclasses prevent pipeline state mutations
+- **Type Safety**: Full type hints + Pydantic v2 validation enforced by mypy
+- **Interface-Based**: All modules implement ABCs (BaseExtractor, BaseProcessor, BaseFormatter)
+- **Determinism**: Same input always produces same output
+
+## Dual Codebase Structure
+
+### Greenfield (New Modular Architecture)
+`src/data_extract/` - Modern pipeline implementation following Epic-based development
+
+### Brownfield (Existing Code)
+`src/{cli,core,extractors,processors,formatters,infrastructure,pipeline}/` - Legacy code being assessed and consolidated (Story 1.2-1.4)
+
+**Important**: Both systems coexist during migration. Don't break existing brownfield code.
+
+## Development Commands
+
+### Setup
+```bash
+# Windows (primary target)
+python -m venv venv
+venv\Scripts\activate
+pip install -e ".[dev]"
+pre-commit install
+
+# macOS/Linux
+python -m venv venv
+source venv/bin/activate
+pip install -e ".[dev]"
+pre-commit install
+```
+
+### Testing (pytest with markers)
+```bash
+# Run all tests (includes 1000+ brownfield tests)
+pytest
+
+# With coverage
+pytest --cov=src --cov-report=html
+
+# By category
+pytest -m unit              # Fast unit tests only
+pytest -m integration       # Integration tests
+pytest -m extraction        # Extraction-specific tests
+pytest -m "not slow"        # Skip slow tests
+
+# Specific test file/function
+pytest tests/unit/test_extract/test_pdf.py
+pytest tests/unit/test_extract/test_pdf.py::test_basic_extraction
+
+# Debug mode
+pytest --pdb tests/unit/test_name.py        # Drop to debugger on failure
+pytest -vv --showlocals tests/unit/test.py  # Verbose with variables
+pytest -s tests/unit/test.py                 # Show print statements
+
+# Parallel execution
+pytest -n auto
+```
+
+**Test Markers**: `unit`, `integration`, `extraction`, `processing`, `formatting`, `pipeline`, `cli`, `slow`, `performance`
+
+### Code Quality (Enforced by Pre-commit)
+```bash
+# Format code (100 char line length)
+black src/ tests/
+
+# Lint code (modern, fast replacement for flake8)
+ruff check src/ tests/
+
+# Type check (strict mode, excludes brownfield)
+mypy src/data_extract/
+
+# Run all pre-commit hooks manually
+pre-commit run --all-files
+```
+
+**Note**: Pre-commit hooks run automatically on `git commit`. If blocked, fix the issues or ask user to check hook configuration.
+
+### CLI Entry Point
+```bash
+data-extract    # Typer-based CLI (Epic 5 - placeholder in Epic 1)
+```
+
+## Testing Strategy
+
+### Organization
+Tests mirror `src/` structure exactly:
+- `tests/unit/` - Fast, isolated tests
+- `tests/integration/` - Multi-component, end-to-end
+- `tests/performance/` - Benchmarks and stress tests
+- `tests/fixtures/` - Shared test data
+
+### Coverage Requirements
+- Epic 1: >60% baseline
+- Epic 2-4: >80% overall
+- Epic 5: >90% critical paths
+
+### Key Patterns
+- Use pytest fixtures for test data (see `tests/conftest.py`)
+- Use markers for selective execution
+- Mirror src/ structure exactly (e.g., `tests/unit/test_extract/test_pdf.py` mirrors `src/data_extract/extract/pdf.py`)
+- Include integration and performance tests for all stages
+
+## Code Conventions
+
+### Style (Enforced by Tools)
+- **Formatting**: Black (100 char lines, target Python 3.12)
+- **Linting**: Ruff (replaces flake8 + isort)
+- **Type Checking**: Mypy strict mode (excludes brownfield during migration)
+
+### Naming
+- Classes: `PascalCase` (e.g., `DocxExtractor`)
+- Functions/methods: `snake_case` (e.g., `extract_content`)
+- Constants: `UPPER_SNAKE_CASE` (e.g., `MAX_CHUNK_SIZE`)
+- Modules: `snake_case` (e.g., `context_linker.py`)
+
+### Required
+- Type hints on all public functions
+- Google-style docstrings for public APIs
+- Tests for all new functionality
+- Pre-commit compliance (black, ruff, mypy must pass)
+
+## Epic-Based Development
+
+### Current: Epic 1 - Foundation
+- ✅ Story 1.1: Project Infrastructure (complete)
+- 🔄 Story 1.2: Brownfield Codebase Assessment (in progress)
+- 📋 Story 1.3: Testing Framework & CI Pipeline
+- 📋 Story 1.4: Core Pipeline Architecture Consolidation
+
+### Upcoming
+- **Epic 2**: Extract & Normalize stages
+- **Epic 3**: Chunk & Output stages
+- **Epic 4**: Semantic analysis stage
+- **Epic 5**: CLI, batch processing, configuration cascade
+
+See `docs/epics.md` and `docs/stories/` for detailed story specifications.
+
+## Configuration (Epic 5)
+
+Four-tier precedence cascade:
+1. CLI flags (highest)
+2. Environment variables (`DATA_EXTRACT_*` prefix)
+3. YAML config file (`~/.data-extract/config.yaml` or project-local)
+4. Hardcoded defaults (lowest)
+
+Epic 1 sets up infrastructure; Epic 5 implements full cascade.
+
+## Technology Stack
+
+| Component | Technology | Rationale |
+|-----------|-----------|-----------|
+| CLI | Typer | Type-safe, modern, minimal boilerplate |
+| UI | Rich | Industry-standard progress bars |
+| Data Models | Pydantic v2 | Runtime validation, schema generation |
+| PDF | PyMuPDF | Fast, handles native + OCR fallback |
+| Office | python-docx, openpyxl, python-pptx | Mature, standard libraries |
+| OCR | pytesseract | Tesseract wrapper with confidence scores |
+| Chunking | spaCy | Production-ready sentence boundaries |
+| Semantic | scikit-learn | TF-IDF, LSA, cosine similarity |
+| Advanced NLP | gensim | Word2Vec, LDA (optional) |
+| Quality | textstat | Readability metrics |
+| Logging | structlog | Structured JSON for audit trails |
+| Testing | pytest | Industry standard with rich ecosystem |
+| Type Checking | mypy | Static analysis, gradual typing |
+| Linting | ruff | Fast, modern, replaces flake8 |
+
+**Enterprise Constraint**: Classical NLP only - no transformer models allowed.
+
+## Common Tasks
+
+### Adding a New Extractor
+1. Create `src/data_extract/extract/{format}.py`
+2. Implement `BaseExtractor` ABC
+3. Add tests in `tests/unit/test_extract/test_{format}.py`
+4. Register in pipeline's `FORMAT_EXTENSIONS` mapping
+5. Update documentation
+
+### Adding a New Processing Stage
+1. Define stage interface in `src/data_extract/core/`
+2. Implement processor in appropriate module
+3. Add unit tests with fixtures
+4. Add integration tests with sample documents
+5. Wire into pipeline configuration
+
+### Running Specific Test Suites
+```bash
+# All extraction tests
+pytest -m extraction
+
+# PDF extraction only
+pytest tests/unit/test_extract/test_pdf.py
+
+# Integration tests for entire pipeline
+pytest -m integration tests/integration/test_pipeline.py
+```
+
+## Key Architecture Decisions
+
+- **ADR-001**: Immutable models prevent pipeline state corruption
+- **ADR-002**: Pluggable extractors isolate format-specific logic
+- **ADR-003**: ContentBlocks preserve document structure over raw text
+- **ADR-004**: Classical NLP only (enterprise constraint - no transformers)
+- **ADR-005**: Gradual brownfield modernization (don't break production)
+
+See `docs/architecture.md` for full details.
+
+## Documentation References
+
+- `docs/architecture.md` - Technical architecture and ADRs
+- `docs/PRD.md` - Product requirements and vision
+- `docs/tech-spec-epic-1.md` - Epic 1 technical specification
+- `docs/brownfield-assessment.md` - Existing code analysis
+- `docs/epics.md` - Epic breakdown and roadmap
+- `docs/stories/` - Story-level implementation specs
+- `pyproject.toml` - Project configuration and dependencies
+- `.pre-commit-config.yaml` - Code quality hooks
+
+## Important Notes
+
+### Search Tools
+**Always use ripgrep (rg), never grep**. The tool is configured to use rg for performance.
+
+### Brownfield Code
+Existing code in `src/{cli,extractors,processors,formatters,core,pipeline,infrastructure}/` is being assessed and consolidated. During Epic 1, both systems coexist. Don't remove or refactor brownfield code without checking Story 1.2 assessment first.
+
+### Type Checking Exclusions
+Mypy excludes brownfield packages during migration (see `pyproject.toml` `[tool.mypy]` section). New code in `src/data_extract/` must pass strict type checking.
+
+### Testing Philosophy
+- Tests mirror source structure exactly
+- Use markers for selective execution
+- Coverage requirements increase by epic
+- Integration tests validate end-to-end workflows
+- Performance tests catch regressions early
+
+### Error Handling
+Pipeline uses "continue-on-error" pattern - graceful degradation per file. Don't fail entire batch on single document error.

@@ -1,0 +1,112 @@
+# Logging Configuration Template
+#
+# This file demonstrates all available configuration options for the
+# logging framework. Copy and customize for your deployment.
+
+logging:
+  # Logging specification version
+  version: 1
+
+  # Global log level (DEBUG, INFO, WARNING, ERROR, CRITICAL)
+  # More verbose levels include all less verbose levels
+  level: INFO
+
+  # Log format: "json" for structured logging, "text" for human-readable
+  # JSON is recommended for production (machine parsing, log aggregation)
+  format: json
+
+  # Handler configuration (where logs are sent)
+  handlers:
+    # File handler - writes logs to rotating files
+    file:
+      enabled: true
+      path: logs/extraction.log
+
+      # Rotation settings
+      max_bytes: 10485760  # 10MB - rotate when file reaches this size
+      backup_count: 5      # Keep 5 backup files (extraction.log.1, .2, etc.)
+
+    # Console handler - writes logs to stdout/stderr
+    console:
+      enabled: false  # Disable in production, enable for development
+
+
+# Environment-Specific Configurations
+# ------------------------------------
+
+# Development Configuration
+# logging:
+#   version: 1
+#   level: DEBUG
+#   format: text
+#   handlers:
+#     file:
+#       enabled: true
+#       path: logs/dev.log
+#       max_bytes: 1048576  # 1MB
+#       backup_count: 3
+#     console:
+#       enabled: true
+
+
+# Production Configuration
+# logging:
+#   version: 1
+#   level: INFO
+#   format: json
+#   handlers:
+#     file:
+#       enabled: true
+#       path: /var/log/extraction/production.log
+#       max_bytes: 104857600  # 100MB
+#       backup_count: 10
+#     console:
+#       enabled: false
+
+
+# Debug Configuration (verbose logging)
+# logging:
+#   version: 1
+#   level: DEBUG
+#   format: json
+#   handlers:
+#     file:
+#       enabled: true
+#       path: logs/debug.log
+#       max_bytes: 5242880  # 5MB
+#       backup_count: 2
+#     console:
+#       enabled: true
+
+
+# Notes:
+# ------
+#
+# Log Levels:
+#   DEBUG    - Detailed diagnostic information (per-block extraction, etc.)
+#   INFO     - General informational messages (extraction started/completed)
+#   WARNING  - Warning messages (non-fatal issues, truncations)
+#   ERROR    - Error messages (extraction failures)
+#   CRITICAL - Critical failures (system-level issues)
+#
+# File Rotation:
+#   When a log file reaches max_bytes, it's renamed to .1 and a new file
+#   is created. Older backups are incremented (.1 -> .2, etc.) and the
+#   oldest backup beyond backup_count is deleted.
+#
+# JSON Format Fields:
+#   timestamp       - ISO 8601 timestamp
+#   level           - Log level (INFO, ERROR, etc.)
+#   message         - Log message
+#   module          - Python module name
+#   function        - Function name
+#   line            - Line number
+#   correlation_id  - Request tracking ID (if set)
+#   duration_seconds - Operation duration (if using @timed or timer())
+#   [custom fields] - Any extra fields passed via extra={...}
+#
+# Performance:
+#   - JSON formatting has minimal overhead (<5% in real workloads)
+#   - File I/O is buffered for efficiency
+#   - Rotating file handler is thread-safe
+#   - Log level filtering happens before formatting (fast)

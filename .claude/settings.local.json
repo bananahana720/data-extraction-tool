@@ -1,0 +1,36 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pytest:*)",
+      "Bash(if [ -d \"venv\" ])",
+      "Bash(then source venv/bin/activate)",
+      "Bash(elif [ -d \"venv\" ])",
+      "Bash([ -f \"venv/Scripts/activate\" ])",
+      "Bash(then source venv/Scripts/activate)",
+      "Bash(else echo \"Virtual environment not found\")",
+      "Bash(fi)",
+      "Bash(./venv/Scripts/python.exe -m pytest --version)",
+      "Bash(python -m pytest:*)",
+      "Bash(./venv/Scripts/python.exe -m pytest:*)",
+      "Bash(elif [ -d \".venv\" ])",
+      "Bash(then source .venv/bin/activate)",
+      "Bash(elif [ -f \"venv/Scripts/activate\" ])"
+    ],
+    "deny": [],
+    "ask": []
+  },
+  "model": "sonnet",
+  "hooks": {
+    "SubagentStop": [
+      {
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "Evaluate if this subagent should stop. Input: $ARGUMENTS\n\nCheck if:\n- The subagent completed its assigned task\n- Any errors occurred that need fixing\n- Additional context gathering is needed\n\nReturn: {\"decision\": \"approve\" or \"block\", \"reason\": \"explanation\"}"
+          }
+        ]
+      }
+    ]
+  },
+  "outputStyle": "default"
+}

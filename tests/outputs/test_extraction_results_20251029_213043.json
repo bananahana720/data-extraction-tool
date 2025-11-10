@@ -1,0 +1,346 @@
+{
+  "timestamp": "2025-10-29T21:30:43.370109",
+  "total_files": 16,
+  "successful": 16,
+  "failed": 0,
+  "success_rate": 100.0,
+  "by_type": {
+    "pdf": {
+      "total": 8,
+      "success": 8,
+      "failed": 0
+    },
+    "xlsx": {
+      "total": 3,
+      "success": 3,
+      "failed": 0
+    },
+    "txt": {
+      "total": 5,
+      "success": 5,
+      "failed": 0
+    }
+  },
+  "metrics": {
+    "total_duration_seconds": 187.446384,
+    "avg_duration_seconds": 11.715399,
+    "total_blocks_extracted": 14990,
+    "avg_quality_score": 78.33333333333334
+  },
+  "detailed_results": [
+    {
+      "file_name": "COBIT-2019-Design-Guide_res_eng_1218.pdf",
+      "file_type": "pdf",
+      "file_size": 11912641,
+      "timestamp": "2025-10-29T21:27:35.858089",
+      "success": true,
+      "errors": [],
+      "warnings": [
+        "17 blocks with readability issues"
+      ],
+      "metrics": {
+        "duration_seconds": 72.305542,
+        "blocks_extracted": 3025,
+        "quality_score": 66.66666666666667
+      },
+      "output_files": [
+        "C:\\Users\\Andrew\\Documents\\AI ideas for fun and work\\Prompt Research\\Data Extraction\\data-extractor-tool\\test-extraction-outputs\\COBIT-2019-Design-Guide_res_eng_1218_json.json",
+        "C:\\Users\\Andrew\\Documents\\AI ideas for fun and work\\Prompt Research\\Data Extraction\\data-extractor-tool\\test-extraction-outputs\\COBIT-2019-Design-Guide_res_eng_1218_markdown.markdown"
+      ]
+    },
+    {
+      "file_name": "COBIT-2019-Framework-Governance-and-Management-Objectives_res_eng_1118.pdf",
+      "file_type": "pdf",
+      "file_size": 5943271,
+      "timestamp": "2025-10-29T21:28:48.177011",
+      "success": true,
+      "errors": [],
+      "warnings": [
+        "15 blocks with readability issues"
+      ],
+      "metrics": {
+        "duration_seconds": 29.953423,
+        "blocks_extracted": 6642,
+        "quality_score": 66.66666666666667
+      },
+      "output_files": [
+        "C:\\Users\\Andrew\\Documents\\AI ideas for fun and work\\Prompt Research\\Data Extraction\\data-extractor-tool\\test-extraction-outputs\\COBIT-2019-Framework-Governance-and-Management-Objectives_res_eng_1118_json.json",
+        "C:\\Users\\Andrew\\Documents\\AI ideas for fun and work\\Prompt Research\\Data Extraction\\data-extractor-tool\\test-extraction-outputs\\COBIT-2019-Framework-Governance-and-Management-Objectives_res_eng_1118_markdown.markdown"
+      ]
+    },
+    {
+      "file_name": "COBIT-2019-Framework-Introduction-and-Methodology_res_eng_1118.pdf",
+      "file_type": "pdf",
+      "file_size": 826660,
+      "timestamp": "2025-10-29T21:29:18.151249",
+      "success": true,
+      "errors": [],
+      "warnings": [
+        "11 blocks with readability issues"
+      ],
+      "metrics": {
+        "duration_seconds": 12.252898,
+        "blocks_extracted": 478,
+        "quality_score": 76.66666666666667
+      },
+      "output_files": [
+        "C:\\Users\\Andrew\\Documents\\AI ideas for fun and work\\Prompt Research\\Data Extraction\\data-extractor-tool\\test-extraction-outputs\\COBIT-2019-Framework-Introduction-and-Methodology_res_eng_1118_json.json",
+        "C:\\Users\\Andrew\\Documents\\AI ideas for fun and work\\Prompt Research\\Data Extraction\\data-extractor-tool\\test-extraction-outputs\\COBIT-2019-Framework-Introduction-and-Methodology_res_eng_1118_markdown.markdown"
+      ]
+    },
+    {
+      "file_name": "COBIT-2019-Implementation-Guide_res_eng_1218.pdf",
+      "file_type": "pdf",
+      "file_size": 2965302,
+      "timestamp": "2025-10-29T21:29:30.406886",
+      "success": true,
+      "errors": [],
+      "warnings": [
+        "11 blocks with readability issues"
+      ],
+      "metrics": {
+        "duration_seconds": 21.573605,
+        "blocks_extracted": 687,
+        "quality_score": 75.0
+      },
+      "output_files": [
+        "C:\\Users\\Andrew\\Documents\\AI ideas for fun and work\\Prompt Research\\Data Extraction\\data-extractor-tool\\test-extraction-outputs\\COBIT-2019-Implementation-Guide_res_eng_1218_json.json",
+        "C:\\Users\\Andrew\\Documents\\AI ideas for fun and work\\Prompt Research\\Data Extraction\\data-extractor-tool\\test-extraction-outputs\\COBIT-2019-Implementation-Guide_res_eng_1218_markdown.markdown"
+      ]
+    },
+    {
+      "file_name": "Compliance-Risk-Management-Applying-the-COSO-ERM-Framework.pdf",
+      "file_type": "pdf",
+      "file_size": 6790709,
+      "timestamp": "2025-10-29T21:29:51.984611",
+      "success": true,
+      "errors": [],
+      "warnings": [
+        "5 blocks with readability issues"
+      ],
+      "metrics": {
+        "duration_seconds": 8.396647,
+        "blocks_extracted": 481,
+        "quality_score": 91.66666666666667
+      },
+      "output_files": [
+        "C:\\Users\\Andrew\\Documents\\AI ideas for fun and work\\Prompt Research\\Data Extraction\\data-extractor-tool\\test-extraction-outputs\\Compliance-Risk-Management-Applying-the-COSO-ERM-Framework_json.json",
+        "C:\\Users\\Andrew\\Documents\\AI ideas for fun and work\\Prompt Research\\Data Extraction\\data-extractor-tool\\test-extraction-outputs\\Compliance-Risk-Management-Applying-the-COSO-ERM-Framework_markdown.markdown"
+      ]
+    },
+    {
+      "file_name": "NIST.SP.800-37r2.pdf",
+      "file_type": "pdf",
+      "file_size": 2270327,
+      "timestamp": "2025-10-29T21:30:00.384116",
+      "success": true,
+      "errors": [],
+      "warnings": [
+        "568 blocks with readability issues"
+      ],
+      "metrics": {
+        "duration_seconds": 23.813352,
+        "blocks_extracted": 2747,
+        "quality_score": 66.66666666666667
+      },
+      "output_files": [
+        "C:\\Users\\Andrew\\Documents\\AI ideas for fun and work\\Prompt Research\\Data Extraction\\data-extractor-tool\\test-extraction-outputs\\NIST.SP.800-37r2_json.json",
+        "C:\\Users\\Andrew\\Documents\\AI ideas for fun and work\\Prompt Research\\Data Extraction\\data-extractor-tool\\test-extraction-outputs\\NIST.SP.800-37r2_markdown.markdown"
+      ]
+    },
+    {
+      "file_name": "OWASP - AI Exchange - Overview.pdf",
+      "file_type": "pdf",
+      "file_size": 1655447,
+      "timestamp": "2025-10-29T21:30:24.206597",
+      "success": true,
+      "errors": [],
+      "warnings": [
+        "59 blocks with readability issues"
+      ],
+      "metrics": {
+        "duration_seconds": 4.537134,
+        "blocks_extracted": 120,
+        "quality_score": 66.66666666666667
+      },
+      "output_files": [
+        "C:\\Users\\Andrew\\Documents\\AI ideas for fun and work\\Prompt Research\\Data Extraction\\data-extractor-tool\\test-extraction-outputs\\OWASP - AI Exchange - Overview_json.json",
+        "C:\\Users\\Andrew\\Documents\\AI ideas for fun and work\\Prompt Research\\Data Extraction\\data-extractor-tool\\test-extraction-outputs\\OWASP - AI Exchange - Overview_markdown.markdown"
+      ]
+    },
+    {
+      "file_name": "OWASP-LLM_GenAI-Security-Solutions-Reference-Guide-v1.1.25.pdf",
+      "file_type": "pdf",
+      "file_size": 3077999,
+      "timestamp": "2025-10-29T21:30:28.745297",
+      "success": true,
+      "errors": [],
+      "warnings": [
+        "46 blocks with readability issues"
+      ],
+      "metrics": {
+        "duration_seconds": 12.033758,
+        "blocks_extracted": 595,
+        "quality_score": 66.66666666666667
+      },
+      "output_files": [
+        "C:\\Users\\Andrew\\Documents\\AI ideas for fun and work\\Prompt Research\\Data Extraction\\data-extractor-tool\\test-extraction-outputs\\OWASP-LLM_GenAI-Security-Solutions-Reference-Guide-v1.1.25_json.json",
+        "C:\\Users\\Andrew\\Documents\\AI ideas for fun and work\\Prompt Research\\Data Extraction\\data-extractor-tool\\test-extraction-outputs\\OWASP-LLM_GenAI-Security-Solutions-Reference-Guide-v1.1.25_markdown.markdown"
+      ]
+    },
+    {
+      "file_name": "NIST-Privacy-Framework-V1.0-Core.xlsx",
+      "file_type": "xlsx",
+      "file_size": 115952,
+      "timestamp": "2025-10-29T21:30:40.781428",
+      "success": true,
+      "errors": [],
+      "warnings": [],
+      "metrics": {
+        "duration_seconds": 1.406482,
+        "blocks_extracted": 1,
+        "quality_score": 93.33333333333333
+      },
+      "output_files": [
+        "C:\\Users\\Andrew\\Documents\\AI ideas for fun and work\\Prompt Research\\Data Extraction\\data-extractor-tool\\test-extraction-outputs\\NIST-Privacy-Framework-V1.0-Core_json.json",
+        "C:\\Users\\Andrew\\Documents\\AI ideas for fun and work\\Prompt Research\\Data Extraction\\data-extractor-tool\\test-extraction-outputs\\NIST-Privacy-Framework-V1.0-Core_markdown.markdown"
+      ]
+    },
+    {
+      "file_name": "NIST_SP-800-53_rev5-derived-OSCAL.xlsx",
+      "file_type": "xlsx",
+      "file_size": 378937,
+      "timestamp": "2025-10-29T21:30:42.188964",
+      "success": true,
+      "errors": [],
+      "warnings": [],
+      "metrics": {
+        "duration_seconds": 0.18249,
+        "blocks_extracted": 2,
+        "quality_score": 93.33333333333333
+      },
+      "output_files": [
+        "C:\\Users\\Andrew\\Documents\\AI ideas for fun and work\\Prompt Research\\Data Extraction\\data-extractor-tool\\test-extraction-outputs\\NIST_SP-800-53_rev5-derived-OSCAL_json.json",
+        "C:\\Users\\Andrew\\Documents\\AI ideas for fun and work\\Prompt Research\\Data Extraction\\data-extractor-tool\\test-extraction-outputs\\NIST_SP-800-53_rev5-derived-OSCAL_markdown.markdown"
+      ]
+    },
+    {
+      "file_name": "sp800-53ar5-assessment-procedures.xlsx",
+      "file_type": "xlsx",
+      "file_size": 468556,
+      "timestamp": "2025-10-29T21:30:42.372201",
+      "success": true,
+      "errors": [],
+      "warnings": [],
+      "metrics": {
+        "duration_seconds": 0.980665,
+        "blocks_extracted": 1,
+        "quality_score": 93.33333333333333
+      },
+      "output_files": [
+        "C:\\Users\\Andrew\\Documents\\AI ideas for fun and work\\Prompt Research\\Data Extraction\\data-extractor-tool\\test-extraction-outputs\\sp800-53ar5-assessment-procedures_json.json",
+        "C:\\Users\\Andrew\\Documents\\AI ideas for fun and work\\Prompt Research\\Data Extraction\\data-extractor-tool\\test-extraction-outputs\\sp800-53ar5-assessment-procedures_markdown.markdown"
+      ]
+    },
+    {
+      "file_name": "test_case_01_mixed_format.txt",
+      "file_type": "txt",
+      "file_size": 4975,
+      "timestamp": "2025-10-29T21:30:43.353964",
+      "success": true,
+      "errors": [],
+      "warnings": [
+        "7 blocks with readability issues"
+      ],
+      "metrics": {
+        "duration_seconds": 0.00121,
+        "blocks_extracted": 19,
+        "quality_score": 86.66666666666667
+      },
+      "output_files": [
+        "C:\\Users\\Andrew\\Documents\\AI ideas for fun and work\\Prompt Research\\Data Extraction\\data-extractor-tool\\test-extraction-outputs\\test_case_01_mixed_format_json.json",
+        "C:\\Users\\Andrew\\Documents\\AI ideas for fun and work\\Prompt Research\\Data Extraction\\data-extractor-tool\\test-extraction-outputs\\test_case_01_mixed_format_markdown.markdown"
+      ]
+    },
+    {
+      "file_name": "test_case_02_degraded_ocr.txt",
+      "file_type": "txt",
+      "file_size": 5122,
+      "timestamp": "2025-10-29T21:30:43.356132",
+      "success": true,
+      "errors": [],
+      "warnings": [
+        "2 blocks with readability issues"
+      ],
+      "metrics": {
+        "duration_seconds": 0.001304,
+        "blocks_extracted": 25,
+        "quality_score": 96.66666666666667
+      },
+      "output_files": [
+        "C:\\Users\\Andrew\\Documents\\AI ideas for fun and work\\Prompt Research\\Data Extraction\\data-extractor-tool\\test-extraction-outputs\\test_case_02_degraded_ocr_json.json",
+        "C:\\Users\\Andrew\\Documents\\AI ideas for fun and work\\Prompt Research\\Data Extraction\\data-extractor-tool\\test-extraction-outputs\\test_case_02_degraded_ocr_markdown.markdown"
+      ]
+    },
+    {
+      "file_name": "test_case_03_nested_structure.txt",
+      "file_type": "txt",
+      "file_size": 14657,
+      "timestamp": "2025-10-29T21:30:43.359049",
+      "success": true,
+      "errors": [],
+      "warnings": [
+        "9 blocks with readability issues"
+      ],
+      "metrics": {
+        "duration_seconds": 0.001793,
+        "blocks_extracted": 8,
+        "quality_score": 80.0
+      },
+      "output_files": [
+        "C:\\Users\\Andrew\\Documents\\AI ideas for fun and work\\Prompt Research\\Data Extraction\\data-extractor-tool\\test-extraction-outputs\\test_case_03_nested_structure_json.json",
+        "C:\\Users\\Andrew\\Documents\\AI ideas for fun and work\\Prompt Research\\Data Extraction\\data-extractor-tool\\test-extraction-outputs\\test_case_03_nested_structure_markdown.markdown"
+      ]
+    },
+    {
+      "file_name": "test_case_04_formatting_chaos.txt",
+      "file_type": "txt",
+      "file_size": 12430,
+      "timestamp": "2025-10-29T21:30:43.361979",
+      "success": true,
+      "errors": [],
+      "warnings": [
+        "37 blocks with readability issues"
+      ],
+      "metrics": {
+        "duration_seconds": 0.00271,
+        "blocks_extracted": 59,
+        "quality_score": 66.66666666666667
+      },
+      "output_files": [
+        "C:\\Users\\Andrew\\Documents\\AI ideas for fun and work\\Prompt Research\\Data Extraction\\data-extractor-tool\\test-extraction-outputs\\test_case_04_formatting_chaos_json.json",
+        "C:\\Users\\Andrew\\Documents\\AI ideas for fun and work\\Prompt Research\\Data Extraction\\data-extractor-tool\\test-extraction-outputs\\test_case_04_formatting_chaos_markdown.markdown"
+      ]
+    },
+    {
+      "file_name": "test_case_05_technical_dense.txt",
+      "file_type": "txt",
+      "file_size": 18960,
+      "timestamp": "2025-10-29T21:30:43.365664",
+      "success": true,
+      "errors": [],
+      "warnings": [
+        "31 blocks with readability issues"
+      ],
+      "metrics": {
+        "duration_seconds": 0.003371,
+        "blocks_extracted": 100,
+        "quality_score": 66.66666666666667
+      },
+      "output_files": [
+        "C:\\Users\\Andrew\\Documents\\AI ideas for fun and work\\Prompt Research\\Data Extraction\\data-extractor-tool\\test-extraction-outputs\\test_case_05_technical_dense_json.json",
+        "C:\\Users\\Andrew\\Documents\\AI ideas for fun and work\\Prompt Research\\Data Extraction\\data-extractor-tool\\test-extraction-outputs\\test_case_05_technical_dense_markdown.markdown"
+      ]
+    }
+  ]
+}

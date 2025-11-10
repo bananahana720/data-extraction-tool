@@ -1,0 +1,284 @@
+# Data Extractor Tool - Example Configuration Schema
+#
+# This file demonstrates all supported configuration options for the
+# data extraction tool. Copy this to your project directory and customize
+# as needed.
+#
+# Configuration Priority (highest to lowest):
+#   1. Environment variables (DATA_EXTRACTOR_*)
+#   2. Configuration file (this file)
+#   3. Built-in defaults
+
+# ============================================================================
+# General Settings
+# ============================================================================
+general:
+  # Application name (for logging and identification)
+  app_name: "data-extractor-tool"
+
+  # Version (automatically set by application)
+  version: "1.0.0"
+
+  # Working directory for temporary files
+  work_dir: "./tmp"
+
+  # Maximum parallel extractors (for batch processing)
+  max_workers: 4
+
+# ============================================================================
+# Logging Configuration
+# ============================================================================
+logging:
+  # Log level: DEBUG, INFO, WARNING, ERROR, CRITICAL
+  level: "INFO"
+
+  # Log format (Python logging format string)
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+
+  # Output destination: console, file, or both
+  output: "console"
+
+  # Log file path (when output is 'file' or 'both')
+  file_path: "./logs/extractor.log"
+
+  # Rotate log files
+  rotate: true
+
+  # Max log file size before rotation (in MB)
+  max_size_mb: 10
+
+  # Number of backup log files to keep
+  backup_count: 5
+
+# ============================================================================
+# Extractor Settings
+# ============================================================================
+extractors:
+  # Microsoft Word (.docx) Extractor
+  docx:
+    # Maximum characters per paragraph (truncate if longer)
+    # Set to null/None for no limit
+    max_paragraph_length: null
+
+    # Skip empty paragraphs in extraction
+    skip_empty: true
+
+    # Extract style information (fonts, colors, etc.)
+    extract_styles: true
+
+    # Extract tables (future feature)
+    extract_tables: false
+
+    # Extract images (future feature)
+    extract_images: false
+
+    # Extract headers and footers (future feature)
+    extract_headers_footers: false
+
+  # PDF Extractor
+  pdf:
+    # Use OCR for scanned PDFs
+    use_ocr: true
+
+    # OCR DPI (higher = better quality, slower processing)
+    ocr_dpi: 300
+
+    # OCR language (ISO 639-2 code)
+    ocr_language: "eng"
+
+    # Extract images from PDF
+    extract_images: false
+
+    # Page range to extract (null for all pages)
+    # Format: [start_page, end_page] (1-indexed)
+    page_range: null
+
+    # Skip empty pages
+    skip_empty_pages: true
+
+  # PowerPoint (.pptx) Extractor
+  pptx:
+    # Extract speaker notes
+    extract_notes: true
+
+    # Extract slide numbers
+    extract_slide_numbers: true
+
+    # Extract images from slides
+    extract_images: false
+
+    # Maximum text length per slide
+    max_slide_text_length: null
+
+  # Excel (.xlsx) Extractor
+  xlsx:
+    # Sheet names to extract (null for all sheets)
+    sheet_names: null
+
+    # Skip empty rows
+    skip_empty_rows: true
+
+    # Skip empty columns
+    skip_empty_columns: true
+
+    # Treat first row as header
+    has_header: true
+
+    # Maximum rows to extract per sheet (null for all)
+    max_rows: null
+
+# ============================================================================
+# Processor Settings
+# ============================================================================
+processors:
+  # Context Linker - Builds document structure tree
+  context_linker:
+    # Enable context linking
+    enabled: true
+
+    # Link depth (how many levels of nesting to track)
+    max_depth: 10
+
+  # Metadata Aggregator - Computes statistics
+  metadata_aggregator:
+    # Enable metadata aggregation
+    enabled: true
+
+    # Compute word count
+    compute_word_count: true
+
+    # Compute character count
+    compute_character_count: true
+
+    # Detect language
+    detect_language: false
+
+  # Quality Validator - Scores extraction quality
+  quality_validator:
+    # Enable quality validation
+    enabled: true
+
+    # Minimum acceptable quality score (0.0-1.0)
+    min_quality_score: 0.70
+
+    # Fail extraction if quality too low
+    fail_on_low_quality: false
+
+# ============================================================================
+# Formatter Settings
+# ============================================================================
+formatters:
+  # JSON Formatter
+  json:
+    # Pretty-print JSON output
+    indent: 2
+
+    # Include null values in output
+    include_nulls: false
+
+    # Sort keys alphabetically
+    sort_keys: false
+
+  # Markdown Formatter
+  markdown:
+    # Include table of contents
+    include_toc: true
+
+    # TOC depth (heading levels to include)
+    toc_depth: 3
+
+    # Code block language for syntax highlighting
+    code_language: "text"
+
+  # Chunked Text Formatter (for LLM consumption)
+  chunked:
+    # Maximum tokens per chunk
+    max_tokens: 4000
+
+    # Overlap between chunks (in tokens)
+    chunk_overlap: 200
+
+    # Chunking strategy: "paragraph", "sentence", "token"
+    strategy: "paragraph"
+
+    # Preserve context in chunks (include headings)
+    preserve_context: true
+
+# ============================================================================
+# Pipeline Settings
+# ============================================================================
+pipeline:
+  # Stop pipeline on first error
+  fail_fast: false
+
+  # Retry failed stages
+  retry_on_failure: true
+
+  # Maximum retry attempts
+  max_retries: 3
+
+  # Delay between retries (in seconds)
+  retry_delay: 1.0
+
+  # Enable progress reporting
+  show_progress: true
+
+  # Track performance metrics
+  track_metrics: true
+
+# ============================================================================
+# Performance Settings
+# ============================================================================
+performance:
+  # Enable caching
+  enable_cache: true
+
+  # Cache directory
+  cache_dir: "./.cache"
+
+  # Cache expiration (in seconds, null for no expiration)
+  cache_expiration: 3600
+
+  # Memory limit per extractor (in MB)
+  memory_limit_mb: 500
+
+  # Timeout for single file extraction (in seconds)
+  extraction_timeout: 300
+
+# ============================================================================
+# Security Settings
+# ============================================================================
+security:
+  # Validate file signatures (magic bytes)
+  validate_file_signatures: true
+
+  # Maximum file size (in MB)
+  max_file_size_mb: 100
+
+  # Allowed file extensions
+  allowed_extensions:
+    - ".docx"
+    - ".pdf"
+    - ".pptx"
+    - ".xlsx"
+
+  # Scan for malware (requires external tool)
+  scan_malware: false
+
+  # Sanitize extracted content
+  sanitize_content: true
+
+# ============================================================================
+# Environment Variable Overrides
+# ============================================================================
+# Any setting can be overridden with environment variables using the format:
+#   DATA_EXTRACTOR_<SECTION>_<KEY>
+#
+# Examples:
+#   DATA_EXTRACTOR_LOGGING_LEVEL=DEBUG
+#   DATA_EXTRACTOR_EXTRACTORS_DOCX_MAX_PARAGRAPH_LENGTH=500
+#   DATA_EXTRACTOR_PERFORMANCE_MEMORY_LIMIT_MB=1000
+#
+# Note: Nested keys with underscores (like skip_empty) are intelligently
+# matched, so DATA_EXTRACTOR_EXTRACTORS_DOCX_SKIP_EMPTY=false will correctly
+# override extractors.docx.skip_empty

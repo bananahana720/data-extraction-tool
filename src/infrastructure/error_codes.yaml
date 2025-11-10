@@ -1,0 +1,281 @@
+# Error Code Registry for Data Extraction Tool
+# Format: EXXX where X is a digit
+# Categories: E001-E099 (Validation), E100-E199 (Extraction), E200-E299 (Processing),
+#            E300-E399 (Formatting), E400-E499 (Config), E500-E599 (Resource)
+
+# Validation Errors (E001-E099)
+E001:
+  category: ValidationError
+  message: "The file you specified could not be found. Please check the file path and try again."
+  technical_message: "File not found: {file_path}"
+  recoverable: false
+  suggested_action: "Verify the file path is correct and the file exists."
+
+E002:
+  category: ValidationError
+  message: "You don't have permission to access this file. Please check file permissions."
+  technical_message: "Permission denied reading file: {file_path}"
+  recoverable: false
+  suggested_action: "Contact your system administrator to grant read access to this file."
+
+E003:
+  category: ValidationError
+  message: "The file appears to be empty. Please provide a file with content."
+  technical_message: "File is empty (0 bytes): {file_path}"
+  recoverable: false
+  suggested_action: "Check that the file contains content before processing."
+
+E004:
+  category: ValidationError
+  message: "The path you provided is a directory, not a file. Please specify a file."
+  technical_message: "Path is a directory: {file_path}"
+  recoverable: false
+  suggested_action: "Provide a path to a file, not a directory."
+
+E005:
+  category: ValidationError
+  message: "The file type is not supported. Supported types are: DOCX, PDF, PPTX, XLSX."
+  technical_message: "Unsupported file format: {format}"
+  recoverable: false
+  suggested_action: "Convert the file to a supported format or use a different file."
+
+E006:
+  category: ValidationError
+  message: "The file is too large to process. Maximum size is {max_size}."
+  technical_message: "File exceeds size limit: {file_size} > {max_size}"
+  recoverable: false
+  suggested_action: "Split the file into smaller parts or increase the size limit in configuration."
+
+# Extraction Errors (E100-E199)
+E100:
+  category: ExtractionError
+  message: "The document could not be opened. It may be corrupted or password-protected."
+  technical_message: "Failed to open document: {file_path}"
+  recoverable: false
+  suggested_action: "Verify the file is not corrupted. If password-protected, remove the password first."
+
+E101:
+  category: ExtractionError
+  message: "The document structure is invalid. The file may be corrupted."
+  technical_message: "Invalid document structure: {details}"
+  recoverable: false
+  suggested_action: "Try opening the file in its native application to verify it's not corrupted."
+
+E102:
+  category: ExtractionError
+  message: "The document is password-protected. Please remove the password and try again."
+  technical_message: "Document is encrypted: {file_path}"
+  recoverable: false
+  suggested_action: "Open the document, remove password protection, and save before processing."
+
+E103:
+  category: ExtractionError
+  message: "No text content could be extracted from this document."
+  technical_message: "No extractable content found in: {file_path}"
+  recoverable: false
+  suggested_action: "Verify the document contains text content, not just images."
+
+E104:
+  category: ExtractionError
+  message: "An error occurred while reading the document. Some content may be missing."
+  technical_message: "Partial extraction failure at {location}: {details}"
+  recoverable: true
+  suggested_action: "Review the extracted content to verify completeness."
+
+E105:
+  category: ExtractionError
+  message: "The document contains an unsupported feature. Some content may not be extracted."
+  technical_message: "Unsupported feature encountered: {feature_type}"
+  recoverable: true
+  suggested_action: "Review extracted content. Consider manual review of original document."
+
+# DOCX-Specific Errors (E110-E129)
+E110:
+  category: ExtractionError
+  message: "The Word document structure is invalid. It may have been created with an incompatible tool."
+  technical_message: "DOCX XML structure error: {details}"
+  recoverable: false
+  suggested_action: "Try opening and re-saving the document in Microsoft Word."
+
+E111:
+  category: ExtractionError
+  message: "The Word document contains embedded objects that cannot be extracted."
+  technical_message: "DOCX embedded object extraction failed: {object_type}"
+  recoverable: true
+  suggested_action: "Some content may be missing. Review the original document."
+
+# PDF-Specific Errors (E130-E149)
+E130:
+  category: ExtractionError
+  message: "The PDF could not be read. It may use an unsupported encryption method."
+  technical_message: "PDF encryption not supported: {encryption_type}"
+  recoverable: false
+  suggested_action: "Remove encryption from the PDF or use a different version."
+
+E131:
+  category: ExtractionError
+  message: "The PDF appears to be scanned images. OCR processing is required."
+  technical_message: "PDF contains no text layer, OCR needed for: {file_path}"
+  recoverable: true
+  suggested_action: "OCR processing will be attempted, but may take longer."
+
+# Processing Errors (E200-E299)
+E200:
+  category: ProcessingError
+  message: "An error occurred while analyzing the document structure."
+  technical_message: "Context linking failed: {details}"
+  recoverable: true
+  suggested_action: "The document content was extracted but structure analysis failed."
+
+E201:
+  category: ProcessingError
+  message: "Document statistics could not be computed completely."
+  technical_message: "Metadata aggregation failed: {details}"
+  recoverable: true
+  suggested_action: "Some statistics may be missing from the output."
+
+E202:
+  category: ProcessingError
+  message: "Quality validation detected potential issues with extraction."
+  technical_message: "Quality score below threshold: {score} < {threshold}"
+  recoverable: true
+  suggested_action: "Review the output carefully. Consider manual verification."
+
+E203:
+  category: ProcessingError
+  message: "Image analysis could not be completed for some images."
+  technical_message: "Image analysis failed for {count} images: {details}"
+  recoverable: true
+  suggested_action: "Image metadata may be incomplete."
+
+# Formatting Errors (E300-E399)
+E300:
+  category: FormattingError
+  message: "The output could not be formatted in the requested format."
+  technical_message: "Formatting failed for format type: {format_type}"
+  recoverable: false
+  suggested_action: "Try a different output format or check format configuration."
+
+E301:
+  category: FormattingError
+  message: "The output file could not be written to the specified location."
+  technical_message: "Failed to write output file: {output_path}"
+  recoverable: false
+  suggested_action: "Check write permissions and disk space for the output location."
+
+E302:
+  category: FormattingError
+  message: "The JSON output contains invalid characters and could not be serialized."
+  technical_message: "JSON serialization error: {details}"
+  recoverable: false
+  suggested_action: "Contact support with the source document for investigation."
+
+# Configuration Errors (E400-E499)
+E400:
+  category: ConfigError
+  message: "The configuration file could not be found or read."
+  technical_message: "Config file not found: {config_path}"
+  recoverable: false
+  suggested_action: "Verify the configuration file exists and is readable."
+
+E401:
+  category: ConfigError
+  message: "The configuration file contains invalid settings."
+  technical_message: "Invalid config value for {key}: {value}"
+  recoverable: false
+  suggested_action: "Check the configuration file for syntax errors or invalid values."
+
+E402:
+  category: ConfigError
+  message: "A required configuration setting is missing."
+  technical_message: "Missing required config key: {key}"
+  recoverable: false
+  suggested_action: "Add the required setting to your configuration file."
+
+E403:
+  category: ConfigError
+  message: "The configuration value is out of the acceptable range."
+  technical_message: "Config value out of range for {key}: {value} not in [{min}, {max}]"
+  recoverable: false
+  suggested_action: "Adjust the configuration value to be within the acceptable range."
+
+# Resource Errors (E500-E599)
+E500:
+  category: ResourceError
+  message: "The system ran out of memory while processing this file."
+  technical_message: "Out of memory processing: {file_path}"
+  recoverable: false
+  suggested_action: "Try processing a smaller file or increase available memory."
+
+E501:
+  category: ResourceError
+  message: "Disk space is insufficient to complete the operation."
+  technical_message: "Insufficient disk space: {required} required, {available} available"
+  recoverable: false
+  suggested_action: "Free up disk space and try again."
+
+E502:
+  category: ResourceError
+  message: "The operation exceeded the time limit and was cancelled."
+  technical_message: "Operation timeout after {elapsed}s (limit: {limit}s)"
+  recoverable: false
+  suggested_action: "Try processing a smaller file or increase the timeout setting."
+
+E503:
+  category: ResourceError
+  message: "A temporary file could not be created."
+  technical_message: "Failed to create temp file in: {temp_dir}"
+  recoverable: false
+  suggested_action: "Check permissions for the temporary directory."
+
+# Network/External Service Errors (E600-E699)
+E600:
+  category: ExternalServiceError
+  message: "The OCR service is not available. Text extraction from images will be skipped."
+  technical_message: "OCR service unavailable: {service_url}"
+  recoverable: true
+  suggested_action: "Verify OCR service is running or process documents with text layers."
+
+E601:
+  category: ExternalServiceError
+  message: "The OCR service request failed. Some content may not be extracted."
+  technical_message: "OCR service error: {error_details}"
+  recoverable: true
+  suggested_action: "Retry the operation or check OCR service logs."
+
+# Pipeline Errors (E700-E799)
+E700:
+  category: PipelineError
+  message: "The processing pipeline could not be initialized."
+  technical_message: "Pipeline initialization failed: {details}"
+  recoverable: false
+  suggested_action: "Check system configuration and dependencies."
+
+E701:
+  category: PipelineError
+  message: "A required pipeline component is not registered."
+  technical_message: "Missing pipeline component: {component_type}"
+  recoverable: false
+  suggested_action: "Verify all required extractors and processors are installed."
+
+E702:
+  category: PipelineError
+  message: "The pipeline could not determine which extractor to use for this file."
+  technical_message: "No suitable extractor found for: {file_path}"
+  recoverable: false
+  suggested_action: "Verify the file extension and format are supported."
+
+# Unknown/Unexpected Errors (E900-E999)
+E900:
+  category: UnknownError
+  message: "An unexpected error occurred. Please contact support."
+  technical_message: "Unhandled exception: {exception_type}: {exception_message}"
+  recoverable: false
+  suggested_action: "Save your work and contact technical support with details of what you were doing."
+
+E901:
+  category: UnknownError
+  message: "A programming error was detected. Please report this issue."
+  technical_message: "Assertion failed: {assertion_message}"
+  recoverable: false
+  suggested_action: "This is a bug. Please report to the development team with the error details."

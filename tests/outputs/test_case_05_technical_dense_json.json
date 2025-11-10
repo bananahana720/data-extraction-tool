@@ -1,0 +1,1883 @@
+{
+  "content_blocks": [
+    {
+      "block_id": "b5220f14-34df-4d66-bc73-894a7084cded",
+      "block_type": "paragraph",
+      "content": "TECHNICAL RESEARCH PAPER - PREPRINT\n====================================\nTitle: \"Adversarial Robustness in Transformer-Based Neural Architecture \n       Search via Differentiable Architecture Pruning and Lipschitz \n       Regularization\"",
+      "raw_content": "TECHNICAL RESEARCH PAPER - PREPRINT\n====================================\nTitle: \"Adversarial Robustness in Transformer-Based Neural Architecture \n       Search via Differentiable Architecture Pruning and Lipschitz \n       Regularization\"",
+      "position": {
+        "sequence_index": 0
+      },
+      "metadata": {
+        "char_count": 237,
+        "word_count": 21,
+        "depth": 0,
+        "document_path": [],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "21decad6-d514-45d1-8b48-6a8463fa9554",
+      "block_type": "paragraph",
+      "content": "Authors: Chen, L.¹*, Rodriguez-Martinez, A.²*, Kim, J.³, Patel, S.¹\n         ¹MIT CSAIL, ²Stanford AI Lab, ³Seoul National University\n         *Equal contribution\nArXiv: 2410.xxxxx [cs.LG] | Submitted: 2024-10-28",
+      "raw_content": "Authors: Chen, L.¹*, Rodriguez-Martinez, A.²*, Kim, J.³, Patel, S.¹\n         ¹MIT CSAIL, ²Stanford AI Lab, ³Seoul National University\n         *Equal contribution\nArXiv: 2410.xxxxx [cs.LG] | Submitted: 2024-10-28",
+      "position": {
+        "sequence_index": 1
+      },
+      "metadata": {
+        "char_count": 212,
+        "word_count": 25,
+        "depth": 0,
+        "document_path": [],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "52644bb4-3c54-478c-acb9-3d787226082e",
+      "block_type": "heading",
+      "content": "═══════════════════════════════════════════════════════════════════",
+      "raw_content": "═══════════════════════════════════════════════════════════════════",
+      "position": {
+        "sequence_index": 2
+      },
+      "metadata": {
+        "char_count": 67,
+        "word_count": 1,
+        "depth": 0,
+        "document_path": [],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "55261496-bcd9-4dfc-8f8d-482e2e999b10",
+      "block_type": "heading",
+      "content": "ABSTRACT",
+      "raw_content": "ABSTRACT",
+      "position": {
+        "sequence_index": 3
+      },
+      "metadata": {
+        "char_count": 8,
+        "word_count": 1,
+        "depth": 0,
+        "document_path": [],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "f26d8714-f645-4507-9e4a-2c41a8ba5cbe",
+      "block_type": "paragraph",
+      "content": "We present DART-NAS (Differentiable Adversarial Robustness via \nTransformer Neural Architecture Search), a novel framework for discovering \nneural architectures that exhibit superior robustness against adversarial \nperturbations while maintaining competitive clean accuracy. Our approach \ncombines gradient-based architecture search with Lipschitz-constrained \nweight regularization (λ_lip = 0.01) and achieves state-of-the-art \nperformance on ImageNet (ε = 8/255 PGD-10): 67.3% robust accuracy vs. \n62.1% (WideResNet-28-10) and 64.8% (ViT-B/16 + AT). We demonstrate that \narchitectural choices—particularly attention head dimensionality \n(d_k ∈ [32, 128]) and FFN expansion ratios (r_ffn ∈ [2, 8])—significantly \nimpact adversarial robustness (σ² = 14.7% variance explained, p < 0.001).",
+      "raw_content": "We present DART-NAS (Differentiable Adversarial Robustness via \nTransformer Neural Architecture Search), a novel framework for discovering \nneural architectures that exhibit superior robustness against adversarial \nperturbations while maintaining competitive clean accuracy. Our approach \ncombines gradient-based architecture search with Lipschitz-constrained \nweight regularization (λ_lip = 0.01) and achieves state-of-the-art \nperformance on ImageNet (ε = 8/255 PGD-10): 67.3% robust accuracy vs. \n62.1% (WideResNet-28-10) and 64.8% (ViT-B/16 + AT). We demonstrate that \narchitectural choices—particularly attention head dimensionality \n(d_k ∈ [32, 128]) and FFN expansion ratios (r_ffn ∈ [2, 8])—significantly \nimpact adversarial robustness (σ² = 14.7% variance explained, p < 0.001).",
+      "position": {
+        "sequence_index": 4
+      },
+      "parent_id": "55261496-bcd9-4dfc-8f8d-482e2e999b10",
+      "metadata": {
+        "char_count": 787,
+        "word_count": 95,
+        "depth": 1,
+        "document_path": [
+          "ABSTRACT"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "dcff4d71-05b2-4265-b446-1f99eb7c72bf",
+      "block_type": "paragraph",
+      "content": "Keywords: neural architecture search, adversarial robustness, transformers,\n          Lipschitz continuity, automated machine learning",
+      "raw_content": "Keywords: neural architecture search, adversarial robustness, transformers,\n          Lipschitz continuity, automated machine learning",
+      "position": {
+        "sequence_index": 5
+      },
+      "parent_id": "55261496-bcd9-4dfc-8f8d-482e2e999b10",
+      "metadata": {
+        "char_count": 134,
+        "word_count": 12,
+        "depth": 1,
+        "document_path": [
+          "ABSTRACT"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "e671cfa5-46d4-4edc-88a4-499638a27bb3",
+      "block_type": "heading",
+      "content": "═══════════════════════════════════════════════════════════════════",
+      "raw_content": "═══════════════════════════════════════════════════════════════════",
+      "position": {
+        "sequence_index": 6
+      },
+      "metadata": {
+        "char_count": 67,
+        "word_count": 1,
+        "depth": 0,
+        "document_path": [],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "3384a47d-7824-4b79-b47c-e4c4f9bdd307",
+      "block_type": "heading",
+      "content": "1. INTRODUCTION",
+      "raw_content": "1. INTRODUCTION",
+      "position": {
+        "sequence_index": 7
+      },
+      "metadata": {
+        "char_count": 15,
+        "word_count": 2,
+        "depth": 0,
+        "document_path": [],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "b144a1fd-1fd1-4a43-8b5b-1fbd76a82e86",
+      "block_type": "paragraph",
+      "content": "The vulnerability of deep neural networks (DNNs) to adversarial examples \n[Szegedy et al., 2014] poses critical challenges for safety-critical \napplications. While adversarial training (AT) [Madry et al., 2018] remains \nthe de facto defense, it often requires manually designed architectures \nand suffers from the robustness-accuracy trade-off [Zhang et al., 2019].",
+      "raw_content": "The vulnerability of deep neural networks (DNNs) to adversarial examples \n[Szegedy et al., 2014] poses critical challenges for safety-critical \napplications. While adversarial training (AT) [Madry et al., 2018] remains \nthe de facto defense, it often requires manually designed architectures \nand suffers from the robustness-accuracy trade-off [Zhang et al., 2019].",
+      "position": {
+        "sequence_index": 8
+      },
+      "parent_id": "3384a47d-7824-4b79-b47c-e4c4f9bdd307",
+      "metadata": {
+        "char_count": 365,
+        "word_count": 49,
+        "depth": 1,
+        "document_path": [
+          "1. INTRODUCTION"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "78d6cb9d-9065-4d81-954b-0aeeaf4cc77e",
+      "block_type": "paragraph",
+      "content": "Recent work in Neural Architecture Search (NAS) [Zoph & Le, 2017; Liu et \nal., 2019] has automated architecture design for clean accuracy, but \nadversarial robustness has received limited attention. We address this gap \nby formulating robust architecture search as a bi-level optimization:",
+      "raw_content": "Recent work in Neural Architecture Search (NAS) [Zoph & Le, 2017; Liu et \nal., 2019] has automated architecture design for clean accuracy, but \nadversarial robustness has received limited attention. We address this gap \nby formulating robust architecture search as a bi-level optimization:",
+      "position": {
+        "sequence_index": 9
+      },
+      "parent_id": "3384a47d-7824-4b79-b47c-e4c4f9bdd307",
+      "metadata": {
+        "char_count": 289,
+        "word_count": 42,
+        "depth": 1,
+        "document_path": [
+          "1. INTRODUCTION"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "65473cc7-e076-44c8-be61-fa2e9385aef8",
+      "block_type": "paragraph",
+      "content": "min_{α} max_{||δ||_p ≤ ε} L(f(x + δ; w*(α), α), y)     (1)\n    s.t. w*(α) = argmin_w L(f(x; w, α), y)                  (2)",
+      "raw_content": "min_{α} max_{||δ||_p ≤ ε} L(f(x + δ; w*(α), α), y)     (1)\n    s.t. w*(α) = argmin_w L(f(x; w, α), y)                  (2)",
+      "position": {
+        "sequence_index": 10
+      },
+      "parent_id": "3384a47d-7824-4b79-b47c-e4c4f9bdd307",
+      "metadata": {
+        "char_count": 122,
+        "word_count": 20,
+        "depth": 1,
+        "document_path": [
+          "1. INTRODUCTION"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "262da53f-89ed-4c91-8f97-5342680565db",
+      "block_type": "paragraph",
+      "content": "where α represents architectural parameters (e.g., layer connectivity, \noperator choices), w denotes network weights, f(·) is the model, L(·) is \nthe loss function, and δ represents adversarial perturbations bounded by \nε in the L_p norm.",
+      "raw_content": "where α represents architectural parameters (e.g., layer connectivity, \noperator choices), w denotes network weights, f(·) is the model, L(·) is \nthe loss function, and δ represents adversarial perturbations bounded by \nε in the L_p norm.",
+      "position": {
+        "sequence_index": 11
+      },
+      "parent_id": "3384a47d-7824-4b79-b47c-e4c4f9bdd307",
+      "metadata": {
+        "char_count": 238,
+        "word_count": 35,
+        "depth": 1,
+        "document_path": [
+          "1. INTRODUCTION"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "c6c5d031-17cb-4ace-b897-e357c65eaf74",
+      "block_type": "heading",
+      "content": "Our key contributions:",
+      "raw_content": "Our key contributions:",
+      "position": {
+        "sequence_index": 12
+      },
+      "metadata": {
+        "char_count": 22,
+        "word_count": 3,
+        "depth": 0,
+        "document_path": [],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "ea510751-598b-49d7-ba81-3a9c75ac6e2b",
+      "block_type": "paragraph",
+      "content": "[1] A differentiable architecture search framework optimizing for both \n    clean and robust accuracy via smooth relaxation of discrete choices:\n    \n    σ(α_i,j) = exp(α_i,j) / Σ_k exp(α_i,k)                (3)",
+      "raw_content": "[1] A differentiable architecture search framework optimizing for both \n    clean and robust accuracy via smooth relaxation of discrete choices:\n    \n    σ(α_i,j) = exp(α_i,j) / Σ_k exp(α_i,k)                (3)",
+      "position": {
+        "sequence_index": 13
+      },
+      "parent_id": "c6c5d031-17cb-4ace-b897-e357c65eaf74",
+      "metadata": {
+        "char_count": 211,
+        "word_count": 26,
+        "depth": 1,
+        "document_path": [
+          "Our key contributions:"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "3abe63ef-fcd6-4603-b98c-4fb717f973e1",
+      "block_type": "paragraph",
+      "content": "[2] Lipschitz-regularized weight training with spectral normalization:\n    \n    ||∂f/∂x|| ≤ Π_{l=1}^L ||W_l||_2 ≤ K_lip                (4)\n    \n    where ||W_l||_2 is the largest singular value of layer l.",
+      "raw_content": "[2] Lipschitz-regularized weight training with spectral normalization:\n    \n    ||∂f/∂x|| ≤ Π_{l=1}^L ||W_l||_2 ≤ K_lip                (4)\n    \n    where ||W_l||_2 is the largest singular value of layer l.",
+      "position": {
+        "sequence_index": 14
+      },
+      "parent_id": "c6c5d031-17cb-4ace-b897-e357c65eaf74",
+      "metadata": {
+        "char_count": 205,
+        "word_count": 24,
+        "depth": 1,
+        "document_path": [
+          "Our key contributions:"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "88c60352-b3dc-48e7-9bbc-0a63d615aa4e",
+      "block_type": "paragraph",
+      "content": "[3] Theoretical analysis proving that architectures with controlled \n    Lipschitz constants exhibit bounded adversarial perturbation \n    propagation (Theorem 3.1).",
+      "raw_content": "[3] Theoretical analysis proving that architectures with controlled \n    Lipschitz constants exhibit bounded adversarial perturbation \n    propagation (Theorem 3.1).",
+      "position": {
+        "sequence_index": 15
+      },
+      "parent_id": "c6c5d031-17cb-4ace-b897-e357c65eaf74",
+      "metadata": {
+        "char_count": 165,
+        "word_count": 17,
+        "depth": 1,
+        "document_path": [
+          "Our key contributions:"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "7e376b8c-380e-4985-b4f2-3c754d9f4bf9",
+      "block_type": "paragraph",
+      "content": "[4] Empirical validation across CIFAR-10/100, ImageNet, showing \n    +5.2% robust accuracy improvement over manual designs with \n    3.2× faster search (GPU-hours: 847 vs. 2,712).",
+      "raw_content": "[4] Empirical validation across CIFAR-10/100, ImageNet, showing \n    +5.2% robust accuracy improvement over manual designs with \n    3.2× faster search (GPU-hours: 847 vs. 2,712).",
+      "position": {
+        "sequence_index": 16
+      },
+      "parent_id": "c6c5d031-17cb-4ace-b897-e357c65eaf74",
+      "metadata": {
+        "char_count": 179,
+        "word_count": 22,
+        "depth": 1,
+        "document_path": [
+          "Our key contributions:"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "2322de51-eb0a-48bf-84c5-a784d53c3800",
+      "block_type": "heading",
+      "content": "═══════════════════════════════════════════════════════════════════",
+      "raw_content": "═══════════════════════════════════════════════════════════════════",
+      "position": {
+        "sequence_index": 17
+      },
+      "metadata": {
+        "char_count": 67,
+        "word_count": 1,
+        "depth": 0,
+        "document_path": [],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "f139039a-50a4-40b7-a414-cc96a2324cff",
+      "block_type": "heading",
+      "content": "2. METHODOLOGY",
+      "raw_content": "2. METHODOLOGY",
+      "position": {
+        "sequence_index": 18
+      },
+      "metadata": {
+        "char_count": 14,
+        "word_count": 2,
+        "depth": 0,
+        "document_path": [],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "323d3526-9ff6-401b-9f3b-b8ac4320f6a2",
+      "block_type": "heading",
+      "content": "2.1 Search Space Definition",
+      "raw_content": "2.1 Search Space Definition",
+      "position": {
+        "sequence_index": 19
+      },
+      "metadata": {
+        "char_count": 27,
+        "word_count": 4,
+        "depth": 0,
+        "document_path": [],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "00e2aa3b-ffc7-4208-be0d-b089363ea349",
+      "block_type": "heading",
+      "content": "We define a hierarchical search space S = {S_macro, S_micro} where:",
+      "raw_content": "We define a hierarchical search space S = {S_macro, S_micro} where:",
+      "position": {
+        "sequence_index": 20
+      },
+      "metadata": {
+        "char_count": 67,
+        "word_count": 11,
+        "depth": 0,
+        "document_path": [],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "1b198b45-00a9-4b62-81e0-a4233c46486c",
+      "block_type": "paragraph",
+      "content": "S_macro = {N_layers ∈ [12, 48], d_model ∈ [256, 1024], N_heads ∈ [4, 16]}\nS_micro = {O_attn, O_ffn, O_norm, O_act, O_skip}",
+      "raw_content": "S_macro = {N_layers ∈ [12, 48], d_model ∈ [256, 1024], N_heads ∈ [4, 16]}\nS_micro = {O_attn, O_ffn, O_norm, O_act, O_skip}",
+      "position": {
+        "sequence_index": 21
+      },
+      "parent_id": "00e2aa3b-ffc7-4208-be0d-b089363ea349",
+      "metadata": {
+        "char_count": 122,
+        "word_count": 21,
+        "depth": 1,
+        "document_path": [
+          "We define a hierarchical search space S = {S_macro, S_micro} where:"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "dbe5c8cf-51ef-4e57-ae6c-1921f012a996",
+      "block_type": "paragraph",
+      "content": "Each micro operation O ∈ S_micro has associated latency τ(O) and memory \nμ(O). We constrain search via multi-objective optimization:",
+      "raw_content": "Each micro operation O ∈ S_micro has associated latency τ(O) and memory \nμ(O). We constrain search via multi-objective optimization:",
+      "position": {
+        "sequence_index": 22
+      },
+      "parent_id": "00e2aa3b-ffc7-4208-be0d-b089363ea349",
+      "metadata": {
+        "char_count": 132,
+        "word_count": 19,
+        "depth": 1,
+        "document_path": [
+          "We define a hierarchical search space S = {S_macro, S_micro} where:"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "3f14fcec-8123-4e70-927e-e13490adc83b",
+      "block_type": "heading",
+      "content": "min_{α ∈ S} {-R(α), -A(α), τ(α), μ(α)}                 (5)",
+      "raw_content": "min_{α ∈ S} {-R(α), -A(α), τ(α), μ(α)}                 (5)",
+      "position": {
+        "sequence_index": 23
+      },
+      "metadata": {
+        "char_count": 58,
+        "word_count": 8,
+        "depth": 0,
+        "document_path": [],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "f152e739-e1e5-407e-a9fa-a7b807dd5823",
+      "block_type": "paragraph",
+      "content": "where R(α) = robust accuracy, A(α) = clean accuracy, τ(α) = inference \nlatency, μ(α) = memory footprint.",
+      "raw_content": "where R(α) = robust accuracy, A(α) = clean accuracy, τ(α) = inference \nlatency, μ(α) = memory footprint.",
+      "position": {
+        "sequence_index": 24
+      },
+      "parent_id": "3f14fcec-8123-4e70-927e-e13490adc83b",
+      "metadata": {
+        "char_count": 104,
+        "word_count": 17,
+        "depth": 1,
+        "document_path": [
+          "min_{α ∈ S} {-R(α), -A(α), τ(α), μ(α)}                 (5)"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "22169f9f-1436-424d-a1b6-8ef300a96fd0",
+      "block_type": "paragraph",
+      "content": "Pareto-optimal solutions found via NSGA-III [Deb & Jain, 2014] with \nreference directions D = 100, population size P = 50.",
+      "raw_content": "Pareto-optimal solutions found via NSGA-III [Deb & Jain, 2014] with \nreference directions D = 100, population size P = 50.",
+      "position": {
+        "sequence_index": 25
+      },
+      "parent_id": "3f14fcec-8123-4e70-927e-e13490adc83b",
+      "metadata": {
+        "char_count": 122,
+        "word_count": 20,
+        "depth": 1,
+        "document_path": [
+          "min_{α ∈ S} {-R(α), -A(α), τ(α), μ(α)}                 (5)"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "dbc937ae-72ce-4c09-a133-5eca9979c745",
+      "block_type": "heading",
+      "content": "2.2 Differentiable Architecture Representation",
+      "raw_content": "2.2 Differentiable Architecture Representation",
+      "position": {
+        "sequence_index": 26
+      },
+      "metadata": {
+        "char_count": 46,
+        "word_count": 4,
+        "depth": 0,
+        "document_path": [],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "841d0440-6576-4ab8-9312-5c3c4ecb6bd1",
+      "block_type": "paragraph",
+      "content": "Following DARTS [Liu et al., 2019], we relax categorical choices via \ncontinuous architectural parameters:",
+      "raw_content": "Following DARTS [Liu et al., 2019], we relax categorical choices via \ncontinuous architectural parameters:",
+      "position": {
+        "sequence_index": 27
+      },
+      "parent_id": "dbc937ae-72ce-4c09-a133-5eca9979c745",
+      "metadata": {
+        "char_count": 106,
+        "word_count": 14,
+        "depth": 1,
+        "document_path": [
+          "2.2 Differentiable Architecture Representation"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "a0084313-47a8-4cdf-80ee-86b961c4b74b",
+      "block_type": "paragraph",
+      "content": "x^{(l+1)} = Σ_{i=1}^{|O|} (exp(α_i^{(l)}) / Σ_j exp(α_j^{(l)})) · O_i(x^{(l)})    (6)",
+      "raw_content": "x^{(l+1)} = Σ_{i=1}^{|O|} (exp(α_i^{(l)}) / Σ_j exp(α_j^{(l)})) · O_i(x^{(l)})    (6)",
+      "position": {
+        "sequence_index": 28
+      },
+      "parent_id": "dbc937ae-72ce-4c09-a133-5eca9979c745",
+      "metadata": {
+        "char_count": 85,
+        "word_count": 10,
+        "depth": 1,
+        "document_path": [
+          "2.2 Differentiable Architecture Representation"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "80c38dda-3cfa-48a2-a40b-68d15069b93d",
+      "block_type": "heading",
+      "content": "To prevent gradient collapse, we apply temperature annealing:",
+      "raw_content": "To prevent gradient collapse, we apply temperature annealing:",
+      "position": {
+        "sequence_index": 29
+      },
+      "metadata": {
+        "char_count": 61,
+        "word_count": 8,
+        "depth": 0,
+        "document_path": [],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "648dcdfc-b58f-491e-b229-3282af15873e",
+      "block_type": "heading",
+      "content": "T(epoch) = T_0 · (T_min/T_0)^{epoch/E_max}             (7)",
+      "raw_content": "T(epoch) = T_0 · (T_min/T_0)^{epoch/E_max}             (7)",
+      "position": {
+        "sequence_index": 30
+      },
+      "metadata": {
+        "char_count": 58,
+        "word_count": 6,
+        "depth": 0,
+        "document_path": [],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "ab3c238a-fcc6-4b9c-b921-414dba5a4e35",
+      "block_type": "paragraph",
+      "content": "with T_0 = 1.0, T_min = 0.01, E_max = 50.",
+      "raw_content": "with T_0 = 1.0, T_min = 0.01, E_max = 50.",
+      "position": {
+        "sequence_index": 31
+      },
+      "parent_id": "648dcdfc-b58f-491e-b229-3282af15873e",
+      "metadata": {
+        "char_count": 41,
+        "word_count": 10,
+        "depth": 1,
+        "document_path": [
+          "T(epoch) = T_0 · (T_min/T_0)^{epoch/E_max}             (7)"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "5a5b0ed2-34f0-49eb-9663-0ccbf418ef17",
+      "block_type": "heading",
+      "content": "2.3 Adversarial Training Integration",
+      "raw_content": "2.3 Adversarial Training Integration",
+      "position": {
+        "sequence_index": 32
+      },
+      "metadata": {
+        "char_count": 36,
+        "word_count": 4,
+        "depth": 0,
+        "document_path": [],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "fd43f552-77b5-4929-9acf-84f23d30aeeb",
+      "block_type": "paragraph",
+      "content": "During architecture search, we employ Fast Adversarial Training (FAT) \n[Wong et al., 2020] with random initialization:",
+      "raw_content": "During architecture search, we employ Fast Adversarial Training (FAT) \n[Wong et al., 2020] with random initialization:",
+      "position": {
+        "sequence_index": 33
+      },
+      "parent_id": "5a5b0ed2-34f0-49eb-9663-0ccbf418ef17",
+      "metadata": {
+        "char_count": 118,
+        "word_count": 16,
+        "depth": 1,
+        "document_path": [
+          "2.3 Adversarial Training Integration"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "8cfac6cb-626e-4047-9d3c-d238be6dc30c",
+      "block_type": "paragraph",
+      "content": "δ ~ Uniform(-ε, ε)                                      (8)\n    δ = δ + α · sign(∇_δ L(f(x + δ), y))                   (9)\n    δ = Π_{||·||_∞ ≤ ε}(δ)                                  (10)",
+      "raw_content": "δ ~ Uniform(-ε, ε)                                      (8)\n    δ = δ + α · sign(∇_δ L(f(x + δ), y))                   (9)\n    δ = Π_{||·||_∞ ≤ ε}(δ)                                  (10)",
+      "position": {
+        "sequence_index": 34
+      },
+      "parent_id": "5a5b0ed2-34f0-49eb-9663-0ccbf418ef17",
+      "metadata": {
+        "char_count": 187,
+        "word_count": 23,
+        "depth": 1,
+        "document_path": [
+          "2.3 Adversarial Training Integration"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "2fea1de2-fe2d-45d7-bc63-7cc811e7f30f",
+      "block_type": "paragraph",
+      "content": "where α = 2ε/K for K = 7 steps, ε = 8/255 for CIFAR-10.",
+      "raw_content": "where α = 2ε/K for K = 7 steps, ε = 8/255 for CIFAR-10.",
+      "position": {
+        "sequence_index": 35
+      },
+      "parent_id": "5a5b0ed2-34f0-49eb-9663-0ccbf418ef17",
+      "metadata": {
+        "char_count": 55,
+        "word_count": 14,
+        "depth": 1,
+        "document_path": [
+          "2.3 Adversarial Training Integration"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "09546953-c4db-4b6b-8ffd-edb2cb06a058",
+      "block_type": "heading",
+      "content": "We augment the loss with Lipschitz regularization:",
+      "raw_content": "We augment the loss with Lipschitz regularization:",
+      "position": {
+        "sequence_index": 36
+      },
+      "metadata": {
+        "char_count": 50,
+        "word_count": 7,
+        "depth": 0,
+        "document_path": [],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "6091c8ef-77f0-4d11-b7d7-9a1fc8b654de",
+      "block_type": "heading",
+      "content": "L_total = L_ce + λ_lip · (||∇_x f||_2 - K_target)²     (11)",
+      "raw_content": "L_total = L_ce + λ_lip · (||∇_x f||_2 - K_target)²     (11)",
+      "position": {
+        "sequence_index": 37
+      },
+      "metadata": {
+        "char_count": 59,
+        "word_count": 11,
+        "depth": 0,
+        "document_path": [],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "4a40fc27-48e3-43ad-9345-e9094c801497",
+      "block_type": "paragraph",
+      "content": "where K_target = 10.0 empirically determined via grid search.",
+      "raw_content": "where K_target = 10.0 empirically determined via grid search.",
+      "position": {
+        "sequence_index": 38
+      },
+      "parent_id": "6091c8ef-77f0-4d11-b7d7-9a1fc8b654de",
+      "metadata": {
+        "char_count": 61,
+        "word_count": 9,
+        "depth": 1,
+        "document_path": [
+          "L_total = L_ce + λ_lip · (||∇_x f||_2 - K_target)²     (11)"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "392ec5c4-20bf-4f89-81a3-dd45e8d665e8",
+      "block_type": "heading",
+      "content": "═══════════════════════════════════════════════════════════════════",
+      "raw_content": "═══════════════════════════════════════════════════════════════════",
+      "position": {
+        "sequence_index": 39
+      },
+      "metadata": {
+        "char_count": 67,
+        "word_count": 1,
+        "depth": 0,
+        "document_path": [],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "a120d1db-5f4f-4757-8c49-578fbb3a9461",
+      "block_type": "heading",
+      "content": "3. THEORETICAL ANALYSIS",
+      "raw_content": "3. THEORETICAL ANALYSIS",
+      "position": {
+        "sequence_index": 40
+      },
+      "metadata": {
+        "char_count": 23,
+        "word_count": 3,
+        "depth": 0,
+        "document_path": [],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "94f93373-3f57-410c-a5cd-a0de57557090",
+      "block_type": "paragraph",
+      "content": "Theorem 3.1 (Adversarial Perturbation Bound): Let f: ℝ^n → ℝ^m be a \nneural network with Lipschitz constant K_lip. For any adversarial \nperturbation δ with ||δ||_p ≤ ε, the output perturbation satisfies:",
+      "raw_content": "Theorem 3.1 (Adversarial Perturbation Bound): Let f: ℝ^n → ℝ^m be a \nneural network with Lipschitz constant K_lip. For any adversarial \nperturbation δ with ||δ||_p ≤ ε, the output perturbation satisfies:",
+      "position": {
+        "sequence_index": 41
+      },
+      "parent_id": "a120d1db-5f4f-4757-8c49-578fbb3a9461",
+      "metadata": {
+        "char_count": 203,
+        "word_count": 31,
+        "depth": 1,
+        "document_path": [
+          "3. THEORETICAL ANALYSIS"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "99746ea5-b2c1-4632-a34f-d1fa338522eb",
+      "block_type": "heading",
+      "content": "||f(x + δ) - f(x)||_q ≤ K_lip · ε · n^{1/p - 1/q}      (12)",
+      "raw_content": "||f(x + δ) - f(x)||_q ≤ K_lip · ε · n^{1/p - 1/q}      (12)",
+      "position": {
+        "sequence_index": 42
+      },
+      "metadata": {
+        "char_count": 59,
+        "word_count": 14,
+        "depth": 0,
+        "document_path": [],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "2dd59741-36de-4219-8823-458a74e633d1",
+      "block_type": "paragraph",
+      "content": "where 1/p + 1/q = 1 (Hölder conjugates).",
+      "raw_content": "where 1/p + 1/q = 1 (Hölder conjugates).",
+      "position": {
+        "sequence_index": 43
+      },
+      "parent_id": "99746ea5-b2c1-4632-a34f-d1fa338522eb",
+      "metadata": {
+        "char_count": 40,
+        "word_count": 8,
+        "depth": 1,
+        "document_path": [
+          "||f(x + δ) - f(x)||_q ≤ K_lip · ε · n^{1/p - 1/q}      (12)"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "a3d4cb70-2080-4ad6-81b7-a921c1c6db75",
+      "block_type": "paragraph",
+      "content": "Proof: By Lipschitz continuity,\n    ||f(x + δ) - f(x)||_q ≤ K_lip · ||δ||_p\n                           ≤ K_lip · ε",
+      "raw_content": "Proof: By Lipschitz continuity,\n    ||f(x + δ) - f(x)||_q ≤ K_lip · ||δ||_p\n                           ≤ K_lip · ε",
+      "position": {
+        "sequence_index": 44
+      },
+      "parent_id": "99746ea5-b2c1-4632-a34f-d1fa338522eb",
+      "metadata": {
+        "char_count": 114,
+        "word_count": 17,
+        "depth": 1,
+        "document_path": [
+          "||f(x + δ) - f(x)||_q ≤ K_lip · ε · n^{1/p - 1/q}      (12)"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "f8328cb4-d356-4a68-bb15-c0765b87f8f7",
+      "block_type": "paragraph",
+      "content": "For p = ∞, q = 1: ||δ||_∞ ≤ ε implies ||δ||_1 ≤ n·ε\nTherefore: ||f(x + δ) - f(x)||_1 ≤ K_lip · n · ε            □",
+      "raw_content": "For p = ∞, q = 1: ||δ||_∞ ≤ ε implies ||δ||_1 ≤ n·ε\nTherefore: ||f(x + δ) - f(x)||_1 ≤ K_lip · n · ε            □",
+      "position": {
+        "sequence_index": 45
+      },
+      "parent_id": "99746ea5-b2c1-4632-a34f-d1fa338522eb",
+      "metadata": {
+        "char_count": 113,
+        "word_count": 27,
+        "depth": 1,
+        "document_path": [
+          "||f(x + δ) - f(x)||_q ≤ K_lip · ε · n^{1/p - 1/q}      (12)"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "978de227-355d-4bab-b94f-33a33a3bb7f9",
+      "block_type": "paragraph",
+      "content": "Corollary 3.1.1: Architectures with lower K_lip exhibit bounded \nadversarial vulnerability with probability ≥ 1 - exp(-λK_lip²).",
+      "raw_content": "Corollary 3.1.1: Architectures with lower K_lip exhibit bounded \nadversarial vulnerability with probability ≥ 1 - exp(-λK_lip²).",
+      "position": {
+        "sequence_index": 46
+      },
+      "parent_id": "99746ea5-b2c1-4632-a34f-d1fa338522eb",
+      "metadata": {
+        "char_count": 128,
+        "word_count": 16,
+        "depth": 1,
+        "document_path": [
+          "||f(x + δ) - f(x)||_q ≤ K_lip · ε · n^{1/p - 1/q}      (12)"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "622c361c-5939-4ddd-9d8f-397c4d5c7113",
+      "block_type": "paragraph",
+      "content": "Lemma 3.2 (Gradient Flow Stability): Under Lipschitz constraints, \ngradient magnitudes during architecture search satisfy:",
+      "raw_content": "Lemma 3.2 (Gradient Flow Stability): Under Lipschitz constraints, \ngradient magnitudes during architecture search satisfy:",
+      "position": {
+        "sequence_index": 47
+      },
+      "parent_id": "99746ea5-b2c1-4632-a34f-d1fa338522eb",
+      "metadata": {
+        "char_count": 122,
+        "word_count": 14,
+        "depth": 1,
+        "document_path": [
+          "||f(x + δ) - f(x)||_q ≤ K_lip · ε · n^{1/p - 1/q}      (12)"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "be98eb3d-fa32-4f45-898a-cfd60a12eef1",
+      "block_type": "heading",
+      "content": "𝔼[||∇_α L||_2] ≤ C · √(d_α) · K_lip                    (13)",
+      "raw_content": "𝔼[||∇_α L||_2] ≤ C · √(d_α) · K_lip                    (13)",
+      "position": {
+        "sequence_index": 48
+      },
+      "metadata": {
+        "char_count": 59,
+        "word_count": 9,
+        "depth": 0,
+        "document_path": [],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "9eab3663-98f5-4260-9393-080b435eec6e",
+      "block_type": "paragraph",
+      "content": "where d_α is the dimensionality of architecture parameters and C is a \nproblem-dependent constant.",
+      "raw_content": "where d_α is the dimensionality of architecture parameters and C is a \nproblem-dependent constant.",
+      "position": {
+        "sequence_index": 49
+      },
+      "parent_id": "be98eb3d-fa32-4f45-898a-cfd60a12eef1",
+      "metadata": {
+        "char_count": 98,
+        "word_count": 14,
+        "depth": 1,
+        "document_path": [
+          "𝔼[||∇_α L||_2] ≤ C · √(d_α) · K_lip                    (13)"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "76e45b81-efdd-40cc-a3d6-ed76f65ed555",
+      "block_type": "heading",
+      "content": "═══════════════════════════════════════════════════════════════════",
+      "raw_content": "═══════════════════════════════════════════════════════════════════",
+      "position": {
+        "sequence_index": 50
+      },
+      "metadata": {
+        "char_count": 67,
+        "word_count": 1,
+        "depth": 0,
+        "document_path": [],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "a0023522-bf4d-44a4-991c-f7267b57f848",
+      "block_type": "heading",
+      "content": "4. EXPERIMENTAL SETUP",
+      "raw_content": "4. EXPERIMENTAL SETUP",
+      "position": {
+        "sequence_index": 51
+      },
+      "metadata": {
+        "char_count": 21,
+        "word_count": 3,
+        "depth": 0,
+        "document_path": [],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "f02ca2ba-de71-4191-b924-5ceff68cf7cc",
+      "block_type": "heading",
+      "content": "4.1 Datasets & Evaluation Metrics",
+      "raw_content": "4.1 Datasets & Evaluation Metrics",
+      "position": {
+        "sequence_index": 52
+      },
+      "metadata": {
+        "char_count": 33,
+        "word_count": 5,
+        "depth": 0,
+        "document_path": [],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "153708fc-14ed-4d50-aba7-2c8d679fb5d6",
+      "block_type": "paragraph",
+      "content": "┌──────────────┬─────────────┬──────────────┬─────────────┐\n│ Dataset      │ Train Size  │ Test Size    │ Resolution  │\n├──────────────┼─────────────┼──────────────┼─────────────┤\n│ CIFAR-10     │ 50,000      │ 10,000       │ 32×32×3     │\n│ CIFAR-100    │ 50,000      │ 10,000       │ 32×32×3     │\n│ ImageNet     │ 1,281,167   │ 50,000       │ 224×224×3   │\n│ SVHN         │ 73,257      │ 26,032       │ 32×32×3     │\n└──────────────┴─────────────┴──────────────┴─────────────┘",
+      "raw_content": "┌──────────────┬─────────────┬──────────────┬─────────────┐\n│ Dataset      │ Train Size  │ Test Size    │ Resolution  │\n├──────────────┼─────────────┼──────────────┼─────────────┤\n│ CIFAR-10     │ 50,000      │ 10,000       │ 32×32×3     │\n│ CIFAR-100    │ 50,000      │ 10,000       │ 32×32×3     │\n│ ImageNet     │ 1,281,167   │ 50,000       │ 224×224×3   │\n│ SVHN         │ 73,257      │ 26,032       │ 32×32×3     │\n└──────────────┴─────────────┴──────────────┴─────────────┘",
+      "position": {
+        "sequence_index": 53
+      },
+      "parent_id": "f02ca2ba-de71-4191-b924-5ceff68cf7cc",
+      "metadata": {
+        "char_count": 479,
+        "word_count": 50,
+        "depth": 1,
+        "document_path": [
+          "4.1 Datasets & Evaluation Metrics"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "cb2cd47c-001d-439e-ae3f-e76147d3acfd",
+      "block_type": "paragraph",
+      "content": "Adversarial Attacks:\n• PGD (Projected Gradient Descent): ε ∈ {4/255, 8/255, 16/255}, \n  step size α = 2ε/K, iterations K ∈ {10, 20, 50}\n• AutoAttack [Croce & Hein, 2020]: ensemble of APGD-CE, APGD-DLR, \n  FAB-T, Square Attack\n• C&W [Carlini & Wagner, 2017]: κ = 0, learning rate = 0.01, \n  binary search steps = 9",
+      "raw_content": "Adversarial Attacks:\n• PGD (Projected Gradient Descent): ε ∈ {4/255, 8/255, 16/255}, \n  step size α = 2ε/K, iterations K ∈ {10, 20, 50}\n• AutoAttack [Croce & Hein, 2020]: ensemble of APGD-CE, APGD-DLR, \n  FAB-T, Square Attack\n• C&W [Carlini & Wagner, 2017]: κ = 0, learning rate = 0.01, \n  binary search steps = 9",
+      "position": {
+        "sequence_index": 54
+      },
+      "parent_id": "f02ca2ba-de71-4191-b924-5ceff68cf7cc",
+      "metadata": {
+        "char_count": 313,
+        "word_count": 54,
+        "depth": 1,
+        "document_path": [
+          "4.1 Datasets & Evaluation Metrics"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "00419c3a-fbee-4a7e-8ebc-2deeb76e9f08",
+      "block_type": "paragraph",
+      "content": "Metrics:\n- Clean Accuracy: A_clean = (1/N) Σ_i 𝟙[argmax f(x_i) = y_i]\n- Robust Accuracy: A_robust = (1/N) Σ_i min_{||δ||_∞≤ε} 𝟙[argmax f(x_i+δ) = y_i]\n- Average Perturbation Distance (APD): 𝔼_x[min_δ ||δ||_2 s.t. argmax f(x+δ) ≠ y]",
+      "raw_content": "Metrics:\n- Clean Accuracy: A_clean = (1/N) Σ_i 𝟙[argmax f(x_i) = y_i]\n- Robust Accuracy: A_robust = (1/N) Σ_i min_{||δ||_∞≤ε} 𝟙[argmax f(x_i+δ) = y_i]\n- Average Perturbation Distance (APD): 𝔼_x[min_δ ||δ||_2 s.t. argmax f(x+δ) ≠ y]",
+      "position": {
+        "sequence_index": 55
+      },
+      "parent_id": "f02ca2ba-de71-4191-b924-5ceff68cf7cc",
+      "metadata": {
+        "char_count": 231,
+        "word_count": 36,
+        "depth": 1,
+        "document_path": [
+          "4.1 Datasets & Evaluation Metrics"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "e5940e3c-9175-4d4c-8f39-ac5d78384d1e",
+      "block_type": "heading",
+      "content": "4.2 Implementation Details",
+      "raw_content": "4.2 Implementation Details",
+      "position": {
+        "sequence_index": 56
+      },
+      "metadata": {
+        "char_count": 26,
+        "word_count": 3,
+        "depth": 0,
+        "document_path": [],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "db52da3b-4797-4551-90be-53f4a34a1498",
+      "block_type": "paragraph",
+      "content": "Hardware: 8× NVIDIA A100 (80GB) GPUs\nFramework: PyTorch 2.1.0 + CUDA 12.1 + cuDNN 8.9.0\nSearch Time: 847 GPU-hours (CIFAR-10), 2,134 GPU-hours (ImageNet)",
+      "raw_content": "Hardware: 8× NVIDIA A100 (80GB) GPUs\nFramework: PyTorch 2.1.0 + CUDA 12.1 + cuDNN 8.9.0\nSearch Time: 847 GPU-hours (CIFAR-10), 2,134 GPU-hours (ImageNet)",
+      "position": {
+        "sequence_index": 57
+      },
+      "parent_id": "e5940e3c-9175-4d4c-8f39-ac5d78384d1e",
+      "metadata": {
+        "char_count": 153,
+        "word_count": 23,
+        "depth": 1,
+        "document_path": [
+          "4.2 Implementation Details"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "84bc6347-1488-467b-ac19-c51105bbcbcd",
+      "block_type": "paragraph",
+      "content": "Hyperparameters:\n```python\nconfig = {\n    \"search\": {\n        \"optimizer\": \"Adam\",\n        \"lr\": 0.001,\n        \"weight_decay\": 3e-4,\n        \"momentum\": 0.9,  # for SGD in weight training\n        \"epochs\": 50,\n        \"batch_size\": 64,\n        \"grad_clip_norm\": 5.0\n    },\n    \"train\": {\n        \"optimizer\": \"SGD\",\n        \"lr\": 0.025,\n        \"lr_scheduler\": \"cosine\",\n        \"T_max\": 600,\n        \"eta_min\": 0.0,\n        \"momentum\": 0.9,\n        \"weight_decay\": 3e-4,\n        \"epochs\": 600,\n        \"batch_size\": 128\n    },\n    \"adversarial\": {\n        \"epsilon\": 8/255,\n        \"alpha\": 2/255,\n        \"num_steps\": 10,\n        \"random_start\": True,\n        \"loss_fn\": \"ce\"  # cross-entropy\n    },\n    \"lipschitz\": {\n        \"lambda\": 0.01,\n        \"target_constant\": 10.0,\n        \"spectral_norm_iter\": 1\n    }\n}\n```",
+      "raw_content": "Hyperparameters:\n```python\nconfig = {\n    \"search\": {\n        \"optimizer\": \"Adam\",\n        \"lr\": 0.001,\n        \"weight_decay\": 3e-4,\n        \"momentum\": 0.9,  # for SGD in weight training\n        \"epochs\": 50,\n        \"batch_size\": 64,\n        \"grad_clip_norm\": 5.0\n    },\n    \"train\": {\n        \"optimizer\": \"SGD\",\n        \"lr\": 0.025,\n        \"lr_scheduler\": \"cosine\",\n        \"T_max\": 600,\n        \"eta_min\": 0.0,\n        \"momentum\": 0.9,\n        \"weight_decay\": 3e-4,\n        \"epochs\": 600,\n        \"batch_size\": 128\n    },\n    \"adversarial\": {\n        \"epsilon\": 8/255,\n        \"alpha\": 2/255,\n        \"num_steps\": 10,\n        \"random_start\": True,\n        \"loss_fn\": \"ce\"  # cross-entropy\n    },\n    \"lipschitz\": {\n        \"lambda\": 0.01,\n        \"target_constant\": 10.0,\n        \"spectral_norm_iter\": 1\n    }\n}\n```",
+      "position": {
+        "sequence_index": 58
+      },
+      "parent_id": "e5940e3c-9175-4d4c-8f39-ac5d78384d1e",
+      "metadata": {
+        "char_count": 822,
+        "word_count": 75,
+        "depth": 1,
+        "document_path": [
+          "4.2 Implementation Details"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "eb3456f6-c899-4bd8-ad62-c4eb4a57dac5",
+      "block_type": "paragraph",
+      "content": "Data Augmentation:\n- Random crop (32×32 with padding=4)\n- Random horizontal flip (p=0.5)\n- Cutout [DeVries & Taylor, 2017]: n_holes=1, length=16\n- AutoAugment [Cubuk et al., 2019]: policy \"cifar10\"",
+      "raw_content": "Data Augmentation:\n- Random crop (32×32 with padding=4)\n- Random horizontal flip (p=0.5)\n- Cutout [DeVries & Taylor, 2017]: n_holes=1, length=16\n- AutoAugment [Cubuk et al., 2019]: policy \"cifar10\"",
+      "position": {
+        "sequence_index": 59
+      },
+      "parent_id": "e5940e3c-9175-4d4c-8f39-ac5d78384d1e",
+      "metadata": {
+        "char_count": 197,
+        "word_count": 29,
+        "depth": 1,
+        "document_path": [
+          "4.2 Implementation Details"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "07d82b8c-1c52-4a93-8188-0278cd8635a6",
+      "block_type": "heading",
+      "content": "═══════════════════════════════════════════════════════════════════",
+      "raw_content": "═══════════════════════════════════════════════════════════════════",
+      "position": {
+        "sequence_index": 60
+      },
+      "metadata": {
+        "char_count": 67,
+        "word_count": 1,
+        "depth": 0,
+        "document_path": [],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "59d4160a-74f7-4d2f-b308-f2627b8b8d1b",
+      "block_type": "heading",
+      "content": "5. RESULTS",
+      "raw_content": "5. RESULTS",
+      "position": {
+        "sequence_index": 61
+      },
+      "metadata": {
+        "char_count": 10,
+        "word_count": 2,
+        "depth": 0,
+        "document_path": [],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "85ebb6f9-d03c-4159-a459-964a88688de6",
+      "block_type": "heading",
+      "content": "5.1 Quantitative Performance",
+      "raw_content": "5.1 Quantitative Performance",
+      "position": {
+        "sequence_index": 62
+      },
+      "metadata": {
+        "char_count": 28,
+        "word_count": 3,
+        "depth": 0,
+        "document_path": [],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "536e7b7c-7680-4ae1-9cd0-b0a20754d334",
+      "block_type": "paragraph",
+      "content": "Table 1: Comparison with State-of-the-Art (CIFAR-10)\n┌─────────────────────────┬────────────┬─────────────┬──────────┐\n│ Model                   │ Clean Acc  │ Robust Acc  │ Params   │\n│                         │ (%)        │ (ε=8/255)   │ (M)      │\n├─────────────────────────┼────────────┼─────────────┼──────────┤\n│ ResNet-18 (Standard)    │ 94.7       │ 0.0         │ 11.2     │\n│ WideResNet-28-10 [AT]   │ 87.3       │ 56.4        │ 36.5     │\n│ WideResNet-34-10 [TRADES]│ 85.4      │ 57.3        │ 46.2     │\n│ ViT-S/16 [AT]           │ 86.8       │ 54.9        │ 22.1     │\n│ RobustBench Best [2024] │ 88.7       │ 62.1        │ 71.3     │\n├─────────────────────────┼────────────┼─────────────┼──────────┤\n│ DART-NAS (ours)         │ 88.9       │ 67.3        │ 38.7     │\n│ DART-NAS-L (ours)       │ 90.1       │ 69.8        │ 58.4     │\n└─────────────────────────┴────────────┴─────────────┴──────────┘",
+      "raw_content": "Table 1: Comparison with State-of-the-Art (CIFAR-10)\n┌─────────────────────────┬────────────┬─────────────┬──────────┐\n│ Model                   │ Clean Acc  │ Robust Acc  │ Params   │\n│                         │ (%)        │ (ε=8/255)   │ (M)      │\n├─────────────────────────┼────────────┼─────────────┼──────────┤\n│ ResNet-18 (Standard)    │ 94.7       │ 0.0         │ 11.2     │\n│ WideResNet-28-10 [AT]   │ 87.3       │ 56.4        │ 36.5     │\n│ WideResNet-34-10 [TRADES]│ 85.4      │ 57.3        │ 46.2     │\n│ ViT-S/16 [AT]           │ 86.8       │ 54.9        │ 22.1     │\n│ RobustBench Best [2024] │ 88.7       │ 62.1        │ 71.3     │\n├─────────────────────────┼────────────┼─────────────┼──────────┤\n│ DART-NAS (ours)         │ 88.9       │ 67.3        │ 38.7     │\n│ DART-NAS-L (ours)       │ 90.1       │ 69.8        │ 58.4     │\n└─────────────────────────┴────────────┴─────────────┴──────────┘",
+      "position": {
+        "sequence_index": 63
+      },
+      "parent_id": "85ebb6f9-d03c-4159-a459-964a88688de6",
+      "metadata": {
+        "char_count": 910,
+        "word_count": 99,
+        "depth": 1,
+        "document_path": [
+          "5.1 Quantitative Performance"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "40df1ae6-fc99-4716-b0be-41761810a406",
+      "block_type": "paragraph",
+      "content": "Statistical Significance: Paired t-test vs. RobustBench Best\np-value = 0.0023 (α = 0.05), Cohen's d = 1.47 (large effect)",
+      "raw_content": "Statistical Significance: Paired t-test vs. RobustBench Best\np-value = 0.0023 (α = 0.05), Cohen's d = 1.47 (large effect)",
+      "position": {
+        "sequence_index": 64
+      },
+      "parent_id": "85ebb6f9-d03c-4159-a459-964a88688de6",
+      "metadata": {
+        "char_count": 121,
+        "word_count": 19,
+        "depth": 1,
+        "document_path": [
+          "5.1 Quantitative Performance"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "63cc30b6-11b7-40e6-ab30-f1959a156579",
+      "block_type": "paragraph",
+      "content": "Table 2: Ablation Study (CIFAR-10, ε=8/255)\n┌──────────────────────────────┬────────────┬─────────────┐\n│ Configuration                │ Clean Acc  │ Robust Acc  │\n├──────────────────────────────┼────────────┼─────────────┤\n│ DART-NAS (full)              │ 88.9       │ 67.3        │\n│ - Lipschitz regularization   │ 89.2       │ 63.1 (-4.2) │\n│ - Architecture search        │ 87.6       │ 62.8 (-4.5) │\n│ - Temperature annealing      │ 88.4       │ 65.7 (-1.6) │\n│ Only clean acc objective     │ 91.3       │ 58.4 (-8.9) │\n└──────────────────────────────┴────────────┴─────────────┘",
+      "raw_content": "Table 2: Ablation Study (CIFAR-10, ε=8/255)\n┌──────────────────────────────┬────────────┬─────────────┐\n│ Configuration                │ Clean Acc  │ Robust Acc  │\n├──────────────────────────────┼────────────┼─────────────┤\n│ DART-NAS (full)              │ 88.9       │ 67.3        │\n│ - Lipschitz regularization   │ 89.2       │ 63.1 (-4.2) │\n│ - Architecture search        │ 87.6       │ 62.8 (-4.5) │\n│ - Temperature annealing      │ 88.4       │ 65.7 (-1.6) │\n│ Only clean acc objective     │ 91.3       │ 58.4 (-8.9) │\n└──────────────────────────────┴────────────┴─────────────┘",
+      "position": {
+        "sequence_index": 65
+      },
+      "parent_id": "85ebb6f9-d03c-4159-a459-964a88688de6",
+      "metadata": {
+        "char_count": 583,
+        "word_count": 67,
+        "depth": 1,
+        "document_path": [
+          "5.1 Quantitative Performance"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "c9f8f045-c8ba-4fac-87f2-5c1f34e20782",
+      "block_type": "heading",
+      "content": "5.2 Discovered Architecture",
+      "raw_content": "5.2 Discovered Architecture",
+      "position": {
+        "sequence_index": 66
+      },
+      "metadata": {
+        "char_count": 27,
+        "word_count": 3,
+        "depth": 0,
+        "document_path": [],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "46fadebc-5d47-498b-85e0-394ce9843981",
+      "block_type": "paragraph",
+      "content": "Optimal macro-architecture (α*):\n- N_layers = 24\n- d_model = 768\n- N_heads = 12\n- d_k = 64 (head dimension)\n- r_ffn = 4 (FFN expansion ratio)",
+      "raw_content": "Optimal macro-architecture (α*):\n- N_layers = 24\n- d_model = 768\n- N_heads = 12\n- d_k = 64 (head dimension)\n- r_ffn = 4 (FFN expansion ratio)",
+      "position": {
+        "sequence_index": 67
+      },
+      "parent_id": "c9f8f045-c8ba-4fac-87f2-5c1f34e20782",
+      "metadata": {
+        "char_count": 141,
+        "word_count": 28,
+        "depth": 1,
+        "document_path": [
+          "5.2 Discovered Architecture"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "3da70281-edc5-464a-a15d-d9a9aa0f689c",
+      "block_type": "paragraph",
+      "content": "Micro-operations selected (frequency):\n┌─────────────────────────┬───────────┐\n│ Operation               │ Selection │\n├─────────────────────────┼───────────┤\n│ Multi-Head Attention    │ 87%       │\n│ Separable Conv 3×3      │ 23%       │\n│ Identity (skip)         │ 34%       │\n│ Layer Normalization     │ 100%      │\n│ GELU Activation         │ 76%       │\n│ SwiGLU FFN              │ 24%       │\n└─────────────────────────┴───────────┘",
+      "raw_content": "Micro-operations selected (frequency):\n┌─────────────────────────┬───────────┐\n│ Operation               │ Selection │\n├─────────────────────────┼───────────┤\n│ Multi-Head Attention    │ 87%       │\n│ Separable Conv 3×3      │ 23%       │\n│ Identity (skip)         │ 34%       │\n│ Layer Normalization     │ 100%      │\n│ GELU Activation         │ 76%       │\n│ SwiGLU FFN              │ 24%       │\n└─────────────────────────┴───────────┘",
+      "position": {
+        "sequence_index": 68
+      },
+      "parent_id": "c9f8f045-c8ba-4fac-87f2-5c1f34e20782",
+      "metadata": {
+        "char_count": 438,
+        "word_count": 48,
+        "depth": 1,
+        "document_path": [
+          "5.2 Discovered Architecture"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "ca0bb22b-b30a-4811-8441-f55fc6b16b58",
+      "block_type": "paragraph",
+      "content": "Key insights:\n• Attention heads with d_k = 64 optimal (vs. 32, 128)\n• Skip connections every 2-3 layers improve robustness +3.2%\n• Layer normalization outperforms batch norm +2.7% robust accuracy",
+      "raw_content": "Key insights:\n• Attention heads with d_k = 64 optimal (vs. 32, 128)\n• Skip connections every 2-3 layers improve robustness +3.2%\n• Layer normalization outperforms batch norm +2.7% robust accuracy",
+      "position": {
+        "sequence_index": 69
+      },
+      "parent_id": "c9f8f045-c8ba-4fac-87f2-5c1f34e20782",
+      "metadata": {
+        "char_count": 195,
+        "word_count": 31,
+        "depth": 1,
+        "document_path": [
+          "5.2 Discovered Architecture"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "3f7f3c83-3789-4b81-8b0b-90c614e7ecd0",
+      "block_type": "heading",
+      "content": "5.3 Lipschitz Constant Analysis",
+      "raw_content": "5.3 Lipschitz Constant Analysis",
+      "position": {
+        "sequence_index": 70
+      },
+      "metadata": {
+        "char_count": 31,
+        "word_count": 4,
+        "depth": 0,
+        "document_path": [],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "d3a9ef14-f432-4035-ace7-fa0becf9c275",
+      "block_type": "heading",
+      "content": "Measured Lipschitz constants (via power iteration, n_iter=100):",
+      "raw_content": "Measured Lipschitz constants (via power iteration, n_iter=100):",
+      "position": {
+        "sequence_index": 71
+      },
+      "metadata": {
+        "char_count": 63,
+        "word_count": 7,
+        "depth": 0,
+        "document_path": [],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "3f768ec0-aad4-405b-998a-a62047340293",
+      "block_type": "paragraph",
+      "content": "Model                    K_lip (measured)    K_lip (theoretical bound)\n─────────────────────────────────────────────────────────────────────\nResNet-18 (standard)     8472.3 ± 847.2     ∞ (unbounded)\nWideResNet-28-10 [AT]    124.7 ± 12.4       ~150 (estimated)\nDART-NAS (ours)          9.8 ± 0.9          ≤ 10 (constrained)",
+      "raw_content": "Model                    K_lip (measured)    K_lip (theoretical bound)\n─────────────────────────────────────────────────────────────────────\nResNet-18 (standard)     8472.3 ± 847.2     ∞ (unbounded)\nWideResNet-28-10 [AT]    124.7 ± 12.4       ~150 (estimated)\nDART-NAS (ours)          9.8 ± 0.9          ≤ 10 (constrained)",
+      "position": {
+        "sequence_index": 72
+      },
+      "parent_id": "d3a9ef14-f432-4035-ace7-fa0becf9c275",
+      "metadata": {
+        "char_count": 322,
+        "word_count": 29,
+        "depth": 1,
+        "document_path": [
+          "Measured Lipschitz constants (via power iteration, n_iter=100):"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "37c5f997-262d-4cf3-b00d-9932f6f6d51a",
+      "block_type": "paragraph",
+      "content": "Correlation: Spearman's ρ = -0.847 between K_lip and robust accuracy\n(p < 0.001), confirming Theorem 3.1.",
+      "raw_content": "Correlation: Spearman's ρ = -0.847 between K_lip and robust accuracy\n(p < 0.001), confirming Theorem 3.1.",
+      "position": {
+        "sequence_index": 73
+      },
+      "parent_id": "d3a9ef14-f432-4035-ace7-fa0becf9c275",
+      "metadata": {
+        "char_count": 105,
+        "word_count": 16,
+        "depth": 1,
+        "document_path": [
+          "Measured Lipschitz constants (via power iteration, n_iter=100):"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "d610fad2-f908-4632-920c-682b3ad001bc",
+      "block_type": "heading",
+      "content": "═══════════════════════════════════════════════════════════════════",
+      "raw_content": "═══════════════════════════════════════════════════════════════════",
+      "position": {
+        "sequence_index": 74
+      },
+      "metadata": {
+        "char_count": 67,
+        "word_count": 1,
+        "depth": 0,
+        "document_path": [],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "9b5c1474-e047-4925-927f-324c5135aa83",
+      "block_type": "heading",
+      "content": "6. COMPUTATIONAL COMPLEXITY",
+      "raw_content": "6. COMPUTATIONAL COMPLEXITY",
+      "position": {
+        "sequence_index": 75
+      },
+      "metadata": {
+        "char_count": 27,
+        "word_count": 3,
+        "depth": 0,
+        "document_path": [],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "766e3bb6-1280-4b6e-96d4-6d3a1c058786",
+      "block_type": "heading",
+      "content": "Time Complexity Analysis:",
+      "raw_content": "Time Complexity Analysis:",
+      "position": {
+        "sequence_index": 76
+      },
+      "metadata": {
+        "char_count": 25,
+        "word_count": 3,
+        "depth": 0,
+        "document_path": [],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "48e8d908-acc9-4b71-bcfc-77430825a170",
+      "block_type": "heading",
+      "content": "Forward Pass: O(N_layers · N_heads · d_model · L²)\nwhere L = sequence length",
+      "raw_content": "Forward Pass: O(N_layers · N_heads · d_model · L²)\nwhere L = sequence length",
+      "position": {
+        "sequence_index": 77
+      },
+      "metadata": {
+        "char_count": 76,
+        "word_count": 14,
+        "depth": 0,
+        "document_path": [],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "0ec249be-c330-496d-a4d4-e6985fcb1ed5",
+      "block_type": "paragraph",
+      "content": "Backward Pass (architecture gradient):\n    ∂L/∂α = Σ_i (∂L/∂O_i) · (∂O_i/∂α)\n    Complexity: O(|O| · N_layers · d_model · L²)",
+      "raw_content": "Backward Pass (architecture gradient):\n    ∂L/∂α = Σ_i (∂L/∂O_i) · (∂O_i/∂α)\n    Complexity: O(|O| · N_layers · d_model · L²)",
+      "position": {
+        "sequence_index": 78
+      },
+      "parent_id": "48e8d908-acc9-4b71-bcfc-77430825a170",
+      "metadata": {
+        "char_count": 125,
+        "word_count": 18,
+        "depth": 1,
+        "document_path": [
+          "Forward Pass: O(N_layers · N_heads · d_model · L²)\nwhere L = sequence length"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "e0974868-92fc-44ff-b215-2396a2c54099",
+      "block_type": "paragraph",
+      "content": "Search Algorithm Complexity:\n    Total: O(E_search · B · (T_forward + T_backward + T_adversarial))\n    ≈ 50 · 64 · (0.12s + 0.34s + 0.89s) = 4,320 seconds ≈ 1.2 hours\n    \n    On 8× A100 GPUs: 1.2 hours / 8 = 9 minutes per iteration\n    Total search: 50 epochs × 9 min = 450 min ≈ 7.5 hours",
+      "raw_content": "Search Algorithm Complexity:\n    Total: O(E_search · B · (T_forward + T_backward + T_adversarial))\n    ≈ 50 · 64 · (0.12s + 0.34s + 0.89s) = 4,320 seconds ≈ 1.2 hours\n    \n    On 8× A100 GPUs: 1.2 hours / 8 = 9 minutes per iteration\n    Total search: 50 epochs × 9 min = 450 min ≈ 7.5 hours",
+      "position": {
+        "sequence_index": 79
+      },
+      "parent_id": "48e8d908-acc9-4b71-bcfc-77430825a170",
+      "metadata": {
+        "char_count": 290,
+        "word_count": 55,
+        "depth": 1,
+        "document_path": [
+          "Forward Pass: O(N_layers · N_heads · d_model · L²)\nwhere L = sequence length"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "3c0b9c63-3836-412b-b033-e24336a138e0",
+      "block_type": "paragraph",
+      "content": "Memory Footprint:\n    Architecture params: |α| = N_layers × |O| × d_model²\n                        = 24 × 8 × 768² ≈ 113M parameters\n    \n    Peak GPU memory: \n        - Forward activations: ~8.7 GB\n        - Backward gradients: ~12.3 GB\n        - Optimizer states: ~6.2 GB\n        - Total: ~27.2 GB per GPU",
+      "raw_content": "Memory Footprint:\n    Architecture params: |α| = N_layers × |O| × d_model²\n                        = 24 × 8 × 768² ≈ 113M parameters\n    \n    Peak GPU memory: \n        - Forward activations: ~8.7 GB\n        - Backward gradients: ~12.3 GB\n        - Optimizer states: ~6.2 GB\n        - Total: ~27.2 GB per GPU",
+      "position": {
+        "sequence_index": 80
+      },
+      "parent_id": "48e8d908-acc9-4b71-bcfc-77430825a170",
+      "metadata": {
+        "char_count": 307,
+        "word_count": 44,
+        "depth": 1,
+        "document_path": [
+          "Forward Pass: O(N_layers · N_heads · d_model · L²)\nwhere L = sequence length"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "2873f815-72f0-4a49-8d36-256b80e9c7ca",
+      "block_type": "heading",
+      "content": "═══════════════════════════════════════════════════════════════════",
+      "raw_content": "═══════════════════════════════════════════════════════════════════",
+      "position": {
+        "sequence_index": 81
+      },
+      "metadata": {
+        "char_count": 67,
+        "word_count": 1,
+        "depth": 0,
+        "document_path": [],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "fd1bf111-fddd-4ec4-8ff1-bddefeda65c3",
+      "block_type": "heading",
+      "content": "7. LIMITATIONS & FUTURE WORK",
+      "raw_content": "7. LIMITATIONS & FUTURE WORK",
+      "position": {
+        "sequence_index": 82
+      },
+      "metadata": {
+        "char_count": 28,
+        "word_count": 5,
+        "depth": 0,
+        "document_path": [],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "21884074-8bfc-4736-b3a2-276027a3adfa",
+      "block_type": "paragraph",
+      "content": "Current Limitations:\n[1] Search cost scales quadratically with d_model (O(d²))\n[2] Limited to L_∞ threat model; L_2, L_1 require separate tuning\n[3] Transferability to larger datasets (ImageNet-21k) untested\n[4] Certified robustness bounds not provided (future: interval analysis)",
+      "raw_content": "Current Limitations:\n[1] Search cost scales quadratically with d_model (O(d²))\n[2] Limited to L_∞ threat model; L_2, L_1 require separate tuning\n[3] Transferability to larger datasets (ImageNet-21k) untested\n[4] Certified robustness bounds not provided (future: interval analysis)",
+      "position": {
+        "sequence_index": 83
+      },
+      "parent_id": "fd1bf111-fddd-4ec4-8ff1-bddefeda65c3",
+      "metadata": {
+        "char_count": 280,
+        "word_count": 37,
+        "depth": 1,
+        "document_path": [
+          "7. LIMITATIONS & FUTURE WORK"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "1166cf44-ebee-463b-a13a-81aaaab846b6",
+      "block_type": "paragraph",
+      "content": "Future Directions:\n• Multi-threat model NAS (L_∞ + L_2 + semantic perturbations)\n• Integration with neural ODE frameworks for continuous architectures\n• Theoretical analysis of robust generalization bounds\n• Extension to vision-language models (CLIP, ALIGN)\n• Quantum-inspired architecture search (variational quantum circuits)",
+      "raw_content": "Future Directions:\n• Multi-threat model NAS (L_∞ + L_2 + semantic perturbations)\n• Integration with neural ODE frameworks for continuous architectures\n• Theoretical analysis of robust generalization bounds\n• Extension to vision-language models (CLIP, ALIGN)\n• Quantum-inspired architecture search (variational quantum circuits)",
+      "position": {
+        "sequence_index": 84
+      },
+      "parent_id": "fd1bf111-fddd-4ec4-8ff1-bddefeda65c3",
+      "metadata": {
+        "char_count": 327,
+        "word_count": 42,
+        "depth": 1,
+        "document_path": [
+          "7. LIMITATIONS & FUTURE WORK"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "f6e5790e-5cd5-43ff-a966-b1e989aec164",
+      "block_type": "heading",
+      "content": "═══════════════════════════════════════════════════════════════════",
+      "raw_content": "═══════════════════════════════════════════════════════════════════",
+      "position": {
+        "sequence_index": 85
+      },
+      "metadata": {
+        "char_count": 67,
+        "word_count": 1,
+        "depth": 0,
+        "document_path": [],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "9595015b-86fe-4ef7-93eb-5bc0f2deac1e",
+      "block_type": "heading",
+      "content": "8. CONCLUSION",
+      "raw_content": "8. CONCLUSION",
+      "position": {
+        "sequence_index": 86
+      },
+      "metadata": {
+        "char_count": 13,
+        "word_count": 2,
+        "depth": 0,
+        "document_path": [],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "80c65646-7877-48a9-b53c-61692f7ade52",
+      "block_type": "paragraph",
+      "content": "We introduced DART-NAS, achieving state-of-the-art adversarial robustness \n(+5.2% over prior work) via principled architecture search with Lipschitz \nregularization. Our theoretical analysis (Theorem 3.1) and empirical \nvalidation (p < 0.001) confirm that architectural choices significantly \nimpact robustness. The discovered architecture demonstrates that \nattention mechanisms with controlled Lipschitz constants provide superior \nrobustness-accuracy trade-offs.",
+      "raw_content": "We introduced DART-NAS, achieving state-of-the-art adversarial robustness \n(+5.2% over prior work) via principled architecture search with Lipschitz \nregularization. Our theoretical analysis (Theorem 3.1) and empirical \nvalidation (p < 0.001) confirm that architectural choices significantly \nimpact robustness. The discovered architecture demonstrates that \nattention mechanisms with controlled Lipschitz constants provide superior \nrobustness-accuracy trade-offs.",
+      "position": {
+        "sequence_index": 87
+      },
+      "parent_id": "9595015b-86fe-4ef7-93eb-5bc0f2deac1e",
+      "metadata": {
+        "char_count": 465,
+        "word_count": 51,
+        "depth": 1,
+        "document_path": [
+          "8. CONCLUSION"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "699b3e12-1394-440e-9f5c-65f0ce1408b1",
+      "block_type": "paragraph",
+      "content": "Code: https://github.com/dart-nas/dart-nas-official\nCheckpoints: https://huggingface.co/dart-nas/cifar10-robust\nContact: {lchen, armartinez, jkim, spatel}@dartnas-authors.org",
+      "raw_content": "Code: https://github.com/dart-nas/dart-nas-official\nCheckpoints: https://huggingface.co/dart-nas/cifar10-robust\nContact: {lchen, armartinez, jkim, spatel}@dartnas-authors.org",
+      "position": {
+        "sequence_index": 88
+      },
+      "parent_id": "9595015b-86fe-4ef7-93eb-5bc0f2deac1e",
+      "metadata": {
+        "char_count": 174,
+        "word_count": 9,
+        "depth": 1,
+        "document_path": [
+          "8. CONCLUSION"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "13305dcd-81c7-4aec-9785-09b01a85388e",
+      "block_type": "heading",
+      "content": "═══════════════════════════════════════════════════════════════════",
+      "raw_content": "═══════════════════════════════════════════════════════════════════",
+      "position": {
+        "sequence_index": 89
+      },
+      "metadata": {
+        "char_count": 67,
+        "word_count": 1,
+        "depth": 0,
+        "document_path": [],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "3c911c0e-ece0-42ab-abd6-40780adb46ba",
+      "block_type": "heading",
+      "content": "REFERENCES [47 total, showing key citations]",
+      "raw_content": "REFERENCES [47 total, showing key citations]",
+      "position": {
+        "sequence_index": 90
+      },
+      "metadata": {
+        "char_count": 44,
+        "word_count": 6,
+        "depth": 0,
+        "document_path": [],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "2c4d46c8-b0dd-4e99-8703-6c50a07fd65e",
+      "block_type": "paragraph",
+      "content": "[1] Szegedy et al. (2014). Intriguing properties of neural networks. \n    ICLR 2014. arXiv:1312.6199",
+      "raw_content": "[1] Szegedy et al. (2014). Intriguing properties of neural networks. \n    ICLR 2014. arXiv:1312.6199",
+      "position": {
+        "sequence_index": 91
+      },
+      "parent_id": "3c911c0e-ece0-42ab-abd6-40780adb46ba",
+      "metadata": {
+        "char_count": 100,
+        "word_count": 13,
+        "depth": 1,
+        "document_path": [
+          "REFERENCES [47 total, showing key citations]"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "2e066e05-f265-4980-a6e4-5613a66e4825",
+      "block_type": "paragraph",
+      "content": "[2] Madry et al. (2018). Towards deep learning models resistant to \n    adversarial attacks. ICLR 2018. arXiv:1706.06083",
+      "raw_content": "[2] Madry et al. (2018). Towards deep learning models resistant to \n    adversarial attacks. ICLR 2018. arXiv:1706.06083",
+      "position": {
+        "sequence_index": 92
+      },
+      "parent_id": "3c911c0e-ece0-42ab-abd6-40780adb46ba",
+      "metadata": {
+        "char_count": 120,
+        "word_count": 16,
+        "depth": 1,
+        "document_path": [
+          "REFERENCES [47 total, showing key citations]"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "1d9f7f5a-f538-45c8-87c2-aabb109853bd",
+      "block_type": "paragraph",
+      "content": "[3] Liu et al. (2019). DARTS: Differentiable Architecture Search. \n    ICLR 2019. arXiv:1806.09055",
+      "raw_content": "[3] Liu et al. (2019). DARTS: Differentiable Architecture Search. \n    ICLR 2019. arXiv:1806.09055",
+      "position": {
+        "sequence_index": 93
+      },
+      "parent_id": "3c911c0e-ece0-42ab-abd6-40780adb46ba",
+      "metadata": {
+        "char_count": 98,
+        "word_count": 12,
+        "depth": 1,
+        "document_path": [
+          "REFERENCES [47 total, showing key citations]"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "fc12a6fc-5fc8-4ee5-b88f-3d4f765ac260",
+      "block_type": "paragraph",
+      "content": "[4] Croce & Hein (2020). Reliable evaluation of adversarial robustness \n    with an ensemble of diverse parameter-free attacks. ICML 2020.",
+      "raw_content": "[4] Croce & Hein (2020). Reliable evaluation of adversarial robustness \n    with an ensemble of diverse parameter-free attacks. ICML 2020.",
+      "position": {
+        "sequence_index": 94
+      },
+      "parent_id": "3c911c0e-ece0-42ab-abd6-40780adb46ba",
+      "metadata": {
+        "char_count": 138,
+        "word_count": 19,
+        "depth": 1,
+        "document_path": [
+          "REFERENCES [47 total, showing key citations]"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "d40e90c9-754f-4782-81c6-b03c7a3fb76d",
+      "block_type": "heading",
+      "content": "... [43 additional references omitted for brevity]",
+      "raw_content": "... [43 additional references omitted for brevity]",
+      "position": {
+        "sequence_index": 95
+      },
+      "metadata": {
+        "char_count": 50,
+        "word_count": 7,
+        "depth": 0,
+        "document_path": [],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "591826d0-96f3-4c14-97db-726e1a6bbe8e",
+      "block_type": "heading",
+      "content": "═══════════════════════════════════════════════════════════════════",
+      "raw_content": "═══════════════════════════════════════════════════════════════════",
+      "position": {
+        "sequence_index": 96
+      },
+      "metadata": {
+        "char_count": 67,
+        "word_count": 1,
+        "depth": 0,
+        "document_path": [],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "f43ad6f7-e603-4291-b6d5-c4130b62976a",
+      "block_type": "paragraph",
+      "content": "APPENDIX A: Additional Experimental Results\nAPPENDIX B: Architecture Encoding Details  \nAPPENDIX C: Hyperparameter Sensitivity Analysis\nAPPENDIX D: Extended Proofs (Theorems 3.1-3.4)",
+      "raw_content": "APPENDIX A: Additional Experimental Results\nAPPENDIX B: Architecture Encoding Details  \nAPPENDIX C: Hyperparameter Sensitivity Analysis\nAPPENDIX D: Extended Proofs (Theorems 3.1-3.4)",
+      "position": {
+        "sequence_index": 97
+      },
+      "parent_id": "591826d0-96f3-4c14-97db-726e1a6bbe8e",
+      "metadata": {
+        "char_count": 182,
+        "word_count": 21,
+        "depth": 1,
+        "document_path": [
+          "═══════════════════════════════════════════════════════════════════"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "d152a319-2a2d-4832-a604-890356cc25a1",
+      "block_type": "paragraph",
+      "content": "═══════════════════════════════════════════════════════════════════\nDocument Hash (SHA-256): \na7f3d8c9e2b1f4a6c8d3e5f7a9b2c4d6e8f3a5b7c9d1e4f6a8c2d5e7f9a3b6c8d5",
+      "raw_content": "═══════════════════════════════════════════════════════════════════\nDocument Hash (SHA-256): \na7f3d8c9e2b1f4a6c8d3e5f7a9b2c4d6e8f3a5b7c9d1e4f6a8c2d5e7f9a3b6c8d5",
+      "position": {
+        "sequence_index": 98
+      },
+      "parent_id": "591826d0-96f3-4c14-97db-726e1a6bbe8e",
+      "metadata": {
+        "char_count": 160,
+        "word_count": 5,
+        "depth": 1,
+        "document_path": [
+          "═══════════════════════════════════════════════════════════════════"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "30fc4095-1bf5-4e94-bc17-22b3379cf1eb",
+      "block_type": "paragraph",
+      "content": "LaTeX Source: 18,473 lines | Compiled PDF: 24 pages | Word Count: 8,947\nProcessing Requirements: Unicode math symbols (∈∂∇∫Σ∏), subscripts/\nsuperscripts, matrices, code blocks, citation links, cross-references",
+      "raw_content": "LaTeX Source: 18,473 lines | Compiled PDF: 24 pages | Word Count: 8,947\nProcessing Requirements: Unicode math symbols (∈∂∇∫Σ∏), subscripts/\nsuperscripts, matrices, code blocks, citation links, cross-references",
+      "position": {
+        "sequence_index": 99
+      },
+      "parent_id": "591826d0-96f3-4c14-97db-726e1a6bbe8e",
+      "metadata": {
+        "char_count": 209,
+        "word_count": 27,
+        "depth": 1,
+        "document_path": [
+          "═══════════════════════════════════════════════════════════════════"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    }
+  ],
+  "document_metadata": {
+    "source_file": "C:\\Users\\Andrew\\Documents\\AI ideas for fun and work\\Prompt Research\\Data Extraction\\data-extractor-tool\\test-files-assesses-extraction-tool\\test_case_05_technical_dense.txt",
+    "file_format": "text",
+    "file_size_bytes": 18960,
+    "word_count": 1839,
+    "character_count": 15211,
+    "extracted_at": "2025-10-30T01:30:43.366623"
+  },
+  "processing_stage": "quality_validation",
+  "quality_score": 66.66666666666667,
+  "processing_success": true
+}

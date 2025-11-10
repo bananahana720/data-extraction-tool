@@ -1,0 +1,63 @@
+{
+  "content_blocks": [
+    {
+      "block_id": "6bac309e-c22f-44dc-a981-fc5938a35ef5",
+      "block_type": "table",
+      "content": "Sheet: Note to Users",
+      "position": {
+        "sheet": "Note to Users",
+        "sequence_index": 0
+      },
+      "metadata": {
+        "sheet_name": "Note to Users",
+        "sheet_index": 0,
+        "num_rows": 1,
+        "num_columns": 1,
+        "table_id": "cee5440e-baa8-4422-8367-12a0ab95b65a",
+        "depth": 0,
+        "document_path": [],
+        "word_count": 4,
+        "char_count": 20,
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "56e3ffd9-ad5b-4b66-8310-bd04f94061f5",
+      "block_type": "table",
+      "content": "Sheet: SP-800-53_rev5",
+      "position": {
+        "sheet": "SP-800-53_rev5",
+        "sequence_index": 1
+      },
+      "metadata": {
+        "sheet_name": "SP-800-53_rev5",
+        "sheet_index": 1,
+        "num_rows": 1190,
+        "num_columns": 5,
+        "table_id": "7095c552-4fb4-4140-a8b2-8d13490f53f5",
+        "depth": 0,
+        "document_path": [],
+        "word_count": 2,
+        "char_count": 21,
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    }
+  ],
+  "document_metadata": {
+    "source_file": "C:\\Users\\Andrew\\Documents\\AI ideas for fun and work\\Prompt Research\\Data Extraction\\data-extractor-tool\\test-files-assesses-extraction-tool\\NIST_SP-800-53_rev5-derived-OSCAL.xlsx",
+    "file_format": "xlsx",
+    "file_size_bytes": 378937,
+    "file_hash": "7773178405a203c9704bc5fdb61df84899d15443d702111b58cbe33c2a97b43d",
+    "author": "openpyxl",
+    "created_date": "2021-03-13T01:45:32",
+    "modified_date": "2021-03-24T15:48:52",
+    "table_count": 2,
+    "extracted_at": "2025-10-30T01:30:42.371070",
+    "extractor_version": "0.1.0-tdd"
+  },
+  "processing_stage": "quality_validation",
+  "quality_score": 93.33333333333333,
+  "processing_success": true
+}

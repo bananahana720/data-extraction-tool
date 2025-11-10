@@ -1,0 +1,127 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "data-extraction-tool"
+version = "0.1.0"
+description = "Enterprise data extraction tool with modular pipeline architecture for document processing"
+readme = "README.md"
+requires-python = ">=3.12"
+license = {text = "Proprietary"}
+authors = [
+    {name = "Andrew", email = "andrew@example.com"},
+]
+keywords = [
+    "document-extraction",
+    "ai-ready",
+    "enterprise",
+    "data-extraction",
+    "pdf",
+    "docx",
+    "excel",
+    "powerpoint",
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: End Users/Desktop",
+    "Topic :: Office/Business",
+    "Topic :: Text Processing",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Operating System :: OS Independent",
+]
+
+dependencies = [
+    # Core Epic 1 Foundation (required for Story 1.4)
+    "pydantic>=2.0.0,<3.0",
+    "PyYAML>=6.0.0,<7.0",
+    "python-dotenv>=1.0.0,<2.0",
+    "structlog>=24.0.0,<25.0",
+
+    # Brownfield compatibility (existing dependencies, kept for Story 1.2 assessment)
+    "python-docx>=0.8.11",
+    "pypdf>=3.0.0",
+    "python-pptx>=0.6.21",
+    "openpyxl>=3.0.10",
+    "click>=8.1.0",
+    "rich>=13.0.0",
+    "pdfplumber>=0.10.0",
+    "Pillow>=10.0.0",
+]
+
+[project.optional-dependencies]
+# OCR support (optional, requires system dependencies)
+ocr = [
+    "pytesseract>=0.3.10",
+    "pdf2image>=1.16.0",
+]
+
+# Development dependencies
+dev = [
+    "pytest>=8.0.0,<9.0",
+    "pytest-cov>=5.0.0,<6.0",
+    "pytest-xdist>=3.6.0,<4.0",
+    "pytest-mock>=3.11.0",
+    "black>=24.0.0,<25.0",
+    "ruff>=0.6.0,<0.7",
+    "mypy>=1.11.0,<2.0",
+    "pre-commit>=3.0.0,<4.0",
+]
+
+# All optional dependencies
+all = [
+    "data-extraction-tool[ocr,dev]",
+]
+
+[project.scripts]
+data-extract = "data_extract.cli:app"
+
+[project.urls]
+Homepage = "https://github.com/yourusername/ai-data-extractor"
+Documentation = "https://github.com/yourusername/ai-data-extractor/blob/main/README.md"
+Repository = "https://github.com/yourusername/ai-data-extractor"
+Issues = "https://github.com/yourusername/ai-data-extractor/issues"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+"*" = ["*.yaml", "*.yml", "*.json", "*.txt"]
+infrastructure = ["*.yaml", "*.yml", "*.json"]
+cli = ["*.yaml", "*.yml", "*.json"]
+formatters = ["*.yaml", "*.yml"]
+extractors = ["*.yaml", "*.yml"]
+processors = ["*.yaml", "*.yml"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = "-v --cov=src --cov-report=term-missing"
+
+[tool.black]
+line-length = 100
+target-version = ['py312']
+include = '\.pyi?$'
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+select = ["E", "F", "I", "N", "W"]
+ignore = ["E501"]  # Line too long (handled by black)
+
+[tool.mypy]
+python_version = "3.12"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+exclude = [
+    "src/(cli|extractors|processors|formatters|core|pipeline|infrastructure)/",
+]

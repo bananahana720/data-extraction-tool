@@ -1,0 +1,1117 @@
+{
+  "content_blocks": [
+    {
+      "block_id": "66b76896-58d9-4682-9900-0b15f51d8c6c",
+      "block_type": "paragraph",
+      "content": "╔═══════════════════════════════════════════════════════════════════╗\n║   INTERNATIONAL RESEARCH COLLABORATION AGREEMENT                  ║\n║   多国研究合作协议 • Accord de collaboration de recherche       ║\n╚═══════════════════════════════════════════════════════════════════╝",
+      "raw_content": "╔═══════════════════════════════════════════════════════════════════╗\n║   INTERNATIONAL RESEARCH COLLABORATION AGREEMENT                  ║\n║   多国研究合作协议 • Accord de collaboration de recherche       ║\n╚═══════════════════════════════════════════════════════════════════╝",
+      "position": {
+        "sequence_index": 0
+      },
+      "metadata": {
+        "char_count": 269,
+        "word_count": 17,
+        "depth": 0,
+        "document_path": [],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "d1f2362a-df0d-4129-b73f-91df2fa5e845",
+      "block_type": "paragraph",
+      "content": "Document ID: IRCA-2024-ΩΨΦ-7493          Status: ✓ EXECUTED\nEffective Date: 2024-10-15                Expires: 2027-10-15\nClassification: 🔒 CONFIDENTIAL • 机密 • CONFIDENTIEL",
+      "raw_content": "Document ID: IRCA-2024-ΩΨΦ-7493          Status: ✓ EXECUTED\nEffective Date: 2024-10-15                Expires: 2027-10-15\nClassification: 🔒 CONFIDENTIAL • 机密 • CONFIDENTIEL",
+      "position": {
+        "sequence_index": 1
+      },
+      "metadata": {
+        "char_count": 172,
+        "word_count": 18,
+        "depth": 0,
+        "document_path": [],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "d6b3d6f8-e104-4fc5-923f-43d69493b338",
+      "block_type": "heading",
+      "content": "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━",
+      "raw_content": "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━",
+      "position": {
+        "sequence_index": 2
+      },
+      "metadata": {
+        "char_count": 65,
+        "word_count": 1,
+        "depth": 0,
+        "document_path": [],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "39880928-8bb0-4247-82bc-af65838bde7e",
+      "block_type": "heading",
+      "content": "PARTICIPATING INSTITUTIONS / 参与机构 / INSTITUTIONS PARTICIPANTES:",
+      "raw_content": "PARTICIPATING INSTITUTIONS / 参与机构 / INSTITUTIONS PARTICIPANTES:",
+      "position": {
+        "sequence_index": 3
+      },
+      "metadata": {
+        "char_count": 63,
+        "word_count": 7,
+        "depth": 0,
+        "document_path": [],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "5709a225-4e50-4e67-af47-683a9dd12296",
+      "block_type": "paragraph",
+      "content": "[1] Massachusetts Institute of Technology (MIT) 🇺🇸\n    Address: 77 Massachusetts Ave, Cambridge, MA 02139\n    Representative: Dr. Sarah O'Brien-MacDonald, PhD\n    Title: Director → Quantum Computing Research Lab\n    Contact: s.obrien@mit.edu | ☎ +1-617-253-4000\n    ORCID: 0000-0002-1234-5678",
+      "raw_content": "[1] Massachusetts Institute of Technology (MIT) 🇺🇸\n    Address: 77 Massachusetts Ave, Cambridge, MA 02139\n    Representative: Dr. Sarah O'Brien-MacDonald, PhD\n    Title: Director → Quantum Computing Research Lab\n    Contact: s.obrien@mit.edu | ☎ +1-617-253-4000\n    ORCID: 0000-0002-1234-5678",
+      "position": {
+        "sequence_index": 4
+      },
+      "parent_id": "39880928-8bb0-4247-82bc-af65838bde7e",
+      "metadata": {
+        "char_count": 292,
+        "word_count": 33,
+        "depth": 1,
+        "document_path": [
+          "PARTICIPATING INSTITUTIONS / 参与机构 / INSTITUTIONS PARTICIPANTES:"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "06c6a19a-82b7-48cd-abbc-1fbef4e7b450",
+      "block_type": "paragraph",
+      "content": "[2] 清华大学 • Tsinghua University 🇨🇳\n    地址: 北京市海淀区清华园1号 (Haidian District, Beijing 100084)\n    代表: 张伟教授 (Prof. Wěi Zhāng)\n    职位: 量子信息研究中心主任\n    联系方式: w.zhang@tsinghua.edu.cn | ☎ +86-10-6278-xxxx\n    Research ID: C-3847-2019",
+      "raw_content": "[2] 清华大学 • Tsinghua University 🇨🇳\n    地址: 北京市海淀区清华园1号 (Haidian District, Beijing 100084)\n    代表: 张伟教授 (Prof. Wěi Zhāng)\n    职位: 量子信息研究中心主任\n    联系方式: w.zhang@tsinghua.edu.cn | ☎ +86-10-6278-xxxx\n    Research ID: C-3847-2019",
+      "position": {
+        "sequence_index": 5
+      },
+      "parent_id": "39880928-8bb0-4247-82bc-af65838bde7e",
+      "metadata": {
+        "char_count": 222,
+        "word_count": 27,
+        "depth": 1,
+        "document_path": [
+          "PARTICIPATING INSTITUTIONS / 参与机构 / INSTITUTIONS PARTICIPANTES:"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "432fcad2-0e27-4c60-a4a7-d7f9e82c6006",
+      "block_type": "paragraph",
+      "content": "[3] École Polytechnique Fédérale de Lausanne (EPFL) 🇨🇭\n    Adresse: Route Cantonale, 1015 Lausanne, Suisse\n    Représentant: Prof. Dr. François Müller-Leclerc\n    Titre: Directeur — Laboratoire de Nanoscience\n    Contact: f.muller.leclerc@epfl.ch | ☎ +41-21-693-xxxx\n    Scopus ID: 57194728300",
+      "raw_content": "[3] École Polytechnique Fédérale de Lausanne (EPFL) 🇨🇭\n    Adresse: Route Cantonale, 1015 Lausanne, Suisse\n    Représentant: Prof. Dr. François Müller-Leclerc\n    Titre: Directeur — Laboratoire de Nanoscience\n    Contact: f.muller.leclerc@epfl.ch | ☎ +41-21-693-xxxx\n    Scopus ID: 57194728300",
+      "position": {
+        "sequence_index": 6
+      },
+      "parent_id": "39880928-8bb0-4247-82bc-af65838bde7e",
+      "metadata": {
+        "char_count": 293,
+        "word_count": 33,
+        "depth": 1,
+        "document_path": [
+          "PARTICIPATING INSTITUTIONS / 参与机构 / INSTITUTIONS PARTICIPANTES:"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "05c87d5d-dd46-49ed-82fa-7fb65029f9a2",
+      "block_type": "paragraph",
+      "content": "[4] 東京大学 • University of Tokyo 🇯🇵\n    住所: 〒113-8654 東京都文京区本郷7-3-1\n    代表者: 田中 花子 博士 (Dr. Hanako Tanaka)\n    役職: 先端物理学研究所 • 准教授\n    連絡先: h.tanaka@u-tokyo.ac.jp | ☎ +81-3-5841-xxxx",
+      "raw_content": "[4] 東京大学 • University of Tokyo 🇯🇵\n    住所: 〒113-8654 東京都文京区本郷7-3-1\n    代表者: 田中 花子 博士 (Dr. Hanako Tanaka)\n    役職: 先端物理学研究所 • 准教授\n    連絡先: h.tanaka@u-tokyo.ac.jp | ☎ +81-3-5841-xxxx",
+      "position": {
+        "sequence_index": 7
+      },
+      "parent_id": "39880928-8bb0-4247-82bc-af65838bde7e",
+      "metadata": {
+        "char_count": 178,
+        "word_count": 26,
+        "depth": 1,
+        "document_path": [
+          "PARTICIPATING INSTITUTIONS / 参与机构 / INSTITUTIONS PARTICIPANTES:"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "fb33ddfd-29ee-4f8e-bca0-d425beb82166",
+      "block_type": "heading",
+      "content": "───────────────────────────────────────────────────────────────────",
+      "raw_content": "───────────────────────────────────────────────────────────────────",
+      "position": {
+        "sequence_index": 8
+      },
+      "metadata": {
+        "char_count": 67,
+        "word_count": 1,
+        "depth": 0,
+        "document_path": [],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "916025b1-7bca-4a7d-9403-ddb9125405eb",
+      "block_type": "heading",
+      "content": "SCOPE OF COLLABORATION / 合作范围 / PORTÉE DE LA COLLABORATION:",
+      "raw_content": "SCOPE OF COLLABORATION / 合作范围 / PORTÉE DE LA COLLABORATION:",
+      "position": {
+        "sequence_index": 9
+      },
+      "metadata": {
+        "char_count": 59,
+        "word_count": 10,
+        "depth": 0,
+        "document_path": [],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "ab98ef4f-1a57-4642-9552-ae3e7e37ddd3",
+      "block_type": "paragraph",
+      "content": "The parties agree to jointly investigate quantum entanglement phenomena \nin topological materials, with focus on:",
+      "raw_content": "The parties agree to jointly investigate quantum entanglement phenomena \nin topological materials, with focus on:",
+      "position": {
+        "sequence_index": 10
+      },
+      "parent_id": "916025b1-7bca-4a7d-9403-ddb9125405eb",
+      "metadata": {
+        "char_count": 113,
+        "word_count": 15,
+        "depth": 1,
+        "document_path": [
+          "SCOPE OF COLLABORATION / 合作范围 / PORTÉE DE LA COLLABORATION:"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "8eea8c67-cd74-4cd1-b8a5-d65d7f37d9ec",
+      "block_type": "paragraph",
+      "content": "➀ Theoretical Framework Development\n   • Non-Abelian anyon models (SU(2)_k fusion rules)\n   • Topological quantum field theory (TQFT) applications\n   • Majorana zero-mode detection protocols",
+      "raw_content": "➀ Theoretical Framework Development\n   • Non-Abelian anyon models (SU(2)_k fusion rules)\n   • Topological quantum field theory (TQFT) applications\n   • Majorana zero-mode detection protocols",
+      "position": {
+        "sequence_index": 11
+      },
+      "parent_id": "916025b1-7bca-4a7d-9403-ddb9125405eb",
+      "metadata": {
+        "char_count": 190,
+        "word_count": 23,
+        "depth": 1,
+        "document_path": [
+          "SCOPE OF COLLABORATION / 合作范围 / PORTÉE DE LA COLLABORATION:"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "0b65f72e-bb04-4b6c-bf22-fd04603beb99",
+      "block_type": "paragraph",
+      "content": "➁ Experimental Validation (实验验证 • Validation expérimentale)\n   ⚛ Material synthesis: HgTe/CdTe quantum wells\n   ⚛ Cryogenic measurements: T ≤ 10mK (dilution refrigerator)\n   ⚛ Interferometric analysis: Δφ = (2π/Φ₀)∮A·dl where Φ₀ = h/2e",
+      "raw_content": "➁ Experimental Validation (实验验证 • Validation expérimentale)\n   ⚛ Material synthesis: HgTe/CdTe quantum wells\n   ⚛ Cryogenic measurements: T ≤ 10mK (dilution refrigerator)\n   ⚛ Interferometric analysis: Δφ = (2π/Φ₀)∮A·dl where Φ₀ = h/2e",
+      "position": {
+        "sequence_index": 12
+      },
+      "parent_id": "916025b1-7bca-4a7d-9403-ddb9125405eb",
+      "metadata": {
+        "char_count": 235,
+        "word_count": 31,
+        "depth": 1,
+        "document_path": [
+          "SCOPE OF COLLABORATION / 合作范围 / PORTÉE DE LA COLLABORATION:"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "d94394f4-84ea-42fd-92b0-bb071d86baf7",
+      "block_type": "paragraph",
+      "content": "➂ Computational Modeling & Simulation\n   ∫∫∫ψ(r,t)·H·ψ(r,t)dV = E_total\n   Supercomputing resources: 10^6 CPU-hours @ 2.3 PFLOPS",
+      "raw_content": "➂ Computational Modeling & Simulation\n   ∫∫∫ψ(r,t)·H·ψ(r,t)dV = E_total\n   Supercomputing resources: 10^6 CPU-hours @ 2.3 PFLOPS",
+      "position": {
+        "sequence_index": 13
+      },
+      "parent_id": "916025b1-7bca-4a7d-9403-ddb9125405eb",
+      "metadata": {
+        "char_count": 128,
+        "word_count": 15,
+        "depth": 1,
+        "document_path": [
+          "SCOPE OF COLLABORATION / 合作范围 / PORTÉE DE LA COLLABORATION:"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "cc0c5754-9ee8-4b7a-b376-b1e6d60bdbed",
+      "block_type": "paragraph",
+      "content": "➃ Data Management & Sharing\n   Repository: https://quantum-collab.research.org/data/IRCA-2024\n   Format: HDF5, NetCDF-4, JSON-LD\n   Size: ~847 TB (estimated over 3-year period)",
+      "raw_content": "➃ Data Management & Sharing\n   Repository: https://quantum-collab.research.org/data/IRCA-2024\n   Format: HDF5, NetCDF-4, JSON-LD\n   Size: ~847 TB (estimated over 3-year period)",
+      "position": {
+        "sequence_index": 14
+      },
+      "parent_id": "916025b1-7bca-4a7d-9403-ddb9125405eb",
+      "metadata": {
+        "char_count": 176,
+        "word_count": 18,
+        "depth": 1,
+        "document_path": [
+          "SCOPE OF COLLABORATION / 合作范围 / PORTÉE DE LA COLLABORATION:"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "5964b129-df19-4246-bab8-e58d14c7f203",
+      "block_type": "heading",
+      "content": "───────────────────────────────────────────────────────────────────",
+      "raw_content": "───────────────────────────────────────────────────────────────────",
+      "position": {
+        "sequence_index": 15
+      },
+      "metadata": {
+        "char_count": 67,
+        "word_count": 1,
+        "depth": 0,
+        "document_path": [],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "42681535-bf65-4345-961d-c57a361f4db2",
+      "block_type": "heading",
+      "content": "FINANCIAL ARRANGEMENTS / 财务安排 / ARRANGEMENTS FINANCIERS:",
+      "raw_content": "FINANCIAL ARRANGEMENTS / 财务安排 / ARRANGEMENTS FINANCIERS:",
+      "position": {
+        "sequence_index": 16
+      },
+      "metadata": {
+        "char_count": 56,
+        "word_count": 7,
+        "depth": 0,
+        "document_path": [],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "eb3a3f25-f1bd-4930-b99f-16797b34ed23",
+      "block_type": "paragraph",
+      "content": "┌─────────────────────────┬──────────────┬──────────────┬──────────────┐\n│ Institution             │ Year 1       │ Year 2       │ Year 3       │\n├─────────────────────────┼──────────────┼──────────────┼──────────────┤\n│ MIT                     │ $2,847,000   │ $3,124,000   │ $3,412,000   │\n│ Tsinghua (清华)         │ ¥19,847,000  │ ¥21,942,000  │ ¥24,073,000  │\n│ EPFL                    │ CHF 2,634,000│ CHF 2,897,000│ CHF 3,187,000│\n│ U-Tokyo (東京大)        │ ¥387,420,000 │ ¥426,162,000 │ ¥468,778,000 │\n├─────────────────────────┼──────────────┼──────────────┼──────────────┤\n│ TOTAL (USD equivalent)  │ ~$11.2M      │ ~$12.3M      │ ~$13.5M      │\n└─────────────────────────┴──────────────┴──────────────┴──────────────┘",
+      "raw_content": "┌─────────────────────────┬──────────────┬──────────────┬──────────────┐\n│ Institution             │ Year 1       │ Year 2       │ Year 3       │\n├─────────────────────────┼──────────────┼──────────────┼──────────────┤\n│ MIT                     │ $2,847,000   │ $3,124,000   │ $3,412,000   │\n│ Tsinghua (清华)         │ ¥19,847,000  │ ¥21,942,000  │ ¥24,073,000  │\n│ EPFL                    │ CHF 2,634,000│ CHF 2,897,000│ CHF 3,187,000│\n│ U-Tokyo (東京大)        │ ¥387,420,000 │ ¥426,162,000 │ ¥468,778,000 │\n├─────────────────────────┼──────────────┼──────────────┼──────────────┤\n│ TOTAL (USD equivalent)  │ ~$11.2M      │ ~$12.3M      │ ~$13.5M      │\n└─────────────────────────┴──────────────┴──────────────┴──────────────┘",
+      "position": {
+        "sequence_index": 17
+      },
+      "parent_id": "42681535-bf65-4345-961d-c57a361f4db2",
+      "metadata": {
+        "char_count": 724,
+        "word_count": 65,
+        "depth": 1,
+        "document_path": [
+          "FINANCIAL ARRANGEMENTS / 财务安排 / ARRANGEMENTS FINANCIERS:"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "92a75951-40fc-4996-96c2-e74b15d31a56",
+      "block_type": "paragraph",
+      "content": "Exchange rates (reference): 1 USD ≈ 7.2 CNY ≈ 0.92 CHF ≈ 149.7 JPY\n(Rates subject to quarterly adjustment ±5% per ECB/PBOC/SNB/BOJ)",
+      "raw_content": "Exchange rates (reference): 1 USD ≈ 7.2 CNY ≈ 0.92 CHF ≈ 149.7 JPY\n(Rates subject to quarterly adjustment ±5% per ECB/PBOC/SNB/BOJ)",
+      "position": {
+        "sequence_index": 18
+      },
+      "parent_id": "42681535-bf65-4345-961d-c57a361f4db2",
+      "metadata": {
+        "char_count": 131,
+        "word_count": 22,
+        "depth": 1,
+        "document_path": [
+          "FINANCIAL ARRANGEMENTS / 财务安排 / ARRANGEMENTS FINANCIERS:"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "d09133bc-0788-445f-8847-d1e4110e1654",
+      "block_type": "paragraph",
+      "content": "※ Special allocation: €500,000 from European Research Council (ERC)\n   Grant ID: AdG-2024-847392 \"TopQuant\"",
+      "raw_content": "※ Special allocation: €500,000 from European Research Council (ERC)\n   Grant ID: AdG-2024-847392 \"TopQuant\"",
+      "position": {
+        "sequence_index": 19
+      },
+      "parent_id": "42681535-bf65-4345-961d-c57a361f4db2",
+      "metadata": {
+        "char_count": 107,
+        "word_count": 13,
+        "depth": 1,
+        "document_path": [
+          "FINANCIAL ARRANGEMENTS / 财务安排 / ARRANGEMENTS FINANCIERS:"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "12decb6c-d5ca-4d9a-8e00-ac6026243616",
+      "block_type": "heading",
+      "content": "───────────────────────────────────────────────────────────────────",
+      "raw_content": "───────────────────────────────────────────────────────────────────",
+      "position": {
+        "sequence_index": 20
+      },
+      "metadata": {
+        "char_count": 67,
+        "word_count": 1,
+        "depth": 0,
+        "document_path": [],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "b4dfc721-8b74-4626-b6ed-eb8e25033f03",
+      "block_type": "heading",
+      "content": "INTELLECTUAL PROPERTY PROVISIONS / 知识产权条款:",
+      "raw_content": "INTELLECTUAL PROPERTY PROVISIONS / 知识产权条款:",
+      "position": {
+        "sequence_index": 21
+      },
+      "metadata": {
+        "char_count": 42,
+        "word_count": 5,
+        "depth": 0,
+        "document_path": [],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "39b167d1-bbdb-475b-91fb-14977c8a1eda",
+      "block_type": "paragraph",
+      "content": "§1. BACKGROUND IP\n   Each party retains ownership of pre-existing intellectual property\n   (申请日期 < 2024-10-15). No implied license granted.",
+      "raw_content": "§1. BACKGROUND IP\n   Each party retains ownership of pre-existing intellectual property\n   (申请日期 < 2024-10-15). No implied license granted.",
+      "position": {
+        "sequence_index": 22
+      },
+      "parent_id": "b4dfc721-8b74-4626-b6ed-eb8e25033f03",
+      "metadata": {
+        "char_count": 139,
+        "word_count": 18,
+        "depth": 1,
+        "document_path": [
+          "INTELLECTUAL PROPERTY PROVISIONS / 知识产权条款:"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "6800158e-5de1-4a7e-9126-f6d71fb0dfe6",
+      "block_type": "paragraph",
+      "content": "§2. FOREGROUND IP (新开发的知识产权)\n   • Joint ownership → proportional to contribution\n   • Publication rights: 90-day review period\n   • Patent filing: unanimous consent required\n   • Commercialization: 70/30 revenue split (developing party/others)",
+      "raw_content": "§2. FOREGROUND IP (新开发的知识产权)\n   • Joint ownership → proportional to contribution\n   • Publication rights: 90-day review period\n   • Patent filing: unanimous consent required\n   • Commercialization: 70/30 revenue split (developing party/others)",
+      "position": {
+        "sequence_index": 23
+      },
+      "parent_id": "b4dfc721-8b74-4626-b6ed-eb8e25033f03",
+      "metadata": {
+        "char_count": 243,
+        "word_count": 30,
+        "depth": 1,
+        "document_path": [
+          "INTELLECTUAL PROPERTY PROVISIONS / 知识产权条款:"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "eca8e0e5-5b97-48a4-a2e3-a63b94c8553c",
+      "block_type": "paragraph",
+      "content": "§3. CONFIDENTIALITY (保密协议 • Accord de confidentialité)\n   Duration: 7 years post-termination\n   Exceptions: (a) publicly known; (b) independently developed;\n              (c) legally disclosed; (d) approved in writing",
+      "raw_content": "§3. CONFIDENTIALITY (保密协议 • Accord de confidentialité)\n   Duration: 7 years post-termination\n   Exceptions: (a) publicly known; (b) independently developed;\n              (c) legally disclosed; (d) approved in writing",
+      "position": {
+        "sequence_index": 24
+      },
+      "parent_id": "b4dfc721-8b74-4626-b6ed-eb8e25033f03",
+      "metadata": {
+        "char_count": 217,
+        "word_count": 25,
+        "depth": 1,
+        "document_path": [
+          "INTELLECTUAL PROPERTY PROVISIONS / 知识产权条款:"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "a6751bb0-47b0-4e67-a581-634e8a5b6ff5",
+      "block_type": "heading",
+      "content": "───────────────────────────────────────────────────────────────────",
+      "raw_content": "───────────────────────────────────────────────────────────────────",
+      "position": {
+        "sequence_index": 25
+      },
+      "metadata": {
+        "char_count": 67,
+        "word_count": 1,
+        "depth": 0,
+        "document_path": [],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "79018b42-fe3f-419b-ac4d-142909461d4d",
+      "block_type": "heading",
+      "content": "PUBLICATION & AUTHORSHIP GUIDELINES:",
+      "raw_content": "PUBLICATION & AUTHORSHIP GUIDELINES:",
+      "position": {
+        "sequence_index": 26
+      },
+      "metadata": {
+        "char_count": 36,
+        "word_count": 4,
+        "depth": 0,
+        "document_path": [],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "f05f33e4-161c-441d-9b41-c4257770e4a4",
+      "block_type": "paragraph",
+      "content": "≡≡≡ Author Order Protocol ≡≡≡\n1° Corresponding author rotates annually: MIT→清华→EPFL→東京大→MIT...\n2° Co-authors listed alphabetically within institutions\n3° Equal contribution designation: * or † symbols\n4° ACKNOWLEDGMENTS must cite: \"This work was supported by IRCA-2024-ΩΨΦ\"",
+      "raw_content": "≡≡≡ Author Order Protocol ≡≡≡\n1° Corresponding author rotates annually: MIT→清华→EPFL→東京大→MIT...\n2° Co-authors listed alphabetically within institutions\n3° Equal contribution designation: * or † symbols\n4° ACKNOWLEDGMENTS must cite: \"This work was supported by IRCA-2024-ΩΨΦ\"",
+      "position": {
+        "sequence_index": 27
+      },
+      "parent_id": "79018b42-fe3f-419b-ac4d-142909461d4d",
+      "metadata": {
+        "char_count": 273,
+        "word_count": 35,
+        "depth": 1,
+        "document_path": [
+          "PUBLICATION & AUTHORSHIP GUIDELINES:"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "26712d92-2825-4d5e-88c1-06e2017d6397",
+      "block_type": "paragraph",
+      "content": "Target Journals (Impact Factor > 10):\n• Nature Physics (IF: 19.6) — ISSN: 1745-2473\n• Science (IF: 47.7) — ISSN: 0036-8075  \n• Physical Review X (IF: 12.7) — ISSN: 2160-3308\n• Nature Materials (IF: 43.8) — ISSN: 1476-1122",
+      "raw_content": "Target Journals (Impact Factor > 10):\n• Nature Physics (IF: 19.6) — ISSN: 1745-2473\n• Science (IF: 47.7) — ISSN: 0036-8075  \n• Physical Review X (IF: 12.7) — ISSN: 2160-3308\n• Nature Materials (IF: 43.8) — ISSN: 1476-1122",
+      "position": {
+        "sequence_index": 28
+      },
+      "parent_id": "79018b42-fe3f-419b-ac4d-142909461d4d",
+      "metadata": {
+        "char_count": 221,
+        "word_count": 38,
+        "depth": 1,
+        "document_path": [
+          "PUBLICATION & AUTHORSHIP GUIDELINES:"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "e6c32c7b-1565-40c7-b9d2-56ff0ae656ba",
+      "block_type": "heading",
+      "content": "Open Access Policy: ✓ MANDATORY via arXiv preprint + institutional repos",
+      "raw_content": "Open Access Policy: ✓ MANDATORY via arXiv preprint + institutional repos",
+      "position": {
+        "sequence_index": 29
+      },
+      "metadata": {
+        "char_count": 72,
+        "word_count": 11,
+        "depth": 0,
+        "document_path": [],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "41909650-d718-49fc-8929-bcaf7f919b73",
+      "block_type": "heading",
+      "content": "───────────────────────────────────────────────────────────────────",
+      "raw_content": "───────────────────────────────────────────────────────────────────",
+      "position": {
+        "sequence_index": 30
+      },
+      "metadata": {
+        "char_count": 67,
+        "word_count": 1,
+        "depth": 0,
+        "document_path": [],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "e86a6c45-3bd8-4441-94b6-726926b0d39f",
+      "block_type": "heading",
+      "content": "MEETINGS & COMMUNICATION SCHEDULE:",
+      "raw_content": "MEETINGS & COMMUNICATION SCHEDULE:",
+      "position": {
+        "sequence_index": 31
+      },
+      "metadata": {
+        "char_count": 34,
+        "word_count": 4,
+        "depth": 0,
+        "document_path": [],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "3f2f580f-fe41-46ff-8999-3f34c5c62559",
+      "block_type": "paragraph",
+      "content": "⏰ Quarterly Virtual Meetings (via Zoom/WebEx)\n   Q1: January 15 @ 15:00 UTC (02:00 JST / 23:00 Beijing / 16:00 CET / 10:00 EST)\n   Q2: April 15 @ 12:00 UTC\n   Q3: July 15 @ 09:00 UTC  \n   Q4: October 15 @ 18:00 UTC",
+      "raw_content": "⏰ Quarterly Virtual Meetings (via Zoom/WebEx)\n   Q1: January 15 @ 15:00 UTC (02:00 JST / 23:00 Beijing / 16:00 CET / 10:00 EST)\n   Q2: April 15 @ 12:00 UTC\n   Q3: July 15 @ 09:00 UTC  \n   Q4: October 15 @ 18:00 UTC",
+      "position": {
+        "sequence_index": 32
+      },
+      "parent_id": "e86a6c45-3bd8-4441-94b6-726926b0d39f",
+      "metadata": {
+        "char_count": 214,
+        "word_count": 41,
+        "depth": 1,
+        "document_path": [
+          "MEETINGS & COMMUNICATION SCHEDULE:"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "d82e1d89-a4be-4cb9-b1f7-2a482fe050a1",
+      "block_type": "paragraph",
+      "content": "🌍 Annual In-Person Symposium (rotating host)\n   2024 → MIT (Cambridge, MA)\n   2025 → 清华大学 (Beijing)\n   2026 → EPFL (Lausanne)\n   2027 → 東京大学 (Tokyo)",
+      "raw_content": "🌍 Annual In-Person Symposium (rotating host)\n   2024 → MIT (Cambridge, MA)\n   2025 → 清华大学 (Beijing)\n   2026 → EPFL (Lausanne)\n   2027 → 東京大学 (Tokyo)",
+      "position": {
+        "sequence_index": 33
+      },
+      "parent_id": "e86a6c45-3bd8-4441-94b6-726926b0d39f",
+      "metadata": {
+        "char_count": 148,
+        "word_count": 23,
+        "depth": 1,
+        "document_path": [
+          "MEETINGS & COMMUNICATION SCHEDULE:"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "1ba360da-d9f2-4f53-82fc-32d350d4621a",
+      "block_type": "paragraph",
+      "content": "Communication Channels:\n├─ Slack: quantum-collab-2024.slack.com\n├─ GitLab: gitlab.com/irca-2024/quantum-entanglement\n├─ Mailing List: irca-quantum@research-collab.org\n└─ Emergency: ☎ Duty Officer +1-857-xxx-xxxx (24/7 hotline)",
+      "raw_content": "Communication Channels:\n├─ Slack: quantum-collab-2024.slack.com\n├─ GitLab: gitlab.com/irca-2024/quantum-entanglement\n├─ Mailing List: irca-quantum@research-collab.org\n└─ Emergency: ☎ Duty Officer +1-857-xxx-xxxx (24/7 hotline)",
+      "position": {
+        "sequence_index": 34
+      },
+      "parent_id": "e86a6c45-3bd8-4441-94b6-726926b0d39f",
+      "metadata": {
+        "char_count": 226,
+        "word_count": 20,
+        "depth": 1,
+        "document_path": [
+          "MEETINGS & COMMUNICATION SCHEDULE:"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "80e7ca8f-2f6b-4241-bdd0-c5585166440c",
+      "block_type": "heading",
+      "content": "───────────────────────────────────────────────────────────────────",
+      "raw_content": "───────────────────────────────────────────────────────────────────",
+      "position": {
+        "sequence_index": 35
+      },
+      "metadata": {
+        "char_count": 67,
+        "word_count": 1,
+        "depth": 0,
+        "document_path": [],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "9d18563c-5142-4c12-b383-41073a2896fc",
+      "block_type": "heading",
+      "content": "RISK MANAGEMENT & COMPLIANCE:",
+      "raw_content": "RISK MANAGEMENT & COMPLIANCE:",
+      "position": {
+        "sequence_index": 36
+      },
+      "metadata": {
+        "char_count": 29,
+        "word_count": 4,
+        "depth": 0,
+        "document_path": [],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "ed3f8b11-7709-4f5a-ab18-17cdbf2fbc28",
+      "block_type": "paragraph",
+      "content": "⚠ Export Control Compliance\n   • ITAR (US): EAR99 designation required\n   • China: 《中国出口管制法》compliance mandatory\n   • EU: Dual-use regulation (EU) 2021/821\n   • Japan: 外為法 (Foreign Exchange Law) adherence",
+      "raw_content": "⚠ Export Control Compliance\n   • ITAR (US): EAR99 designation required\n   • China: 《中国出口管制法》compliance mandatory\n   • EU: Dual-use regulation (EU) 2021/821\n   • Japan: 外為法 (Foreign Exchange Law) adherence",
+      "position": {
+        "sequence_index": 37
+      },
+      "parent_id": "9d18563c-5142-4c12-b383-41073a2896fc",
+      "metadata": {
+        "char_count": 204,
+        "word_count": 27,
+        "depth": 1,
+        "document_path": [
+          "RISK MANAGEMENT & COMPLIANCE:"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "253ca0c9-1aca-4a6f-a215-d6d2e6b1ef12",
+      "block_type": "paragraph",
+      "content": "⚖ Ethics Oversight\n   Approved by: MIT Committee on Use of Humans as Experimental Subjects\n               清华大学伦理审查委员会\n               EPFL Human Research Ethics Committee  \n               東京大学研究倫理審査委員会\n   Protocol IDs: MIT-2024-0847, THU-IRB-2024-392, EPFL-HEC-2024-184, UT-REC-2024-571",
+      "raw_content": "⚖ Ethics Oversight\n   Approved by: MIT Committee on Use of Humans as Experimental Subjects\n               清华大学伦理审查委员会\n               EPFL Human Research Ethics Committee  \n               東京大学研究倫理審査委員会\n   Protocol IDs: MIT-2024-0847, THU-IRB-2024-392, EPFL-HEC-2024-184, UT-REC-2024-571",
+      "position": {
+        "sequence_index": 38
+      },
+      "parent_id": "9d18563c-5142-4c12-b383-41073a2896fc",
+      "metadata": {
+        "char_count": 285,
+        "word_count": 27,
+        "depth": 1,
+        "document_path": [
+          "RISK MANAGEMENT & COMPLIANCE:"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "b43818fa-0ba3-491e-9fd9-729d034a6978",
+      "block_type": "paragraph",
+      "content": "⚕ Safety Protocols (radiation/cryogenics/nanomaterials)\n   Compliance: OSHA, NIOSH, ISO 45001:2018\n   Training: Annual recertification required\n   Incident reporting: < 24 hours via incident@irca-collab.org",
+      "raw_content": "⚕ Safety Protocols (radiation/cryogenics/nanomaterials)\n   Compliance: OSHA, NIOSH, ISO 45001:2018\n   Training: Annual recertification required\n   Incident reporting: < 24 hours via incident@irca-collab.org",
+      "position": {
+        "sequence_index": 39
+      },
+      "parent_id": "9d18563c-5142-4c12-b383-41073a2896fc",
+      "metadata": {
+        "char_count": 206,
+        "word_count": 20,
+        "depth": 1,
+        "document_path": [
+          "RISK MANAGEMENT & COMPLIANCE:"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "bffaf56e-27a0-4039-9ad4-66aaa79598e1",
+      "block_type": "heading",
+      "content": "───────────────────────────────────────────────────────────────────",
+      "raw_content": "───────────────────────────────────────────────────────────────────",
+      "position": {
+        "sequence_index": 40
+      },
+      "metadata": {
+        "char_count": 67,
+        "word_count": 1,
+        "depth": 0,
+        "document_path": [],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "2c3067d5-74ae-47aa-9cf5-155a4b625ab8",
+      "block_type": "heading",
+      "content": "SPECIAL PROVISIONS & AMENDMENTS:",
+      "raw_content": "SPECIAL PROVISIONS & AMENDMENTS:",
+      "position": {
+        "sequence_index": 41
+      },
+      "metadata": {
+        "char_count": 32,
+        "word_count": 4,
+        "depth": 0,
+        "document_path": [],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "02c3aa25-e20f-4400-9d5d-b0981a3a637f",
+      "block_type": "paragraph",
+      "content": "¶ Force Majeure: Natural disasters, pandemics (cf. COVID-19 precedent),\n                 war, civil unrest → 90-day suspension option",
+      "raw_content": "¶ Force Majeure: Natural disasters, pandemics (cf. COVID-19 precedent),\n                 war, civil unrest → 90-day suspension option",
+      "position": {
+        "sequence_index": 42
+      },
+      "parent_id": "2c3067d5-74ae-47aa-9cf5-155a4b625ab8",
+      "metadata": {
+        "char_count": 133,
+        "word_count": 16,
+        "depth": 1,
+        "document_path": [
+          "SPECIAL PROVISIONS & AMENDMENTS:"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "bc33a424-4741-4360-b755-812d289800f9",
+      "block_type": "paragraph",
+      "content": "¶ Termination: 6-month written notice required\n               Ongoing work → 12-month wind-down period\n               Data access maintained for 3 years post-termination",
+      "raw_content": "¶ Termination: 6-month written notice required\n               Ongoing work → 12-month wind-down period\n               Data access maintained for 3 years post-termination",
+      "position": {
+        "sequence_index": 43
+      },
+      "parent_id": "2c3067d5-74ae-47aa-9cf5-155a4b625ab8",
+      "metadata": {
+        "char_count": 169,
+        "word_count": 19,
+        "depth": 1,
+        "document_path": [
+          "SPECIAL PROVISIONS & AMENDMENTS:"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "93cce3c9-e0ae-4224-9802-f4a421005140",
+      "block_type": "paragraph",
+      "content": "¶ Dispute Resolution:\n   Step 1: Direct negotiation (30 days)\n   Step 2: Mediation — International Chamber of Commerce (ICC)\n   Step 3: Arbitration — Stockholm Chamber of Commerce\n           Venue: Geneva, Switzerland\n           Language: English\n           Law: Swiss law (substantive), UNCITRAL rules (procedural)",
+      "raw_content": "¶ Dispute Resolution:\n   Step 1: Direct negotiation (30 days)\n   Step 2: Mediation — International Chamber of Commerce (ICC)\n   Step 3: Arbitration — Stockholm Chamber of Commerce\n           Venue: Geneva, Switzerland\n           Language: English\n           Law: Swiss law (substantive), UNCITRAL rules (procedural)",
+      "position": {
+        "sequence_index": 44
+      },
+      "parent_id": "2c3067d5-74ae-47aa-9cf5-155a4b625ab8",
+      "metadata": {
+        "char_count": 315,
+        "word_count": 38,
+        "depth": 1,
+        "document_path": [
+          "SPECIAL PROVISIONS & AMENDMENTS:"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "375607f8-41b2-4637-937c-59eaa8131543",
+      "block_type": "heading",
+      "content": "───────────────────────────────────────────────────────────────────",
+      "raw_content": "───────────────────────────────────────────────────────────────────",
+      "position": {
+        "sequence_index": 45
+      },
+      "metadata": {
+        "char_count": 67,
+        "word_count": 1,
+        "depth": 0,
+        "document_path": [],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "8f2529b4-35c5-45aa-b356-24414a935add",
+      "block_type": "heading",
+      "content": "SIGNATURES / 签名 / SIGNATURES:",
+      "raw_content": "SIGNATURES / 签名 / SIGNATURES:",
+      "position": {
+        "sequence_index": 46
+      },
+      "metadata": {
+        "char_count": 29,
+        "word_count": 5,
+        "depth": 0,
+        "document_path": [],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "90cc4500-6112-4444-868c-0fb00a1e6548",
+      "block_type": "paragraph",
+      "content": "[MIT] ___________________________________  Date: 2024-10-15\n      Dr. Sarah O'Brien-MacDonald\n      Title: Director, Quantum Computing Research Lab\n      Witness: ______________________________",
+      "raw_content": "[MIT] ___________________________________  Date: 2024-10-15\n      Dr. Sarah O'Brien-MacDonald\n      Title: Director, Quantum Computing Research Lab\n      Witness: ______________________________",
+      "position": {
+        "sequence_index": 47
+      },
+      "parent_id": "8f2529b4-35c5-45aa-b356-24414a935add",
+      "metadata": {
+        "char_count": 193,
+        "word_count": 15,
+        "depth": 1,
+        "document_path": [
+          "SIGNATURES / 签名 / SIGNATURES:"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "10e04219-97e9-4dcc-86e9-68641277b863",
+      "block_type": "paragraph",
+      "content": "[清华] __________________________________  日期: 2024年10月15日\n       张伟教授\n       职位: 量子信息研究中心主任\n       见证人: ______________________________",
+      "raw_content": "[清华] __________________________________  日期: 2024年10月15日\n       张伟教授\n       职位: 量子信息研究中心主任\n       见证人: ______________________________",
+      "position": {
+        "sequence_index": 48
+      },
+      "parent_id": "8f2529b4-35c5-45aa-b356-24414a935add",
+      "metadata": {
+        "char_count": 133,
+        "word_count": 9,
+        "depth": 1,
+        "document_path": [
+          "SIGNATURES / 签名 / SIGNATURES:"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "a8964e21-2646-4404-a59d-afa704e10fbd",
+      "block_type": "paragraph",
+      "content": "[EPFL] __________________________________  Date: 2024-10-15\n       Prof. Dr. François Müller-Leclerc\n       Titre: Directeur, Laboratoire de Nanoscience\n       Témoin: ______________________________",
+      "raw_content": "[EPFL] __________________________________  Date: 2024-10-15\n       Prof. Dr. François Müller-Leclerc\n       Titre: Directeur, Laboratoire de Nanoscience\n       Témoin: ______________________________",
+      "position": {
+        "sequence_index": 49
+      },
+      "parent_id": "8f2529b4-35c5-45aa-b356-24414a935add",
+      "metadata": {
+        "char_count": 198,
+        "word_count": 15,
+        "depth": 1,
+        "document_path": [
+          "SIGNATURES / 签名 / SIGNATURES:"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "af9e620c-4fd0-4645-bcec-2e7d96089e45",
+      "block_type": "paragraph",
+      "content": "[東京大] ________________________________  日付: 2024年10月15日\n         田中 花子 博士\n         役職: 准教授、先端物理学研究所\n         立会人: ______________________________",
+      "raw_content": "[東京大] ________________________________  日付: 2024年10月15日\n         田中 花子 博士\n         役職: 准教授、先端物理学研究所\n         立会人: ______________________________",
+      "position": {
+        "sequence_index": 50
+      },
+      "parent_id": "8f2529b4-35c5-45aa-b356-24414a935add",
+      "metadata": {
+        "char_count": 144,
+        "word_count": 11,
+        "depth": 1,
+        "document_path": [
+          "SIGNATURES / 签名 / SIGNATURES:"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "c7cfafa9-2bad-4b85-bf6e-f22acefe02a4",
+      "block_type": "heading",
+      "content": "═══════════════════════════════════════════════════════════════════",
+      "raw_content": "═══════════════════════════════════════════════════════════════════",
+      "position": {
+        "sequence_index": 51
+      },
+      "metadata": {
+        "char_count": 67,
+        "word_count": 1,
+        "depth": 0,
+        "document_path": [],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "0a7b2927-a4c9-4220-affe-f9f981af102b",
+      "block_type": "heading",
+      "content": "APPENDICES (別紙 • ANNEXES):",
+      "raw_content": "APPENDICES (別紙 • ANNEXES):",
+      "position": {
+        "sequence_index": 52
+      },
+      "metadata": {
+        "char_count": 26,
+        "word_count": 4,
+        "depth": 0,
+        "document_path": [],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "29c2c45d-c85e-4a7d-b8af-1eb12df1a007",
+      "block_type": "paragraph",
+      "content": "Appendix A: Technical Specifications (72 pages) — SHA256:7f3a8c9d...\nAppendix B: Budget Breakdown (34 pages) — MD5:a8f4c2e9...\nAppendix C: Risk Assessment Matrix (18 pages) — CRC32:0xDEADBEEF\nAppendix D: Publication Templates (9 pages) — Blake2b:5c7e9f2a...",
+      "raw_content": "Appendix A: Technical Specifications (72 pages) — SHA256:7f3a8c9d...\nAppendix B: Budget Breakdown (34 pages) — MD5:a8f4c2e9...\nAppendix C: Risk Assessment Matrix (18 pages) — CRC32:0xDEADBEEF\nAppendix D: Publication Templates (9 pages) — Blake2b:5c7e9f2a...",
+      "position": {
+        "sequence_index": 53
+      },
+      "parent_id": "0a7b2927-a4c9-4220-affe-f9f981af102b",
+      "metadata": {
+        "char_count": 257,
+        "word_count": 33,
+        "depth": 1,
+        "document_path": [
+          "APPENDICES (別紙 • ANNEXES):"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "ac3cde74-abf4-4998-a253-c89e1f2613bc",
+      "block_type": "heading",
+      "content": "═══════════════════════════════════════════════════════════════════",
+      "raw_content": "═══════════════════════════════════════════════════════════════════",
+      "position": {
+        "sequence_index": 54
+      },
+      "metadata": {
+        "char_count": 67,
+        "word_count": 1,
+        "depth": 0,
+        "document_path": [],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "5c6a4c93-be39-45d8-a78f-0296dec8b80a",
+      "block_type": "paragraph",
+      "content": "✓ Document authenticated via blockchain timestamp\n  Transaction: 0x7a8f3c9d2e1b4f6a8c3d5e7f9a2b4c6d8e3f5a7b9c1d4e6f8a2c5d7e9f\n  Block: #18,473,829 on Ethereum mainnet\n  Verified: 2024-10-15T16:42:33Z",
+      "raw_content": "✓ Document authenticated via blockchain timestamp\n  Transaction: 0x7a8f3c9d2e1b4f6a8c3d5e7f9a2b4c6d8e3f5a7b9c1d4e6f8a2c5d7e9f\n  Block: #18,473,829 on Ethereum mainnet\n  Verified: 2024-10-15T16:42:33Z",
+      "position": {
+        "sequence_index": 55
+      },
+      "parent_id": "ac3cde74-abf4-4998-a253-c89e1f2613bc",
+      "metadata": {
+        "char_count": 199,
+        "word_count": 15,
+        "depth": 1,
+        "document_path": [
+          "═══════════════════════════════════════════════════════════════════"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "28da13c6-0a98-440e-bb44-25bba5a660c8",
+      "block_type": "heading",
+      "content": "═══════════════════════════════════════════════════════════════════",
+      "raw_content": "═══════════════════════════════════════════════════════════════════",
+      "position": {
+        "sequence_index": 56
+      },
+      "metadata": {
+        "char_count": 67,
+        "word_count": 1,
+        "depth": 0,
+        "document_path": [],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "52d2f4a6-4d0d-4602-9e3f-12cdc8c10a7a",
+      "block_type": "heading",
+      "content": "END OF DOCUMENT • 文件结束 • FIN DU DOCUMENT",
+      "raw_content": "END OF DOCUMENT • 文件结束 • FIN DU DOCUMENT",
+      "position": {
+        "sequence_index": 57
+      },
+      "metadata": {
+        "char_count": 40,
+        "word_count": 9,
+        "depth": 0,
+        "document_path": [],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "4debdf93-ce2b-48d0-afde-db4eb6c58281",
+      "block_type": "paragraph",
+      "content": "Character encodings present: UTF-8, UTF-16 (mixed), ISO-8859-1 fragments\nTotal characters: 12,847 | Unique glyphs: 487 | Languages: 4\nProcessing notes: Contains mathematical symbols (∫∮∂∇), currency symbols\n(¥€£$), special operators (±≤≥≠≈), and multilingual content requiring\nUnicode normalization (NFC) + bidirectional text handling (RTL/LTR).",
+      "raw_content": "Character encodings present: UTF-8, UTF-16 (mixed), ISO-8859-1 fragments\nTotal characters: 12,847 | Unique glyphs: 487 | Languages: 4\nProcessing notes: Contains mathematical symbols (∫∮∂∇), currency symbols\n(¥€£$), special operators (±≤≥≠≈), and multilingual content requiring\nUnicode normalization (NFC) + bidirectional text handling (RTL/LTR).",
+      "position": {
+        "sequence_index": 58
+      },
+      "parent_id": "52d2f4a6-4d0d-4602-9e3f-12cdc8c10a7a",
+      "metadata": {
+        "char_count": 345,
+        "word_count": 42,
+        "depth": 1,
+        "document_path": [
+          "END OF DOCUMENT • 文件结束 • FIN DU DOCUMENT"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    }
+  ],
+  "document_metadata": {
+    "source_file": "C:\\Users\\Andrew\\Documents\\AI ideas for fun and work\\Prompt Research\\Data Extraction\\data-extractor-tool\\test-files-assesses-extraction-tool\\test_case_04_formatting_chaos.txt",
+    "file_format": "text",
+    "file_size_bytes": 12430,
+    "word_count": 959,
+    "character_count": 9128,
+    "extracted_at": "2025-10-30T01:30:43.362908"
+  },
+  "processing_stage": "quality_validation",
+  "quality_score": 66.66666666666667,
+  "processing_success": true
+}

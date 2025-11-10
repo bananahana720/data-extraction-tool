@@ -1,0 +1,383 @@
+{
+  "content_blocks": [
+    {
+      "block_id": "e2e6f651-07d0-47e3-8e8d-4f4883262c07",
+      "block_type": "heading",
+      "content": "QUARTERLY FINANCIAL REPORT - Q3 2024\n=====================================",
+      "raw_content": "QUARTERLY FINANCIAL REPORT - Q3 2024\n=====================================",
+      "position": {
+        "sequence_index": 0
+      },
+      "metadata": {
+        "char_count": 74,
+        "word_count": 7,
+        "depth": 0,
+        "document_path": [],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "d9f6065a-84cd-4f1f-b0fe-c3a91c5c4df7",
+      "block_type": "paragraph",
+      "content": "Executive Summary\n-----------------\nRevenue increased 23.7% YoY to $847.3M, driven by enterprise segment growth and geographic expansion into APAC markets. EBITDA margin improved to 31.2% (+4.3pp) due to operational efficiency gains.",
+      "raw_content": "Executive Summary\n-----------------\nRevenue increased 23.7% YoY to $847.3M, driven by enterprise segment growth and geographic expansion into APAC markets. EBITDA margin improved to 31.2% (+4.3pp) due to operational efficiency gains.",
+      "position": {
+        "sequence_index": 1
+      },
+      "parent_id": "e2e6f651-07d0-47e3-8e8d-4f4883262c07",
+      "metadata": {
+        "char_count": 233,
+        "word_count": 31,
+        "depth": 1,
+        "document_path": [
+          "QUARTERLY FINANCIAL REPORT - Q3 2024\n====================================="
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "c08b60c7-0dbd-423d-9420-c50562ca6c45",
+      "block_type": "paragraph",
+      "content": "Key Performance Indicators:\n┌─────────────────────────┬──────────┬──────────┬─────────┐\n│ Metric                  │ Q3 2024  │ Q3 2023  │ Change  │\n├─────────────────────────┼──────────┼──────────┼─────────┤\n│ Total Revenue ($M)      │ 847.3    │ 688.1    │ +23.1%  │\n│ Gross Margin (%)        │ 67.4     │ 64.2     │ +3.2pp  │\n│ Operating Income ($M)   │ 264.3    │ 189.7    │ +39.3%  │\n│ Net Income ($M)         │ 198.4    │ 142.1    │ +39.6%  │\n│ EPS (Diluted)           │ $2.13    │ $1.52    │ +40.1%  │\n│ Free Cash Flow ($M)     │ 312.8    │ 247.3    │ +26.5%  │\n└─────────────────────────┴──────────┴──────────┴─────────┘",
+      "raw_content": "Key Performance Indicators:\n┌─────────────────────────┬──────────┬──────────┬─────────┐\n│ Metric                  │ Q3 2024  │ Q3 2023  │ Change  │\n├─────────────────────────┼──────────┼──────────┼─────────┤\n│ Total Revenue ($M)      │ 847.3    │ 688.1    │ +23.1%  │\n│ Gross Margin (%)        │ 67.4     │ 64.2     │ +3.2pp  │\n│ Operating Income ($M)   │ 264.3    │ 189.7    │ +39.3%  │\n│ Net Income ($M)         │ 198.4    │ 142.1    │ +39.6%  │\n│ EPS (Diluted)           │ $2.13    │ $1.52    │ +40.1%  │\n│ Free Cash Flow ($M)     │ 312.8    │ 247.3    │ +26.5%  │\n└─────────────────────────┴──────────┴──────────┴─────────┘",
+      "position": {
+        "sequence_index": 2
+      },
+      "parent_id": "e2e6f651-07d0-47e3-8e8d-4f4883262c07",
+      "metadata": {
+        "char_count": 627,
+        "word_count": 83,
+        "depth": 1,
+        "document_path": [
+          "QUARTERLY FINANCIAL REPORT - Q3 2024\n====================================="
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "1054135f-6100-4a42-b860-886c13eee0da",
+      "block_type": "paragraph",
+      "content": "Revenue Breakdown by Segment:\n• Enterprise Solutions: $523.2M (61.8% of total, +28.3% YoY)\n  - North America: $341.7M\n  - EMEA: $124.8M  \n  - APAC: $56.7M [NEW REGION - launched Q1 2024]\n  \n• SMB Platform: $198.6M (23.4% of total, +15.2% YoY)\n  - Self-Service: $127.4M\n  - Managed Services: $71.2M",
+      "raw_content": "Revenue Breakdown by Segment:\n• Enterprise Solutions: $523.2M (61.8% of total, +28.3% YoY)\n  - North America: $341.7M\n  - EMEA: $124.8M  \n  - APAC: $56.7M [NEW REGION - launched Q1 2024]\n  \n• SMB Platform: $198.6M (23.4% of total, +15.2% YoY)\n  - Self-Service: $127.4M\n  - Managed Services: $71.2M",
+      "position": {
+        "sequence_index": 3
+      },
+      "parent_id": "e2e6f651-07d0-47e3-8e8d-4f4883262c07",
+      "metadata": {
+        "char_count": 297,
+        "word_count": 45,
+        "depth": 1,
+        "document_path": [
+          "QUARTERLY FINANCIAL REPORT - Q3 2024\n====================================="
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "453bb4e6-7914-46b2-a99d-6bfdd748663e",
+      "block_type": "heading",
+      "content": "• Professional Services: $125.5M (14.8% of total, +19.7% YoY)",
+      "raw_content": "• Professional Services: $125.5M (14.8% of total, +19.7% YoY)",
+      "position": {
+        "sequence_index": 4
+      },
+      "metadata": {
+        "char_count": 61,
+        "word_count": 9,
+        "depth": 0,
+        "document_path": [],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "36756d29-5f60-4bb5-9548-c9bc9d9888dd",
+      "block_type": "paragraph",
+      "content": "CRITICAL ISSUES IDENTIFIED:\n!!! Customer churn rate increased to 4.7% (target: <3.5%) !!!\n!!! Sales cycle elongation: avg 127 days (was 98 days in Q2) !!!",
+      "raw_content": "CRITICAL ISSUES IDENTIFIED:\n!!! Customer churn rate increased to 4.7% (target: <3.5%) !!!\n!!! Sales cycle elongation: avg 127 days (was 98 days in Q2) !!!",
+      "position": {
+        "sequence_index": 5
+      },
+      "parent_id": "453bb4e6-7914-46b2-a99d-6bfdd748663e",
+      "metadata": {
+        "char_count": 154,
+        "word_count": 26,
+        "depth": 1,
+        "document_path": [
+          "• Professional Services: $125.5M (14.8% of total, +19.7% YoY)"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "a2ebfa28-a8fc-4c34-93eb-8019ebe6aa54",
+      "block_type": "paragraph",
+      "content": "Product Development Milestones:\n═══════════════════════════════\n✓ AI-Enhanced Analytics Module → SHIPPED (Sept 15)\n✓ Mobile App v3.0 → SHIPPED (Aug 28)\n○ API Gateway Redesign → IN PROGRESS (67% complete)\n○ Multi-Tenant Architecture → PLANNING PHASE\n✗ Blockchain Integration → CANCELLED (low customer demand)",
+      "raw_content": "Product Development Milestones:\n═══════════════════════════════\n✓ AI-Enhanced Analytics Module → SHIPPED (Sept 15)\n✓ Mobile App v3.0 → SHIPPED (Aug 28)\n○ API Gateway Redesign → IN PROGRESS (67% complete)\n○ Multi-Tenant Architecture → PLANNING PHASE\n✗ Blockchain Integration → CANCELLED (low customer demand)",
+      "position": {
+        "sequence_index": 6
+      },
+      "parent_id": "453bb4e6-7914-46b2-a99d-6bfdd748663e",
+      "metadata": {
+        "char_count": 307,
+        "word_count": 43,
+        "depth": 1,
+        "document_path": [
+          "• Professional Services: $125.5M (14.8% of total, +19.7% YoY)"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "33f31e31-bfa7-49ad-894f-65a277519216",
+      "block_type": "paragraph",
+      "content": "Employee Metrics & Human Capital:\n----------------------------------\nTotal Headcount: 1,847 (+12.3% from Q2)\n├── Engineering: 687 (37.2%)\n├── Sales & Marketing: 423 (22.9%)\n├── Customer Success: 312 (16.9%)\n├── G&A: 289 (15.6%)\n└── Operations: 136 (7.4%)",
+      "raw_content": "Employee Metrics & Human Capital:\n----------------------------------\nTotal Headcount: 1,847 (+12.3% from Q2)\n├── Engineering: 687 (37.2%)\n├── Sales & Marketing: 423 (22.9%)\n├── Customer Success: 312 (16.9%)\n├── G&A: 289 (15.6%)\n└── Operations: 136 (7.4%)",
+      "position": {
+        "sequence_index": 7
+      },
+      "parent_id": "453bb4e6-7914-46b2-a99d-6bfdd748663e",
+      "metadata": {
+        "char_count": 254,
+        "word_count": 35,
+        "depth": 1,
+        "document_path": [
+          "• Professional Services: $125.5M (14.8% of total, +19.7% YoY)"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "f165fcc4-cec2-44c6-987b-ef0c0c65152a",
+      "block_type": "paragraph",
+      "content": "Turnover Rate: 8.4% (industry avg: 13.2%)\nOpen Positions: 143 roles across all departments",
+      "raw_content": "Turnover Rate: 8.4% (industry avg: 13.2%)\nOpen Positions: 143 roles across all departments",
+      "position": {
+        "sequence_index": 8
+      },
+      "parent_id": "453bb4e6-7914-46b2-a99d-6bfdd748663e",
+      "metadata": {
+        "char_count": 90,
+        "word_count": 13,
+        "depth": 1,
+        "document_path": [
+          "• Professional Services: $125.5M (14.8% of total, +19.7% YoY)"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "b3d2f8e1-0466-4770-9409-8d905fadad65",
+      "block_type": "paragraph",
+      "content": "TECHNICAL DEBT ASSESSMENT:\n--------------------------\nCode Quality Score: 7.2/10 (▼ from 7.8 last quarter)\n- Legacy system dependencies: 23 critical components\n- Security vulnerabilities: 14 HIGH, 47 MEDIUM, 128 LOW\n- Test Coverage: 76.4% (target: 85%)",
+      "raw_content": "TECHNICAL DEBT ASSESSMENT:\n--------------------------\nCode Quality Score: 7.2/10 (▼ from 7.8 last quarter)\n- Legacy system dependencies: 23 critical components\n- Security vulnerabilities: 14 HIGH, 47 MEDIUM, 128 LOW\n- Test Coverage: 76.4% (target: 85%)",
+      "position": {
+        "sequence_index": 9
+      },
+      "parent_id": "453bb4e6-7914-46b2-a99d-6bfdd748663e",
+      "metadata": {
+        "char_count": 252,
+        "word_count": 35,
+        "depth": 1,
+        "document_path": [
+          "• Professional Services: $125.5M (14.8% of total, +19.7% YoY)"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "d966eb45-731c-40e7-abba-56d677108a1e",
+      "block_type": "paragraph",
+      "content": "Infrastructure Costs:\nCloud Spend: $12.4M/month (+31% QoQ) ⚠️\n├─ Compute: $7.8M (AWS EC2, Lambda)\n├─ Storage: $2.3M (S3, EBS, Glacier)\n├─ Data Transfer: $1.4M (CDN, Egress)\n└─ Other Services: $0.9M (RDS, ElastiCache, etc.)",
+      "raw_content": "Infrastructure Costs:\nCloud Spend: $12.4M/month (+31% QoQ) ⚠️\n├─ Compute: $7.8M (AWS EC2, Lambda)\n├─ Storage: $2.3M (S3, EBS, Glacier)\n├─ Data Transfer: $1.4M (CDN, Egress)\n└─ Other Services: $0.9M (RDS, ElastiCache, etc.)",
+      "position": {
+        "sequence_index": 10
+      },
+      "parent_id": "453bb4e6-7914-46b2-a99d-6bfdd748663e",
+      "metadata": {
+        "char_count": 222,
+        "word_count": 33,
+        "depth": 1,
+        "document_path": [
+          "• Professional Services: $125.5M (14.8% of total, +19.7% YoY)"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "51e25b95-b0b7-4dfc-b76c-9d3514f4bcec",
+      "block_type": "heading",
+      "content": "Projected Annual Run Rate: $148.8M (exceeds budget by $23.4M)",
+      "raw_content": "Projected Annual Run Rate: $148.8M (exceeds budget by $23.4M)",
+      "position": {
+        "sequence_index": 11
+      },
+      "metadata": {
+        "char_count": 61,
+        "word_count": 9,
+        "depth": 0,
+        "document_path": [],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "b567ff1d-9392-4ba2-b4d8-fbdfab93559d",
+      "block_type": "paragraph",
+      "content": "COMPLIANCE & RISK MATRIX:\n========================\n[HIGH] SOC 2 Type II Audit → Due: Dec 15, 2024 (48 days remaining)\n[MED]  GDPR Compliance Review → In Progress (external auditors engaged)\n[LOW]  ISO 27001 Recertification → Scheduled: Q1 2025",
+      "raw_content": "COMPLIANCE & RISK MATRIX:\n========================\n[HIGH] SOC 2 Type II Audit → Due: Dec 15, 2024 (48 days remaining)\n[MED]  GDPR Compliance Review → In Progress (external auditors engaged)\n[LOW]  ISO 27001 Recertification → Scheduled: Q1 2025",
+      "position": {
+        "sequence_index": 12
+      },
+      "parent_id": "51e25b95-b0b7-4dfc-b76c-9d3514f4bcec",
+      "metadata": {
+        "char_count": 243,
+        "word_count": 37,
+        "depth": 1,
+        "document_path": [
+          "Projected Annual Run Rate: $148.8M (exceeds budget by $23.4M)"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "64bcda13-5fb5-4cff-92cd-a1e116b75dd0",
+      "block_type": "paragraph",
+      "content": "Legal Proceedings:\n- Patent infringement suit vs. TechCorp Inc. → Discovery phase\n- Class action settlement (data breach 2022) → $8.7M reserve established",
+      "raw_content": "Legal Proceedings:\n- Patent infringement suit vs. TechCorp Inc. → Discovery phase\n- Class action settlement (data breach 2022) → $8.7M reserve established",
+      "position": {
+        "sequence_index": 13
+      },
+      "parent_id": "51e25b95-b0b7-4dfc-b76c-9d3514f4bcec",
+      "metadata": {
+        "char_count": 154,
+        "word_count": 23,
+        "depth": 1,
+        "document_path": [
+          "Projected Annual Run Rate: $148.8M (exceeds budget by $23.4M)"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "98b3e054-e92f-44d9-b8a0-49c6bb8811cb",
+      "block_type": "paragraph",
+      "content": "Forward-Looking Statements:\n===========================\nManagement expects Q4 2024 revenue of $920M-$960M (midpoint: $940M, +21% YoY)\nFull year 2024 guidance raised to $3.45B-$3.50B (from $3.35B-$3.42B)",
+      "raw_content": "Forward-Looking Statements:\n===========================\nManagement expects Q4 2024 revenue of $920M-$960M (midpoint: $940M, +21% YoY)\nFull year 2024 guidance raised to $3.45B-$3.50B (from $3.35B-$3.42B)",
+      "position": {
+        "sequence_index": 14
+      },
+      "parent_id": "51e25b95-b0b7-4dfc-b76c-9d3514f4bcec",
+      "metadata": {
+        "char_count": 202,
+        "word_count": 23,
+        "depth": 1,
+        "document_path": [
+          "Projected Annual Run Rate: $148.8M (exceeds budget by $23.4M)"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "5d6eb312-ecd6-455f-a92c-43018dc522a9",
+      "block_type": "paragraph",
+      "content": "RISK FACTORS include: macroeconomic headwinds, competitive pressure from \nemerging AI-native platforms, regulatory changes in EU markets, customer \nconcentration (top 10 customers = 34% of revenue), and potential supply \nchain disruptions affecting hardware components.",
+      "raw_content": "RISK FACTORS include: macroeconomic headwinds, competitive pressure from \nemerging AI-native platforms, regulatory changes in EU markets, customer \nconcentration (top 10 customers = 34% of revenue), and potential supply \nchain disruptions affecting hardware components.",
+      "position": {
+        "sequence_index": 15
+      },
+      "parent_id": "51e25b95-b0b7-4dfc-b76c-9d3514f4bcec",
+      "metadata": {
+        "char_count": 269,
+        "word_count": 33,
+        "depth": 1,
+        "document_path": [
+          "Projected Annual Run Rate: $148.8M (exceeds budget by $23.4M)"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "e1aabfe5-9294-4798-836d-e1da5ffcb3cc",
+      "block_type": "paragraph",
+      "content": "==== EMBEDDED DATA STRUCTURE ====\n{\n  \"metadata\": {\n    \"report_id\": \"FR-Q3-2024-001\",\n    \"generated\": \"2024-10-15T14:32:18Z\",\n    \"version\": \"1.2.3\",\n    \"confidentiality\": \"INTERNAL USE ONLY\"\n  },\n  \"key_ratios\": {\n    \"current_ratio\": 2.34,\n    \"quick_ratio\": 1.87,\n    \"debt_to_equity\": 0.42,\n    \"return_on_equity\": 18.7,\n    \"return_on_assets\": 12.3\n  },\n  \"forecast_scenarios\": {\n    \"bull_case\": {\"q4_revenue\": 985, \"probability\": 0.25},\n    \"base_case\": {\"q4_revenue\": 940, \"probability\": 0.50},\n    \"bear_case\": {\"q4_revenue\": 895, \"probability\": 0.25}\n  }\n}\n=================================",
+      "raw_content": "==== EMBEDDED DATA STRUCTURE ====\n{\n  \"metadata\": {\n    \"report_id\": \"FR-Q3-2024-001\",\n    \"generated\": \"2024-10-15T14:32:18Z\",\n    \"version\": \"1.2.3\",\n    \"confidentiality\": \"INTERNAL USE ONLY\"\n  },\n  \"key_ratios\": {\n    \"current_ratio\": 2.34,\n    \"quick_ratio\": 1.87,\n    \"debt_to_equity\": 0.42,\n    \"return_on_equity\": 18.7,\n    \"return_on_assets\": 12.3\n  },\n  \"forecast_scenarios\": {\n    \"bull_case\": {\"q4_revenue\": 985, \"probability\": 0.25},\n    \"base_case\": {\"q4_revenue\": 940, \"probability\": 0.50},\n    \"bear_case\": {\"q4_revenue\": 895, \"probability\": 0.25}\n  }\n}\n=================================",
+      "position": {
+        "sequence_index": 16
+      },
+      "parent_id": "51e25b95-b0b7-4dfc-b76c-9d3514f4bcec",
+      "metadata": {
+        "char_count": 603,
+        "word_count": 52,
+        "depth": 1,
+        "document_path": [
+          "Projected Annual Run Rate: $148.8M (exceeds budget by $23.4M)"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "2ef8b370-3fae-4eb4-8825-31252b8dfe0f",
+      "block_type": "paragraph",
+      "content": "Contact Information:\n--------------------\nInvestor Relations: ir@company.com | +1 (555) 847-2000\nMedia Inquiries: press@company.com\nReport prepared by: Finance Team | Approved by: CFO Jane Martinez",
+      "raw_content": "Contact Information:\n--------------------\nInvestor Relations: ir@company.com | +1 (555) 847-2000\nMedia Inquiries: press@company.com\nReport prepared by: Finance Team | Approved by: CFO Jane Martinez",
+      "position": {
+        "sequence_index": 17
+      },
+      "parent_id": "51e25b95-b0b7-4dfc-b76c-9d3514f4bcec",
+      "metadata": {
+        "char_count": 197,
+        "word_count": 24,
+        "depth": 1,
+        "document_path": [
+          "Projected Annual Run Rate: $148.8M (exceeds budget by $23.4M)"
+        ],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    },
+    {
+      "block_id": "f82305d6-77fa-410f-8167-81767230dbb7",
+      "block_type": "heading",
+      "content": "[END OF REPORT] - Document Hash: 7f3a8c9d2e1b4f6a8c3d5e7f9a2b4c6d",
+      "raw_content": "[END OF REPORT] - Document Hash: 7f3a8c9d2e1b4f6a8c3d5e7f9a2b4c6d",
+      "position": {
+        "sequence_index": 18
+      },
+      "metadata": {
+        "char_count": 65,
+        "word_count": 7,
+        "depth": 0,
+        "document_path": [],
+        "quality_checked": true
+      },
+      "confidence": 1.0
+    }
+  ],
+  "document_metadata": {
+    "source_file": "C:\\Users\\Andrew\\Documents\\AI ideas for fun and work\\Prompt Research\\Data Extraction\\data-extractor-tool\\test-files-assesses-extraction-tool\\test_case_01_mixed_format.txt",
+    "file_format": "text",
+    "file_size_bytes": 4975,
+    "word_count": 568,
+    "character_count": 4401,
+    "extracted_at": "2025-10-30T01:30:43.354470"
+  },
+  "processing_stage": "quality_validation",
+  "quality_score": 86.66666666666667,
+  "processing_success": true
+}
