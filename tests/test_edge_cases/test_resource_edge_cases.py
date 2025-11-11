@@ -213,7 +213,7 @@ class TestResourceEdgeCases:
             [
                 "batch",
                 str(temp_output_dir),
-                "--output-dir",
+                "--output",
                 str(output_dir),
                 "--format",
                 "json",
@@ -241,7 +241,7 @@ class TestResourceEdgeCases:
             [
                 "batch",
                 str(temp_output_dir),
-                "--output-dir",
+                "--output",
                 str(output_dir),
                 "--format",
                 "json",
@@ -272,7 +272,7 @@ class TestResourceEdgeCases:
             [
                 "batch",
                 str(temp_output_dir),
-                "--output-dir",
+                "--output",
                 str(output_dir),
                 "--format",
                 "json",
@@ -438,7 +438,7 @@ class TestResourceEdgeCases:
             [
                 "batch",
                 str(temp_output_dir),
-                "--output-dir",
+                "--output",
                 str(output_dir),
                 "--format",
                 "json",

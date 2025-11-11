@@ -129,8 +129,8 @@ def sample_pdf_file(tmp_path: Path) -> Path:
     file_path = tmp_path / "test_document.pdf"
 
     # Create PDF
-    # reportlab 3.5+ supports Path objects natively
-    c = canvas.Canvas(file_path, pagesize=letter)
+    # reportlab 3.5+ supports Path objects natively, but Python 3.13 requires str()
+    c = canvas.Canvas(str(file_path), pagesize=letter)
     width, height = letter
 
     # Add content

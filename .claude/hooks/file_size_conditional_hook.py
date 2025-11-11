@@ -83,7 +83,7 @@ if file_path and os.path.exists(file_path):
         # If no limit, we read from offset to end of file
         effective_lines = max(0, line_count - offset)
 
-    if is_main_agent and line_count > 500:
+    if is_main_agent and line_count > 750:
         print(json.dumps({
             "decision": "block",
             "reason": f"""

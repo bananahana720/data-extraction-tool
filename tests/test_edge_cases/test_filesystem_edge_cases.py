@@ -60,7 +60,7 @@ class TestFilesystemEdgeCases:
 
         result = runner.invoke(
             cli,
-            ["batch", str(nonexistent_dir), "--output-dir", str(output_dir), "--format", "json"],
+            ["batch", str(nonexistent_dir), "--output", str(output_dir), "--format", "json"],
         )
 
         assert result.exit_code != 0, "Should fail for non-existent directory"

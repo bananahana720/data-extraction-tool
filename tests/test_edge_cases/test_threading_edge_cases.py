@@ -58,7 +58,7 @@ class TestThreadingEdgeCases:
             [
                 "batch",
                 str(temp_output_dir),
-                "--output-dir",
+                "--output",
                 str(output_dir),
                 "--format",
                 "json",
@@ -82,7 +82,7 @@ class TestThreadingEdgeCases:
             [
                 "batch",
                 str(temp_output_dir),
-                "--output-dir",
+                "--output",
                 str(output_dir),
                 "--format",
                 "json",
@@ -107,7 +107,7 @@ class TestThreadingEdgeCases:
             [
                 "batch",
                 str(temp_output_dir),
-                "--output-dir",
+                "--output",
                 str(output_dir),
                 "--format",
                 "json",
@@ -133,7 +133,7 @@ class TestThreadingEdgeCases:
             [
                 "batch",
                 str(temp_output_dir),
-                "--output-dir",
+                "--output",
                 str(output_dir),
                 "--format",
                 "json",
@@ -160,7 +160,7 @@ class TestThreadingEdgeCases:
             [
                 "batch",
                 str(temp_output_dir),
-                "--output-dir",
+                "--output",
                 str(output_dir),
                 "--format",
                 "json",
@@ -187,7 +187,7 @@ class TestThreadingEdgeCases:
             [
                 "batch",
                 str(temp_output_dir),
-                "--output-dir",
+                "--output",
                 str(output_dir),
                 "--format",
                 "json",
@@ -213,7 +213,7 @@ class TestThreadingEdgeCases:
             [
                 "batch",
                 str(temp_output_dir),
-                "--output-dir",
+                "--output",
                 str(output_dir),
                 "--format",
                 "json",
@@ -237,7 +237,7 @@ class TestThreadingEdgeCases:
             [
                 "batch",
                 str(temp_output_dir),
-                "--output-dir",
+                "--output",
                 str(output_dir),
                 "--format",
                 "json",
@@ -268,7 +268,7 @@ class TestThreadingEdgeCases:
             [
                 "batch",
                 str(temp_output_dir),
-                "--output-dir",
+                "--output",
                 str(output_dir),
                 "--format",
                 "json",
@@ -300,7 +300,7 @@ class TestThreadingEdgeCases:
             [
                 "batch",
                 str(temp_output_dir),
-                "--output-dir",
+                "--output",
                 str(output_dir),
                 "--format",
                 "json",
@@ -335,7 +335,7 @@ class TestThreadingEdgeCases:
             [
                 "batch",
                 str(temp_output_dir),
-                "--output-dir",
+                "--output",
                 str(output_dir),
                 "--format",
                 "json",
@@ -376,7 +376,7 @@ class TestThreadingEdgeCases:
             [
                 "batch",
                 str(temp_output_dir),
-                "--output-dir",
+                "--output",
                 str(output_dir),
                 "--format",
                 "json",
@@ -414,7 +414,7 @@ class TestThreadingEdgeCases:
             [
                 "batch",
                 str(batch1_dir),
-                "--output-dir",
+                "--output",
                 str(output1_dir),
                 "--format",
                 "json",
@@ -429,7 +429,7 @@ class TestThreadingEdgeCases:
             [
                 "batch",
                 str(batch2_dir),
-                "--output-dir",
+                "--output",
                 str(output2_dir),
                 "--format",
                 "json",
@@ -454,7 +454,7 @@ class TestThreadingEdgeCases:
         output_dir.mkdir()
 
         result = runner.invoke(
-            cli, ["batch", str(empty_dir), "--output-dir", str(output_dir), "--format", "json"]
+            cli, ["batch", str(empty_dir), "--output", str(output_dir), "--format", "json"]
         )
 
         # Should handle gracefully - either success with warning or specific error
@@ -474,7 +474,7 @@ class TestThreadingEdgeCases:
 
         result = runner.invoke(
             cli,
-            ["batch", str(temp_output_dir), "--output-dir", str(output_dir), "--format", "json"],
+            ["batch", str(temp_output_dir), "--output", str(output_dir), "--format", "json"],
         )
 
         # Behavior depends on whether batch command recursively processes

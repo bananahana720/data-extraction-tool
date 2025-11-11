@@ -445,14 +445,14 @@ class TestEncodingEdgeCases:
         Partition: Encoding → Valid → UTF-8 with BOM
         Boundary: BOM handling
         """
-        from extractors.txt_extractor import TxtExtractor
+        from extractors.txt_extractor import TextFileExtractor
 
         txt_path = tmp_path / "with_bom.txt"
         # UTF-8 BOM is EF BB BF
         content = "\ufeff" + "Content with BOM"
         txt_path.write_text(content, encoding="utf-8-sig")
 
-        extractor = TxtExtractor()
+        extractor = TextFileExtractor()
         result = extractor.extract(txt_path)
 
         assert result.success is True
@@ -466,14 +466,14 @@ class TestEncodingEdgeCases:
         Partition: Encoding → Valid → Line ending variants
         Boundary: Cross-platform compatibility
         """
-        from extractors.txt_extractor import TxtExtractor
+        from extractors.txt_extractor import TextFileExtractor
 
         txt_path = tmp_path / "mixed_endings.txt"
         # Mix of line endings
         content = "Line 1\r\nLine 2\nLine 3\rLine 4"
         txt_path.write_bytes(content.encode("utf-8"))
 
-        extractor = TxtExtractor()
+        extractor = TextFileExtractor()
         result = extractor.extract(txt_path)
 
         assert result.success is True
@@ -487,13 +487,13 @@ class TestEncodingEdgeCases:
         Partition: Encoding → Invalid → Binary contamination
         Expected: Should handle or skip null bytes
         """
-        from extractors.txt_extractor import TxtExtractor
+        from extractors.txt_extractor import TextFileExtractor
 
         txt_path = tmp_path / "with_nulls.txt"
         content = b"Text with\x00null\x00bytes"
         txt_path.write_bytes(content)
 
-        extractor = TxtExtractor()
+        extractor = TextFileExtractor()
         result = extractor.extract(txt_path)
 
         # Should handle gracefully (may succeed or fail depending on implementation)

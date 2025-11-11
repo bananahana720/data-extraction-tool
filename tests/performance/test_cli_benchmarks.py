@@ -285,7 +285,7 @@ class TestBatchProcessingPerformance:
             [
                 "batch",
                 str(fixture_dir),
-                "--output-dir",
+                "--output",
                 str(output_dir),
                 "--workers",
                 str(workers),
@@ -381,7 +381,7 @@ class TestThreadSafetyStress:
             [
                 "batch",
                 str(fixture_dir),
-                "--output-dir",
+                "--output",
                 str(output_dir),
                 "--workers",
                 "16",

@@ -26,7 +26,17 @@
         "hooks": [
           {
             "type": "prompt",
-            "prompt": "Evaluate if this subagent should stop. Input: $ARGUMENTS\n\nCheck if:\n- The subagent completed its assigned task\n- Any errors occurred that need fixing\n- Additional context gathering is needed\n\nReturn: {\"decision\": \"approve\" or \"block\", \"reason\": \"explanation\"}"
+            "prompt": "You are a meta-agent analyzing subagent task completion.\n\nAssess whether the subagent:\n1. Fully addressed the delegated task scope\n2. Handled error conditions\n3. Provided actionable output for parent agent\n4. Maintained context coherence\n\nSubagent Context: $ARGUMENTS\n\nBlock if the subagent created more problems than it solved or left critical gaps. Provide constructive feedback for improvement.\n\nRespond with either \"APPROVE\" or \"BLOCK\" along with a brief justification."
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "Predict the likely tool chain needed for the current task and validate this tool call fits the optimal path:\n\nCurrent Tool: $ARGUMENTS\nTask Context: [from conversation]\n\nPredict:\n- Expected tool sequence: [Read → Analyze → Edit → Test → Verify]\n- Current position in chain\n- Likely next 2-3 tools\n\nIf current tool breaks the expected pattern, evaluate:\n- Is this a better approach (eg. using grep instead of rg-based tool calls)?\n- Is Claude exploring unnecessarily?\n- Should we enforce the standard pattern?\n\nModify tool input if it can be optimized for the predicted chain."
           }
         ]
       }
