@@ -12,14 +12,17 @@ Type Contract: Document (raw text) → Document (cleaned text, normalized entiti
 """
 
 from .cleaning import CleaningResult, TextCleaner
-from .config import NormalizationConfig, load_config
+from .config import NormalizationConfig, load_config, validate_entity_patterns
+from .entities import EntityNormalizer
 from .normalizer import Normalizer, NormalizerFactory
 
 __all__ = [
     "NormalizationConfig",
     "load_config",
+    "validate_entity_patterns",
     "TextCleaner",
     "CleaningResult",
+    "EntityNormalizer",
     "Normalizer",
     "NormalizerFactory",
 ]

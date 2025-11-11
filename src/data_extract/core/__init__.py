@@ -1,7 +1,22 @@
 """Core data models and pipeline architecture.
 
-Story 1.4 will implement:
-- Pydantic v2 models (Document, Chunk, Metadata, Entity)
-- PipelineStage[Input, Output] protocol
-- Base exception hierarchy
+Exports:
+- EntityType: Enum for audit domain entity types
+- Entity: Domain entity model with type, id, text, confidence, location
+- Metadata: Provenance and quality tracking with entity tags
+- Document: Processed document model
+- Chunk: Semantic chunk for RAG
+- ProcessingContext: Shared pipeline state
+- PipelineStage: Pipeline stage protocol (when implemented)
 """
+
+from .models import Chunk, Document, Entity, EntityType, Metadata, ProcessingContext
+
+__all__ = [
+    "EntityType",
+    "Entity",
+    "Metadata",
+    "Document",
+    "Chunk",
+    "ProcessingContext",
+]

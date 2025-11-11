@@ -1,7 +1,7 @@
 """Normalization configuration models and loaders.
 
 This module defines configuration for text normalization pipeline:
-- NormalizationConfig: Main configuration model with text cleaning settings
+- NormalizationConfig: Main configuration model with text cleaning and entity settings
 - load_config(): Configuration cascade loader (CLI > env > YAML > defaults)
 
 Configuration cascade precedence (highest to lowest):
@@ -12,8 +12,9 @@ Configuration cascade precedence (highest to lowest):
 """
 
 import os
+import re
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional
 
 import yaml
 from pydantic import BaseModel, ConfigDict, Field, field_validator
@@ -23,7 +24,7 @@ class NormalizationConfig(BaseModel):
     """Configuration for text normalization pipeline.
 
     Defines settings for text cleaning, artifact removal, whitespace
-    normalization, and header/footer detection.
+    normalization, header/footer detection, and entity normalization.
 
     Attributes:
         remove_ocr_artifacts: Enable OCR artifact removal (AC-2.1.1)
@@ -33,6 +34,10 @@ class NormalizationConfig(BaseModel):
         whitespace_max_consecutive_newlines: Max consecutive newlines (AC-2.1.2)
         ocr_artifact_patterns_file: Path to OCR artifact patterns YAML
         header_footer_patterns_file: Path to header/footer patterns YAML
+        enable_entity_normalization: Enable entity recognition and normalization (AC-2.2.1)
+        entity_patterns_file: Path to entity patterns YAML (AC-2.2.7)
+        entity_dictionary_file: Path to entity dictionary YAML (AC-2.2.3)
+        entity_context_window: Context window size for entity disambiguation (AC-2.2.1)
     """
 
     model_config = ConfigDict(frozen=False)
@@ -58,7 +63,7 @@ class NormalizationConfig(BaseModel):
         default=2, ge=1, description="Max consecutive newlines (AC-2.1.2)"
     )
 
-    # Configuration file paths
+    # Configuration file paths (Story 2.1)
     ocr_artifact_patterns_file: Optional[Path] = Field(
         default=None, description="Path to OCR artifact patterns YAML (optional)"
     )
@@ -66,7 +71,33 @@ class NormalizationConfig(BaseModel):
         default=None, description="Path to header/footer patterns YAML (optional)"
     )
 
-    @field_validator("ocr_artifact_patterns_file", "header_footer_patterns_file")
+    # Entity Normalization Flags (Story 2.2)
+    enable_entity_normalization: bool = Field(
+        default=True, description="Enable entity recognition and normalization (AC-2.2.1)"
+    )
+
+    # Entity Configuration file paths (Story 2.2)
+    entity_patterns_file: Optional[Path] = Field(
+        default=None, description="Path to entity patterns YAML (AC-2.2.7)"
+    )
+    entity_dictionary_file: Optional[Path] = Field(
+        default=None, description="Path to entity dictionary YAML (AC-2.2.3)"
+    )
+
+    # Entity Processing Settings (Story 2.2)
+    entity_context_window: int = Field(
+        default=5,
+        ge=1,
+        le=20,
+        description="Context window size for entity disambiguation (AC-2.2.1)",
+    )
+
+    @field_validator(
+        "ocr_artifact_patterns_file",
+        "header_footer_patterns_file",
+        "entity_patterns_file",
+        "entity_dictionary_file",
+    )
     @classmethod
     def validate_file_paths(cls, v: Optional[Path]) -> Optional[Path]:
         """Validate that configuration file paths exist if specified.
@@ -83,6 +114,78 @@ class NormalizationConfig(BaseModel):
         if v is not None and not v.exists():
             raise ValueError(f"Configuration file not found: {v}")
         return v
+
+
+def validate_entity_patterns(patterns_file: Path) -> List[str]:
+    """Validate entity patterns YAML file and return validation errors.
+
+    Checks that:
+    - All 6 entity types have patterns defined
+    - All regex patterns compile successfully
+    - Required fields (pattern, description, priority) are present
+    - Priority values are positive integers
+
+    Args:
+        patterns_file: Path to entity_patterns.yaml file
+
+    Returns:
+        List of validation error messages (empty if valid)
+
+    Example:
+        >>> errors = validate_entity_patterns(Path("config/normalize/entity_patterns.yaml"))
+        >>> if errors:
+        ...     print("Validation errors:", errors)
+    """
+    errors: List[str] = []
+
+    try:
+        with open(patterns_file, "r", encoding="utf-8") as f:
+            patterns_config = yaml.safe_load(f) or {}
+    except Exception as e:
+        return [f"Failed to load patterns file: {e}"]
+
+    # Required entity types (AC-2.2.1)
+    required_types = ["processes", "risks", "controls", "regulations", "policies", "issues"]
+
+    # Check all entity types are defined
+    for entity_type in required_types:
+        if entity_type not in patterns_config:
+            errors.append(f"Missing entity type: {entity_type}")
+            continue
+
+        patterns = patterns_config[entity_type]
+        if not isinstance(patterns, list) or len(patterns) == 0:
+            errors.append(f"Entity type '{entity_type}' has no patterns defined")
+            continue
+
+        # Validate each pattern
+        for i, pattern_def in enumerate(patterns):
+            if not isinstance(pattern_def, dict):
+                errors.append(f"{entity_type}[{i}]: Pattern must be a dictionary")
+                continue
+
+            # Check required fields
+            if "pattern" not in pattern_def:
+                errors.append(f"{entity_type}[{i}]: Missing 'pattern' field")
+            if "description" not in pattern_def:
+                errors.append(f"{entity_type}[{i}]: Missing 'description' field")
+            if "priority" not in pattern_def:
+                errors.append(f"{entity_type}[{i}]: Missing 'priority' field")
+
+            # Validate regex pattern compilation (AC-2.2.7)
+            if "pattern" in pattern_def:
+                try:
+                    re.compile(pattern_def["pattern"])
+                except re.error as e:
+                    errors.append(f"{entity_type}[{i}]: Invalid regex pattern: {e}")
+
+            # Validate priority is positive integer
+            if "priority" in pattern_def:
+                priority = pattern_def["priority"]
+                if not isinstance(priority, int) or priority < 1:
+                    errors.append(f"{entity_type}[{i}]: Priority must be positive integer")
+
+    return errors
 
 
 def load_config(
@@ -160,7 +263,12 @@ def load_config(
         merged_config.update(cli_flags)
 
     # Convert Path strings to Path objects
-    for path_field in ["ocr_artifact_patterns_file", "header_footer_patterns_file"]:
+    for path_field in [
+        "ocr_artifact_patterns_file",
+        "header_footer_patterns_file",
+        "entity_patterns_file",
+        "entity_dictionary_file",
+    ]:
         if path_field in merged_config and isinstance(merged_config[path_field], str):
             merged_config[path_field] = Path(merged_config[path_field])
 

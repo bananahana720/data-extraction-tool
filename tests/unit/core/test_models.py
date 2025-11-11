@@ -5,6 +5,9 @@ Tests cover:
 - Field validation constraints
 - Pydantic ValidationError for invalid data
 - Edge cases (empty values, boundary conditions)
+- EntityType enum validation (Story 2.2)
+- Entity location field (Story 2.2)
+- Metadata entity_tags and entity_counts (Story 2.2)
 """
 
 from datetime import datetime
@@ -18,9 +21,33 @@ from src.data_extract.core.models import (
     Chunk,
     Document,
     Entity,
+    EntityType,
     Metadata,
     ProcessingContext,
 )
+
+
+class TestEntityType:
+    """Test EntityType enum (Story 2.2 - AC 2.2.1)."""
+
+    def test_entity_type_enum_has_all_six_types(self):
+        """Test EntityType enum contains all 6 required audit entity types."""
+        assert EntityType.PROCESS.value == "process"
+        assert EntityType.RISK.value == "risk"
+        assert EntityType.CONTROL.value == "control"
+        assert EntityType.REGULATION.value == "regulation"
+        assert EntityType.POLICY.value == "policy"
+        assert EntityType.ISSUE.value == "issue"
+
+    def test_entity_type_enum_count(self):
+        """Test EntityType enum has exactly 6 types."""
+        assert len(EntityType) == 6
+
+    def test_entity_type_string_values(self):
+        """Test EntityType enum values are lowercase strings."""
+        for entity_type in EntityType:
+            assert isinstance(entity_type.value, str)
+            assert entity_type.value.islower()
 
 
 class TestEntity:
@@ -29,46 +56,114 @@ class TestEntity:
     def test_entity_valid_creation(self):
         """Test Entity instantiation with valid data."""
         entity = Entity(
-            type="risk",
+            type=EntityType.RISK,
             id="RISK-001",
             text="High operational risk identified",
             confidence=0.85,
+            location={"start": 100, "end": 136},
         )
-        assert entity.type == "risk"
+        assert entity.type == EntityType.RISK
         assert entity.id == "RISK-001"
         assert entity.text == "High operational risk identified"
         assert entity.confidence == 0.85
+        assert entity.location == {"start": 100, "end": 136}
 
     def test_entity_confidence_boundary_valid(self):
         """Test Entity confidence at boundary values (0.0 and 1.0)."""
-        entity_min = Entity(type="control", id="C-001", text="Control", confidence=0.0)
+        entity_min = Entity(
+            type=EntityType.CONTROL,
+            id="C-001",
+            text="Control",
+            confidence=0.0,
+            location={"start": 0, "end": 7},
+        )
         assert entity_min.confidence == 0.0
 
-        entity_max = Entity(type="policy", id="P-001", text="Policy", confidence=1.0)
+        entity_max = Entity(
+            type=EntityType.POLICY,
+            id="P-001",
+            text="Policy",
+            confidence=1.0,
+            location={"start": 0, "end": 6},
+        )
         assert entity_max.confidence == 1.0
 
     def test_entity_confidence_below_zero_invalid(self):
         """Test Entity with confidence < 0.0 raises ValidationError."""
         with pytest.raises(ValidationError) as exc_info:
-            Entity(type="risk", id="R-001", text="Risk", confidence=-0.1)
+            Entity(
+                type=EntityType.RISK,
+                id="R-001",
+                text="Risk",
+                confidence=-0.1,
+                location={"start": 0, "end": 4},
+            )
         assert "greater than or equal to 0" in str(exc_info.value).lower()
 
     def test_entity_confidence_above_one_invalid(self):
         """Test Entity with confidence > 1.0 raises ValidationError."""
         with pytest.raises(ValidationError) as exc_info:
-            Entity(type="risk", id="R-001", text="Risk", confidence=1.5)
+            Entity(
+                type=EntityType.RISK,
+                id="R-001",
+                text="Risk",
+                confidence=1.5,
+                location={"start": 0, "end": 4},
+            )
         assert "less than or equal to 1" in str(exc_info.value).lower()
 
     def test_entity_missing_required_fields(self):
         """Test Entity with missing required fields raises ValidationError."""
         with pytest.raises(ValidationError) as exc_info:
-            Entity(type="risk", id="R-001")  # Missing text and confidence
+            Entity(type=EntityType.RISK, id="R-001")  # Missing text, confidence, location
         assert "field required" in str(exc_info.value).lower()
 
     def test_entity_empty_text_valid(self):
         """Test Entity with empty text is valid (edge case)."""
-        entity = Entity(type="issue", id="I-001", text="", confidence=0.5)
+        entity = Entity(
+            type=EntityType.ISSUE,
+            id="I-001",
+            text="",
+            confidence=0.5,
+            location={"start": 0, "end": 0},
+        )
         assert entity.text == ""
+
+    def test_entity_location_field(self):
+        """Test Entity location field stores character positions (Story 2.2)."""
+        entity = Entity(
+            type=EntityType.PROCESS,
+            id="PROC-001",
+            text="Document review process",
+            confidence=0.95,
+            location={"start": 50, "end": 73},
+        )
+        assert entity.location["start"] == 50
+        assert entity.location["end"] == 73
+
+    def test_entity_type_enum_usage(self):
+        """Test Entity type field accepts EntityType enum values (Story 2.2)."""
+        for entity_type in EntityType:
+            entity = Entity(
+                type=entity_type,
+                id=f"{entity_type.value.upper()}-001",
+                text=f"Sample {entity_type.value}",
+                confidence=0.8,
+                location={"start": 0, "end": 10},
+            )
+            assert entity.type == entity_type
+
+    def test_entity_serialization_with_enum(self):
+        """Test Entity serializes EntityType enum correctly."""
+        entity = Entity(
+            type=EntityType.CONTROL,
+            id="CTRL-123",
+            text="Access control policy",
+            confidence=0.92,
+            location={"start": 200, "end": 221},
+        )
+        entity_dict = entity.model_dump()
+        assert entity_dict["type"] == "control"  # Enum serializes to string value
 
 
 class TestMetadata:
@@ -91,6 +186,8 @@ class TestMetadata:
         assert metadata.document_type == "pdf"
         assert metadata.quality_scores == {}
         assert metadata.quality_flags == []
+        assert metadata.entity_tags == []  # Story 2.2
+        assert metadata.entity_counts == {}  # Story 2.2
 
     def test_metadata_with_quality_metrics(self):
         """Test Metadata with quality scores and flags."""
@@ -117,6 +214,52 @@ class TestMetadata:
                 file_hash="hash",
             )  # Missing other required fields
         assert "field required" in str(exc_info.value).lower()
+
+    def test_metadata_with_entity_tags(self):
+        """Test Metadata with entity_tags for RAG retrieval (Story 2.2 - AC 2.2.6)."""
+        metadata = Metadata(
+            source_file=Path("audit_report.pdf"),
+            file_hash="hash123",
+            processing_timestamp=datetime.now(),
+            tool_version="1.0.0",
+            config_version="v1",
+            document_type="pdf",
+            entity_tags=["Risk-123", "Control-456", "Policy-789"],
+        )
+        assert len(metadata.entity_tags) == 3
+        assert "Risk-123" in metadata.entity_tags
+        assert "Control-456" in metadata.entity_tags
+        assert "Policy-789" in metadata.entity_tags
+
+    def test_metadata_with_entity_counts(self):
+        """Test Metadata with entity_counts by type (Story 2.2 - AC 2.2.6)."""
+        metadata = Metadata(
+            source_file=Path("audit_report.pdf"),
+            file_hash="hash123",
+            processing_timestamp=datetime.now(),
+            tool_version="1.0.0",
+            config_version="v1",
+            document_type="pdf",
+            entity_counts={"risk": 5, "control": 3, "policy": 2, "regulation": 1},
+        )
+        assert metadata.entity_counts["risk"] == 5
+        assert metadata.entity_counts["control"] == 3
+        assert metadata.entity_counts["policy"] == 2
+        assert metadata.entity_counts["regulation"] == 1
+
+    def test_metadata_entity_fields_optional(self):
+        """Test Metadata entity fields are optional with empty defaults."""
+        metadata = Metadata(
+            source_file=Path("doc.pdf"),
+            file_hash="hash",
+            processing_timestamp=datetime.now(),
+            tool_version="1.0.0",
+            config_version="v1",
+            document_type="pdf",
+        )
+        # entity_tags and entity_counts should default to empty
+        assert metadata.entity_tags == []
+        assert metadata.entity_counts == {}
 
 
 class TestDocument:
@@ -154,8 +297,20 @@ class TestDocument:
             document_type="pdf",
         )
         entities = [
-            Entity(type="risk", id="R-001", text="Risk 1", confidence=0.9),
-            Entity(type="control", id="C-001", text="Control 1", confidence=0.85),
+            Entity(
+                type=EntityType.RISK,
+                id="R-001",
+                text="Risk 1",
+                confidence=0.9,
+                location={"start": 0, "end": 6},
+            ),
+            Entity(
+                type=EntityType.CONTROL,
+                id="C-001",
+                text="Control 1",
+                confidence=0.85,
+                location={"start": 10, "end": 19},
+            ),
         ]
         document = Document(
             id="DOC-001",
@@ -164,8 +319,8 @@ class TestDocument:
             metadata=metadata,
         )
         assert len(document.entities) == 2
-        assert document.entities[0].type == "risk"
-        assert document.entities[1].type == "control"
+        assert document.entities[0].type == EntityType.RISK
+        assert document.entities[1].type == EntityType.CONTROL
 
     def test_document_with_structure(self):
         """Test Document with structure metadata."""
@@ -324,7 +479,15 @@ class TestChunk:
             config_version="v1",
             document_type="pdf",
         )
-        entities = [Entity(type="risk", id="R-001", text="Risk", confidence=0.9)]
+        entities = [
+            Entity(
+                type=EntityType.RISK,
+                id="R-001",
+                text="Risk",
+                confidence=0.9,
+                location={"start": 0, "end": 4},
+            )
+        ]
         chunk = Chunk(
             id="doc_001",
             text="Chunk with metrics",

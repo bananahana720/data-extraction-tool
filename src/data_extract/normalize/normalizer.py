@@ -1,11 +1,14 @@
 """Normalizer orchestrator for text normalization pipeline.
 
 This module implements the main Normalizer class that orchestrates
-text cleaning using TextCleaner and integrates with the pipeline architecture.
+text cleaning and entity normalization using TextCleaner and EntityNormalizer.
 
 Key classes:
 - Normalizer: Main orchestrator implementing PipelineStage[Document, Document]
 """
+
+from pathlib import Path
+from typing import Optional
 
 import structlog
 
@@ -13,32 +16,34 @@ from src.data_extract.core.exceptions import CriticalError, ProcessingError
 from src.data_extract.core.models import Document, ProcessingContext
 from src.data_extract.normalize.cleaning import TextCleaner
 from src.data_extract.normalize.config import NormalizationConfig
+from src.data_extract.normalize.entities import EntityNormalizer
 
 
 class Normalizer:
-    """Main normalization orchestrator (Story 2.1).
+    """Main normalization orchestrator (Story 2.1 + 2.2).
 
     Implements PipelineStage[Document, Document] protocol for integration
     with the modular pipeline architecture from Epic 1.
 
     Orchestrates:
-    - Text cleaning via TextCleaner
-    - Metadata enrichment with cleaning metrics
+    - Text cleaning via TextCleaner (Story 2.1)
+    - Entity normalization via EntityNormalizer (Story 2.2)
+    - Metadata enrichment with cleaning and entity metrics
     - Error handling (ProcessingError, CriticalError)
     - Structured logging via structlog
 
-    Type Contract: Document (raw text) → Document (cleaned text)
+    Type Contract: Document (raw text) → Document (cleaned text + entities)
 
     Design:
     - Stateless: All state in ProcessingContext
     - Deterministic: Same input + config → same output
-    - Auditable: All cleaning decisions logged
+    - Auditable: All cleaning and entity decisions logged
 
     Example:
         >>> config = NormalizationConfig()
         >>> normalizer = Normalizer(config)
         >>> context = ProcessingContext(config={}, logger=logger)
-        >>> cleaned_doc = normalizer.process(raw_doc, context)
+        >>> processed_doc = normalizer.process(raw_doc, context)
     """
 
     def __init__(self, config: NormalizationConfig):
@@ -49,6 +54,20 @@ class Normalizer:
         """
         self.config = config
         self.text_cleaner = TextCleaner(config)
+
+        # Initialize EntityNormalizer if enabled (Story 2.2)
+        self.entity_normalizer: Optional[EntityNormalizer] = None
+        if config.enable_entity_normalization:
+            try:
+                self.entity_normalizer = EntityNormalizer(
+                    patterns_file=config.entity_patterns_file,
+                    dictionary_file=config.entity_dictionary_file,
+                    context_window=config.entity_context_window,
+                )
+            except FileNotFoundError as e:
+                # Entity normalization disabled if config files not found
+                logger = structlog.get_logger()
+                logger.warning("entity_normalization_disabled", reason=str(e))
 
     def process(self, document: Document, context: ProcessingContext) -> Document:
         """Normalize document through all stages (PipelineStage protocol).
@@ -128,13 +147,38 @@ class Normalizer:
             if cleaning_result.artifacts_removed > 10:
                 updated_metadata.quality_flags.append("high_ocr_artifact_count")
 
-            # Create and return normalized document
-            normalized_document = document.model_copy(
+            # Create intermediate document with cleaned text
+            intermediate_document = document.model_copy(
                 update={
                     "text": cleaned_text,
                     "metadata": updated_metadata,
                 }
             )
+
+            # Step 2: Entity normalization (Story 2.2) if enabled
+            if self.entity_normalizer:
+                try:
+                    normalized_document = self.entity_normalizer.process(
+                        intermediate_document, context
+                    )
+                    logger.info(
+                        "entity_normalization_complete",
+                        document_id=document.id,
+                        entities_found=len(normalized_document.entities),
+                        entity_counts=normalized_document.metadata.entity_counts,
+                    )
+                except Exception as e:
+                    # Log error but continue with cleaned text (graceful degradation)
+                    logger.warning(
+                        "entity_normalization_error",
+                        document_id=document.id,
+                        error=str(e),
+                        fallback="continuing_without_entities",
+                    )
+                    normalized_document = intermediate_document
+            else:
+                # Entity normalization disabled or not configured
+                normalized_document = intermediate_document
 
             return normalized_document
 

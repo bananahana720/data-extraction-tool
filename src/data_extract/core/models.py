@@ -11,10 +11,34 @@ All models use Pydantic v2 for runtime validation and type safety.
 """
 
 from datetime import datetime
+from enum import Enum
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 from pydantic import BaseModel, ConfigDict, Field
+
+
+class EntityType(str, Enum):
+    """Audit domain entity types.
+
+    Six entity types recognized in audit documents for consistent
+    naming and cross-reference resolution.
+
+    Values:
+        PROCESS: Business or operational processes
+        RISK: Identified risks or risk factors
+        CONTROL: Control measures or procedures
+        REGULATION: Regulatory requirements or standards
+        POLICY: Organizational policies or guidelines
+        ISSUE: Identified issues, findings, or audit observations
+    """
+
+    PROCESS = "process"
+    RISK = "risk"
+    CONTROL = "control"
+    REGULATION = "regulation"
+    POLICY = "policy"
+    ISSUE = "issue"
 
 
 class Entity(BaseModel):
@@ -24,22 +48,27 @@ class Entity(BaseModel):
     process, regulation, issue. Used by Document and Chunk models.
 
     Attributes:
-        type: Entity type (e.g., 'risk', 'control', 'policy')
-        id: Unique entity identifier
-        text: Entity text content
+        type: Entity type from EntityType enum
+        id: Canonical entity identifier (e.g., 'Risk-123')
+        text: Entity text content as it appears in document
         confidence: Confidence score (0.0-1.0) for entity extraction
+        location: Character position in document (start and end indices)
     """
 
     model_config = ConfigDict(frozen=False)
 
-    type: str = Field(..., description="Entity type (e.g., risk, control, policy)")
-    id: str = Field(..., description="Unique entity identifier")
-    text: str = Field(..., description="Entity text content")
+    type: EntityType = Field(..., description="Entity type from EntityType enum")
+    id: str = Field(..., description="Canonical entity identifier (e.g., Risk-123)")
+    text: str = Field(..., description="Entity text content as it appears in document")
     confidence: float = Field(
         ...,
         ge=0.0,
         le=1.0,
         description="Confidence score for entity extraction (0.0-1.0)",
+    )
+    location: Dict[str, int] = Field(
+        ...,
+        description="Character position in document (start and end indices)",
     )
 
 
@@ -58,6 +87,8 @@ class Metadata(BaseModel):
         document_type: Type of document (e.g., 'pdf', 'docx', 'xlsx')
         quality_scores: Quality metrics dict (e.g., {'ocr_confidence': 0.95})
         quality_flags: List of quality warnings/flags
+        entity_tags: List of canonical entity IDs for RAG retrieval filtering
+        entity_counts: Count of entities by type (e.g., {'risk': 5, 'control': 3})
     """
 
     model_config = ConfigDict(frozen=False)
@@ -75,6 +106,14 @@ class Metadata(BaseModel):
     )
     quality_flags: List[str] = Field(
         default_factory=list, description="List of quality warnings/flags"
+    )
+    entity_tags: List[str] = Field(
+        default_factory=list,
+        description="List of canonical entity IDs for RAG retrieval filtering",
+    )
+    entity_counts: Dict[str, int] = Field(
+        default_factory=dict,
+        description="Count of entities by type (e.g., {'risk': 5, 'control': 3})",
     )
 
 
