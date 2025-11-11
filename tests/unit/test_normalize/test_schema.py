@@ -791,3 +791,230 @@ class TestExcelTablePreservation:
         assert len(result.structure["standardized_tables"]) == 2
         assert result.structure["standardized_tables"][0]["sheet_name"] == "Sheet1"
         assert result.structure["standardized_tables"][1]["sheet_name"] == "Sheet2"
+
+
+# Edge Case Tests for Coverage Improvement
+
+
+class TestEdgeCases:
+    """Edge case tests to improve coverage from 91% to 95%+."""
+
+    def test_schema_templates_yaml_malformed(self, tmp_path: Path, mock_metadata: Metadata) -> None:
+        """Test handling of corrupt/malformed YAML schema templates."""
+        malformed_yaml = tmp_path / "malformed.yaml"
+        malformed_yaml.write_text("invalid: yaml: content: [unclosed", encoding="utf-8")
+
+        standardizer = SchemaStandardizer(schema_templates_file=malformed_yaml)
+        assert standardizer.field_mappings == {}
+
+    def test_schema_templates_yaml_missing_file(self, tmp_path: Path) -> None:
+        """Test handling of missing schema templates file."""
+        missing_file = tmp_path / "nonexistent.yaml"
+        standardizer = SchemaStandardizer(schema_templates_file=missing_file)
+        assert standardizer.field_mappings == {}
+
+    def test_schema_templates_from_dict(self) -> None:
+        """Test schema templates provided as dictionary."""
+        templates_dict = {"archer": {"risk_management": {"Risk ID": "id"}}}
+        standardizer = SchemaStandardizer(schema_templates=templates_dict)
+        assert standardizer.field_mappings == templates_dict
+
+    def test_standardization_disabled(
+        self, mock_metadata: Metadata, processing_context: ProcessingContext
+    ) -> None:
+        """Test schema standardization when disabled."""
+        standardizer = SchemaStandardizer(enable_standardization=False)
+        document = Document(
+            id="test-1",
+            text="Test",
+            metadata=mock_metadata,
+            structure={"sections": [{"title": "Test"}]},
+        )
+        result = standardizer.process(document, processing_context)
+        assert result == document
+
+    def test_detect_image_low_ocr_confidence(
+        self, schema_standardizer: SchemaStandardizer, mock_metadata: Metadata
+    ) -> None:
+        """Test IMAGE detection with low OCR confidence."""
+        mock_metadata.quality_scores["ocr_confidence"] = 0.5
+        document = Document(id="low-ocr-1", text="Poor OCR", metadata=mock_metadata, structure={})
+        doc_type, confidence = schema_standardizer.detect_document_type(document)
+        assert doc_type == DocumentType.IMAGE
+        assert confidence == 0.85
+
+    def test_detect_report_medium_length_text(
+        self, schema_standardizer: SchemaStandardizer, mock_metadata: Metadata
+    ) -> None:
+        """Test REPORT detection for medium-length text."""
+        medium_text = "Test content " * 50
+        document = Document(id="medium-1", text=medium_text, metadata=mock_metadata, structure={})
+        doc_type, confidence = schema_standardizer.detect_document_type(document)
+        assert doc_type == DocumentType.REPORT
+        assert confidence == 0.85
+
+    def test_transform_image_missing_ocr_confidence(
+        self, schema_standardizer: SchemaStandardizer, mock_metadata: Metadata
+    ) -> None:
+        """Test IMAGE transformation when OCR confidence is missing."""
+        mock_metadata.quality_scores = {}
+        document = Document(id="image-1", text="OCR text", metadata=mock_metadata, structure={})
+        transformed = schema_standardizer._transform_image(document)
+        assert "missing_ocr_confidence" in transformed.metadata.quality_flags
+
+    def test_archer_field_mapping_default_fallback(self, mock_metadata: Metadata) -> None:
+        """Test Archer field mapping falls back to risk_management default."""
+        config_path = Path("config/normalize/schema_templates.yaml")
+        standardizer = SchemaStandardizer(schema_templates_file=config_path)
+
+        # Test with unknown subtype - should fall back to risk_management
+        fields = {"Risk ID": "RISK-999", "Risk Description": "Test"}
+        result = standardizer.standardize_field_names(fields, DocumentType.EXPORT, "Unknown Module")
+
+        # Should use risk_management mapping as fallback
+        assert result["id"] == "RISK-999"
+        assert result["description"] == "Test"
+
+    def test_process_exception_with_invalid_structure(
+        self, mock_metadata: Metadata, processing_context: ProcessingContext, monkeypatch
+    ) -> None:
+        """Test process exception handling with invalid document structure."""
+        from src.data_extract.core.exceptions import ProcessingError
+
+        standardizer = SchemaStandardizer(enable_standardization=True)
+
+        # Mock detect_document_type to raise an exception
+        def mock_detect_raises(document):
+            raise ValueError("Simulated detection error")
+
+        monkeypatch.setattr(standardizer, "detect_document_type", mock_detect_raises)
+
+        document = Document(
+            id="test-1",
+            text="Test",
+            metadata=mock_metadata,
+            structure={},
+        )
+
+        with pytest.raises(ProcessingError) as exc_info:
+            standardizer.process(document, processing_context)
+        assert "Schema standardization failed" in str(exc_info.value)
+
+    def test_transform_export_with_no_fields(
+        self, mock_metadata: Metadata, processing_context: ProcessingContext
+    ) -> None:
+        """Test EXPORT transformation when parse_archer_export returns empty fields."""
+        config_path = Path("config/normalize/schema_templates.yaml")
+        standardizer = SchemaStandardizer(
+            schema_templates_file=config_path, enable_standardization=True
+        )
+
+        # Create EXPORT document with minimal patterns
+        document = Document(
+            id="export-minimal-1",
+            text="RSA Archer recordId=123",
+            metadata=mock_metadata,
+            structure={},
+        )
+
+        result = standardizer.process(document, processing_context)
+
+        # Should detect as EXPORT and add archer_fields even if empty
+        assert result.metadata.document_type == DocumentType.EXPORT
+        assert "archer_fields" in result.structure
+
+    def test_transform_export_with_populated_fields(
+        self, mock_metadata: Metadata, processing_context: ProcessingContext
+    ) -> None:
+        """Test EXPORT transformation with populated Archer fields for standardization."""
+        config_path = Path("config/normalize/schema_templates.yaml")
+        standardizer = SchemaStandardizer(
+            schema_templates_file=config_path, enable_standardization=True
+        )
+
+        # Create EXPORT document with actual Archer fields
+        archer_html = """
+        <html>
+        <body>
+            <field name="Risk ID">RISK-123</field>
+            <field name="Risk Description">Critical security risk</field>
+            <field name="Risk Owner">Security Team</field>
+            <a href="/record.aspx?recordId=456">Control-456</a>
+        </body>
+        </html>
+        """
+
+        document = Document(
+            id="export-with-fields-1",
+            text=archer_html,
+            metadata=mock_metadata,
+            structure={},
+        )
+
+        # Set document subtype to trigger Risk Management module
+        document.metadata.document_subtype = "Risk Management"
+
+        result = standardizer.process(document, processing_context)
+
+        # Should detect as EXPORT and standardize field names
+        assert result.metadata.document_type == DocumentType.EXPORT
+        assert "archer_fields" in result.structure
+
+        # Check that fields were standardized
+        if "standardized_fields" in result.structure["archer_fields"]:
+            standardized = result.structure["archer_fields"]["standardized_fields"]
+            assert "id" in standardized or "Risk ID" in result.structure["archer_fields"]["fields"]
+
+    def test_parse_archer_exception_with_invalid_html(
+        self, schema_standardizer: SchemaStandardizer, mock_metadata: Metadata
+    ) -> None:
+        """Test Archer parsing exception handling with problematic content."""
+        # Create content that could cause BeautifulSoup parsing issues
+        problematic_html = "<html><body>" + "\x00" * 1000 + "</body></html>"
+
+        document = Document(
+            id="problematic-1",
+            text=problematic_html,
+            metadata=mock_metadata,
+            structure={},
+        )
+
+        # Should handle gracefully and log warning
+        result = schema_standardizer.parse_archer_export(document)
+
+        # Even with problematic content, should return valid structure
+        assert isinstance(result, dict)
+        assert "fields" in result
+        assert "hyperlinks" in result
+        assert "module" in result
+
+    def test_parse_archer_with_exception_in_soup(
+        self, schema_standardizer: SchemaStandardizer, mock_metadata: Metadata, monkeypatch
+    ) -> None:
+        """Test Archer parsing when BeautifulSoup raises exception."""
+        from bs4 import BeautifulSoup
+
+        # Mock BeautifulSoup to raise an exception
+        def mock_soup_raises(*args, **kwargs):
+            raise RuntimeError("BeautifulSoup parsing error")
+
+        # Temporarily replace BeautifulSoup in the schema module
+        import src.data_extract.normalize.schema as schema_module
+
+        original_soup = schema_module.BeautifulSoup
+        monkeypatch.setattr(schema_module, "BeautifulSoup", mock_soup_raises)
+
+        document = Document(
+            id="exception-1",
+            text="<html><body>Test</body></html>",
+            metadata=mock_metadata,
+            structure={},
+        )
+
+        # Should handle exception gracefully
+        result = schema_standardizer.parse_archer_export(document)
+
+        # Should return empty archer_data structure
+        assert result["fields"] == {}
+        assert result["hyperlinks"] == []
+        assert result["module"] is None

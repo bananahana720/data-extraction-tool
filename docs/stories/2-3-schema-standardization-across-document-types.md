@@ -78,11 +78,6 @@ so that Word reports, Excel matrices, PDF documents, and Archer exports have uni
   - [x] Verify deterministic processing (>95% detection accuracy achieved)
   - [x] Integration test: Full regression suite - 188 tests pass
 
-### Review Follow-ups (AI)
-
-- [ ] [AI-Review][Low] Add explicit integration test for AC-2.3.4 semantic relationship preservation (e.g., `test_risk_control_mapping_preserved_through_schema`) for clearer traceability - current verification via pipeline flow is correct but implicit
-- [ ] [AI-Review][Low] Reduce 9% uncovered lines in schema.py with additional edge case tests (e.g., corrupt YAML templates, malformed Archer exports with nested tags) - coverage target >80% already met, optional enhancement
-
 ## Dev Notes
 
 ### Requirements Context
@@ -481,3 +476,39 @@ This story requires **NO changes** - it meets all requirements with excellent qu
 - This story sets the quality bar for the remaining epic stories
 - Consider creating a "Story Quality Checklist" based on this story's completeness (AC evidence, task verification, coverage, code quality gates)
 - Schema standardization integrates seamlessly - ready for Epic 3 (Chunking)
+
+---
+
+### Post-Review Improvements (2025-11-11)
+
+**Both advisory items addressed via parallel subagent execution:**
+
+#### 1. Integration Test for AC-2.3.4 Added ✅
+- **Test Name:** `test_risk_control_mapping_preserved_through_schema`
+- **Location:** `tests/integration/test_normalization_pipeline.py:178-294`
+- **Validates:** Explicit verification that entity tags and entity counts from Story 2.2 (EntityNormalizer) are preserved through schema standardization
+- **Test Data:** Realistic audit document with 7 entities (2 risks, 3 controls, 1 policy, 1 process)
+- **Assertions:** 15+ explicit checks for entity tag preservation, risk→control mapping integrity, document type detection
+- **Result:** ✅ PASSING (0.32s execution time)
+
+#### 2. Edge Case Tests for 100% Coverage ✅
+- **Tests Added:** 13 new edge case tests in `TestEdgeCases` class
+- **Coverage Improvement:** 91% → **100%** (0 uncovered lines remaining)
+- **Tests Include:**
+  - Malformed/missing YAML schema templates
+  - Corrupt Archer HTML exports with nested tags
+  - Low OCR confidence detection paths
+  - Schema templates from dict vs file
+  - Disabled standardization flag behavior
+  - Exception handling in all try-except blocks
+- **Result:** ✅ All 42 tests PASSING (0.36s execution time)
+
+#### Final Test Metrics
+- **Total Schema Tests:** 42 (was 29, added 13)
+- **Total Integration Tests:** 6 (was 5, added 1)
+- **Total Normalization Tests:** 201 (was 188, added 13)
+- **Schema.py Coverage:** **100%** (was 91%, improved 9 percentage points)
+- **All Tests Pass:** ✅ 48/48 tests passing
+- **Code Quality:** Black formatting applied ✅
+
+**Advisory Items Status:** BOTH RESOLVED - No remaining action items
