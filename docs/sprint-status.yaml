@@ -1,4 +1,4 @@
-# generated: 2025-11-09
+# generated: 2025-11-10
 # project: data-extraction-tool
 # project_key: data-extraction-tool
 # tracking_system: file-system
@@ -29,7 +29,7 @@
 # - SM typically drafts next story after previous one is 'done' to incorporate learnings
 # - Dev moves story to 'review', SM reviews, then Dev moves to 'done'
 
-generated: 2025-11-09
+generated: 2025-11-10
 project: data-extraction-tool
 project_key: data-extraction-tool
 tracking_system: file-system
@@ -40,11 +40,11 @@ development_status:
   1-1-project-infrastructure-initialization: done
   1-2-brownfield-codebase-assessment: done
   1-3-testing-framework-and-ci-pipeline: done
-  1-4-core-pipeline-architecture-pattern: review
-  epic-1-retrospective: optional
+  1-4-core-pipeline-architecture-pattern: done
+  epic-1-retrospective: completed
 
-  epic-2: backlog
-  2-1-text-cleaning-and-artifact-removal: backlog
+  epic-2: contexted
+  2-1-text-cleaning-and-artifact-removal: done
   2-2-entity-normalization-for-audit-domain: backlog
   2-3-schema-standardization-across-document-types: backlog
   2-4-ocr-confidence-scoring-and-validation: backlog
