@@ -92,11 +92,22 @@ class NormalizationConfig(BaseModel):
         description="Context window size for entity disambiguation (AC-2.2.1)",
     )
 
+    # Schema Standardization Flags (Story 2.3)
+    enable_schema_standardization: bool = Field(
+        default=True, description="Enable schema standardization across document types (AC-2.3.2)"
+    )
+
+    # Schema Configuration file paths (Story 2.3)
+    schema_templates_file: Optional[Path] = Field(
+        default=None, description="Path to schema templates YAML (AC-2.3.3)"
+    )
+
     @field_validator(
         "ocr_artifact_patterns_file",
         "header_footer_patterns_file",
         "entity_patterns_file",
         "entity_dictionary_file",
+        "schema_templates_file",
     )
     @classmethod
     def validate_file_paths(cls, v: Optional[Path]) -> Optional[Path]:

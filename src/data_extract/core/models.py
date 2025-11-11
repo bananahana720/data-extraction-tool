@@ -13,9 +13,9 @@ All models use Pydantic v2 for runtime validation and type safety.
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Union
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 
 class EntityType(str, Enum):
@@ -39,6 +39,25 @@ class EntityType(str, Enum):
     REGULATION = "regulation"
     POLICY = "policy"
     ISSUE = "issue"
+
+
+class DocumentType(str, Enum):
+    """Document classification types for schema standardization.
+
+    Four document types for applying type-specific transformations and
+    schema standardization across different source formats.
+
+    Values:
+        REPORT: Narrative documents (Word, PDF) with sections and headings
+        MATRIX: Tabular documents (Excel) like control matrices or risk registers
+        EXPORT: System exports (Archer GRC HTML/XML) with structured fields
+        IMAGE: Scanned documents or images requiring OCR processing
+    """
+
+    REPORT = "report"
+    MATRIX = "matrix"
+    EXPORT = "export"
+    IMAGE = "image"
 
 
 class Entity(BaseModel):
@@ -84,7 +103,8 @@ class Metadata(BaseModel):
         processing_timestamp: When the document/chunk was processed
         tool_version: Version of the data extraction tool
         config_version: Version of the configuration used
-        document_type: Type of document (e.g., 'pdf', 'docx', 'xlsx')
+        document_type: Document classification (report, matrix, export, image)
+        document_subtype: Document subtype (e.g., Archer module variations)
         quality_scores: Quality metrics dict (e.g., {'ocr_confidence': 0.95})
         quality_flags: List of quality warnings/flags
         entity_tags: List of canonical entity IDs for RAG retrieval filtering
@@ -100,10 +120,39 @@ class Metadata(BaseModel):
     processing_timestamp: datetime = Field(..., description="When the document/chunk was processed")
     tool_version: str = Field(..., description="Version of the data extraction tool")
     config_version: str = Field(..., description="Version of the configuration used")
-    document_type: str = Field(..., description="Type of document (e.g., pdf, docx)")
+    document_type: Optional[Union[DocumentType, str]] = Field(
+        None,
+        description="Document classification type (report, matrix, export, image) or legacy string",
+    )
+    document_subtype: Optional[str] = Field(
+        None, description="Document subtype (e.g., Archer module: Risk Management, Compliance)"
+    )
     quality_scores: Dict[str, float] = Field(
         default_factory=dict, description="Quality metrics (e.g., ocr_confidence)"
     )
+
+    @field_validator("document_type", mode="before")
+    @classmethod
+    def validate_document_type(cls, v: Any) -> Optional[Union[DocumentType, str]]:
+        """Validate and optionally convert document_type.
+
+        Accepts DocumentType enum, string, or None for backwards compatibility.
+
+        Args:
+            v: Value to validate
+
+        Returns:
+            DocumentType enum, string (for legacy support), or None
+        """
+        if v is None:
+            return None
+        if isinstance(v, DocumentType):
+            return v
+        if isinstance(v, str):
+            # Allow legacy string values for backwards compatibility
+            return v
+        return None
+
     quality_flags: List[str] = Field(
         default_factory=list, description="List of quality warnings/flags"
     )

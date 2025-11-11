@@ -17,10 +17,11 @@ from src.data_extract.core.models import Document, ProcessingContext
 from src.data_extract.normalize.cleaning import TextCleaner
 from src.data_extract.normalize.config import NormalizationConfig
 from src.data_extract.normalize.entities import EntityNormalizer
+from src.data_extract.normalize.schema import SchemaStandardizer
 
 
 class Normalizer:
-    """Main normalization orchestrator (Story 2.1 + 2.2).
+    """Main normalization orchestrator (Story 2.1 + 2.2 + 2.3).
 
     Implements PipelineStage[Document, Document] protocol for integration
     with the modular pipeline architecture from Epic 1.
@@ -28,11 +29,12 @@ class Normalizer:
     Orchestrates:
     - Text cleaning via TextCleaner (Story 2.1)
     - Entity normalization via EntityNormalizer (Story 2.2)
+    - Schema standardization via SchemaStandardizer (Story 2.3)
     - Metadata enrichment with cleaning and entity metrics
     - Error handling (ProcessingError, CriticalError)
     - Structured logging via structlog
 
-    Type Contract: Document (raw text) → Document (cleaned text + entities)
+    Type Contract: Document (raw text) → Document (cleaned text + entities + standardized schema)
 
     Design:
     - Stateless: All state in ProcessingContext
@@ -68,6 +70,14 @@ class Normalizer:
                 # Entity normalization disabled if config files not found
                 logger = structlog.get_logger()
                 logger.warning("entity_normalization_disabled", reason=str(e))
+
+        # Initialize SchemaStandardizer if enabled (Story 2.3)
+        self.schema_standardizer: Optional[SchemaStandardizer] = None
+        if config.enable_schema_standardization:
+            self.schema_standardizer = SchemaStandardizer(
+                schema_templates_file=config.schema_templates_file,
+                enable_standardization=True,
+            )
 
     def process(self, document: Document, context: ProcessingContext) -> Document:
         """Normalize document through all stages (PipelineStage protocol).
@@ -180,7 +190,30 @@ class Normalizer:
                 # Entity normalization disabled or not configured
                 normalized_document = intermediate_document
 
-            return normalized_document
+            # Step 3: Schema standardization (Story 2.3) if enabled
+            if self.schema_standardizer:
+                try:
+                    final_document = self.schema_standardizer.process(normalized_document, context)
+                    logger.info(
+                        "schema_standardization_complete",
+                        document_id=document.id,
+                        document_type=final_document.metadata.document_type,
+                        document_subtype=final_document.metadata.document_subtype,
+                    )
+                except Exception as e:
+                    # Log error but continue without schema standardization (graceful degradation)
+                    logger.warning(
+                        "schema_standardization_error",
+                        document_id=document.id,
+                        error=str(e),
+                        fallback="continuing_without_schema_standardization",
+                    )
+                    final_document = normalized_document
+            else:
+                # Schema standardization disabled or not configured
+                final_document = normalized_document
+
+            return final_document
 
         except Exception as e:
             # Catch unexpected errors and wrap in ProcessingError
@@ -256,7 +289,6 @@ class NormalizerFactory:
             ...     "config/normalize/cleaning_rules.yaml"
             ... )
         """
-        from pathlib import Path
 
         from src.data_extract.normalize.config import load_config
 
