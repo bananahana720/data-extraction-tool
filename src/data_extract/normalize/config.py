@@ -38,6 +38,9 @@ class NormalizationConfig(BaseModel):
         entity_patterns_file: Path to entity patterns YAML (AC-2.2.7)
         entity_dictionary_file: Path to entity dictionary YAML (AC-2.2.3)
         entity_context_window: Context window size for entity disambiguation (AC-2.2.1)
+        ocr_confidence_threshold: Minimum OCR confidence threshold (AC-2.4.2)
+        ocr_preprocessing_enabled: Enable image preprocessing before OCR (AC-2.4.3)
+        quarantine_low_confidence: Enable quarantine for low confidence (AC-2.4.5)
     """
 
     model_config = ConfigDict(frozen=False)
@@ -100,6 +103,28 @@ class NormalizationConfig(BaseModel):
     # Schema Configuration file paths (Story 2.3)
     schema_templates_file: Optional[Path] = Field(
         default=None, description="Path to schema templates YAML (AC-2.3.3)"
+    )
+
+    # OCR Validation Flags (Story 2.4)
+    ocr_confidence_threshold: float = Field(
+        default=0.95,
+        ge=0.0,
+        le=1.0,
+        description="Minimum OCR confidence threshold for quality validation (AC-2.4.2)",
+    )
+    ocr_preprocessing_enabled: bool = Field(
+        default=True, description="Enable image preprocessing before OCR (AC-2.4.3)"
+    )
+    quarantine_low_confidence: bool = Field(
+        default=True, description="Enable quarantine for low confidence extractions (AC-2.4.5)"
+    )
+
+    # Completeness Validation Flags (Story 2.5)
+    completeness_threshold: float = Field(
+        default=0.90,
+        ge=0.0,
+        le=1.0,
+        description="Minimum completeness ratio threshold for quality validation (AC-2.5.3)",
     )
 
     @field_validator(

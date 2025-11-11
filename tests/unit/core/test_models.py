@@ -24,6 +24,8 @@ from src.data_extract.core.models import (
     EntityType,
     Metadata,
     ProcessingContext,
+    QualityFlag,
+    ValidationReport,
 )
 
 
@@ -48,6 +50,40 @@ class TestEntityType:
         for entity_type in EntityType:
             assert isinstance(entity_type.value, str)
             assert entity_type.value.islower()
+
+
+class TestQualityFlag:
+    """Test QualityFlag enum (Story 2.4 - AC 2.4.6, 2.4.7)."""
+
+    def test_quality_flag_enum_has_all_flags(self):
+        """Test QualityFlag enum contains all required quality flags."""
+        assert QualityFlag.LOW_OCR_CONFIDENCE.value == "low_ocr_confidence"
+        assert QualityFlag.MISSING_IMAGES.value == "missing_images"
+        assert QualityFlag.INCOMPLETE_EXTRACTION.value == "incomplete_extraction"
+        assert QualityFlag.COMPLEX_OBJECTS.value == "complex_objects"
+
+    def test_quality_flag_enum_count(self):
+        """Test QualityFlag enum has exactly 4 flags (Story 2.5)."""
+        assert len(QualityFlag) == 4
+
+    def test_quality_flag_string_values(self):
+        """Test QualityFlag enum values are lowercase strings with underscores."""
+        for quality_flag in QualityFlag:
+            assert isinstance(quality_flag.value, str)
+            assert quality_flag.value.islower()
+            assert " " not in quality_flag.value  # No spaces, use underscores
+
+    def test_quality_flag_usage_in_list(self):
+        """Test QualityFlag enum can be used in lists for quality tracking."""
+        flags = [QualityFlag.LOW_OCR_CONFIDENCE, QualityFlag.MISSING_IMAGES]
+        assert len(flags) == 2
+        assert QualityFlag.LOW_OCR_CONFIDENCE in flags
+        assert QualityFlag.INCOMPLETE_EXTRACTION not in flags
+
+    def test_quality_flag_serialization(self):
+        """Test QualityFlag enum serializes to string value."""
+        flag = QualityFlag.LOW_OCR_CONFIDENCE
+        assert flag.value == "low_ocr_confidence"
 
 
 class TestEntity:
@@ -260,6 +296,307 @@ class TestMetadata:
         # entity_tags and entity_counts should default to empty
         assert metadata.entity_tags == []
         assert metadata.entity_counts == {}
+
+    def test_metadata_with_ocr_confidence_scores(self):
+        """Test Metadata with per-page OCR confidence scores (Story 2.4 - AC 2.4.6)."""
+        metadata = Metadata(
+            source_file=Path("scanned_doc.pdf"),
+            file_hash="hash456",
+            processing_timestamp=datetime.now(),
+            tool_version="1.0.0",
+            config_version="v1",
+            document_type="pdf",
+            ocr_confidence={1: 0.98, 2: 0.95, 3: 0.92},
+        )
+        assert len(metadata.ocr_confidence) == 3
+        assert metadata.ocr_confidence[1] == 0.98
+        assert metadata.ocr_confidence[2] == 0.95
+        assert metadata.ocr_confidence[3] == 0.92
+
+    def test_metadata_ocr_confidence_empty_by_default(self):
+        """Test Metadata ocr_confidence field defaults to empty dict."""
+        metadata = Metadata(
+            source_file=Path("native_doc.pdf"),
+            file_hash="hash789",
+            processing_timestamp=datetime.now(),
+            tool_version="1.0.0",
+            config_version="v1",
+            document_type="pdf",
+        )
+        assert metadata.ocr_confidence == {}
+
+    def test_metadata_ocr_confidence_with_quality_flags(self):
+        """Test Metadata with both OCR confidence scores and quality flags (Story 2.4)."""
+        metadata = Metadata(
+            source_file=Path("low_quality_scan.pdf"),
+            file_hash="hash999",
+            processing_timestamp=datetime.now(),
+            tool_version="1.0.0",
+            config_version="v1",
+            document_type="pdf",
+            ocr_confidence={1: 0.85, 2: 0.82},
+            quality_flags=["low_ocr_confidence"],  # String values from QualityFlag enum
+        )
+        assert metadata.ocr_confidence[1] == 0.85
+        assert metadata.ocr_confidence[2] == 0.82
+        assert "low_ocr_confidence" in metadata.quality_flags
+
+    def test_metadata_completeness_ratio_valid(self):
+        """Test Metadata.completeness_ratio accepts valid 0.0-1.0 values (Story 2.5 - AC 2.5.3)."""
+        metadata = Metadata(
+            source_file=Path("test.pdf"),
+            file_hash="abc123",
+            processing_timestamp=datetime.now(),
+            tool_version="1.0.0",
+            config_version="1.0",
+            completeness_ratio=0.95,
+        )
+        assert metadata.completeness_ratio == 0.95
+
+    def test_metadata_completeness_ratio_boundary_values(self):
+        """Test Metadata.completeness_ratio at boundary values 0.0 and 1.0 (Story 2.5)."""
+        # Test 0.0 (0% complete)
+        metadata_zero = Metadata(
+            source_file=Path("test.pdf"),
+            file_hash="abc123",
+            processing_timestamp=datetime.now(),
+            tool_version="1.0.0",
+            config_version="1.0",
+            completeness_ratio=0.0,
+        )
+        assert metadata_zero.completeness_ratio == 0.0
+
+        # Test 1.0 (100% complete)
+        metadata_one = Metadata(
+            source_file=Path("test.pdf"),
+            file_hash="abc123",
+            processing_timestamp=datetime.now(),
+            tool_version="1.0.0",
+            config_version="1.0",
+            completeness_ratio=1.0,
+        )
+        assert metadata_one.completeness_ratio == 1.0
+
+    def test_metadata_completeness_ratio_none_default(self):
+        """Test Metadata.completeness_ratio defaults to None when not provided (Story 2.5)."""
+        metadata = Metadata(
+            source_file=Path("test.pdf"),
+            file_hash="abc123",
+            processing_timestamp=datetime.now(),
+            tool_version="1.0.0",
+            config_version="1.0",
+        )
+        assert metadata.completeness_ratio is None
+
+    def test_metadata_completeness_ratio_invalid_above_1(self):
+        """Test Metadata.completeness_ratio rejects values > 1.0 (Story 2.5)."""
+        with pytest.raises(ValidationError) as exc_info:
+            Metadata(
+                source_file=Path("test.pdf"),
+                file_hash="abc123",
+                processing_timestamp=datetime.now(),
+                tool_version="1.0.0",
+                config_version="1.0",
+                completeness_ratio=1.5,
+            )
+        assert "completeness_ratio" in str(exc_info.value).lower()
+
+    def test_metadata_completeness_ratio_invalid_below_0(self):
+        """Test Metadata.completeness_ratio rejects values < 0.0 (Story 2.5)."""
+        with pytest.raises(ValidationError) as exc_info:
+            Metadata(
+                source_file=Path("test.pdf"),
+                file_hash="abc123",
+                processing_timestamp=datetime.now(),
+                tool_version="1.0.0",
+                config_version="1.0",
+                completeness_ratio=-0.1,
+            )
+        assert "completeness_ratio" in str(exc_info.value).lower()
+
+
+class TestValidationReport:
+    """Test ValidationReport model (Story 2.4 - AC 2.4.5, 2.4.6, 2.4.7)."""
+
+    def test_validation_report_valid_creation(self):
+        """Test ValidationReport instantiation with valid data."""
+        report = ValidationReport(
+            quarantine_recommended=True,
+            confidence_scores={1: 0.85, 2: 0.88, 3: 0.90},
+            quality_flags=[QualityFlag.LOW_OCR_CONFIDENCE],
+            extraction_gaps=["Page 1: Low confidence text detection"],
+            document_average_confidence=0.8767,
+            scanned_pdf_detected=True,
+        )
+        assert report.quarantine_recommended is True
+        assert len(report.confidence_scores) == 3
+        assert report.confidence_scores[1] == 0.85
+        assert report.quality_flags == [QualityFlag.LOW_OCR_CONFIDENCE]
+        assert len(report.extraction_gaps) == 1
+        assert report.document_average_confidence == 0.8767
+        assert report.scanned_pdf_detected is True
+
+    def test_validation_report_no_quarantine_needed(self):
+        """Test ValidationReport for high-quality document (no quarantine)."""
+        report = ValidationReport(
+            quarantine_recommended=False,
+            confidence_scores={1: 0.98, 2: 0.97, 3: 0.99},
+            quality_flags=[],
+            extraction_gaps=[],
+            document_average_confidence=0.98,
+            scanned_pdf_detected=True,
+        )
+        assert report.quarantine_recommended is False
+        assert all(score >= 0.95 for score in report.confidence_scores.values())
+        assert report.quality_flags == []
+        assert report.extraction_gaps == []
+        assert report.document_average_confidence >= 0.95
+
+    def test_validation_report_multiple_quality_flags(self):
+        """Test ValidationReport with multiple quality flags."""
+        report = ValidationReport(
+            quarantine_recommended=True,
+            confidence_scores={1: 0.80},
+            quality_flags=[
+                QualityFlag.LOW_OCR_CONFIDENCE,
+                QualityFlag.MISSING_IMAGES,
+                QualityFlag.INCOMPLETE_EXTRACTION,
+            ],
+            extraction_gaps=["Low OCR confidence", "Missing image references"],
+        )
+        assert len(report.quality_flags) == 3
+        assert QualityFlag.LOW_OCR_CONFIDENCE in report.quality_flags
+        assert QualityFlag.MISSING_IMAGES in report.quality_flags
+        assert QualityFlag.INCOMPLETE_EXTRACTION in report.quality_flags
+
+    def test_validation_report_optional_fields_none(self):
+        """Test ValidationReport with optional fields set to None."""
+        report = ValidationReport(
+            quarantine_recommended=False,
+            confidence_scores={},
+            quality_flags=[],
+            extraction_gaps=[],
+            document_average_confidence=None,
+            scanned_pdf_detected=None,
+        )
+        assert report.document_average_confidence is None
+        assert report.scanned_pdf_detected is None
+        assert report.confidence_scores == {}
+        assert report.quality_flags == []
+
+    def test_validation_report_average_confidence_boundary_values(self):
+        """Test ValidationReport average confidence at boundary values (0.0 and 1.0)."""
+        report_min = ValidationReport(
+            quarantine_recommended=True,
+            confidence_scores={1: 0.0},
+            quality_flags=[QualityFlag.LOW_OCR_CONFIDENCE],
+            extraction_gaps=["Completely failed OCR"],
+            document_average_confidence=0.0,
+            scanned_pdf_detected=True,
+        )
+        assert report_min.document_average_confidence == 0.0
+
+        report_max = ValidationReport(
+            quarantine_recommended=False,
+            confidence_scores={1: 1.0},
+            quality_flags=[],
+            extraction_gaps=[],
+            document_average_confidence=1.0,
+            scanned_pdf_detected=True,
+        )
+        assert report_max.document_average_confidence == 1.0
+
+    def test_validation_report_average_confidence_invalid_below_zero(self):
+        """Test ValidationReport with average confidence < 0.0 raises ValidationError."""
+        with pytest.raises(ValidationError) as exc_info:
+            ValidationReport(
+                quarantine_recommended=True,
+                confidence_scores={},
+                quality_flags=[],
+                extraction_gaps=[],
+                document_average_confidence=-0.1,
+            )
+        assert "greater than or equal to 0" in str(exc_info.value).lower()
+
+    def test_validation_report_average_confidence_invalid_above_one(self):
+        """Test ValidationReport with average confidence > 1.0 raises ValidationError."""
+        with pytest.raises(ValidationError) as exc_info:
+            ValidationReport(
+                quarantine_recommended=False,
+                confidence_scores={},
+                quality_flags=[],
+                extraction_gaps=[],
+                document_average_confidence=1.5,
+            )
+        assert "less than or equal to 1" in str(exc_info.value).lower()
+
+    def test_validation_report_serialization_with_enum_flags(self):
+        """Test ValidationReport serializes QualityFlag enums correctly."""
+        report = ValidationReport(
+            quarantine_recommended=True,
+            confidence_scores={1: 0.85},
+            quality_flags=[QualityFlag.LOW_OCR_CONFIDENCE, QualityFlag.MISSING_IMAGES],
+            extraction_gaps=["Low quality scan"],
+        )
+        report_dict = report.model_dump()
+        # QualityFlag enums should serialize to string values
+        assert report_dict["quality_flags"] == ["low_ocr_confidence", "missing_images"]
+
+    def test_validation_report_completeness_passed_default(self):
+        """Test ValidationReport.completeness_passed defaults to True (Story 2.5 - AC 2.5.3)."""
+        report = ValidationReport(quarantine_recommended=False)
+        assert report.completeness_passed is True
+
+    def test_validation_report_completeness_passed_explicit(self):
+        """Test ValidationReport.completeness_passed can be set explicitly (Story 2.5)."""
+        report = ValidationReport(quarantine_recommended=True, completeness_passed=False)
+        assert report.completeness_passed is False
+
+    def test_validation_report_missing_images_count_default(self):
+        """Test ValidationReport.missing_images_count defaults to 0 (Story 2.5 - AC 2.5.1)."""
+        report = ValidationReport(quarantine_recommended=False)
+        assert report.missing_images_count == 0
+
+    def test_validation_report_missing_images_count_positive(self):
+        """Test ValidationReport.missing_images_count accepts positive values (Story 2.5)."""
+        report = ValidationReport(quarantine_recommended=True, missing_images_count=5)
+        assert report.missing_images_count == 5
+
+    def test_validation_report_missing_images_count_invalid_negative(self):
+        """Test ValidationReport.missing_images_count rejects negative values (Story 2.5)."""
+        with pytest.raises(ValidationError) as exc_info:
+            ValidationReport(quarantine_recommended=False, missing_images_count=-1)
+        assert "missing_images_count" in str(exc_info.value).lower()
+
+    def test_validation_report_complex_objects_count_default(self):
+        """Test ValidationReport.complex_objects_count defaults to 0 (Story 2.5 - AC 2.5.2)."""
+        report = ValidationReport(quarantine_recommended=False)
+        assert report.complex_objects_count == 0
+
+    def test_validation_report_complex_objects_count_positive(self):
+        """Test ValidationReport.complex_objects_count accepts positive values (Story 2.5)."""
+        report = ValidationReport(quarantine_recommended=True, complex_objects_count=3)
+        assert report.complex_objects_count == 3
+
+    def test_validation_report_complex_objects_count_invalid_negative(self):
+        """Test ValidationReport.complex_objects_count rejects negative values (Story 2.5)."""
+        with pytest.raises(ValidationError) as exc_info:
+            ValidationReport(quarantine_recommended=False, complex_objects_count=-1)
+        assert "complex_objects_count" in str(exc_info.value).lower()
+
+    def test_validation_report_all_completeness_fields(self):
+        """Test ValidationReport with all completeness fields populated (Story 2.5)."""
+        report = ValidationReport(
+            quarantine_recommended=True,
+            completeness_passed=False,
+            missing_images_count=2,
+            complex_objects_count=1,
+            extraction_gaps=["Missing image on page 3", "OLE object on page 5"],
+        )
+        assert report.completeness_passed is False
+        assert report.missing_images_count == 2
+        assert report.complex_objects_count == 1
+        assert len(report.extraction_gaps) == 2
 
 
 class TestDocument:

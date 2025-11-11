@@ -24,3 +24,11 @@ Routing guidance:
 | 2025-11-10 | 1.3 | Epic 1 | TechDebt | Low | TBD | Open | Convert manual test loops to parametrized tests for better test output and debugging [file: tests/integration/test_pipeline_basic.py:170-189] |
 | 2025-11-10 | 1.3 | Epic 1 | TechDebt | Low | TBD | Open | Install missing test dependencies: psutil (performance tests), reportlab (PDF fixtures) [file: pyproject.toml] |
 | 2025-11-10 | 1.3 | Epic 1 | TechDebt | Low | TBD | Open | Improve extractor test coverage to 60%+ baseline (PDF 19%→60%, CSV/Excel/PPTX 24-26%→60%) - Epic 2 prerequisite [files: src/extractors/*.py] |
+
+## Story 2.5 Code Review Follow-ups (2025-11-11)
+
+| Date | Story | Epic | Type | Severity | Owner | Status | Notes |
+|------|-------|------|------|----------|-------|--------|-------|
+| 2025-11-11 | 2.5 | 2 | Bug | High | TBD | Open | Fix Mypy violations in ValidationReport instantiations - add document_average_confidence=None, scanned_pdf_detected=None to lines 694, 719, 736 in validation.py |
+| 2025-11-11 | 2.5 | 2 | Bug | Medium | TBD | Open | Remove unused variable ocr_validation_performed at validation.py:697 (Ruff F841) |
+| 2025-11-11 | 2.5 | 2 | TechDebt | High | TBD | Open | Re-run quality gates (Black/Ruff/Mypy) and verify 0 violations, update Task 8 completion notes with proof |

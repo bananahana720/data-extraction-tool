@@ -61,6 +61,8 @@ dependencies = [
 ocr = [
     "pytesseract>=0.3.10",
     "pdf2image>=1.16.0",
+    "deskew>=1.5.0",
+    "scikit-image>=0.22.0",
 ]
 
 # Development dependencies

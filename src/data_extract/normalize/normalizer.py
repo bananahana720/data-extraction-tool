@@ -18,10 +18,11 @@ from src.data_extract.normalize.cleaning import TextCleaner
 from src.data_extract.normalize.config import NormalizationConfig
 from src.data_extract.normalize.entities import EntityNormalizer
 from src.data_extract.normalize.schema import SchemaStandardizer
+from src.data_extract.normalize.validation import QualityValidator
 
 
 class Normalizer:
-    """Main normalization orchestrator (Story 2.1 + 2.2 + 2.3).
+    """Main normalization orchestrator (Story 2.1 + 2.2 + 2.3 + 2.4).
 
     Implements PipelineStage[Document, Document] protocol for integration
     with the modular pipeline architecture from Epic 1.
@@ -30,11 +31,12 @@ class Normalizer:
     - Text cleaning via TextCleaner (Story 2.1)
     - Entity normalization via EntityNormalizer (Story 2.2)
     - Schema standardization via SchemaStandardizer (Story 2.3)
+    - OCR quality validation via QualityValidator (Story 2.4)
     - Metadata enrichment with cleaning and entity metrics
     - Error handling (ProcessingError, CriticalError)
     - Structured logging via structlog
 
-    Type Contract: Document (raw text) → Document (cleaned text + entities + standardized schema)
+    Type Contract: Document (raw text) → Document (cleaned text + entities + standardized schema + validated OCR)
 
     Design:
     - Stateless: All state in ProcessingContext
@@ -78,6 +80,14 @@ class Normalizer:
                 schema_templates_file=config.schema_templates_file,
                 enable_standardization=True,
             )
+
+        # Initialize QualityValidator (Story 2.4)
+        # Note: Always initialized but will skip validation if Tesseract unavailable
+        self.quality_validator = QualityValidator(
+            ocr_confidence_threshold=config.ocr_confidence_threshold,
+            ocr_preprocessing_enabled=config.ocr_preprocessing_enabled,
+            quarantine_low_confidence=config.quarantine_low_confidence,
+        )
 
     def process(self, document: Document, context: ProcessingContext) -> Document:
         """Normalize document through all stages (PipelineStage protocol).
@@ -193,12 +203,14 @@ class Normalizer:
             # Step 3: Schema standardization (Story 2.3) if enabled
             if self.schema_standardizer:
                 try:
-                    final_document = self.schema_standardizer.process(normalized_document, context)
+                    standardized_document = self.schema_standardizer.process(
+                        normalized_document, context
+                    )
                     logger.info(
                         "schema_standardization_complete",
                         document_id=document.id,
-                        document_type=final_document.metadata.document_type,
-                        document_subtype=final_document.metadata.document_subtype,
+                        document_type=standardized_document.metadata.document_type,
+                        document_subtype=standardized_document.metadata.document_subtype,
                     )
                 except Exception as e:
                     # Log error but continue without schema standardization (graceful degradation)
@@ -208,10 +220,28 @@ class Normalizer:
                         error=str(e),
                         fallback="continuing_without_schema_standardization",
                     )
-                    final_document = normalized_document
+                    standardized_document = normalized_document
             else:
                 # Schema standardization disabled or not configured
-                final_document = normalized_document
+                standardized_document = normalized_document
+
+            # Step 4: OCR quality validation (Story 2.4)
+            try:
+                final_document = self.quality_validator.process(standardized_document, context)
+                logger.info(
+                    "ocr_quality_validation_complete",
+                    document_id=document.id,
+                    ocr_confidence_available=bool(final_document.metadata.ocr_confidence),
+                )
+            except Exception as e:
+                # Log error but continue without OCR validation (graceful degradation)
+                logger.warning(
+                    "ocr_quality_validation_error",
+                    document_id=document.id,
+                    error=str(e),
+                    fallback="continuing_without_ocr_validation",
+                )
+                final_document = standardized_document
 
             return final_document
 
