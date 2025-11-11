@@ -26,7 +26,7 @@
         "hooks": [
           {
             "type": "prompt",
-            "prompt": "You are a meta-agent analyzing subagent task completion.\n\nAssess whether the subagent:\n1. Fully addressed the delegated task scope\n2. Handled error conditions\n3. Provided actionable output for parent agent\n4. Maintained context coherence\n\nSubagent Context: $ARGUMENTS\n\nBlock if the subagent created more problems than it solved or left critical gaps. Provide constructive feedback for improvement.\n\nRespond with either \"APPROVE\" or \"BLOCK\" along with a brief justification."
+            "prompt": "Did the subagent complete its assigned task? Check:\n\n1. Task name in input: [extract from $ARGUMENTS]\n2. Did the subagent execute relevant tools? (yes/no)\n3. Is there output/result data? (yes/no)\n4. Are there uncaught errors? (yes/no = fail)\n\n$ARGUMENTS\n\nBlock if: #2=no OR #3=no OR #4=yes\nOtherwise approve.\n\nRespond: {\"decision\": \"approve|block\", \"reason\": \"[which check failed]\"}"
           }
         ]
       }
