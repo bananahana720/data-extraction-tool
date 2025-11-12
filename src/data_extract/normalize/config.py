@@ -127,6 +127,12 @@ class NormalizationConfig(BaseModel):
         description="Minimum completeness ratio threshold for quality validation (AC-2.5.3)",
     )
 
+    # Metadata Enrichment Flags (Story 2.6)
+    tool_version: str = Field(
+        default="2.0.0",
+        description="Version of the data extraction tool (for reproducibility, AC-2.6.3)",
+    )
+
     @field_validator(
         "ocr_artifact_patterns_file",
         "header_footer_patterns_file",

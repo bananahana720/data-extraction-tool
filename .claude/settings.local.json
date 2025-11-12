@@ -21,26 +21,51 @@
   },
   "model": "sonnet",
   "hooks": {
-    "SubagentStop": [
-      {
-        "hooks": [
-          {
-            "type": "prompt",
-            "prompt": "Did the subagent complete its assigned task? Check:\n\n1. Task name in input: [extract from $ARGUMENTS]\n2. Did the subagent execute relevant tools? (yes/no)\n3. Is there output/result data? (yes/no)\n4. Are there uncaught errors? (yes/no = fail)\n\n$ARGUMENTS\n\nBlock if: #2=no OR #3=no OR #4=yes\nOtherwise approve.\n\nRespond: {\"decision\": \"approve|block\", \"reason\": \"[which check failed]\"}"
-          }
-        ]
-      }
-    ],
     "PreToolUse": [
       {
         "hooks": [
           {
             "type": "prompt",
-            "prompt": "Predict the likely tool chain needed for the current task and validate this tool call fits the optimal path:\n\nCurrent Tool: $ARGUMENTS\nTask Context: [from conversation]\n\nPredict:\n- Expected tool sequence: [Read → Analyze → Edit → Test → Verify]\n- Current position in chain\n- Likely next 2-3 tools\n\nIf current tool breaks the expected pattern, evaluate:\n- Is this a better approach (eg. using grep instead of rg-based tool calls)?\n- Is Claude exploring unnecessarily?\n- Should we enforce the standard pattern?\n\nModify tool input if it can be optimized for the predicted chain."
+            "prompt": "Scan tool input for validation error indicators over sytnax and semantics. Count and track occurrences.\n\n$ARGUMENTS\n\nIf total error indicators >= 2, respond with a:\n```json\n{\n  \"hookEventName\": \"PreToolUse\",\n  \"permissionDecision\": \"block\",\n  \"permissionDecisionReason\": \" Error(s) detected.\",\n  \"additionalContext\": \"[Insert what and why]\"\n}\n```\n\nElse: ```json\n{\n  \"hookEventName\": \"PreToolUse\",\n  \"permissionDecision\": \"allow\"\n}\n```"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "npx prettier --write $FILE_PATH"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "Evaluate task completion using this checklist. Score each item 0 (no) or 1 (yes):\n\n1. Tool execution succeeded (no errors in transcript)\n2. Output was complete or verified\n3. Files were saved (not just viewed)\n4. Changes address the original request\n\n$ARGUMENTS\n\nSum the scores. If total < 3, respond:\n```json\n{\n  \"hookEventName\": \"Stop\",\n  \"decision\": \"block\",\n  \"reason\": \"Incomplete: [list missing items]\"\n}\n```\n\nIf total >= 3, respond:\n```json\n{\n  \"hookEventName\": \"Stop\",\n  \"decision\": \"approve\",\n  \"reason\": \"Complete\"\n}\n```"
+          },
+          {
+            "type": "command",
+            "command": "echo \"$(date): $CONVERSATION_SUMMARY\" >> .claude/activity.log"
+          }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "Did the subagent complete its assigned task? Check:\n\n1. Task name in input: [extract from $ARGUMENTS]\n2. Did the subagent execute relevant tools? (yes/no)\n3. Is there output/result data? (yes/no)\n4. Are there uncaught errors? (yes/no = fail)\n\n$ARGUMENTS\n\nBlock if: #2=no OR #3=no OR #4=yes\nOtherwise approve.\n\nRespond: ```json\n{\n  \"hookEventName\": \"SubagentStop\",\n  \"decision\": \"approve|block\",\n  \"reason\": \"[which check failed]\"\n}\n```"
           }
         ]
       }
     ]
   },
-  "outputStyle": "default"
+  "outputStyle": "critical-code-reviewer"
 }

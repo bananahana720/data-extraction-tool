@@ -679,7 +679,6 @@ class QualityValidator(PipelineStage[Document, Document]):
             ProcessingError: If validation fails critically
         """
         # OCR validation (if available)
-        ocr_validation_performed = False
         confidence_scores: Dict[int, float] = {}
         pages_below_threshold: List[int] = []
         is_scanned = False
@@ -691,10 +690,13 @@ class QualityValidator(PipelineStage[Document, Document]):
                 reason="pytesseract_not_available",
             )
             # Skip OCR but run completeness validation
-            validation_report = ValidationReport(quarantine_recommended=False)
+            validation_report = ValidationReport(
+                quarantine_recommended=False,
+                document_average_confidence=None,
+                scanned_pdf_detected=None,
+            )
             skip_to_completeness = True
         else:
-            ocr_validation_performed = True
             skip_to_completeness = False
 
             self.logger.info(
@@ -716,7 +718,11 @@ class QualityValidator(PipelineStage[Document, Document]):
                 )
                 # Skip OCR but continue to completeness validation
                 # Create empty validation report
-                validation_report = ValidationReport(quarantine_recommended=False)
+                validation_report = ValidationReport(
+                    quarantine_recommended=False,
+                    document_average_confidence=None,
+                    scanned_pdf_detected=None,
+                )
                 # Jump to completeness validation
                 skip_to_completeness = True
             else:
@@ -733,7 +739,11 @@ class QualityValidator(PipelineStage[Document, Document]):
                         message="No OCR confidence scores in metadata - OCR validation skipped",
                     )
                     # Create empty validation report and continue to completeness
-                    validation_report = ValidationReport(quarantine_recommended=False)
+                    validation_report = ValidationReport(
+                        quarantine_recommended=False,
+                        document_average_confidence=None,
+                        scanned_pdf_detected=None,
+                    )
                     skip_to_completeness = True
                 else:
                     skip_to_completeness = False

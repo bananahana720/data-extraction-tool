@@ -17,12 +17,13 @@ from src.data_extract.core.models import Document, ProcessingContext
 from src.data_extract.normalize.cleaning import TextCleaner
 from src.data_extract.normalize.config import NormalizationConfig
 from src.data_extract.normalize.entities import EntityNormalizer
+from src.data_extract.normalize.metadata import MetadataEnricher
 from src.data_extract.normalize.schema import SchemaStandardizer
 from src.data_extract.normalize.validation import QualityValidator
 
 
 class Normalizer:
-    """Main normalization orchestrator (Story 2.1 + 2.2 + 2.3 + 2.4).
+    """Main normalization orchestrator (Story 2.1 + 2.2 + 2.3 + 2.4 + 2.5 + 2.6).
 
     Implements PipelineStage[Document, Document] protocol for integration
     with the modular pipeline architecture from Epic 1.
@@ -32,6 +33,8 @@ class Normalizer:
     - Entity normalization via EntityNormalizer (Story 2.2)
     - Schema standardization via SchemaStandardizer (Story 2.3)
     - OCR quality validation via QualityValidator (Story 2.4)
+    - Completeness validation via QualityValidator (Story 2.5)
+    - Metadata enrichment via MetadataEnricher (Story 2.6)
     - Metadata enrichment with cleaning and entity metrics
     - Error handling (ProcessingError, CriticalError)
     - Structured logging via structlog
@@ -81,13 +84,16 @@ class Normalizer:
                 enable_standardization=True,
             )
 
-        # Initialize QualityValidator (Story 2.4)
+        # Initialize QualityValidator (Story 2.4 + 2.5)
         # Note: Always initialized but will skip validation if Tesseract unavailable
         self.quality_validator = QualityValidator(
             ocr_confidence_threshold=config.ocr_confidence_threshold,
             ocr_preprocessing_enabled=config.ocr_preprocessing_enabled,
             quarantine_low_confidence=config.quarantine_low_confidence,
         )
+
+        # Initialize MetadataEnricher (Story 2.6)
+        self.metadata_enricher = MetadataEnricher()
 
     def process(self, document: Document, context: ProcessingContext) -> Document:
         """Normalize document through all stages (PipelineStage protocol).
@@ -225,23 +231,114 @@ class Normalizer:
                 # Schema standardization disabled or not configured
                 standardized_document = normalized_document
 
-            # Step 4: OCR quality validation (Story 2.4)
+            # Step 4: OCR quality validation (Story 2.4 + 2.5)
             try:
-                final_document = self.quality_validator.process(standardized_document, context)
+                validated_document = self.quality_validator.process(standardized_document, context)
                 logger.info(
-                    "ocr_quality_validation_complete",
+                    "quality_validation_complete",
                     document_id=document.id,
-                    ocr_confidence_available=bool(final_document.metadata.ocr_confidence),
+                    ocr_confidence_available=bool(validated_document.metadata.ocr_confidence),
+                    completeness_ratio=validated_document.metadata.completeness_ratio,
                 )
             except Exception as e:
-                # Log error but continue without OCR validation (graceful degradation)
+                # Log error but continue without validation (graceful degradation)
                 logger.warning(
-                    "ocr_quality_validation_error",
+                    "quality_validation_error",
                     document_id=document.id,
                     error=str(e),
-                    fallback="continuing_without_ocr_validation",
+                    fallback="continuing_without_validation",
                 )
-                final_document = standardized_document
+                validated_document = standardized_document
+
+            # Step 8: Metadata enrichment (Story 2.6)
+            try:
+                # Get ValidationReport from quality validator's last validation
+                # Note: In production, this would be stored or passed through
+                # For now, we'll create a minimal ValidationReport from metadata
+                from src.data_extract.core.models import ValidationReport
+
+                validation_report = ValidationReport(
+                    quarantine_recommended=(len(validated_document.metadata.quality_flags) > 0),
+                    confidence_scores=validated_document.metadata.ocr_confidence,
+                    quality_flags=[],  # Already in metadata.quality_flags
+                    extraction_gaps=[],
+                    document_average_confidence=validated_document.metadata.quality_scores.get(
+                        "ocr_confidence"
+                    ),
+                    scanned_pdf_detected=None,  # Not available at this stage
+                    completeness_passed=(
+                        validated_document.metadata.completeness_ratio is None
+                        or validated_document.metadata.completeness_ratio
+                        >= self.config.completeness_threshold
+                    ),
+                )
+
+                # Enrich metadata with all processing information
+                enriched_metadata = self.metadata_enricher.enrich_metadata(
+                    source_file=validated_document.metadata.source_file,
+                    entities=validated_document.entities,
+                    validation_report=validation_report,
+                    config=self.config,
+                    readability_scores=None,  # Optional: can be added later
+                )
+
+                # Merge enriched metadata with existing metadata
+                # Preserve quality_scores and quality_flags from earlier pipeline stages
+                merged_quality_scores = validated_document.metadata.quality_scores.copy()
+                merged_quality_scores.update(enriched_metadata.quality_scores)
+
+                # Merge quality_flags (combine existing + new, deduplicate)
+                merged_quality_flags = list(
+                    set(validated_document.metadata.quality_flags + enriched_metadata.quality_flags)
+                )
+
+                # Preserve critical fields from original metadata if already set
+                final_metadata = enriched_metadata.model_copy(
+                    update={
+                        "quality_scores": merged_quality_scores,
+                        "quality_flags": merged_quality_flags,
+                        "document_type": (
+                            validated_document.metadata.document_type
+                            or enriched_metadata.document_type
+                        ),
+                        "document_subtype": (
+                            validated_document.metadata.document_subtype
+                            or enriched_metadata.document_subtype
+                        ),
+                        # Preserve original file_hash and tool_version if already set
+                        "file_hash": (
+                            validated_document.metadata.file_hash
+                            if validated_document.metadata.file_hash
+                            else enriched_metadata.file_hash
+                        ),
+                        "tool_version": (
+                            validated_document.metadata.tool_version
+                            if validated_document.metadata.tool_version
+                            else enriched_metadata.tool_version
+                        ),
+                    }
+                )
+
+                # Create final document with merged metadata
+                final_document = validated_document.model_copy(update={"metadata": final_metadata})
+
+                logger.info(
+                    "metadata_enrichment_complete",
+                    document_id=document.id,
+                    file_hash=enriched_metadata.file_hash[:16] + "...",
+                    entity_count=len(enriched_metadata.entity_tags),
+                    config_snapshot_keys=len(enriched_metadata.config_snapshot),
+                )
+
+            except ProcessingError as e:
+                # Log error but continue without enrichment (graceful degradation)
+                logger.warning(
+                    "metadata_enrichment_error",
+                    document_id=document.id,
+                    error=str(e),
+                    fallback="continuing_without_enrichment",
+                )
+                final_document = validated_document
 
             return final_document
 

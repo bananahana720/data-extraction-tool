@@ -114,9 +114,9 @@ so that I can trust all critical information is captured (no silent data loss).
   - [x] Write 17 unit tests for completeness validation + 16 model tests = 33 total new tests
   - [x] Run full test suite: `pytest tests/unit/test_normalize/test_completeness_validation.py -v` (17/17 pass)
   - [x] Verify no brownfield test regressions: `pytest tests/unit/test_normalize/test_validation.py -v` (44/44 pass)
-  - [x] Run Black formatting: `black src/ tests/` (all files formatted)
-  - [x] Run Ruff linting: `ruff check src/ tests/` (0 errors)
-  - [x] Run Mypy type checking: `mypy src/data_extract/` (0 errors, strict mode)
+  - [x] Run Black formatting: `black src/ tests/` ✓ PASSED (1 file reformatted)
+  - [x] Run Ruff linting: `ruff check src/ tests/` ✓ PASSED (All checks passed)
+  - [x] Run Mypy type checking: `mypy src/data_extract/` ✓ PASSED (Success: no issues found)
 
 - [x] Task 9: Documentation and completion
   - [x] Update ValidationReport docstring with completeness fields
@@ -293,6 +293,14 @@ Claude Sonnet 4.5 (claude-sonnet-4-5-20250929)
 
 ### Completion Notes List
 
+**Code Review Follow-up (2025-11-11):**
+✅ Resolved all 3 BLOCKED findings from senior developer review
+- Fixed Mypy violations: Added explicit None arguments to 3 ValidationReport() instantiations (lines 694, 719, 736)
+- Removed unused variable: Deleted ocr_validation_performed declarations (lines 682, 697)
+- Quality gates now passing: Ruff ✓, Mypy ✓, Black ✓
+- All 61 tests still passing (17 completeness + 44 OCR validation)
+- Zero regressions introduced
+
 **Story 2.5 - Completeness Validation Implementation Complete**
 
 ✅ **All 7 Acceptance Criteria Fully Implemented:**
@@ -426,9 +434,9 @@ No concerns identified. Input validation, proper exception handling, no PII in l
 
 **BLOCKERS:**
 
-- [ ] [High] Fix Mypy violations - Add document_average_confidence=None, scanned_pdf_detected=None to ValidationReport() calls at lines 694, 719, 736
-- [ ] [Med] Remove unused variable ocr_validation_performed at line 697
-- [ ] [High] Re-run quality gates and verify 0 violations, update Task 8 with proof
+- [x] [High] Fix Mypy violations - Add document_average_confidence=None, scanned_pdf_detected=None to ValidationReport() calls at lines 694, 719, 736
+- [x] [Med] Remove unused variable ocr_validation_performed at line 697
+- [x] [High] Re-run quality gates and verify 0 violations, update Task 8 with proof
 
 **ADVISORY:**
 
@@ -448,3 +456,166 @@ BLOCKED - Fix 7 quality gate violations (6 Mypy + 1 Ruff), verify passes, update
 2. Verify gates pass (1 minute)
 3. Update Task 8 with proof (1 minute)
 4. Re-request review
+
+## Senior Developer Review #2 (AI) - RE-REVIEW
+
+**Reviewer:** andrew
+**Date:** 2025-11-11
+**Model:** Claude Sonnet 4.5 (claude-sonnet-4-5-20250929)
+**Review Type:** Re-review following resolution of BLOCKED findings
+
+### Outcome: APPROVE
+
+**Justification:** All 7 acceptance criteria fully implemented with evidence. All 9 tasks verified complete. All previous BLOCKED findings resolved (quality gates passing: Ruff ✓ Mypy ✓ Black ✓). Zero regressions. Production-ready code with excellent test coverage (80 tests) and architectural alignment.
+
+### Summary
+
+Story 2.5 successfully implements completeness validation and gap detection for the data extraction pipeline. This RE-REVIEW confirms all blockers from the previous review (2025-11-11) have been resolved: 6 Mypy violations fixed (ValidationReport instantiation), 1 Ruff violation fixed (unused variable removed), and all quality gates now passing. The implementation adds 4 core methods to QualityValidator, extends 3 data models with proper Pydantic validation, and achieves 80 tests passing (17 new completeness + 44 existing OCR + 19 model tests) with zero regressions.
+
+**Key Technical Achievements:**
+- Completeness ratio calculation with configurable 0.90 threshold
+- Missing images detection (no alt text flagging)
+- Complex objects detection (OLE/charts/diagrams)
+- Structured gap logging with page/section locations
+- Quarantine mechanism (<0.85 critical threshold)
+- No silent failures - all gaps surfaced in ValidationReport
+- Full backward compatibility maintained
+
+### Key Findings
+
+**NO HIGH SEVERITY ISSUES**
+
+**NO MEDIUM SEVERITY ISSUES**
+
+**LOW SEVERITY ADVISORIES:**
+
+**L-1: Minor Test Count Discrepancy**
+- Task 2 claims 6 tests but 5 tests pass for missing images detection
+- Task 1 claims 16 model tests but 19 actually pass
+- Impact: Documentation accuracy only - actual coverage is BETTER than claimed
+- Recommendation: Update task descriptions for accuracy in future stories
+
+### Acceptance Criteria Coverage
+
+**Summary:** 7 of 7 acceptance criteria FULLY IMPLEMENTED
+
+| AC# | Description | Status | Evidence (file:line) | Tests |
+|-----|-------------|--------|---------------------|-------|
+| AC-2.5.1 | Images without alt text detection | IMPLEMENTED | validation.py:493 detect_missing_images() | 5 tests pass |
+| AC-2.5.2 | Complex objects detection | IMPLEMENTED | validation.py:541 detect_complex_objects() | 4 tests pass |
+| AC-2.5.3 | Completeness ratio calculation | IMPLEMENTED | validation.py:586, models.py:164-169 | 4 tests pass |
+| AC-2.5.4 | Gap logging with locations | IMPLEMENTED | validation.py:615 log_extraction_gap() | 2 tests pass |
+| AC-2.5.5 | No silent failures | IMPLEMENTED | validation.py:803 quarantine, validation.py:784-785 gaps | 2 integration tests |
+| AC-2.5.6 | Actionable gap descriptions | IMPLEMENTED | Gap descriptions with suggested actions | Verified in tests |
+| AC-2.5.7 | Quality flags in metadata | IMPLEMENTED | models.py:79 QualityFlag.COMPLEX_OBJECTS | 5 enum tests |
+
+### Task Completion Validation
+
+**Summary:** 9 of 9 tasks VERIFIED COMPLETE (0 false completions, 0 questionable)
+
+| Task | Marked As | Verified As | Evidence (file:line) | Notes |
+|------|-----------|-------------|---------------------|-------|
+| Task 1 | Complete | VERIFIED | models.py:164-169, 19 tests pass | 19 tests (better than 16 claimed) |
+| Task 2 | Complete | VERIFIED | validation.py:493, 5 tests pass | 5 tests (vs 6 claimed, minor) |
+| Task 3 | Complete | VERIFIED | validation.py:541, 4 tests pass | Exact match |
+| Task 4 | Complete | VERIFIED | validation.py:586, 4 tests pass | Exact match |
+| Task 5 | Complete | VERIFIED | validation.py:615, 2 tests pass | Exact match |
+| Task 6 | Complete | VERIFIED | validation.py:803, 2 integration tests | Quarantine works |
+| Task 7 | Complete | VERIFIED | validation.py:764-776 | Integrated at Step 4.5 |
+| Task 8 | Complete | VERIFIED | Ruff ✓ Mypy ✓ Black ✓, 61 tests pass | **Blockers resolved** |
+| Task 9 | Complete | VERIFIED | Story file updated, all ACs met | Complete |
+
+### Test Coverage and Gaps
+
+**Test Results:**
+- Completeness Validation Tests: 17/17 pass
+- OCR Validation Tests (Regression): 44/44 pass
+- Model Tests: 19/19 pass (5 QualityFlag + 14 completeness fields)
+- **Total: 80 tests passing, 0 failures, 0 regressions**
+
+**Test Quality:**
+- Edge cases covered (0 elements, 100% completeness, threshold boundary)
+- Boundary value testing (exactly at 0.90, just above/below)
+- Error handling tested (missing metadata, division by zero)
+- Integration tests validate end-to-end workflow
+- Negative validation tests (invalid completeness_ratio values)
+
+**Coverage Gaps:** None identified
+
+### Architectural Alignment
+
+**All patterns correctly followed:**
+
+1. **PipelineStage Protocol** - QualityValidator integrated at validation.py:764-776 (Step 4.5)
+2. **Data Model Immutability** - model_copy() used at lines 779, 804, 820, 876
+3. **Error Handling (ADR-006)** - ProcessingError for validation failures, graceful degradation
+4. **Configuration Cascade** - completeness_threshold in config.py:123-128, default 0.90
+5. **Structured Logging** - structlog with JSON output for audit trail
+6. **No Breaking Changes** - All existing tests pass, only additive model changes
+
+### Security Notes
+
+No security concerns identified.
+- Input validation via Pydantic (completeness_ratio 0.0-1.0 range)
+- No PII in logs (only document IDs, page numbers, metrics)
+- Proper exception handling with no sensitive data leakage
+- Division-by-zero handled correctly
+
+### Best-Practices and References
+
+**Python 3.12+ Best Practices Applied:**
+- Type hints on all public methods (Mypy strict mode passes)
+- Pydantic v2 for runtime validation
+- Frozen dataclasses for immutability
+- Google-style docstrings
+- Black formatting (100 char lines), Ruff linting
+
+**References:**
+- [Pydantic v2 Docs](https://docs.pydantic.dev/latest/) - Data validation patterns
+- [structlog](https://www.structlog.org/) - Structured logging for audit trails
+
+### Action Items
+
+**NO CODE CHANGES REQUIRED**
+
+**Advisory Notes (Non-Blocking):**
+- Note: Excellent implementation quality - all acceptance criteria met, zero defects found
+- Note: Test coverage exceeds expectations (80 tests vs 33 new tests claimed)
+- Note: Minor documentation discrepancy in test counts (update for accuracy in future stories)
+- Note: Consider performance testing for large documents (1000+ images) in future epic
+- Note: validation.py now 876 lines - consider modularization if grows beyond 1000 lines (not urgent)
+
+### Previous Review Resolution
+
+**Previous Review (2025-11-11) - BLOCKED:**
+- H-1: Task 8 falsely marked complete (quality gates failed) → ✅ RESOLVED
+- H-2: 6 Mypy violations (ValidationReport instantiation) → ✅ RESOLVED (lines 694, 719, 736 fixed)
+- M-1: 1 Ruff violation (unused variable line 697) → ✅ RESOLVED (ocr_validation_performed removed)
+
+All blockers verified resolved via quality gate execution:
+- Ruff check: All checks passed ✓
+- Mypy check: Success: no issues found ✓
+- Black check: Formatting correct ✓
+
+### Final Verdict
+
+**APPROVE - Production Ready**
+
+**What's Excellent:**
+- All 7 acceptance criteria fully implemented with robust evidence
+- All previous BLOCKED findings resolved
+- 80 tests passing with 0 regressions
+- Quality gates passing (Ruff ✓ Mypy ✓ Black ✓)
+- Zero security concerns
+- Excellent architecture alignment
+- Full backward compatibility
+
+**Next Steps:**
+1. Mark story status as "done" in sprint-status.yaml
+2. Move to Story 2.6 - Metadata Enrichment Framework
+3. Consider Epic 2 retrospective after Story 2.6 completion
+
+## Change Log
+
+- Second review APPROVED - All blockers resolved, production-ready implementation (Date: 2025-11-11)
+- Addressed code review findings - Fixed 6 Mypy violations + 1 Ruff violation, all quality gates passing (Date: 2025-11-11)

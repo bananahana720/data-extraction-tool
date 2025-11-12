@@ -136,6 +136,8 @@ class Metadata(BaseModel):
         completeness_ratio: Extraction completeness ratio (0.0-1.0, extracted/total elements)
         entity_tags: List of canonical entity IDs for RAG retrieval filtering
         entity_counts: Count of entities by type (e.g., {'risk': 5, 'control': 3})
+        config_snapshot: Full configuration snapshot for reproducibility (all processing settings)
+        validation_report: Serialized ValidationReport with quality validation results
     """
 
     model_config = ConfigDict(frozen=False)
@@ -200,6 +202,14 @@ class Metadata(BaseModel):
     entity_counts: Dict[str, int] = Field(
         default_factory=dict,
         description="Count of entities by type (e.g., {'risk': 5, 'control': 3})",
+    )
+    config_snapshot: Dict[str, Any] = Field(
+        default_factory=dict,
+        description="Configuration snapshot used for processing (for reproducibility)",
+    )
+    validation_report: Dict[str, Any] = Field(
+        default_factory=dict,
+        description="Serialized ValidationReport with quality validation results",
     )
 
 
