@@ -199,6 +199,372 @@ def test_extractor_missing_file():
 - Return result objects with `success=False` and populated `errors`
 - Only raise exceptions for programming errors (bugs, invalid arguments)
 
+### Pattern 5: Testing CLI Commands
+
+The CLI has three testing approaches, organized in a testing pyramid:
+
+```
+         ┌─────────────────┐
+         │   E2E CLI Tests │  ← tmux-cli (interactive flows, real terminal)
+         │   5% of tests   │     tests/e2e/ (optional, WSL required)
+         └─────────────────┘
+              ┌─────────────────────┐
+              │  Integration Tests  │  ← subprocess (installed package validation)
+              │     15% of tests    │     tests/integration/test_cli_subprocess.py
+              └─────────────────────┘
+                   ┌──────────────────────┐
+                   │    Unit Tests        │  ← CliRunner (fast, isolated)
+                   │    80% of tests      │     tests/test_cli/test_*_command.py
+                   └──────────────────────┘
+```
+
+#### Approach 1: CliRunner Tests (PRIMARY - 80% of CLI tests)
+
+**Use for:** Fast command validation, argument parsing, output verification
+
+```python
+from click.testing import CliRunner
+from cli.main import cli
+
+def test_extract_command_basic(cli_runner, sample_docx_file, tmp_path):
+    """Test extract command with CliRunner."""
+    output_file = tmp_path / "output.json"
+
+    # IMPORTANT: Global flags MUST come before subcommand
+    result = cli_runner.invoke(cli, [
+        "--quiet",           # Global flags first
+        "extract",           # Then subcommand
+        str(sample_docx_file),  # Then subcommand args
+        "--output",
+        str(output_file),
+        "--format",
+        "json"
+    ])
+
+    assert result.exit_code == 0
+    assert output_file.exists()
+```
+
+**Key principles:**
+- **Flag Order Matters**: Global flags (`--quiet`, `--verbose`, `--config`) **before** subcommand
+- Use `cli_runner` fixture from `tests/test_cli/conftest.py`
+- Fast execution (no subprocess overhead)
+- Can simulate user input with `input=` parameter
+- Captures stdout/stderr automatically
+
+**Common Mistake - Flag Position:**
+```python
+# WRONG - Will fail with exit code 2:
+result = cli_runner.invoke(cli, ["batch", "--quiet", str(dir), "--output", str(out)])
+
+# CORRECT:
+result = cli_runner.invoke(cli, ["--quiet", "batch", str(dir), "--output", str(out)])
+```
+
+#### Approach 2: Subprocess Tests (VALIDATION - 15% of CLI tests)
+
+**Use for:** Validating installed package, entry point registration, real shell behavior
+
+```python
+import subprocess
+import json
+from pathlib import Path
+
+@pytest.mark.subprocess
+def test_cli_extract_installed_package(tmp_path):
+    """Test installed data-extract command via subprocess."""
+    from docx import Document
+
+    # Create test file
+    input_file = tmp_path / "test.docx"
+    doc = Document()
+    doc.add_paragraph("Test content")
+    doc.save(input_file)
+
+    output_file = tmp_path / "output.json"
+
+    # Invoke real installed CLI
+    result = subprocess.run(
+        [
+            "data-extract",
+            "extract",
+            str(input_file),
+            "--output",
+            str(output_file),
+            "--format",
+            "json"
+        ],
+        capture_output=True,
+        text=True,
+        timeout=30
+    )
+
+    # Verify success
+    assert result.returncode == 0, f"CLI failed: {result.stderr}"
+    assert output_file.exists()
+
+    # Verify output is valid JSON
+    with open(output_file, encoding="utf-8") as f:
+        data = json.load(f)
+        assert "content" in data or "blocks" in data
+```
+
+**Key principles:**
+- Tests the **actual installed package** (not just Click app)
+- Validates console script entry point works
+- Tests real stdout/stderr (not simulated)
+- Slower than CliRunner (subprocess overhead)
+- See `tests/integration/test_cli_subprocess.py` for examples
+
+**When to use:**
+- Smoke tests for installed package
+- Entry point validation
+- Shell integration testing
+- CI/CD validation
+
+#### Approach 3: tmux-cli Tests (OPTIONAL - 5% of CLI tests)
+
+**Use for:** Interactive prompts, progress bars, real terminal behavior
+
+**⚠️ Windows Users:** Requires WSL (tmux is Unix/Linux only)
+
+```python
+import subprocess
+import pytest
+
+@pytest.mark.wsl_required
+@pytest.mark.skipif(not _has_tmux(), reason="tmux-cli requires WSL on Windows")
+def test_interactive_batch_processing():
+    """Test interactive prompts with tmux-cli."""
+
+    # Launch tmux session
+    subprocess.run(["tmux-cli", "launch", "bash"], check=True)
+
+    # Start CLI in interactive mode
+    subprocess.run([
+        "tmux-cli", "send",
+        "data-extract batch --interactive",
+        "--pane=2"
+    ], check=True)
+
+    # Wait for prompt
+    subprocess.run([
+        "tmux-cli", "wait_idle",
+        "--pane=2",
+        "--idle-time=2.0"
+    ], check=True)
+
+    # Capture output
+    result = subprocess.run([
+        "tmux-cli", "capture",
+        "--pane=2"
+    ], capture_output=True, text=True, check=True)
+
+    assert "Enter directory path:" in result.stdout
+
+    # Send user input
+    subprocess.run([
+        "tmux-cli", "send",
+        "tests/fixtures/batch/",
+        "--pane=2"
+    ], check=True)
+
+    # Cleanup
+    subprocess.run(["tmux-cli", "kill", "--pane=2"], check=True)
+
+def _has_tmux():
+    """Check if tmux-cli is available."""
+    try:
+        subprocess.run(
+            ["tmux-cli", "--help"],
+            capture_output=True,
+            check=True,
+            timeout=2
+        )
+        return True
+    except Exception:
+        return False
+```
+
+**Key principles:**
+- Tests real terminal behavior (progress bars, colors, interactive prompts)
+- Requires tmux (Unix/Linux/macOS or WSL on Windows)
+- Slowest approach (real terminal overhead)
+- Skip on Windows CI, run in WSL or Linux CI
+- See `docs/tmux-cli-instructions.md` for full reference
+
+**When to use:**
+- Testing interactive user prompts
+- Validating progress bar rendering
+- Real keyboard input simulation
+- **Skip if:** No interactive features, Windows-only development
+
+#### Running CLI Tests
+
+```bash
+# All CLI tests (CliRunner + subprocess)
+pytest tests/test_cli/ -v
+
+# Only CliRunner tests (fast)
+pytest tests/test_cli/test_*_command.py -v
+
+# Only subprocess integration tests
+pytest tests/integration/test_cli_subprocess.py -v
+pytest -m subprocess
+
+# Skip subprocess tests (faster CI)
+pytest tests/test_cli/ -m "not subprocess"
+
+# Skip WSL-required tests (Windows without WSL)
+pytest -m "not wsl_required"
+
+# With coverage
+pytest tests/test_cli/ --cov=src/cli --cov-report=html
+```
+
+#### CLI Test Markers
+
+```python
+@pytest.mark.cli           # All CLI tests
+@pytest.mark.subprocess    # Subprocess-based tests (validates installed package)
+@pytest.mark.wsl_required  # Requires WSL on Windows (tmux-cli tests)
+```
+
+#### Helper Functions for CLI Tests
+
+The `tests/test_cli/conftest.py` provides helpers to avoid common mistakes:
+
+```python
+# Recommended helper (prevents flag position errors):
+def invoke_cli_with_flags(cli_runner, subcommand, args, quiet=False, verbose=False, config=None):
+    """
+    Invoke CLI with global flags in correct position.
+
+    Example:
+        result = invoke_cli_with_flags(
+            cli_runner,
+            "batch",
+            [str(input_dir), "--output", str(output_dir)],
+            quiet=True
+        )
+    """
+    cmd = []
+
+    # Global flags before subcommand
+    if quiet:
+        cmd.append("--quiet")
+    if verbose:
+        cmd.append("--verbose")
+    if config:
+        cmd.extend(["--config", str(config)])
+
+    # Subcommand
+    cmd.append(subcommand)
+
+    # Subcommand args
+    cmd.extend([str(arg) for arg in args])
+
+    return cli_runner.invoke(cli, cmd)
+```
+
+#### CLI Testing Best Practices
+
+**Do's:**
+- ✓ Use CliRunner for 80% of tests (fast, isolated)
+- ✓ Use subprocess for smoke tests of installed package
+- ✓ Put global flags **before** subcommand
+- ✓ Test both success and error paths
+- ✓ Verify exit codes (0 = success, non-zero = failure)
+- ✓ Test output format (JSON validity, message content)
+- ✓ Test with Unicode filenames and content
+
+**Don'ts:**
+- ✗ Don't put global flags after subcommand (exit code 2 error)
+- ✗ Don't rely solely on CliRunner (doesn't test installed package)
+- ✗ Don't use tmux-cli unless testing interactive features
+- ✗ Don't hardcode paths (use tmp_path fixture)
+- ✗ Don't test implementation details (internal functions)
+
+#### Common CLI Test Patterns
+
+**Testing Error Messages:**
+```python
+def test_extract_missing_file_error(cli_runner, tmp_path):
+    """Verify user-friendly error on missing file."""
+    nonexistent = tmp_path / "nonexistent.pdf"
+
+    result = cli_runner.invoke(cli, ["extract", str(nonexistent)])
+
+    assert result.exit_code != 0
+    assert "not found" in result.output.lower() or "does not exist" in result.output.lower()
+```
+
+**Testing Configuration:**
+```python
+def test_extract_with_config(cli_runner, sample_docx_file, config_file, tmp_path):
+    """Test extract command with config file."""
+    output_file = tmp_path / "output.json"
+
+    # Global --config flag before subcommand
+    result = cli_runner.invoke(cli, [
+        "--config", str(config_file),
+        "extract",
+        str(sample_docx_file),
+        "--output", str(output_file)
+    ])
+
+    assert result.exit_code == 0
+```
+
+**Testing Batch Processing:**
+```python
+def test_batch_multiple_files(cli_runner, multiple_test_files, tmp_path):
+    """Test batch processing with multiple files."""
+    input_dir = multiple_test_files[0].parent
+    output_dir = tmp_path / "outputs"
+
+    result = cli_runner.invoke(cli, [
+        "batch",
+        str(input_dir),
+        "--output", str(output_dir),
+        "--format", "json"
+    ])
+
+    assert result.exit_code == 0
+    assert "Summary" in result.output or "successful" in result.output.lower()
+
+    # Verify output files created
+    output_files = list(output_dir.glob("*.json"))
+    assert len(output_files) >= 3
+```
+
+#### Troubleshooting CLI Tests
+
+**Exit Code 2 (Argument Parsing Error):**
+- **Cause:** Global flags after subcommand
+- **Fix:** Move `--quiet`, `--verbose`, `--config` before subcommand
+- **Example:** `cli, ["--quiet", "batch", ...]` not `cli, ["batch", "--quiet", ...]`
+
+**"No such option" Error:**
+- **Cause:** Flag in wrong position or typo
+- **Fix:** Check flag spelling, ensure correct position
+- **Debugging:** Run with `catch_exceptions=False` to see full traceback
+
+**subprocess.run() Command Not Found:**
+- **Cause:** Package not installed, PATH issue
+- **Fix:** Run `pip install -e .` to install package in development mode
+- **Verify:** `which data-extract` (Unix) or `where data-extract` (Windows)
+
+**tmux-cli Not Found:**
+- **Cause:** tmux not installed or not on PATH
+- **Fix (Linux/macOS):** Install tmux: `sudo apt install tmux` or `brew install tmux`
+- **Fix (Windows):** Use WSL: `wsl --install`, then `sudo apt install tmux` in WSL
+
+**Tests Pass Locally, Fail in CI:**
+- **Cause:** Platform differences (Windows vs Linux), missing dependencies
+- **Fix:** Use markers to skip platform-specific tests
+- **Example:** `@pytest.mark.skipif(sys.platform == "win32", reason="Unix only")`
+
 ## Available Fixtures
 
 The `conftest.py` file provides shared fixtures for all tests. Key fixtures:

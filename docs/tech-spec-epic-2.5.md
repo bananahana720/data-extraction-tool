@@ -647,7 +647,14 @@ workflow build-test-context include_story_context=false
    tmux-cli capture --pane=2
    ```
 
-   See `docs/tmux-cli-instructions.md` for full tmux-cli reference.
+   **⚠️ Windows Users**: tmux-cli requires tmux (Unix/Linux only). On Windows, run execute-tests workflow from WSL:
+   ```bash
+   wsl
+   cd /mnt/c/Users/{username}/projects/data-extraction-tool
+   workflow execute-tests
+   ```
+
+   See `docs/tmux-cli-instructions.md` for full tmux-cli reference and `docs/uat/tmux-cli-windows-setup.md` for Windows setup.
 
 3. **Manual Tests**
    - Tests requiring human verification

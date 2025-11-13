@@ -167,7 +167,17 @@ tmux-cli capture --pane=2
 - Handle interactive prompts with send
 - Clean up pane after tests
 
-See `docs/tmux-cli-instructions.md` for full tmux-cli reference.
+**⚠️ Windows Users**: tmux-cli requires tmux, which is Unix/Linux only. On Windows:
+- **Option 1 (Recommended)**: Run workflow from WSL
+  ```bash
+  wsl
+  cd /mnt/c/Users/{username}/projects/{project-name}
+  workflow execute-tests test_execution_mode=hybrid
+  ```
+- **Option 2**: Run with test_execution_mode=manual (skip CLI tests)
+- **Option 3**: CLI tests will be marked as BLOCKED with Windows limitation noted
+
+See `docs/tmux-cli-instructions.md` for full tmux-cli reference and `docs/uat/tmux-cli-windows-setup.md` for detailed Windows setup.
 
 ### 3. Manual Tests
 

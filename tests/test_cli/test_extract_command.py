@@ -10,7 +10,6 @@ Test coverage for:
 - User-friendly error messages
 """
 
-
 from cli.main import cli
 
 
@@ -27,7 +26,8 @@ class TestExtractCommandSuccess:
         )
 
         assert result.exit_code == 0
-        assert "Successfully extracted" in result.output
+        # String assertion fix: CLI outputs "SUCCESS: Extracted" not "Successfully extracted"
+        assert "SUCCESS" in result.output and "Extracted" in result.output
         assert output_file.exists()
         assert output_file.stat().st_size > 0
 
@@ -48,7 +48,8 @@ class TestExtractCommandSuccess:
         )
 
         assert result.exit_code == 0
-        assert "Successfully extracted" in result.output
+        # String assertion fix: CLI outputs "SUCCESS: Extracted" not "Successfully extracted"
+        assert "SUCCESS" in result.output and "Extracted" in result.output
         assert output_file.exists()
 
     def test_extract_all_formats(self, cli_runner, sample_docx_file, tmp_path):
@@ -60,7 +61,8 @@ class TestExtractCommandSuccess:
         )
 
         assert result.exit_code == 0
-        assert "Successfully extracted" in result.output
+        # String assertion fix: CLI outputs "SUCCESS: Extracted" not "Successfully extracted"
+        assert "SUCCESS" in result.output and "Extracted" in result.output
 
         # Should create multiple output files
         output_files = list(output_dir.glob("*"))
@@ -112,7 +114,8 @@ class TestExtractCommandErrors:
         )
 
         assert result.exit_code != 0
-        assert "not found" in result.output.lower() or "could not find" in result.output.lower()
+        # String assertion fix: CLI outputs "does not exist" not "not found"
+        assert "does not exist" in result.output.lower()
 
         # Should NOT contain technical jargon
         assert "exception" not in result.output.lower()
@@ -224,16 +227,17 @@ class TestExtractCommandOutput:
         """Verbose mode shows detailed information."""
         output_file = tmp_path / "output.json"
 
+        # P0 fix: Global --verbose flag BEFORE subcommand
         result = cli_runner.invoke(
             cli,
             [
+                "--verbose",
                 "extract",
                 str(sample_docx_file),
                 "--output",
                 str(output_file),
                 "--format",
                 "json",
-                "--verbose",
             ],
         )
 
@@ -244,16 +248,17 @@ class TestExtractCommandOutput:
         """Quiet mode suppresses progress output."""
         output_file = tmp_path / "output.json"
 
+        # P0 fix: Global --quiet flag BEFORE subcommand
         result = cli_runner.invoke(
             cli,
             [
+                "--quiet",
                 "extract",
                 str(sample_docx_file),
                 "--output",
                 str(output_file),
                 "--format",
                 "json",
-                "--quiet",
             ],
         )
 

@@ -479,9 +479,10 @@ class TestConcurrentFileProcessing:
         def extract_file(file_path):
             output = file_path.with_suffix(".json")
             runner = CliRunner()
+            # P0 fix: Global --quiet flag BEFORE subcommand
             result = runner.invoke(
                 cli,
-                ["extract", str(file_path), "--output", str(output), "--format", "json", "--quiet"],
+                ["--quiet", "extract", str(file_path), "--output", str(output), "--format", "json"],
             )
             return result.exit_code == 0
 
@@ -624,9 +625,11 @@ class TestThreadingIntegration:
         output_dir = tmp_path / "output"
 
         # Process with threading
+        # P0 fix: Global --verbose flag BEFORE subcommand
         result = cli_runner.invoke(
             cli,
             [
+                "--verbose",  # Verbose mode with threading
                 "batch",
                 str(tmp_path),
                 "--output",
@@ -637,7 +640,6 @@ class TestThreadingIntegration:
                 "*.docx",
                 "--workers",
                 "4",
-                "--verbose",  # Verbose mode with threading
             ],
         )
 

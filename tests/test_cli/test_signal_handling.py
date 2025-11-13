@@ -382,9 +382,10 @@ class TestSignalHandlerEdgeCases:
         input_dir = multiple_test_files[0].parent
         output_dir = tmp_path / "output"
 
+        # P0 fix: Global --quiet flag BEFORE subcommand
         result = cli_runner.invoke(
             cli,
-            ["batch", str(input_dir), "--output", str(output_dir), "--format", "json", "--quiet"],
+            ["--quiet", "batch", str(input_dir), "--output", str(output_dir), "--format", "json"],
         )
 
         assert result.exit_code == 0
@@ -394,9 +395,10 @@ class TestSignalHandlerEdgeCases:
         input_dir = multiple_test_files[0].parent
         output_dir = tmp_path / "output"
 
+        # P0 fix: Global --verbose flag BEFORE subcommand
         result = cli_runner.invoke(
             cli,
-            ["batch", str(input_dir), "--output", str(output_dir), "--format", "json", "--verbose"],
+            ["--verbose", "batch", str(input_dir), "--output", str(output_dir), "--format", "json"],
         )
 
         assert result.exit_code == 0
@@ -435,9 +437,11 @@ class TestSignalHandlingIntegration:
         output_dir = tmp_path / "output"
 
         # Run with all options
+        # P0 fix: Global --verbose flag BEFORE subcommand
         result = cli_runner.invoke(
             cli,
             [
+                "--verbose",
                 "batch",
                 str(tmp_path),
                 "--output",
@@ -448,7 +452,6 @@ class TestSignalHandlingIntegration:
                 "*.docx",
                 "--workers",
                 "4",
-                "--verbose",
             ],
         )
 

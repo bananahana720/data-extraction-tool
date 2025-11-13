@@ -12,7 +12,8 @@
       "PowerShell(./venv/Scripts/python.exe -m pytest:*)",
       "PowerShell(./venv/Scripts/python.exe -m pip:*)",
       "PowerShell(py -m venv venv)",
-      "SlashCommand(/bmad:bmb:workflows:audit-workflow)"
+      "SlashCommand(/bmad:bmb:workflows:audit-workflow)",
+      "SlashCommand(/bmad:bmm:workflows:build-test-context)"
     ],
     "deny": [],
     "ask": []

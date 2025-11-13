@@ -11,6 +11,26 @@ Automatically detects whether you're inside or outside tmux and uses the appropr
 - tmux must be installed
 - The `tmux-cli` command must be available (installed via `uv tool install`)
 
+**⚠️ Windows Users**: tmux is a Unix/Linux-only tool. On Windows, you have two options:
+
+**Option 1 (Recommended)**: Run from WSL
+```bash
+# Enter WSL environment
+wsl
+
+# Navigate to your project (Windows filesystem mounted at /mnt/c/)
+cd /mnt/c/Users/{username}/projects/{project-name}
+
+# Use tmux-cli normally
+tmux-cli launch "zsh"
+```
+
+**Option 2**: Install tmux in WSL, configure .tmux.conf bridge
+- See `docs/uat/tmux-cli-windows-setup.md` for detailed setup instructions
+- This allows WSL tmux to control Windows applications
+
+**Limitation**: tmux-cli cannot be called directly from Windows CMD/PowerShell due to subprocess requirements. Always run tmux-cli commands from within WSL on Windows systems.
+
 ## Pane Identification
 
 Panes can be specified in two simple ways:

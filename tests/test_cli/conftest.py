@@ -8,7 +8,6 @@ Provides reusable fixtures for CLI testing including:
 - Temporary output directories
 """
 
-
 import pytest
 from click.testing import CliRunner
 from docx import Document
@@ -217,3 +216,65 @@ def unsupported_file(tmp_path):
     file_path = tmp_path / "unsupported.xyz"
     file_path.write_text("This is an unsupported format")
     return file_path
+
+
+def invoke_cli_with_flags(
+    cli_runner, cli, subcommand, args, quiet=False, verbose=False, config=None
+):
+    """
+    Invoke CLI with global flags in correct position.
+
+    Click requires global flags to come BEFORE the subcommand.
+    This helper ensures correct flag ordering to prevent SystemExit(2) errors.
+
+    Args:
+        cli_runner: CliRunner instance
+        cli: CLI application (from cli.main import cli)
+        subcommand: Subcommand name (e.g., "extract", "batch", "config")
+        args: List of subcommand arguments and flags
+        quiet: Add --quiet global flag (default: False)
+        verbose: Add --verbose global flag (default: False)
+        config: Path to config file for --config global flag (default: None)
+
+    Returns:
+        Result object from CLI invocation
+
+    Examples:
+        # Extract with quiet mode
+        result = invoke_cli_with_flags(
+            cli_runner, cli, "extract",
+            [str(input_file), "--output", str(output_file)],
+            quiet=True
+        )
+
+        # Batch with config file
+        result = invoke_cli_with_flags(
+            cli_runner, cli, "batch",
+            [str(input_dir), "--output", str(output_dir)],
+            config=config_path
+        )
+
+        # Config command with global config flag
+        result = invoke_cli_with_flags(
+            cli_runner, cli, "config",
+            ["show"],
+            config=config_path
+        )
+    """
+    cmd = []
+
+    # Global flags MUST come before subcommand (Click requirement)
+    if quiet:
+        cmd.append("--quiet")
+    if verbose:
+        cmd.append("--verbose")
+    if config:
+        cmd.extend(["--config", str(config)])
+
+    # Then subcommand
+    cmd.append(subcommand)
+
+    # Then subcommand arguments/flags
+    cmd.extend([str(arg) for arg in args])
+
+    return cli_runner.invoke(cli, cmd)

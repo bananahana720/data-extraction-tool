@@ -9,7 +9,6 @@ Test coverage for:
 - Error reporting
 """
 
-
 from cli.main import cli
 
 
@@ -18,14 +17,16 @@ class TestConfigShowCommand:
 
     def test_config_show(self, cli_runner, config_file):
         """Display current configuration."""
-        result = cli_runner.invoke(cli, ["config", "show", "--config", str(config_file)])
+        # P0 fix: Global --config flag BEFORE subcommand
+        result = cli_runner.invoke(cli, ["--config", str(config_file), "config", "show"])
 
         assert result.exit_code == 0
         # Should show configuration content
 
     def test_config_show_readable_format(self, cli_runner, config_file):
         """Configuration displayed in readable format."""
-        result = cli_runner.invoke(cli, ["config", "show", "--config", str(config_file)])
+        # P0 fix: Global --config flag BEFORE subcommand
+        result = cli_runner.invoke(cli, ["--config", str(config_file), "config", "show"])
 
         assert result.exit_code == 0
         assert len(result.output.strip()) > 0
@@ -34,7 +35,8 @@ class TestConfigShowCommand:
         """Handle missing config file gracefully."""
         nonexistent_config = tmp_path / "nonexistent.yaml"
 
-        result = cli_runner.invoke(cli, ["config", "show", "--config", str(nonexistent_config)])
+        # P0 fix: Global --config flag BEFORE subcommand
+        result = cli_runner.invoke(cli, ["--config", str(nonexistent_config), "config", "show"])
 
         # Should either use defaults or report missing
         assert "not found" in result.output.lower() or result.exit_code == 0
@@ -52,7 +54,8 @@ class TestConfigValidateCommand:
 
     def test_config_validate_valid(self, cli_runner, config_file):
         """Validate valid configuration file."""
-        result = cli_runner.invoke(cli, ["config", "validate", "--config", str(config_file)])
+        # P0 fix: Global --config flag BEFORE subcommand
+        result = cli_runner.invoke(cli, ["--config", str(config_file), "config", "validate"])
 
         assert result.exit_code == 0
         assert "valid" in result.output.lower() or "ok" in result.output.lower()
@@ -91,7 +94,8 @@ class TestConfigPathCommand:
 
     def test_config_path_shows_location(self, cli_runner, config_file):
         """Show configuration file location."""
-        result = cli_runner.invoke(cli, ["config", "path", "--config", str(config_file)])
+        # P0 fix: Global --config flag BEFORE subcommand
+        result = cli_runner.invoke(cli, ["--config", str(config_file), "config", "path"])
 
         assert result.exit_code == 0
         assert str(config_file) in result.output or "config" in result.output.lower()
@@ -107,7 +111,8 @@ class TestConfigPathCommand:
         """Handle nonexistent config path."""
         nonexistent_config = tmp_path / "nonexistent.yaml"
 
-        result = cli_runner.invoke(cli, ["config", "path", "--config", str(nonexistent_config)])
+        # P0 fix: Global --config flag BEFORE subcommand
+        result = cli_runner.invoke(cli, ["--config", str(nonexistent_config), "config", "path"])
 
         # Should still show the path even if doesn't exist
         assert str(nonexistent_config) in result.output or result.exit_code == 0

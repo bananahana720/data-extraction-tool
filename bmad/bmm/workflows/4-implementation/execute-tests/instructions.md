@@ -120,6 +120,11 @@ pytest {pytest_args} -m "unit or integration" --timeout={pytest_timeout}
 <step n="5" goal="Execute CLI tests (tmux-cli)">
 <action if="CLI tests exist and {test_execution_mode} in ['automated', 'hybrid']">Execute CLI tests using tmux-cli</action>
 
+**⚠️ Windows Users**: tmux-cli requires tmux (Unix/Linux only). On Windows, either:
+- Run this workflow from WSL: `wsl` → `cd /mnt/c/Users/{user}/projects/{project}` → `workflow execute-tests`
+- Mark CLI tests as BLOCKED with note: "Requires WSL execution on Windows"
+- See `docs/uat/tmux-cli-windows-setup.md` for detailed setup
+
 **Step 5.1: Initialize tmux session**
 <action>Launch shell for CLI testing:</action>
 ```bash

@@ -1,0 +1,556 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.9, pytest-8.4.2, pluggy-1.6.0 -- C:\Users\Andrew\Projects\data-extraction-tool\venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\Andrew\projects\data-extraction-tool-1
+configfile: pytest.ini
+plugins: cov-5.0.0, mock-3.15.1, xdist-3.8.0, timeout-2.4.0
+collecting ... collected 138 items
+
+tests/test_cli/test_batch_command.py::TestBatchCommandSuccess::test_batch_process_batch FAILED [  0%]
+tests/test_cli/test_batch_command.py::TestBatchCommandSuccess::test_batch_process_file_list PASSED [  1%]
+tests/test_cli/test_batch_command.py::TestBatchCommandSuccess::test_batch_with_glob_pattern PASSED [  2%]
+tests/test_cli/test_batch_command.py::TestBatchCommandSuccess::test_batch_custom_workers PASSED [  2%]
+tests/test_cli/test_batch_command.py::TestBatchCommandSuccess::test_batch_all_formats PASSED [  3%]
+tests/test_cli/test_batch_command.py::TestBatchCommandProgress::test_batch_shows_progress_bar PASSED [  4%]
+tests/test_cli/test_batch_command.py::TestBatchCommandProgress::test_batch_shows_summary_stats PASSED [  5%]
+tests/test_cli/test_batch_command.py::TestBatchCommandProgress::test_batch_quiet_mode FAILED [  5%]
+tests/test_cli/test_batch_command.py::TestBatchCommandErrors::test_batch_directory_not_found PASSED [  6%]
+tests/test_cli/test_batch_command.py::TestBatchCommandErrors::test_batch_no_matching_files PASSED [  7%]
+tests/test_cli/test_batch_command.py::TestBatchCommandErrors::test_batch_partial_failure_continues PASSED [  7%]
+tests/test_cli/test_batch_command.py::TestBatchCommandErrors::test_batch_invalid_workers PASSED [  8%]
+tests/test_cli/test_batch_command.py::TestBatchCommandErrors::test_batch_invalid_workers_negative PASSED [  9%]
+tests/test_cli/test_batch_command.py::TestBatchCommandValidation::test_batch_requires_path_argument PASSED [ 10%]
+tests/test_cli/test_batch_command.py::TestBatchCommandValidation::test_batch_validates_pattern_syntax PASSED [ 10%]
+tests/test_cli/test_batch_command.py::TestBatchCommandOutput::test_batch_summary_shows_counts PASSED [ 11%]
+tests/test_cli/test_batch_command.py::TestBatchCommandOutput::test_batch_verbose_mode FAILED [ 12%]
+tests/test_cli/test_config_command.py::TestConfigShowCommand::test_config_show FAILED [ 13%]
+tests/test_cli/test_config_command.py::TestConfigShowCommand::test_config_show_readable_format FAILED [ 13%]
+tests/test_cli/test_config_command.py::TestConfigShowCommand::test_config_show_missing_file FAILED [ 14%]
+tests/test_cli/test_config_command.py::TestConfigShowCommand::test_config_show_default_location PASSED [ 15%]
+tests/test_cli/test_config_command.py::TestConfigValidateCommand::test_config_validate_valid FAILED [ 15%]
+tests/test_cli/test_config_command.py::TestConfigValidateCommand::test_config_validate_invalid PASSED [ 16%]
+tests/test_cli/test_config_command.py::TestConfigValidateCommand::test_config_validate_missing_file PASSED [ 17%]
+tests/test_cli/test_config_command.py::TestConfigValidateCommand::test_config_validate_shows_errors PASSED [ 18%]
+tests/test_cli/test_config_command.py::TestConfigPathCommand::test_config_path_shows_location FAILED [ 18%]
+tests/test_cli/test_config_command.py::TestConfigPathCommand::test_config_path_default_location PASSED [ 19%]
+tests/test_cli/test_config_command.py::TestConfigPathCommand::test_config_path_nonexistent FAILED [ 20%]
+tests/test_cli/test_config_command.py::TestConfigCommandErrors::test_config_requires_subcommand PASSED [ 21%]
+tests/test_cli/test_config_command.py::TestConfigCommandErrors::test_config_invalid_subcommand PASSED [ 21%]
+tests/test_cli/test_config_command.py::TestConfigCommandErrors::test_config_user_friendly_errors PASSED [ 22%]
+tests/test_cli/test_encoding.py::TestConsoleEncodingConfiguration::test_stdout_uses_utf8_on_windows PASSED [ 23%]
+tests/test_cli/test_encoding.py::TestConsoleEncodingConfiguration::test_stderr_uses_utf8_on_windows PASSED [ 23%]
+tests/test_cli/test_encoding.py::TestConsoleEncodingConfiguration::test_rich_console_configured_correctly PASSED [ 24%]
+tests/test_cli/test_encoding.py::TestUnicodeCharacterHandling::test_bmp_characters PASSED [ 25%]
+tests/test_cli/test_encoding.py::TestUnicodeCharacterHandling::test_private_use_area_characters PASSED [ 26%]
+tests/test_cli/test_encoding.py::TestUnicodeCharacterHandling::test_supplementary_multilingual_plane PASSED [ 26%]
+tests/test_cli/test_encoding.py::TestUnicodeCharacterHandling::test_mixed_encodings PASSED [ 27%]
+tests/test_cli/test_encoding.py::TestFileWriteEncoding::test_json_output_utf8_encoding PASSED [ 28%]
+tests/test_cli/test_encoding.py::TestFileWriteEncoding::test_markdown_output_utf8_encoding PASSED [ 28%]
+tests/test_cli/test_encoding.py::TestFileWriteEncoding::test_filename_with_unicode PASSED [ 29%]
+tests/test_cli/test_encoding.py::TestConsoleOutputEncoding::test_success_message_with_unicode_filename PASSED [ 30%]
+tests/test_cli/test_encoding.py::TestConsoleOutputEncoding::test_error_message_with_unicode PASSED [ 31%]
+tests/test_cli/test_encoding.py::TestBatchProcessingEncoding::test_batch_with_unicode_files PASSED [ 31%]
+tests/test_cli/test_encoding.py::TestBatchProcessingEncoding::test_batch_summary_with_unicode_filenames PASSED [ 32%]
+tests/test_cli/test_encoding.py::TestEncodingEdgeCases::test_null_bytes_handling PASSED [ 33%]
+tests/test_cli/test_encoding.py::TestEncodingEdgeCases::test_invalid_utf8_sequences PASSED [ 34%]
+tests/test_cli/test_encoding.py::TestEncodingEdgeCases::test_very_long_unicode_string PASSED [ 34%]
+tests/test_cli/test_encoding.py::TestWindowsSpecificEncoding::test_console_reconfiguration_on_windows PASSED [ 35%]
+tests/test_cli/test_encoding.py::TestWindowsSpecificEncoding::test_charmap_codec_not_used PASSED [ 36%]
+tests/test_cli/test_encoding.py::TestWindowsSpecificEncoding::test_errors_parameter_set PASSED [ 36%]
+tests/test_cli/test_encoding.py::TestEncodingIntegration::test_end_to_end_unicode_preservation PASSED [ 37%]
+tests/test_cli/test_encoding.py::TestEncodingIntegration::test_concurrent_unicode_processing PASSED [ 38%]
+tests/test_cli/test_extract_command.py::TestExtractCommandSuccess::test_extract_docx_to_json FAILED [ 39%]
+tests/test_cli/test_extract_command.py::TestExtractCommandSuccess::test_extract_docx_to_markdown FAILED [ 39%]
+tests/test_cli/test_extract_command.py::TestExtractCommandSuccess::test_extract_all_formats FAILED [ 40%]
+tests/test_cli/test_extract_command.py::TestExtractCommandSuccess::test_extract_creates_output_directory PASSED [ 41%]
+tests/test_cli/test_extract_command.py::TestExtractCommandSuccess::test_extract_default_output_location PASSED [ 42%]
+tests/test_cli/test_extract_command.py::TestExtractCommandSuccess::test_extract_shows_progress PASSED [ 42%]
+tests/test_cli/test_extract_command.py::TestExtractCommandErrors::test_extract_missing_file FAILED [ 43%]
+tests/test_cli/test_extract_command.py::TestExtractCommandErrors::test_extract_unsupported_format PASSED [ 44%]
+tests/test_cli/test_extract_command.py::TestExtractCommandErrors::test_extract_invalid_output_format PASSED [ 44%]
+tests/test_cli/test_extract_command.py::TestExtractCommandErrors::test_extract_overwrite_protection PASSED [ 45%]
+tests/test_cli/test_extract_command.py::TestExtractCommandErrors::test_extract_force_overwrite FAILED [ 46%]
+tests/test_cli/test_extract_command.py::TestExtractCommandValidation::test_extract_requires_file_argument PASSED [ 47%]
+tests/test_cli/test_extract_command.py::TestExtractCommandValidation::test_extract_validates_format_option PASSED [ 47%]
+tests/test_cli/test_extract_command.py::TestExtractCommandOutput::test_extract_success_message_non_technical PASSED [ 48%]
+tests/test_cli/test_extract_command.py::TestExtractCommandOutput::test_extract_verbose_output FAILED [ 49%]
+tests/test_cli/test_extract_command.py::TestExtractCommandOutput::test_extract_quiet_mode FAILED [ 50%]
+tests/test_cli/test_signal_handling.py::TestKeyboardInterruptHandling::test_extract_handles_keyboard_interrupt PASSED [ 50%]
+tests/test_cli/test_signal_handling.py::TestKeyboardInterruptHandling::test_batch_handles_keyboard_interrupt PASSED [ 51%]
+tests/test_cli/test_signal_handling.py::TestKeyboardInterruptHandling::test_keyboard_interrupt_exit_code PASSED [ 52%]
+tests/test_cli/test_signal_handling.py::TestSignalHandlerRegistration::test_signal_handler_registered_early PASSED [ 52%]
+tests/test_cli/test_signal_handling.py::TestSignalHandlerRegistration::test_signal_handler_function_exists PASSED [ 53%]
+tests/test_cli/test_signal_handling.py::TestInterruptDuringProcessing::test_interrupt_during_extract SKIPPED [ 54%]
+tests/test_cli/test_signal_handling.py::TestInterruptDuringProcessing::test_interrupt_during_batch SKIPPED [ 55%]
+tests/test_cli/test_signal_handling.py::TestExitCodes::test_successful_extract_exit_code PASSED [ 55%]
+tests/test_cli/test_signal_handling.py::TestExitCodes::test_failed_extract_exit_code PASSED [ 56%]
+tests/test_cli/test_signal_handling.py::TestExitCodes::test_successful_batch_exit_code PASSED [ 57%]
+tests/test_cli/test_signal_handling.py::TestExitCodes::test_partial_batch_failure_exit_code PASSED [ 57%]
+tests/test_cli/test_signal_handling.py::TestCleanupAfterInterrupt::test_temp_files_cleaned_up PASSED [ 58%]
+tests/test_cli/test_signal_handling.py::TestCleanupAfterInterrupt::test_partial_outputs_on_interrupt PASSED [ 59%]
+tests/test_cli/test_signal_handling.py::TestSignalHandlerMessages::test_interrupt_message_format PASSED [ 60%]
+tests/test_cli/test_signal_handling.py::TestSignalHandlerMessages::test_interrupt_writes_to_stderr PASSED [ 60%]
+tests/test_cli/test_signal_handling.py::TestSubprocessSignalHandling::test_sigint_during_batch_subprocess SKIPPED [ 61%]
+tests/test_cli/test_signal_handling.py::TestSubprocessSignalHandling::test_multiple_sigints SKIPPED [ 62%]
+tests/test_cli/test_signal_handling.py::TestInterruptRecovery::test_no_corrupted_outputs_after_interrupt PASSED [ 63%]
+tests/test_cli/test_signal_handling.py::TestInterruptRecovery::test_can_rerun_after_interrupt PASSED [ 63%]
+tests/test_cli/test_signal_handling.py::TestConcurrentSignalHandling::test_signal_during_threaded_batch PASSED [ 64%]
+tests/test_cli/test_signal_handling.py::TestSignalHandlerEdgeCases::test_signal_handler_with_quiet_mode FAILED [ 65%]
+tests/test_cli/test_signal_handling.py::TestSignalHandlerEdgeCases::test_signal_handler_with_verbose_mode FAILED [ 65%]
+tests/test_cli/test_signal_handling.py::TestSignalHandlerEdgeCases::test_nested_exception_during_signal PASSED [ 66%]
+tests/test_cli/test_signal_handling.py::TestSignalHandlingIntegration::test_full_workflow_with_signal_handler FAILED [ 67%]
+tests/test_cli/test_signal_handling.py::TestSignalHandlingIntegration::test_signal_handler_doesnt_interfere_with_normal_operation PASSED [ 68%]
+tests/test_cli/test_threading.py::TestProgressDisplayThreadSafety::test_single_file_progress_has_lock PASSED [ 68%]
+tests/test_cli/test_threading.py::TestProgressDisplayThreadSafety::test_batch_progress_has_lock PASSED [ 69%]
+tests/test_cli/test_threading.py::TestProgressDisplayThreadSafety::test_single_file_progress_concurrent_updates PASSED [ 70%]
+tests/test_cli/test_threading.py::TestProgressDisplayThreadSafety::test_batch_progress_concurrent_updates PASSED [ 71%]
+tests/test_cli/test_threading.py::TestProgressDisplayThreadSafety::test_progress_update_exception_handling PASSED [ 71%]
+tests/test_cli/test_threading.py::TestBatchWorkerManagement::test_batch_with_single_worker PASSED [ 72%]
+tests/test_cli/test_threading.py::TestBatchWorkerManagement::test_batch_with_multiple_workers PASSED [ 73%]
+tests/test_cli/test_threading.py::TestBatchWorkerManagement::test_batch_worker_count_validation PASSED [ 73%]
+tests/test_cli/test_threading.py::TestBatchWorkerManagement::test_batch_many_files_with_workers PASSED [ 74%]
+tests/test_cli/test_threading.py::TestThreadCleanup::test_threads_cleaned_up_after_batch PASSED [ 75%]
+tests/test_cli/test_threading.py::TestThreadCleanup::test_no_zombie_threads PASSED [ 76%]
+tests/test_cli/test_threading.py::TestExceptionHandlingInThreads::test_single_file_failure_doesnt_crash_batch PASSED [ 76%]
+tests/test_cli/test_threading.py::TestExceptionHandlingInThreads::test_thread_exception_isolation PASSED [ 77%]
+tests/test_cli/test_threading.py::TestLockContention::test_high_contention_updates PASSED [ 78%]
+tests/test_cli/test_threading.py::TestLockContention::test_lock_timeout_behavior PASSED [ 78%]
+tests/test_cli/test_threading.py::TestConcurrentFileProcessing::test_concurrent_extract_doesnt_conflict FAILED [ 79%]
+tests/test_cli/test_threading.py::TestConcurrentFileProcessing::test_no_race_conditions_in_output PASSED [ 80%]
+tests/test_cli/test_threading.py::TestThreadingStress::test_many_workers_stress PASSED [ 81%]
+tests/test_cli/test_threading.py::TestThreadingStress::test_rapid_batch_processing PASSED [ 81%]
+tests/test_cli/test_threading.py::TestThreadingIntegration::test_full_batch_workflow_with_threading FAILED [ 82%]
+tests/test_cli/test_version_command.py::TestVersionCommand::test_version_basic PASSED [ 83%]
+tests/test_cli/test_version_command.py::TestVersionCommand::test_version_shows_tool_name PASSED [ 84%]
+tests/test_cli/test_version_command.py::TestVersionCommand::test_version_verbose PASSED [ 84%]
+tests/test_cli/test_version_command.py::TestVersionCommand::test_version_exit_code_success PASSED [ 85%]
+tests/test_cli/test_version_command.py::TestVersionCommand::test_version_short_flag PASSED [ 86%]
+tests/test_cli/test_version_command.py::TestVersionCommand::test_version_format_readable PASSED [ 86%]
+tests/test_cli/test_version_command.py::TestVersionCommand::test_version_displays_version_number PASSED [ 87%]
+tests/test_cli/test_version_command.py::TestVersionCommand::test_version_consistent_across_calls PASSED [ 88%]
+tests/test_cli/test_version_command.py::TestVersionCommandVerbose::test_version_verbose_shows_components PASSED [ 89%]
+tests/test_cli/test_version_command.py::TestVersionCommandVerbose::test_version_verbose_shows_python_version PASSED [ 89%]
+tests/test_cli/test_version_command.py::TestVersionCommandVerbose::test_version_verbose_shows_dependencies PASSED [ 90%]
+tests/test_cli/test_version_command.py::TestVersionCommandVerbose::test_version_verbose_shows_platform PASSED [ 91%]
+tests/test_cli/test_version_command.py::TestVersionCommandVerbose::test_verbose_flag_variations PASSED [ 92%]
+tests/test_cli/test_version_command.py::TestVersionCommandVerbose::test_verbose_has_more_content PASSED [ 92%]
+tests/test_cli/test_version_command.py::TestVersionCommandFormatting::test_version_output_is_readable PASSED [ 93%]
+tests/test_cli/test_version_command.py::TestVersionCommandFormatting::test_version_no_error_output PASSED [ 94%]
+tests/test_cli/test_version_command.py::TestVersionCommandFormatting::test_version_output_is_utf8 PASSED [ 94%]
+tests/test_cli/test_version_command.py::TestVersionCommandEdgeCases::test_version_with_quiet_flag PASSED [ 95%]
+tests/test_cli/test_version_command.py::TestVersionCommandEdgeCases::test_version_with_verbose_global PASSED [ 96%]
+tests/test_cli/test_version_command.py::TestVersionCommandEdgeCases::test_version_multiple_times PASSED [ 97%]
+tests/test_cli/test_version_command.py::TestVersionCommandHelp::test_version_help_available PASSED [ 97%]
+tests/test_cli/test_version_command.py::TestVersionCommandHelp::test_version_in_main_help PASSED [ 98%]
+tests/test_cli/test_version_command.py::TestVersionCommandIntegration::test_version_in_workflow PASSED [ 99%]
+tests/test_cli/test_version_command.py::TestVersionCommandIntegration::test_version_with_config PASSED [100%]
+
+================================== FAILURES ===================================
+______________ TestBatchCommandSuccess.test_batch_process_batch _______________
+tests\test_cli\test_batch_command.py:31: in test_batch_process_batch
+    assert "processed" in result.output.lower()
+E   AssertionError: assert 'processed' in '\x1b[36mprocessing \x1b[0m\x1b[1;36m5\x1b[0m\x1b[36m files with \x1b[0m\x1b[1;36m4\x1b[0m\x1b[36m workers\x1b[0m\x1b[36m...\x1b[0m\n\x1b[?25l\r\x1b[2k\x1b[1;34mprocessing files\x1b[0m \x1b[38;5;237m\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\x1b[0m \x1b[35m  0%\x1b[0m (0/5 files) \x1b[36m-:--:--\x1b[0m\r\x1b[2k\n\x1b[36mprocessing \x1b[0m\x1b[1;36m5\x1b[0m\x1b[36m files\x1b[0m\x1b[36m...\x1b[0m\n\n\x1b[1;34mprocessing files\x1b[0m \x1b[38;5;237m\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\x1b[0m \x1b[35m  0%\x1b[0m (0/5 files) \x1b[36m-:--:--\x1b[0m\r\x1b[2k\x1b[1;34mprocessing files\x1b[0m \x1b[38;5;70m\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\x1b[0m \x1b[35m100%\x1b[0m (5/5 files) \x1b[36m0:00:00\x1b[0m\n\x1b[?25h\n\x1b[1msummary:\x1b[0m\n  total files: \x1b[1;36m5\x1b[0m\n  \x1b[32msuccessful: \x1b[0m\x1b[1;32m5\x1b[0m\n  \x1b[31mfailed: \x1b[0m\x1b[1;31m0\x1b[0m\n  success rate: \x1b[1;36m100.0\x1b[0m%\n'
+E    +  where '\x1b[36mprocessing \x1b[0m\x1b[1;36m5\x1b[0m\x1b[36m files with \x1b[0m\x1b[1;36m4\x1b[0m\x1b[36m workers\x1b[0m\x1b[36m...\x1b[0m\n\x1b[?25l\r\x1b[2k\x1b[1;34mprocessing files\x1b[0m \x1b[38;5;237m\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\x1b[0m \x1b[35m  0%\x1b[0m (0/5 files) \x1b[36m-:--:--\x1b[0m\r\x1b[2k\n\x1b[36mprocessing \x1b[0m\x1b[1;36m5\x1b[0m\x1b[36m files\x1b[0m\x1b[36m...\x1b[0m\n\n\x1b[1;34mprocessing files\x1b[0m \x1b[38;5;237m\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\x1b[0m \x1b[35m  0%\x1b[0m (0/5 files) \x1b[36m-:--:--\x1b[0m\r\x1b[2k\x1b[1;34mprocessing files\x1b[0m \x1b[38;5;70m\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\x1b[0m \x1b[35m100%\x1b[0m (5/5 files) \x1b[36m0:00:00\x1b[0m\n\x1b[?25h\n\x1b[1msummary:\x1b[0m\n  total files: \x1b[1;36m5\x1b[0m\n  \x1b[32msuccessful: \x1b[0m\x1b[1;32m5\x1b[0m\n  \x1b[31mfailed: \x1b[0m\x1b[1;31m0\x1b[0m\n  success rate: \x1b[1;36m100.0\x1b[0m%\n' = <built-in method lower of str object at 0x000001CE8EAADA10>()
+E    +    where <built-in method lower of str object at 0x000001CE8EAADA10> = '\x1b[36mProcessing \x1b[0m\x1b[1;36m5\x1b[0m\x1b[36m files with \x1b[0m\x1b[1;36m4\x1b[0m\x1b[36m workers\x1b[0m\x1b[36m...\x1b[0m\n\x1b[?25l\r\x1b[2K\x1b[1;34mProcessing files\x1b[0m \x1b[38;5;237m\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\x1b[0m \x1b[35m  0%\x1b[0m (0/5 files) \x1b[36m-:--:--\x1b[0m\r\x1b[2K\n\x1b[36mProcessing \x1b[0m\x1b[1;36m5\x1b[0m\x1b[36m files\x1b[0m\x1b[36m...\x1b[0m\n\n\x1b[1;34mProcessing files\x1b[0m \x1b[38;5;237m\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\x1b[0m \x1b[35m  0%\x1b[0m (0/5 files) \x1b[36m-:--:--\x1b[0m\r\x1b[2K\x1b[1;34mProcessing files\x1b[0m \x1b[38;5;70m\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\x1b[0m \x1b[35m100%\x1b[0m (5/5 files) \x1b[36m0:00:00\x1b[0m\n\x1b[?25h\n\x1b[1mSummary:\x1b[0m\n  Total files: \x1b[1;36m5\x1b[0m\n  \x1b[32mSuccessful: \x1b[0m\x1b[1;32m5\x1b[0m\n  \x1b[31mFailed: \x1b[0m\x1b[1;31m0\x1b[0m\n  Success rate: \x1b[1;36m100.0\x1b[0m%\n'.lower
+E    +      where '\x1b[36mProcessing \x1b[0m\x1b[1;36m5\x1b[0m\x1b[36m files with \x1b[0m\x1b[1;36m4\x1b[0m\x1b[36m workers\x1b[0m\x1b[36m...\x1b[0m\n\x1b[?25l\r\x1b[2K\x1b[1;34mProcessing files\x1b[0m \x1b[38;5;237m\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\x1b[0m \x1b[35m  0%\x1b[0m (0/5 files) \x1b[36m-:--:--\x1b[0m\r\x1b[2K\n\x1b[36mProcessing \x1b[0m\x1b[1;36m5\x1b[0m\x1b[36m files\x1b[0m\x1b[36m...\x1b[0m\n\n\x1b[1;34mProcessing files\x1b[0m \x1b[38;5;237m\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\x1b[0m \x1b[35m  0%\x1b[0m (0/5 files) \x1b[36m-:--:--\x1b[0m\r\x1b[2K\x1b[1;34mProcessing files\x1b[0m \x1b[38;5;70m\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\x1b[0m \x1b[35m100%\x1b[0m (5/5 files) \x1b[36m0:00:00\x1b[0m\n\x1b[?25h\n\x1b[1mSummary:\x1b[0m\n  Total files: \x1b[1;36m5\x1b[0m\n  \x1b[32mSuccessful: \x1b[0m\x1b[1;32m5\x1b[0m\n  \x1b[31mFailed: \x1b[0m\x1b[1;31m0\x1b[0m\n  Success rate: \x1b[1;36m100.0\x1b[0m%\n' = <Result okay>.output
+        cli_runner = <click.testing.CliRunner object at 0x000001CE8F56F620>
+        input_dir  = WindowsPath('C:/Users/Andrew/AppData/Local/Temp/pytest-of-Andrew/pytest-579/test_batch_process_batch0')
+        multiple_test_files = [WindowsPath('C:/Users/Andrew/AppData/Local/Temp/pytest-of-Andrew/pytest-579/test_batch_process_batch0/doc1.docx'),
+ WindowsPath('C:/Users/Andrew/AppData/Local/Temp/pytest-of-Andrew/pytest-579/test_batch_process_batch0/doc2.docx'),
+ WindowsPath('C:/Users/Andrew/AppData/Local/Temp/pytest-of-Andrew/pytest-579/test_batch_process_batch0/doc3.docx'),
+ WindowsPath('C:/Users/Andrew/AppData/Local/Temp/pytest-of-Andrew/pytest-579/test_batch_process_batch0/text1.txt'),
+ WindowsPath('C:/Users/Andrew/AppData/Local/Temp/pytest-of-Andrew/pytest-579/test_batch_process_batch0/text2.txt')]
+        output_dir = WindowsPath('C:/Users/Andrew/AppData/Local/Temp/pytest-of-Andrew/pytest-579/test_batch_process_batch0/output')
+        result     = <Result okay>
+        self       = <tests.test_cli.test_batch_command.TestBatchCommandSuccess object at 0x000001CE8F6A9F90>
+        tmp_path   = WindowsPath('C:/Users/Andrew/AppData/Local/Temp/pytest-of-Andrew/pytest-579/test_batch_process_batch0')
+_______________ TestBatchCommandProgress.test_batch_quiet_mode ________________
+tests\test_cli\test_batch_command.py:152: in test_batch_quiet_mode
+    assert result.exit_code == 0
+E   assert 2 == 0
+E    +  where 2 = <Result SystemExit(2)>.exit_code
+        cli_runner = <click.testing.CliRunner object at 0x000001CE90BF47C0>
+        input_dir  = WindowsPath('C:/Users/Andrew/AppData/Local/Temp/pytest-of-Andrew/pytest-579/test_batch_quiet_mode0')
+        multiple_test_files = [WindowsPath('C:/Users/Andrew/AppData/Local/Temp/pytest-of-Andrew/pytest-579/test_batch_quiet_mode0/doc1.docx'),
+ WindowsPath('C:/Users/Andrew/AppData/Local/Temp/pytest-of-Andrew/pytest-579/test_batch_quiet_mode0/doc2.docx'),
+ WindowsPath('C:/Users/Andrew/AppData/Local/Temp/pytest-of-Andrew/pytest-579/test_batch_quiet_mode0/doc3.docx'),
+ WindowsPath('C:/Users/Andrew/AppData/Local/Temp/pytest-of-Andrew/pytest-579/test_batch_quiet_mode0/text1.txt'),
+ WindowsPath('C:/Users/Andrew/AppData/Local/Temp/pytest-of-Andrew/pytest-579/test_batch_quiet_mode0/text2.txt')]
+        output_dir = WindowsPath('C:/Users/Andrew/AppData/Local/Temp/pytest-of-Andrew/pytest-579/test_batch_quiet_mode0/output')
+        result     = <Result SystemExit(2)>
+        self       = <tests.test_cli.test_batch_command.TestBatchCommandProgress object at 0x000001CE8F84BA80>
+        tmp_path   = WindowsPath('C:/Users/Andrew/AppData/Local/Temp/pytest-of-Andrew/pytest-579/test_batch_quiet_mode0')
+_______________ TestBatchCommandOutput.test_batch_verbose_mode ________________
+tests\test_cli\test_batch_command.py:284: in test_batch_verbose_mode
+    assert result.exit_code == 0
+E   assert 2 == 0
+E    +  where 2 = <Result SystemExit(2)>.exit_code
+        cli_runner = <click.testing.CliRunner object at 0x000001CE8F9EB050>
+        input_dir  = WindowsPath('C:/Users/Andrew/AppData/Local/Temp/pytest-of-Andrew/pytest-579/test_batch_verbose_mode0')
+        multiple_test_files = [WindowsPath('C:/Users/Andrew/AppData/Local/Temp/pytest-of-Andrew/pytest-579/test_batch_verbose_mode0/doc1.docx'),
+ WindowsPath('C:/Users/Andrew/AppData/Local/Temp/pytest-of-Andrew/pytest-579/test_batch_verbose_mode0/doc2.docx'),
+ WindowsPath('C:/Users/Andrew/AppData/Local/Temp/pytest-of-Andrew/pytest-579/test_batch_verbose_mode0/doc3.docx'),
+ WindowsPath('C:/Users/Andrew/AppData/Local/Temp/pytest-of-Andrew/pytest-579/test_batch_verbose_mode0/text1.txt'),
+ WindowsPath('C:/Users/Andrew/AppData/Local/Temp/pytest-of-Andrew/pytest-579/test_batch_verbose_mode0/text2.txt')]
+        output_dir = WindowsPath('C:/Users/Andrew/AppData/Local/Temp/pytest-of-Andrew/pytest-579/test_batch_verbose_mode0/output')
+        result     = <Result SystemExit(2)>
+        self       = <tests.test_cli.test_batch_command.TestBatchCommandOutput object at 0x000001CE8F8C3ED0>
+        tmp_path   = WindowsPath('C:/Users/Andrew/AppData/Local/Temp/pytest-of-Andrew/pytest-579/test_batch_verbose_mode0')
+___________________ TestConfigShowCommand.test_config_show ____________________
+tests\test_cli\test_config_command.py:23: in test_config_show
+    assert result.exit_code == 0
+E   assert 2 == 0
+E    +  where 2 = <Result SystemExit(2)>.exit_code
+        cli_runner = <click.testing.CliRunner object at 0x000001CE8FACAC50>
+        config_file = WindowsPath('C:/Users/Andrew/AppData/Local/Temp/pytest-of-Andrew/pytest-579/test_config_show0/config.yaml')
+        result     = <Result SystemExit(2)>
+        self       = <tests.test_cli.test_config_command.TestConfigShowCommand object at 0x000001CE8F974050>
+___________ TestConfigShowCommand.test_config_show_readable_format ____________
+tests\test_cli\test_config_command.py:30: in test_config_show_readable_format
+    assert result.exit_code == 0
+E   assert 2 == 0
+E    +  where 2 = <Result SystemExit(2)>.exit_code
+        cli_runner = <click.testing.CliRunner object at 0x000001CE8FAC9230>
+        config_file = WindowsPath('C:/Users/Andrew/AppData/Local/Temp/pytest-of-Andrew/pytest-579/test_config_show_readable_form0/config.yaml')
+        result     = <Result SystemExit(2)>
+        self       = <tests.test_cli.test_config_command.TestConfigShowCommand object at 0x000001CE8F974190>
+_____________ TestConfigShowCommand.test_config_show_missing_file _____________
+tests\test_cli\test_config_command.py:40: in test_config_show_missing_file
+    assert "not found" in result.output.lower() or result.exit_code == 0
+E   assert ('not found' in "usage: cli config show [options]\ntry 'cli config show --help' for help.\n\nerror: no such option: --config\n" or 2 == 0)
+E    +  where "usage: cli config show [options]\ntry 'cli config show --help' for help.\n\nerror: no such option: --config\n" = <built-in method lower of str object at 0x000001CE90C2A290>()
+E    +    where <built-in method lower of str object at 0x000001CE90C2A290> = "Usage: cli config show [OPTIONS]\nTry 'cli config show --help' for help.\n\nError: No such option: --config\n".lower
+E    +      where "Usage: cli config show [OPTIONS]\nTry 'cli config show --help' for help.\n\nError: No such option: --config\n" = <Result SystemExit(2)>.output
+E    +  and   2 = <Result SystemExit(2)>.exit_code
+        cli_runner = <click.testing.CliRunner object at 0x000001CE90C299F0>
+        nonexistent_config = WindowsPath('C:/Users/Andrew/AppData/Local/Temp/pytest-of-Andrew/pytest-579/test_config_show_missing_file0/nonexistent.yaml')
+        result     = <Result SystemExit(2)>
+        self       = <tests.test_cli.test_config_command.TestConfigShowCommand object at 0x000001CE8F97C050>
+        tmp_path   = WindowsPath('C:/Users/Andrew/AppData/Local/Temp/pytest-of-Andrew/pytest-579/test_config_show_missing_file0')
+____________ TestConfigValidateCommand.test_config_validate_valid _____________
+tests\test_cli\test_config_command.py:57: in test_config_validate_valid
+    assert result.exit_code == 0
+E   assert 2 == 0
+E    +  where 2 = <Result SystemExit(2)>.exit_code
+        cli_runner = <click.testing.CliRunner object at 0x000001CE90C1AF00>
+        config_file = WindowsPath('C:/Users/Andrew/AppData/Local/Temp/pytest-of-Andrew/pytest-579/test_config_validate_valid0/config.yaml')
+        result     = <Result SystemExit(2)>
+        self       = <tests.test_cli.test_config_command.TestConfigValidateCommand object at 0x000001CE8F9742D0>
+____________ TestConfigPathCommand.test_config_path_shows_location ____________
+tests\test_cli\test_config_command.py:96: in test_config_path_shows_location
+    assert result.exit_code == 0
+E   assert 2 == 0
+E    +  where 2 = <Result SystemExit(2)>.exit_code
+        cli_runner = <click.testing.CliRunner object at 0x000001CE8FA4F3F0>
+        config_file = WindowsPath('C:/Users/Andrew/AppData/Local/Temp/pytest-of-Andrew/pytest-579/test_config_path_shows_locatio0/config.yaml')
+        result     = <Result SystemExit(2)>
+        self       = <tests.test_cli.test_config_command.TestConfigPathCommand object at 0x000001CE8F974550>
+_____________ TestConfigPathCommand.test_config_path_nonexistent ______________
+tests\test_cli\test_config_command.py:113: in test_config_path_nonexistent
+    assert str(nonexistent_config) in result.output or result.exit_code == 0
+E   assert ('C:\\Users\\Andrew\\AppData\\Local\\Temp\\pytest-of-Andrew\\pytest-579\\test_config_path_nonexistent0\\nonexistent.yaml' in "Usage: cli config path [OPTIONS]\nTry 'cli config path --help' for help.\n\nError: No such option: --config\n" or 2 == 0)
+E    +  where 'C:\\Users\\Andrew\\AppData\\Local\\Temp\\pytest-of-Andrew\\pytest-579\\test_config_path_nonexistent0\\nonexistent.yaml' = str(WindowsPath('C:/Users/Andrew/AppData/Local/Temp/pytest-of-Andrew/pytest-579/test_config_path_nonexistent0/nonexistent.yaml'))
+E    +  and   "Usage: cli config path [OPTIONS]\nTry 'cli config path --help' for help.\n\nError: No such option: --config\n" = <Result SystemExit(2)>.output
+E    +  and   2 = <Result SystemExit(2)>.exit_code
+        cli_runner = <click.testing.CliRunner object at 0x000001CE8FA4FD90>
+        nonexistent_config = WindowsPath('C:/Users/Andrew/AppData/Local/Temp/pytest-of-Andrew/pytest-579/test_config_path_nonexistent0/nonexistent.yaml')
+        result     = <Result SystemExit(2)>
+        self       = <tests.test_cli.test_config_command.TestConfigPathCommand object at 0x000001CE8F97C510>
+        tmp_path   = WindowsPath('C:/Users/Andrew/AppData/Local/Temp/pytest-of-Andrew/pytest-579/test_config_path_nonexistent0')
+_____________ TestExtractCommandSuccess.test_extract_docx_to_json _____________
+tests\test_cli\test_extract_command.py:30: in test_extract_docx_to_json
+    assert "Successfully extracted" in result.output
+E   AssertionError: assert 'Successfully extracted' in '\x1b[36mProcessing file: sample.docx\x1b[0m\n\x1b[?25l\r\x1b[2K\x1b[32m\u280b\x1b[0m \x1b[1;34mProcessing sample.docx\x1b[0m \x1b[38;5;237m\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\x1b[0m \x1b[35m  0%\x1b[0m \x1b[36m-:--:--\x1b[0m\r\x1b[2K  \x1b[1;34mProcessing sample.docx\x1b[0m \x1b[38;5;70m\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\x1b[0m \x1b[35m100%\x1b[0m \x1b[36m0:00:00\x1b[0m\n\x1b[?25h\n\x1b[32mSUCCESS: Extracted sample.docx\x1b[0m\n  Output: \nC:\\Users\\Andrew\\AppData\\Local\\Temp\\pytest-of-Andrew\\pytest-\x1b[1;36m579\x1b[0m\\test_extract_docx\n_to_json0\\output.json\n'
+E    +  where '\x1b[36mProcessing file: sample.docx\x1b[0m\n\x1b[?25l\r\x1b[2K\x1b[32m\u280b\x1b[0m \x1b[1;34mProcessing sample.docx\x1b[0m \x1b[38;5;237m\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\x1b[0m \x1b[35m  0%\x1b[0m \x1b[36m-:--:--\x1b[0m\r\x1b[2K  \x1b[1;34mProcessing sample.docx\x1b[0m \x1b[38;5;70m\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\x1b[0m \x1b[35m100%\x1b[0m \x1b[36m0:00:00\x1b[0m\n\x1b[?25h\n\x1b[32mSUCCESS: Extracted sample.docx\x1b[0m\n  Output: \nC:\\Users\\Andrew\\AppData\\Local\\Temp\\pytest-of-Andrew\\pytest-\x1b[1;36m579\x1b[0m\\test_extract_docx\n_to_json0\\output.json\n' = <Result okay>.output
+        cli_runner = <click.testing.CliRunner object at 0x000001CE8F946F90>
+        output_file = WindowsPath('C:/Users/Andrew/AppData/Local/Temp/pytest-of-Andrew/pytest-579/test_extract_docx_to_json0/output.json')
+        result     = <Result okay>
+        sample_docx_file = WindowsPath('C:/Users/Andrew/AppData/Local/Temp/pytest-of-Andrew/pytest-579/test_extract_docx_to_json0/sample.docx')
+        self       = <tests.test_cli.test_extract_command.TestExtractCommandSuccess object at 0x000001CE8F976350>
+        tmp_path   = WindowsPath('C:/Users/Andrew/AppData/Local/Temp/pytest-of-Andrew/pytest-579/test_extract_docx_to_json0')
+___________ TestExtractCommandSuccess.test_extract_docx_to_markdown ___________
+tests\test_cli\test_extract_command.py:51: in test_extract_docx_to_markdown
+    assert "Successfully extracted" in result.output
+E   AssertionError: assert 'Successfully extracted' in '\x1b[36mProcessing file: sample.docx\x1b[0m\n\x1b[?25l\r\x1b[2K\x1b[32m\u280b\x1b[0m \x1b[1;34mProcessing sample.docx\x1b[0m \x1b[38;5;237m\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\x1b[0m \x1b[35m  0%\x1b[0m \x1b[36m-:--:--\x1b[0m\r\x1b[2K  \x1b[1;34mProcessing sample.docx\x1b[0m \x1b[38;5;70m\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\x1b[0m \x1b[35m100%\x1b[0m \x1b[36m0:00:00\x1b[0m\n\x1b[?25h\n\x1b[32mSUCCESS: Extracted sample.docx\x1b[0m\n  Output: \nC:\\Users\\Andrew\\AppData\\Local\\Temp\\pytest-of-Andrew\\pytest-\x1b[1;36m579\x1b[0m\\test_extract_docx\n_to_markdown0\\output.md\n'
+E    +  where '\x1b[36mProcessing file: sample.docx\x1b[0m\n\x1b[?25l\r\x1b[2K\x1b[32m\u280b\x1b[0m \x1b[1;34mProcessing sample.docx\x1b[0m \x1b[38;5;237m\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\x1b[0m \x1b[35m  0%\x1b[0m \x1b[36m-:--:--\x1b[0m\r\x1b[2K  \x1b[1;34mProcessing sample.docx\x1b[0m \x1b[38;5;70m\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\x1b[0m \x1b[35m100%\x1b[0m \x1b[36m0:00:00\x1b[0m\n\x1b[?25h\n\x1b[32mSUCCESS: Extracted sample.docx\x1b[0m\n  Output: \nC:\\Users\\Andrew\\AppData\\Local\\Temp\\pytest-of-Andrew\\pytest-\x1b[1;36m579\x1b[0m\\test_extract_docx\n_to_markdown0\\output.md\n' = <Result okay>.output
+        cli_runner = <click.testing.CliRunner object at 0x000001CE8FA4E200>
+        output_file = WindowsPath('C:/Users/Andrew/AppData/Local/Temp/pytest-of-Andrew/pytest-579/test_extract_docx_to_markdown0/output.md')
+        result     = <Result okay>
+        sample_docx_file = WindowsPath('C:/Users/Andrew/AppData/Local/Temp/pytest-of-Andrew/pytest-579/test_extract_docx_to_markdown0/sample.docx')
+        self       = <tests.test_cli.test_extract_command.TestExtractCommandSuccess object at 0x000001CE8F976490>
+        tmp_path   = WindowsPath('C:/Users/Andrew/AppData/Local/Temp/pytest-of-Andrew/pytest-579/test_extract_docx_to_markdown0')
+_____________ TestExtractCommandSuccess.test_extract_all_formats ______________
+tests\test_cli\test_extract_command.py:63: in test_extract_all_formats
+    assert "Successfully extracted" in result.output
+E   AssertionError: assert 'Successfully extracted' in '\x1b[36mProcessing file: sample.docx\x1b[0m\n\x1b[?25l\r\x1b[2K\x1b[32m\u280b\x1b[0m \x1b[1;34mProcessing sample.docx\x1b[0m \x1b[38;5;237m\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\x1b[0m \x1b[35m  0%\x1b[0m \x1b[36m-:--:--\x1b[0m\r\x1b[2K  \x1b[1;34mProcessing sample.docx\x1b[0m \x1b[38;5;70m\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\x1b[0m \x1b[35m100%\x1b[0m \x1b[36m0:00:00\x1b[0m\n\x1b[?25h\n\x1b[32mSUCCESS: Extracted sample.docx\x1b[0m\n  Output: \nC:\\Users\\Andrew\\AppData\\Local\\Temp\\pytest-of-Andrew\\pytest-\x1b[1;36m579\x1b[0m\\test_extract_all_\nformats0\\outputs\n'
+E    +  where '\x1b[36mProcessing file: sample.docx\x1b[0m\n\x1b[?25l\r\x1b[2K\x1b[32m\u280b\x1b[0m \x1b[1;34mProcessing sample.docx\x1b[0m \x1b[38;5;237m\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\x1b[0m \x1b[35m  0%\x1b[0m \x1b[36m-:--:--\x1b[0m\r\x1b[2K  \x1b[1;34mProcessing sample.docx\x1b[0m \x1b[38;5;70m\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\x1b[0m \x1b[35m100%\x1b[0m \x1b[36m0:00:00\x1b[0m\n\x1b[?25h\n\x1b[32mSUCCESS: Extracted sample.docx\x1b[0m\n  Output: \nC:\\Users\\Andrew\\AppData\\Local\\Temp\\pytest-of-Andrew\\pytest-\x1b[1;36m579\x1b[0m\\test_extract_all_\nformats0\\outputs\n' = <Result okay>.output
+        cli_runner = <click.testing.CliRunner object at 0x000001CE90CCDDA0>
+        output_dir = WindowsPath('C:/Users/Andrew/AppData/Local/Temp/pytest-of-Andrew/pytest-579/test_extract_all_formats0/outputs')
+        result     = <Result okay>
+        sample_docx_file = WindowsPath('C:/Users/Andrew/AppData/Local/Temp/pytest-of-Andrew/pytest-579/test_extract_all_formats0/sample.docx')
+        self       = <tests.test_cli.test_extract_command.TestExtractCommandSuccess object at 0x000001CE8F97CFC0>
+        tmp_path   = WindowsPath('C:/Users/Andrew/AppData/Local/Temp/pytest-of-Andrew/pytest-579/test_extract_all_formats0')
+_____________ TestExtractCommandErrors.test_extract_missing_file ______________
+tests\test_cli\test_extract_command.py:115: in test_extract_missing_file
+    assert "not found" in result.output.lower() or "could not find" in result.output.lower()
+E   assert ('not found' in "usage: cli extract [options] file_path\ntry 'cli extract --help' for help.\n\nerror: invalid value for 'file_path': path 'c:\\\\users\\\\andrew\\\\appdata\\\\local\\\\temp\\\\pytest-of-andrew\\\\pytest-579\\\\test_extract_missing_file0\\\\nonexistent.docx' does not exist.\n" or 'could not find' in "usage: cli extract [options] file_path\ntry 'cli extract --help' for help.\n\nerror: invalid value for 'file_path': path 'c:\\\\users\\\\andrew\\\\appdata\\\\local\\\\temp\\\\pytest-of-andrew\\\\pytest-579\\\\test_extract_missing_file0\\\\nonexistent.docx' does not exist.\n")
+E    +  where "usage: cli extract [options] file_path\ntry 'cli extract --help' for help.\n\nerror: invalid value for 'file_path': path 'c:\\\\users\\\\andrew\\\\appdata\\\\local\\\\temp\\\\pytest-of-andrew\\\\pytest-579\\\\test_extract_missing_file0\\\\nonexistent.docx' does not exist.\n" = <built-in method lower of str object at 0x000001CE8FA889B0>()
+E    +    where <built-in method lower of str object at 0x000001CE8FA889B0> = "Usage: cli extract [OPTIONS] FILE_PATH\nTry 'cli extract --help' for help.\n\nError: Invalid value for 'FILE_PATH': Path 'C:\\\\Users\\\\Andrew\\\\AppData\\\\Local\\\\Temp\\\\pytest-of-Andrew\\\\pytest-579\\\\test_extract_missing_file0\\\\nonexistent.docx' does not exist.\n".lower
+E    +      where "Usage: cli extract [OPTIONS] FILE_PATH\nTry 'cli extract --help' for help.\n\nError: Invalid value for 'FILE_PATH': Path 'C:\\\\Users\\\\Andrew\\\\AppData\\\\Local\\\\Temp\\\\pytest-of-Andrew\\\\pytest-579\\\\test_extract_missing_file0\\\\nonexistent.docx' does not exist.\n" = <Result SystemExit(2)>.output
+E    +  and   "usage: cli extract [options] file_path\ntry 'cli extract --help' for help.\n\nerror: invalid value for 'file_path': path 'c:\\\\users\\\\andrew\\\\appdata\\\\local\\\\temp\\\\pytest-of-andrew\\\\pytest-579\\\\test_extract_missing_file0\\\\nonexistent.docx' does not exist.\n" = <built-in method lower of str object at 0x000001CE8FA897F0>()
+E    +    where <built-in method lower of str object at 0x000001CE8FA897F0> = "Usage: cli extract [OPTIONS] FILE_PATH\nTry 'cli extract --help' for help.\n\nError: Invalid value for 'FILE_PATH': Path 'C:\\\\Users\\\\Andrew\\\\AppData\\\\Local\\\\Temp\\\\pytest-of-Andrew\\\\pytest-579\\\\test_extract_missing_file0\\\\nonexistent.docx' does not exist.\n".lower
+E    +      where "Usage: cli extract [OPTIONS] FILE_PATH\nTry 'cli extract --help' for help.\n\nError: Invalid value for 'FILE_PATH': Path 'C:\\\\Users\\\\Andrew\\\\AppData\\\\Local\\\\Temp\\\\pytest-of-Andrew\\\\pytest-579\\\\test_extract_missing_file0\\\\nonexistent.docx' does not exist.\n" = <Result SystemExit(2)>.output
+        cli_runner = <click.testing.CliRunner object at 0x000001CE8FA39320>
+        nonexistent_file = WindowsPath('C:/Users/Andrew/AppData/Local/Temp/pytest-of-Andrew/pytest-579/test_extract_missing_file0/nonexistent.docx')
+        output_file = WindowsPath('C:/Users/Andrew/AppData/Local/Temp/pytest-of-Andrew/pytest-579/test_extract_missing_file0/output.json')
+        result     = <Result SystemExit(2)>
+        self       = <tests.test_cli.test_extract_command.TestExtractCommandErrors object at 0x000001CE8F9765D0>
+        tmp_path   = WindowsPath('C:/Users/Andrew/AppData/Local/Temp/pytest-of-Andrew/pytest-579/test_extract_missing_file0')
+____________ TestExtractCommandErrors.test_extract_force_overwrite ____________
+tests\test_cli\test_extract_command.py:186: in test_extract_force_overwrite
+    assert "overwrite" not in result.output.lower()
+E   AssertionError: assert 'overwrite' not in '\\x1b[36mprocessing file: sample.docx\\x1b[0m\\n\\x1b[?25l\\r\\x1b[2k\\x1b[32m\u280b\\x1b[0m \\x1b[1;34mprocessing sample.docx\\x1b[0m \\x1b[38;5;237m\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\\x1b[0m \\x1b[35m  0%\\x1b[0m \\x1b[36m-:--:--\\x1b[0m\\r\\x1b[2k  \\x1b[1;34mprocessing sample.docx\\x1b[0m \\x1b[38;5;70m\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\\x1b[0m \\x1b[35m100%\\x1b[0m \\x1b[36m0:00:00\\x1b[0m\\n\\x1b[?25h\\n\\x1b[32msuccess: extracted sample.docx\\x1b[0m\\n  output: \\nc:\\\\users\\\\andrew\\\\appdata\\\\local\\\\temp\\\\pytest-of-andrew\\\\pytest-\\x1b[1;36m579\\x1b[0m\\\\test_extract_forc\\ne_overwrite0\\\\output.json\\n'
+E     
+E     'overwrite' is contained here:
+E       [36mprocessing file: sample.docx[0m
+E       [?25l
+E       \x1b[2k\x1b[32m\u280b\x1b[0m \x1b[1;34mprocessing sample.docx\x1b[0m \x1b[38;5;237m\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\x1b[0m \x1b[35m  0%\x1b[0m \x1b[36m-:--:--\x1b[0m
+E       \x1b[2k  \x1b[1;34mprocessing sample.docx\x1b[0m \x1b[38;5;70m\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\x1b[0m \x1b[35m100%\x1b[0m \x1b[36m0:00:00\x1b[0m
+E       [?25h
+E       [32msuccess: extracted sample.docx[0m
+E         output: 
+E       c:\users\andrew\appdata\local\temp\pytest-of-andrew\pytest-[1;36m579[0m\test_extract_forc
+E       e_overwrite0\output.json
+E     ?   +++++++++
+        cli_runner = <click.testing.CliRunner object at 0x000001CE90BF2F90>
+        output_file = WindowsPath('C:/Users/Andrew/AppData/Local/Temp/pytest-of-Andrew/pytest-579/test_extract_force_overwrite0/output.json')
+        result     = <Result okay>
+        sample_docx_file = WindowsPath('C:/Users/Andrew/AppData/Local/Temp/pytest-of-Andrew/pytest-579/test_extract_force_overwrite0/sample.docx')
+        self       = <tests.test_cli.test_extract_command.TestExtractCommandErrors object at 0x000001CE8F98F0B0>
+        tmp_path   = WindowsPath('C:/Users/Andrew/AppData/Local/Temp/pytest-of-Andrew/pytest-579/test_extract_force_overwrite0')
+____________ TestExtractCommandOutput.test_extract_verbose_output _____________
+tests\test_cli\test_extract_command.py:240: in test_extract_verbose_output
+    assert result.exit_code == 0
+E   assert 2 == 0
+E    +  where 2 = <Result SystemExit(2)>.exit_code
+        cli_runner = <click.testing.CliRunner object at 0x000001CE8FA39DA0>
+        output_file = WindowsPath('C:/Users/Andrew/AppData/Local/Temp/pytest-of-Andrew/pytest-579/test_extract_verbose_output0/output.json')
+        result     = <Result SystemExit(2)>
+        sample_docx_file = WindowsPath('C:/Users/Andrew/AppData/Local/Temp/pytest-of-Andrew/pytest-579/test_extract_verbose_output0/sample.docx')
+        self       = <tests.test_cli.test_extract_command.TestExtractCommandOutput object at 0x000001CE8F976C10>
+        tmp_path   = WindowsPath('C:/Users/Andrew/AppData/Local/Temp/pytest-of-Andrew/pytest-579/test_extract_verbose_output0')
+______________ TestExtractCommandOutput.test_extract_quiet_mode _______________
+tests\test_cli\test_extract_command.py:260: in test_extract_quiet_mode
+    assert result.exit_code == 0
+E   assert 2 == 0
+E    +  where 2 = <Result SystemExit(2)>.exit_code
+        cli_runner = <click.testing.CliRunner object at 0x000001CE8FA3AD60>
+        output_file = WindowsPath('C:/Users/Andrew/AppData/Local/Temp/pytest-of-Andrew/pytest-579/test_extract_quiet_mode0/output.json')
+        result     = <Result SystemExit(2)>
+        sample_docx_file = WindowsPath('C:/Users/Andrew/AppData/Local/Temp/pytest-of-Andrew/pytest-579/test_extract_quiet_mode0/sample.docx')
+        self       = <tests.test_cli.test_extract_command.TestExtractCommandOutput object at 0x000001CE8F97D480>
+        tmp_path   = WindowsPath('C:/Users/Andrew/AppData/Local/Temp/pytest-of-Andrew/pytest-579/test_extract_quiet_mode0')
+_______ TestSignalHandlerEdgeCases.test_signal_handler_with_quiet_mode ________
+tests\test_cli\test_signal_handling.py:390: in test_signal_handler_with_quiet_mode
+    assert result.exit_code == 0
+E   assert 2 == 0
+E    +  where 2 = <Result SystemExit(2)>.exit_code
+        cli_runner = <click.testing.CliRunner object at 0x000001CE8FA4E190>
+        input_dir  = WindowsPath('C:/Users/Andrew/AppData/Local/Temp/pytest-of-Andrew/pytest-579/test_signal_handler_with_quiet0')
+        multiple_test_files = [WindowsPath('C:/Users/Andrew/AppData/Local/Temp/pytest-of-Andrew/pytest-579/test_signal_handler_with_quiet0/doc1.docx'),
+ WindowsPath('C:/Users/Andrew/AppData/Local/Temp/pytest-of-Andrew/pytest-579/test_signal_handler_with_quiet0/doc2.docx'),
+ WindowsPath('C:/Users/Andrew/AppData/Local/Temp/pytest-of-Andrew/pytest-579/test_signal_handler_with_quiet0/doc3.docx'),
+ WindowsPath('C:/Users/Andrew/AppData/Local/Temp/pytest-of-Andrew/pytest-579/test_signal_handler_with_quiet0/text1.txt'),
+ WindowsPath('C:/Users/Andrew/AppData/Local/Temp/pytest-of-Andrew/pytest-579/test_signal_handler_with_quiet0/text2.txt')]
+        output_dir = WindowsPath('C:/Users/Andrew/AppData/Local/Temp/pytest-of-Andrew/pytest-579/test_signal_handler_with_quiet0/output')
+        result     = <Result SystemExit(2)>
+        self       = <tests.test_cli.test_signal_handling.TestSignalHandlerEdgeCases object at 0x000001CE8F9C02D0>
+        tmp_path   = WindowsPath('C:/Users/Andrew/AppData/Local/Temp/pytest-of-Andrew/pytest-579/test_signal_handler_with_quiet0')
+______ TestSignalHandlerEdgeCases.test_signal_handler_with_verbose_mode _______
+tests\test_cli\test_signal_handling.py:402: in test_signal_handler_with_verbose_mode
+    assert result.exit_code == 0
+E   assert 2 == 0
+E    +  where 2 = <Result SystemExit(2)>.exit_code
+        cli_runner = <click.testing.CliRunner object at 0x000001CE8F67E350>
+        input_dir  = WindowsPath('C:/Users/Andrew/AppData/Local/Temp/pytest-of-Andrew/pytest-579/test_signal_handler_with_verbo0')
+        multiple_test_files = [WindowsPath('C:/Users/Andrew/AppData/Local/Temp/pytest-of-Andrew/pytest-579/test_signal_handler_with_verbo0/doc1.docx'),
+ WindowsPath('C:/Users/Andrew/AppData/Local/Temp/pytest-of-Andrew/pytest-579/test_signal_handler_with_verbo0/doc2.docx'),
+ WindowsPath('C:/Users/Andrew/AppData/Local/Temp/pytest-of-Andrew/pytest-579/test_signal_handler_with_verbo0/doc3.docx'),
+ WindowsPath('C:/Users/Andrew/AppData/Local/Temp/pytest-of-Andrew/pytest-579/test_signal_handler_with_verbo0/text1.txt'),
+ WindowsPath('C:/Users/Andrew/AppData/Local/Temp/pytest-of-Andrew/pytest-579/test_signal_handler_with_verbo0/text2.txt')]
+        output_dir = WindowsPath('C:/Users/Andrew/AppData/Local/Temp/pytest-of-Andrew/pytest-579/test_signal_handler_with_verbo0/output')
+        result     = <Result SystemExit(2)>
+        self       = <tests.test_cli.test_signal_handling.TestSignalHandlerEdgeCases object at 0x000001CE8F9C0410>
+        tmp_path   = WindowsPath('C:/Users/Andrew/AppData/Local/Temp/pytest-of-Andrew/pytest-579/test_signal_handler_with_verbo0')
+____ TestSignalHandlingIntegration.test_full_workflow_with_signal_handler _____
+tests\test_cli\test_signal_handling.py:455: in test_full_workflow_with_signal_handler
+    assert result.exit_code == 0
+E   assert 2 == 0
+E    +  where 2 = <Result SystemExit(2)>.exit_code
+        cli_runner = <click.testing.CliRunner object at 0x000001CE8F67F000>
+        doc        = <docx.document.Document object at 0x000001CE90BF0670>
+        file_path  = WindowsPath('C:/Users/Andrew/AppData/Local/Temp/pytest-of-Andrew/pytest-579/test_full_workflow_with_signal0/doc9.docx')
+        i          = 9
+        j          = 9
+        output_dir = WindowsPath('C:/Users/Andrew/AppData/Local/Temp/pytest-of-Andrew/pytest-579/test_full_workflow_with_signal0/output')
+        result     = <Result SystemExit(2)>
+        self       = <tests.test_cli.test_signal_handling.TestSignalHandlingIntegration object at 0x000001CE8F9C0550>
+        tmp_path   = WindowsPath('C:/Users/Andrew/AppData/Local/Temp/pytest-of-Andrew/pytest-579/test_full_workflow_with_signal0')
+____ TestConcurrentFileProcessing.test_concurrent_extract_doesnt_conflict _____
+tests\test_cli\test_threading.py:489: in test_concurrent_extract_doesnt_conflict
+    results = list(executor.map(extract_file, files))
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        cli_runner = <click.testing.CliRunner object at 0x000001CE8F9E1A20>
+        doc        = <docx.document.Document object at 0x000001CE90BF3A80>
+        executor   = <concurrent.futures.thread.ThreadPoolExecutor object at 0x000001CE90CAD630>
+        extract_file = <function TestConcurrentFileProcessing.test_concurrent_extract_doesnt_conflict.<locals>.extract_file at 0x000001CE90CAFA60>
+        file_path  = WindowsPath('C:/Users/Andrew/AppData/Local/Temp/pytest-of-Andrew/pytest-579/test_concurrent_extract_doesnt0/doc4.docx')
+        files      = [WindowsPath('C:/Users/Andrew/AppData/Local/Temp/pytest-of-Andrew/pytest-579/test_concurrent_extract_doesnt0/doc0.docx'),
+ WindowsPath('C:/Users/Andrew/AppData/Local/Temp/pytest-of-Andrew/pytest-579/test_concurrent_extract_doesnt0/doc1.docx'),
+ WindowsPath('C:/Users/Andrew/AppData/Local/Temp/pytest-of-Andrew/pytest-579/test_concurrent_extract_doesnt0/doc2.docx'),
+ WindowsPath('C:/Users/Andrew/AppData/Local/Temp/pytest-of-Andrew/pytest-579/test_concurrent_extract_doesnt0/doc3.docx'),
+ WindowsPath('C:/Users/Andrew/AppData/Local/Temp/pytest-of-Andrew/pytest-579/test_concurrent_extract_doesnt0/doc4.docx')]
+        i          = 4
+        self       = <tests.test_cli.test_threading.TestConcurrentFileProcessing object at 0x000001CE8F9C1810>
+        tmp_path   = WindowsPath('C:/Users/Andrew/AppData/Local/Temp/pytest-of-Andrew/pytest-579/test_concurrent_extract_doesnt0')
+C:\Program Files\Python\Python313\Lib\concurrent\futures\_base.py:619: in result_iterator
+    yield _result_or_cancel(fs.pop())
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        fs         = [<Future at 0x1ce8fa652d0 state=finished raised ValueError>,
+ <Future at 0x1ce8fa516d0 state=finished raised ValueError>]
+        future     = <Future at 0x1ce8fa516d0 state=finished raised ValueError>
+        timeout    = None
+C:\Program Files\Python\Python313\Lib\concurrent\futures\_base.py:317: in _result_or_cancel
+    return fut.result(timeout)
+           ^^^^^^^^^^^^^^^^^^^
+        timeout    = None
+C:\Program Files\Python\Python313\Lib\concurrent\futures\_base.py:456: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+        self       = None
+        timeout    = None
+C:\Program Files\Python\Python313\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+        self       = None
+C:\Program Files\Python\Python313\Lib\concurrent\futures\thread.py:59: in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self       = None
+tests\test_cli\test_threading.py:482: in extract_file
+    result = runner.invoke(
+        file_path  = WindowsPath('C:/Users/Andrew/AppData/Local/Temp/pytest-of-Andrew/pytest-579/test_concurrent_extract_doesnt0/doc2.docx')
+        output     = WindowsPath('C:/Users/Andrew/AppData/Local/Temp/pytest-of-Andrew/pytest-579/test_concurrent_extract_doesnt0/doc2.json')
+        runner     = <click.testing.CliRunner object at 0x000001CE90BF1400>
+..\data-extraction-tool\venv\Lib\site-packages\click\testing.py:531: in invoke
+    stdout = outstreams[0].getvalue()
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+E   ValueError: I/O operation on closed file.
+        args       = ['extract',
+ 'C:\\Users\\Andrew\\AppData\\Local\\Temp\\pytest-of-Andrew\\pytest-579\\test_concurrent_extract_doesnt0\\doc2.docx',
+ '--output',
+ 'C:\\Users\\Andrew\\AppData\\Local\\Temp\\pytest-of-Andrew\\pytest-579\\test_concurrent_extract_doesnt0\\doc2.json',
+ '--format',
+ 'json',
+ '--quiet']
+        catch_exceptions = True
+        cli        = <Group cli>
+        color      = False
+        e_code     = 2
+        env        = None
+        exc_info   = (<class 'SystemExit'>, SystemExit(2), <traceback object at 0x000001CE94CB6600>)
+        exception  = SystemExit(2)
+        exit_code  = 2
+        extra      = {}
+        input      = None
+        outstreams = (<click.testing.BytesIOCopy object at 0x000001CE94C493A0>,
+ <click.testing.BytesIOCopy object at 0x000001CE94C48720>,
+ <_io.BytesIO object at 0x000001CE94C49210>)
+        prog_name  = 'cli'
+        return_value = None
+        self       = <click.testing.CliRunner object at 0x000001CE90BF1400>
+______ TestThreadingIntegration.test_full_batch_workflow_with_threading _______
+tests\test_cli\test_threading.py:644: in test_full_batch_workflow_with_threading
+    assert result.exit_code == 0
+E   assert 2 == 0
+E    +  where 2 = <Result SystemExit(2)>.exit_code
+        cli_runner = <click.testing.CliRunner object at 0x000001CE94CAC2F0>
+        doc        = <docx.document.Document object at 0x000001CE95D9F4D0>
+        file_path  = WindowsPath('C:/Users/Andrew/AppData/Local/Temp/pytest-of-Andrew/pytest-579/test_full_batch_workflow_with_0/doc14.docx')
+        i          = 14
+        j          = 4
+        output_dir = WindowsPath('C:/Users/Andrew/AppData/Local/Temp/pytest-of-Andrew/pytest-579/test_full_batch_workflow_with_0/output')
+        result     = <Result SystemExit(2)>
+        self       = <tests.test_cli.test_threading.TestThreadingIntegration object at 0x000001CE8F9C1D10>
+        tmp_path   = WindowsPath('C:/Users/Andrew/AppData/Local/Temp/pytest-of-Andrew/pytest-579/test_full_batch_workflow_with_0')
+============================== warnings summary ===============================
+tests/test_cli/test_version_command.py::TestVersionCommand::test_version_verbose
+tests/test_cli/test_version_command.py::TestVersionCommandVerbose::test_version_verbose_shows_components
+tests/test_cli/test_version_command.py::TestVersionCommandVerbose::test_version_verbose_shows_python_version
+tests/test_cli/test_version_command.py::TestVersionCommandVerbose::test_version_verbose_shows_dependencies
+tests/test_cli/test_version_command.py::TestVersionCommandVerbose::test_version_verbose_shows_platform
+tests/test_cli/test_version_command.py::TestVersionCommandVerbose::test_verbose_flag_variations
+tests/test_cli/test_version_command.py::TestVersionCommandVerbose::test_verbose_flag_variations
+tests/test_cli/test_version_command.py::TestVersionCommandVerbose::test_verbose_has_more_content
+tests/test_cli/test_version_command.py::TestVersionCommandFormatting::test_version_output_is_utf8
+  C:\Users\Andrew\projects\data-extraction-tool-1\src\cli\commands.py:513: DeprecationWarning: The '__version__' attribute is deprecated and will be removed in Click 9.1. Use feature detection or 'importlib.metadata.version("click")' instead.
+    console.print(f"  click: {click.__version__}")
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+SKIPPED [1] tests\test_cli\test_signal_handling.py:100: Signal handling tests unreliable on Windows in pytest
+SKIPPED [1] tests\test_cli\test_signal_handling.py:116: Signal handling tests unreliable on Windows in pytest
+SKIPPED [1] tests\test_cli\test_signal_handling.py:258: Subprocess signal tests unreliable on Windows
+SKIPPED [1] tests\test_cli\test_signal_handling.py:285: Subprocess signal tests unreliable on Windows
+FAILED tests/test_cli/test_batch_command.py::TestBatchCommandSuccess::test_batch_process_batch - AssertionError: assert 'processed' in '\x1b[36mprocessing \x1b[0m\x1b[1;36m5\x1b[0m\x1b[36m files with \x1b[0m\x1b[1;36m4\x1b[0m\x1b[36m workers\x1b[0m\x1b[36m...\x1b[0m\n\x1b[?25l\r\x1b[2k\x1b[1;34mprocessing files\x1b[0m \x1b[38;5;237m\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\x1b[0m \x1b[35m  0%\x1b[0m (0/5 files) \x1b[36m-:--:--\x1b[0m\r\x1b[2k\n\x1b[36mprocessing \x1b[0m\x1b[1;36m5\x1b[0m\x1b[36m files\x1b[0m\x1b[36m...\x1b[0m\n\n\x1b[1;34mprocessing files\x1b[0m \x1b[38;5;237m\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\x1b[0m \x1b[35m  0%\x1b[0m (0/5 files) \x1b[36m-:--:--\x1b[0m\r\x1b[2k\x1b[1;34mprocessing files\x1b[0m \x1b[38;5;70m\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\x1b[0m \x1b[35m100%\x1b[0m (5/5 files) \x1b[36m0:00:00\x1b[0m\n\x1b[?25h\n\x1b[1msummary:\x1b[0m\n  total files: \x1b[1;36m5\x1b[0m\n  \x1b[32msuccessful: \x1b[0m\x1b[1;32m5\x1b[0m\n  \x1b[31mfailed: \x1b[0m\x1b[1;31m0\x1b[0m\n  success rate: \x1b[1;36m100.0\x1b[0m%\n'
+ +  where '\x1b[36mprocessing \x1b[0m\x1b[1;36m5\x1b[0m\x1b[36m files with \x1b[0m\x1b[1;36m4\x1b[0m\x1b[36m workers\x1b[0m\x1b[36m...\x1b[0m\n\x1b[?25l\r\x1b[2k\x1b[1;34mprocessing files\x1b[0m \x1b[38;5;237m\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\x1b[0m \x1b[35m  0%\x1b[0m (0/5 files) \x1b[36m-:--:--\x1b[0m\r\x1b[2k\n\x1b[36mprocessing \x1b[0m\x1b[1;36m5\x1b[0m\x1b[36m files\x1b[0m\x1b[36m...\x1b[0m\n\n\x1b[1;34mprocessing files\x1b[0m \x1b[38;5;237m\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\x1b[0m \x1b[35m  0%\x1b[0m (0/5 files) \x1b[36m-:--:--\x1b[0m\r\x1b[2k\x1b[1;34mprocessing files\x1b[0m \x1b[38;5;70m\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\x1b[0m \x1b[35m100%\x1b[0m (5/5 files) \x1b[36m0:00:00\x1b[0m\n\x1b[?25h\n\x1b[1msummary:\x1b[0m\n  total files: \x1b[1;36m5\x1b[0m\n  \x1b[32msuccessful: \x1b[0m\x1b[1;32m5\x1b[0m\n  \x1b[31mfailed: \x1b[0m\x1b[1;31m0\x1b[0m\n  success rate: \x1b[1;36m100.0\x1b[0m%\n' = <built-in method lower of str object at 0x000001CE8EAADA10>()
+ +    where <built-in method lower of str object at 0x000001CE8EAADA10> = '\x1b[36mProcessing \x1b[0m\x1b[1;36m5\x1b[0m\x1b[36m files with \x1b[0m\x1b[1;36m4\x1b[0m\x1b[36m workers\x1b[0m\x1b[36m...\x1b[0m\n\x1b[?25l\r\x1b[2K\x1b[1;34mProcessing files\x1b[0m \x1b[38;5;237m\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\x1b[0m \x1b[35m  0%\x1b[0m (0/5 files) \x1b[36m-:--:--\x1b[0m\r\x1b[2K\n\x1b[36mProcessing \x1b[0m\x1b[1;36m5\x1b[0m\x1b[36m files\x1b[0m\x1b[36m...\x1b[0m\n\n\x1b[1;34mProcessing files\x1b[0m \x1b[38;5;237m\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\x1b[0m \x1b[35m  0%\x1b[0m (0/5 files) \x1b[36m-:--:--\x1b[0m\r\x1b[2K\x1b[1;34mProcessing files\x1b[0m \x1b[38;5;70m\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\x1b[0m \x1b[35m100%\x1b[0m (5/5 files) \x1b[36m0:00:00\x1b[0m\n\x1b[?25h\n\x1b[1mSummary:\x1b[0m\n  Total files: \x1b[1;36m5\x1b[0m\n  \x1b[32mSuccessful: \x1b[0m\x1b[1;32m5\x1b[0m\n  \x1b[31mFailed: \x1b[0m\x1b[1;31m0\x1b[0m\n  Success rate: \x1b[1;36m100.0\x1b[0m%\n'.lower
+ +      where '\x1b[36mProcessing \x1b[0m\x1b[1;36m5\x1b[0m\x1b[36m files with \x1b[0m\x1b[1;36m4\x1b[0m\x1b[36m workers\x1b[0m\x1b[36m...\x1b[0m\n\x1b[?25l\r\x1b[2K\x1b[1;34mProcessing files\x1b[0m \x1b[38;5;237m\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\x1b[0m \x1b[35m  0%\x1b[0m (0/5 files) \x1b[36m-:--:--\x1b[0m\r\x1b[2K\n\x1b[36mProcessing \x1b[0m\x1b[1;36m5\x1b[0m\x1b[36m files\x1b[0m\x1b[36m...\x1b[0m\n\n\x1b[1;34mProcessing files\x1b[0m \x1b[38;5;237m\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\x1b[0m \x1b[35m  0%\x1b[0m (0/5 files) \x1b[36m-:--:--\x1b[0m\r\x1b[2K\x1b[1;34mProcessing files\x1b[0m \x1b[38;5;70m\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\x1b[0m \x1b[35m100%\x1b[0m (5/5 files) \x1b[36m0:00:00\x1b[0m\n\x1b[?25h\n\x1b[1mSummary:\x1b[0m\n  Total files: \x1b[1;36m5\x1b[0m\n  \x1b[32mSuccessful: \x1b[0m\x1b[1;32m5\x1b[0m\n  \x1b[31mFailed: \x1b[0m\x1b[1;31m0\x1b[0m\n  Success rate: \x1b[1;36m100.0\x1b[0m%\n' = <Result okay>.output
+FAILED tests/test_cli/test_batch_command.py::TestBatchCommandProgress::test_batch_quiet_mode - assert 2 == 0
+ +  where 2 = <Result SystemExit(2)>.exit_code
+FAILED tests/test_cli/test_batch_command.py::TestBatchCommandOutput::test_batch_verbose_mode - assert 2 == 0
+ +  where 2 = <Result SystemExit(2)>.exit_code
+FAILED tests/test_cli/test_config_command.py::TestConfigShowCommand::test_config_show - assert 2 == 0
+ +  where 2 = <Result SystemExit(2)>.exit_code
+FAILED tests/test_cli/test_config_command.py::TestConfigShowCommand::test_config_show_readable_format - assert 2 == 0
+ +  where 2 = <Result SystemExit(2)>.exit_code
+FAILED tests/test_cli/test_config_command.py::TestConfigShowCommand::test_config_show_missing_file - assert ('not found' in "usage: cli config show [options]\ntry 'cli config show --help' for help.\n\nerror: no such option: --config\n" or 2 == 0)
+ +  where "usage: cli config show [options]\ntry 'cli config show --help' for help.\n\nerror: no such option: --config\n" = <built-in method lower of str object at 0x000001CE90C2A290>()
+ +    where <built-in method lower of str object at 0x000001CE90C2A290> = "Usage: cli config show [OPTIONS]\nTry 'cli config show --help' for help.\n\nError: No such option: --config\n".lower
+ +      where "Usage: cli config show [OPTIONS]\nTry 'cli config show --help' for help.\n\nError: No such option: --config\n" = <Result SystemExit(2)>.output
+ +  and   2 = <Result SystemExit(2)>.exit_code
+FAILED tests/test_cli/test_config_command.py::TestConfigValidateCommand::test_config_validate_valid - assert 2 == 0
+ +  where 2 = <Result SystemExit(2)>.exit_code
+FAILED tests/test_cli/test_config_command.py::TestConfigPathCommand::test_config_path_shows_location - assert 2 == 0
+ +  where 2 = <Result SystemExit(2)>.exit_code
+FAILED tests/test_cli/test_config_command.py::TestConfigPathCommand::test_config_path_nonexistent - assert ('C:\\Users\\Andrew\\AppData\\Local\\Temp\\pytest-of-Andrew\\pytest-579\\test_config_path_nonexistent0\\nonexistent.yaml' in "Usage: cli config path [OPTIONS]\nTry 'cli config path --help' for help.\n\nError: No such option: --config\n" or 2 == 0)
+ +  where 'C:\\Users\\Andrew\\AppData\\Local\\Temp\\pytest-of-Andrew\\pytest-579\\test_config_path_nonexistent0\\nonexistent.yaml' = str(WindowsPath('C:/Users/Andrew/AppData/Local/Temp/pytest-of-Andrew/pytest-579/test_config_path_nonexistent0/nonexistent.yaml'))
+ +  and   "Usage: cli config path [OPTIONS]\nTry 'cli config path --help' for help.\n\nError: No such option: --config\n" = <Result SystemExit(2)>.output
+ +  and   2 = <Result SystemExit(2)>.exit_code
+FAILED tests/test_cli/test_extract_command.py::TestExtractCommandSuccess::test_extract_docx_to_json - AssertionError: assert 'Successfully extracted' in '\x1b[36mProcessing file: sample.docx\x1b[0m\n\x1b[?25l\r\x1b[2K\x1b[32m\u280b\x1b[0m \x1b[1;34mProcessing sample.docx\x1b[0m \x1b[38;5;237m\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\x1b[0m \x1b[35m  0%\x1b[0m \x1b[36m-:--:--\x1b[0m\r\x1b[2K  \x1b[1;34mProcessing sample.docx\x1b[0m \x1b[38;5;70m\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\x1b[0m \x1b[35m100%\x1b[0m \x1b[36m0:00:00\x1b[0m\n\x1b[?25h\n\x1b[32mSUCCESS: Extracted sample.docx\x1b[0m\n  Output: \nC:\\Users\\Andrew\\AppData\\Local\\Temp\\pytest-of-Andrew\\pytest-\x1b[1;36m579\x1b[0m\\test_extract_docx\n_to_json0\\output.json\n'
+ +  where '\x1b[36mProcessing file: sample.docx\x1b[0m\n\x1b[?25l\r\x1b[2K\x1b[32m\u280b\x1b[0m \x1b[1;34mProcessing sample.docx\x1b[0m \x1b[38;5;237m\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\x1b[0m \x1b[35m  0%\x1b[0m \x1b[36m-:--:--\x1b[0m\r\x1b[2K  \x1b[1;34mProcessing sample.docx\x1b[0m \x1b[38;5;70m\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\x1b[0m \x1b[35m100%\x1b[0m \x1b[36m0:00:00\x1b[0m\n\x1b[?25h\n\x1b[32mSUCCESS: Extracted sample.docx\x1b[0m\n  Output: \nC:\\Users\\Andrew\\AppData\\Local\\Temp\\pytest-of-Andrew\\pytest-\x1b[1;36m579\x1b[0m\\test_extract_docx\n_to_json0\\output.json\n' = <Result okay>.output
+FAILED tests/test_cli/test_extract_command.py::TestExtractCommandSuccess::test_extract_docx_to_markdown - AssertionError: assert 'Successfully extracted' in '\x1b[36mProcessing file: sample.docx\x1b[0m\n\x1b[?25l\r\x1b[2K\x1b[32m\u280b\x1b[0m \x1b[1;34mProcessing sample.docx\x1b[0m \x1b[38;5;237m\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\x1b[0m \x1b[35m  0%\x1b[0m \x1b[36m-:--:--\x1b[0m\r\x1b[2K  \x1b[1;34mProcessing sample.docx\x1b[0m \x1b[38;5;70m\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\x1b[0m \x1b[35m100%\x1b[0m \x1b[36m0:00:00\x1b[0m\n\x1b[?25h\n\x1b[32mSUCCESS: Extracted sample.docx\x1b[0m\n  Output: \nC:\\Users\\Andrew\\AppData\\Local\\Temp\\pytest-of-Andrew\\pytest-\x1b[1;36m579\x1b[0m\\test_extract_docx\n_to_markdown0\\output.md\n'
+ +  where '\x1b[36mProcessing file: sample.docx\x1b[0m\n\x1b[?25l\r\x1b[2K\x1b[32m\u280b\x1b[0m \x1b[1;34mProcessing sample.docx\x1b[0m \x1b[38;5;237m\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\x1b[0m \x1b[35m  0%\x1b[0m \x1b[36m-:--:--\x1b[0m\r\x1b[2K  \x1b[1;34mProcessing sample.docx\x1b[0m \x1b[38;5;70m\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\x1b[0m \x1b[35m100%\x1b[0m \x1b[36m0:00:00\x1b[0m\n\x1b[?25h\n\x1b[32mSUCCESS: Extracted sample.docx\x1b[0m\n  Output: \nC:\\Users\\Andrew\\AppData\\Local\\Temp\\pytest-of-Andrew\\pytest-\x1b[1;36m579\x1b[0m\\test_extract_docx\n_to_markdown0\\output.md\n' = <Result okay>.output
+FAILED tests/test_cli/test_extract_command.py::TestExtractCommandSuccess::test_extract_all_formats - AssertionError: assert 'Successfully extracted' in '\x1b[36mProcessing file: sample.docx\x1b[0m\n\x1b[?25l\r\x1b[2K\x1b[32m\u280b\x1b[0m \x1b[1;34mProcessing sample.docx\x1b[0m \x1b[38;5;237m\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\x1b[0m \x1b[35m  0%\x1b[0m \x1b[36m-:--:--\x1b[0m\r\x1b[2K  \x1b[1;34mProcessing sample.docx\x1b[0m \x1b[38;5;70m\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\x1b[0m \x1b[35m100%\x1b[0m \x1b[36m0:00:00\x1b[0m\n\x1b[?25h\n\x1b[32mSUCCESS: Extracted sample.docx\x1b[0m\n  Output: \nC:\\Users\\Andrew\\AppData\\Local\\Temp\\pytest-of-Andrew\\pytest-\x1b[1;36m579\x1b[0m\\test_extract_all_\nformats0\\outputs\n'
+ +  where '\x1b[36mProcessing file: sample.docx\x1b[0m\n\x1b[?25l\r\x1b[2K\x1b[32m\u280b\x1b[0m \x1b[1;34mProcessing sample.docx\x1b[0m \x1b[38;5;237m\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\x1b[0m \x1b[35m  0%\x1b[0m \x1b[36m-:--:--\x1b[0m\r\x1b[2K  \x1b[1;34mProcessing sample.docx\x1b[0m \x1b[38;5;70m\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\x1b[0m \x1b[35m100%\x1b[0m \x1b[36m0:00:00\x1b[0m\n\x1b[?25h\n\x1b[32mSUCCESS: Extracted sample.docx\x1b[0m\n  Output: \nC:\\Users\\Andrew\\AppData\\Local\\Temp\\pytest-of-Andrew\\pytest-\x1b[1;36m579\x1b[0m\\test_extract_all_\nformats0\\outputs\n' = <Result okay>.output
+FAILED tests/test_cli/test_extract_command.py::TestExtractCommandErrors::test_extract_missing_file - assert ('not found' in "usage: cli extract [options] file_path\ntry 'cli extract --help' for help.\n\nerror: invalid value for 'file_path': path 'c:\\\\users\\\\andrew\\\\appdata\\\\local\\\\temp\\\\pytest-of-andrew\\\\pytest-579\\\\test_extract_missing_file0\\\\nonexistent.docx' does not exist.\n" or 'could not find' in "usage: cli extract [options] file_path\ntry 'cli extract --help' for help.\n\nerror: invalid value for 'file_path': path 'c:\\\\users\\\\andrew\\\\appdata\\\\local\\\\temp\\\\pytest-of-andrew\\\\pytest-579\\\\test_extract_missing_file0\\\\nonexistent.docx' does not exist.\n")
+ +  where "usage: cli extract [options] file_path\ntry 'cli extract --help' for help.\n\nerror: invalid value for 'file_path': path 'c:\\\\users\\\\andrew\\\\appdata\\\\local\\\\temp\\\\pytest-of-andrew\\\\pytest-579\\\\test_extract_missing_file0\\\\nonexistent.docx' does not exist.\n" = <built-in method lower of str object at 0x000001CE8FA889B0>()
+ +    where <built-in method lower of str object at 0x000001CE8FA889B0> = "Usage: cli extract [OPTIONS] FILE_PATH\nTry 'cli extract --help' for help.\n\nError: Invalid value for 'FILE_PATH': Path 'C:\\\\Users\\\\Andrew\\\\AppData\\\\Local\\\\Temp\\\\pytest-of-Andrew\\\\pytest-579\\\\test_extract_missing_file0\\\\nonexistent.docx' does not exist.\n".lower
+ +      where "Usage: cli extract [OPTIONS] FILE_PATH\nTry 'cli extract --help' for help.\n\nError: Invalid value for 'FILE_PATH': Path 'C:\\\\Users\\\\Andrew\\\\AppData\\\\Local\\\\Temp\\\\pytest-of-Andrew\\\\pytest-579\\\\test_extract_missing_file0\\\\nonexistent.docx' does not exist.\n" = <Result SystemExit(2)>.output
+ +  and   "usage: cli extract [options] file_path\ntry 'cli extract --help' for help.\n\nerror: invalid value for 'file_path': path 'c:\\\\users\\\\andrew\\\\appdata\\\\local\\\\temp\\\\pytest-of-andrew\\\\pytest-579\\\\test_extract_missing_file0\\\\nonexistent.docx' does not exist.\n" = <built-in method lower of str object at 0x000001CE8FA897F0>()
+ +    where <built-in method lower of str object at 0x000001CE8FA897F0> = "Usage: cli extract [OPTIONS] FILE_PATH\nTry 'cli extract --help' for help.\n\nError: Invalid value for 'FILE_PATH': Path 'C:\\\\Users\\\\Andrew\\\\AppData\\\\Local\\\\Temp\\\\pytest-of-Andrew\\\\pytest-579\\\\test_extract_missing_file0\\\\nonexistent.docx' does not exist.\n".lower
+ +      where "Usage: cli extract [OPTIONS] FILE_PATH\nTry 'cli extract --help' for help.\n\nError: Invalid value for 'FILE_PATH': Path 'C:\\\\Users\\\\Andrew\\\\AppData\\\\Local\\\\Temp\\\\pytest-of-Andrew\\\\pytest-579\\\\test_extract_missing_file0\\\\nonexistent.docx' does not exist.\n" = <Result SystemExit(2)>.output
+FAILED tests/test_cli/test_extract_command.py::TestExtractCommandErrors::test_extract_force_overwrite - AssertionError: assert 'overwrite' not in '\\x1b[36mprocessing file: sample.docx\\x1b[0m\\n\\x1b[?25l\\r\\x1b[2k\\x1b[32m\u280b\\x1b[0m \\x1b[1;34mprocessing sample.docx\\x1b[0m \\x1b[38;5;237m\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\\x1b[0m \\x1b[35m  0%\\x1b[0m \\x1b[36m-:--:--\\x1b[0m\\r\\x1b[2k  \\x1b[1;34mprocessing sample.docx\\x1b[0m \\x1b[38;5;70m\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\\x1b[0m \\x1b[35m100%\\x1b[0m \\x1b[36m0:00:00\\x1b[0m\\n\\x1b[?25h\\n\\x1b[32msuccess: extracted sample.docx\\x1b[0m\\n  output: \\nc:\\\\users\\\\andrew\\\\appdata\\\\local\\\\temp\\\\pytest-of-andrew\\\\pytest-\\x1b[1;36m579\\x1b[0m\\\\test_extract_forc\\ne_overwrite0\\\\output.json\\n'\n  \n  'overwrite' is contained here:\n    \x1b[36mprocessing file: sample.docx\x1b[0m\n    \x1b[?25l\n    \x1b[2k\x1b[32m\u280b\x1b[0m \x1b[1;34mprocessing sample.docx\x1b[0m \x1b[38;5;237m\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\x1b[0m \x1b[35m  0%\x1b[0m \x1b[36m-:--:--\x1b[0m\n    \x1b[2k  \x1b[1;34mprocessing sample.docx\x1b[0m \x1b[38;5;70m\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\x1b[0m \x1b[35m100%\x1b[0m \x1b[36m0:00:00\x1b[0m\n    \x1b[?25h\n    \x1b[32msuccess: extracted sample.docx\x1b[0m\n      output: \n    c:\\users\\andrew\\appdata\\local\\temp\\pytest-of-andrew\\pytest-\x1b[1;36m579\x1b[0m\\test_extract_forc\n    e_overwrite0\\output.json\n  ?   +++++++++
+FAILED tests/test_cli/test_extract_command.py::TestExtractCommandOutput::test_extract_verbose_output - assert 2 == 0
+ +  where 2 = <Result SystemExit(2)>.exit_code
+FAILED tests/test_cli/test_extract_command.py::TestExtractCommandOutput::test_extract_quiet_mode - assert 2 == 0
+ +  where 2 = <Result SystemExit(2)>.exit_code
+FAILED tests/test_cli/test_signal_handling.py::TestSignalHandlerEdgeCases::test_signal_handler_with_quiet_mode - assert 2 == 0
+ +  where 2 = <Result SystemExit(2)>.exit_code
+FAILED tests/test_cli/test_signal_handling.py::TestSignalHandlerEdgeCases::test_signal_handler_with_verbose_mode - assert 2 == 0
+ +  where 2 = <Result SystemExit(2)>.exit_code
+FAILED tests/test_cli/test_signal_handling.py::TestSignalHandlingIntegration::test_full_workflow_with_signal_handler - assert 2 == 0
+ +  where 2 = <Result SystemExit(2)>.exit_code
+FAILED tests/test_cli/test_threading.py::TestConcurrentFileProcessing::test_concurrent_extract_doesnt_conflict - ValueError: I/O operation on closed file.
+FAILED tests/test_cli/test_threading.py::TestThreadingIntegration::test_full_batch_workflow_with_threading - assert 2 == 0
+ +  where 2 = <Result SystemExit(2)>.exit_code
+=========== 21 failed, 113 passed, 4 skipped, 9 warnings in 16.83s ============

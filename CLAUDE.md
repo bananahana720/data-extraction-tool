@@ -386,6 +386,20 @@ workflow review-uat-results
 ```
 
 **tmux-cli Integration** (for CLI tests):
+
+**⚠️ Windows Users**: tmux-cli requires tmux, which is Unix/Linux only. On Windows, run workflows with CLI tests from WSL:
+```bash
+# Enter WSL environment
+wsl
+
+# Navigate to project (Windows filesystem mounted at /mnt/c/)
+cd /mnt/c/Users/Andrew/projects/data-extraction-tool-1
+
+# Run workflow with CLI tests
+workflow execute-tests test_execution_mode=hybrid
+```
+
+**Linux/macOS or WSL** - Standard tmux-cli usage:
 ```bash
 # Always launch shell first
 tmux-cli launch "zsh"
@@ -398,7 +412,7 @@ tmux-cli wait_idle --pane=2 --idle-time=2.0
 tmux-cli capture --pane=2
 ```
 
-See `docs/tmux-cli-instructions.md` for full tmux-cli reference.
+See `docs/tmux-cli-instructions.md` for full tmux-cli reference and `docs/uat/tmux-cli-windows-setup.md` for detailed Windows setup.
 
 **UAT Output Locations**:
 ```
