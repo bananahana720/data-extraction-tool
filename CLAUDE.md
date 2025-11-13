@@ -112,6 +112,20 @@ pytest -n auto
 
 **Test Markers**: `unit`, `integration`, `extraction`, `processing`, `formatting`, `pipeline`, `cli`, `slow`, `performance`
 
+### CI/CD Pipeline
+
+See `docs/ci-cd-pipeline.md` for complete CI/CD documentation.
+
+**Quick validation before push**:
+```bash
+pre-commit run --all-files  # Runs all quality checks
+```
+
+**Performance testing**:
+```bash
+pytest tests/performance/ -v  # Run performance benchmarks locally
+```
+
 ### Code Quality (Enforced by Pre-commit)
 ```bash
 # Format code (100 char line length)
