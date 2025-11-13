@@ -1,0 +1,116 @@
+# Weekly Performance Testing Pipeline
+# Story 2.5-2.1: Throughput Optimization with ProcessPoolExecutor
+#
+# Runs performance tests weekly to detect regressions:
+# - NFR-P1: 100-file batch throughput (<10 minutes, baseline: 6.86 min with 4 workers)
+# - NFR-P2: Memory usage (<2GB peak)
+# - Memory leak detection
+# - ADR-005 streaming architecture validation
+#
+# Baseline: 14.57 files/min (Story 2.5-2.1, ProcessPoolExecutor)
+# Schedule: Monday at 2:00 AM UTC (weekly)
+# Can also be triggered manually via workflow_dispatch
+
+name: Performance Tests
+
+on:
+  # Weekly schedule: Monday at 2:00 AM UTC
+  schedule:
+    - cron: '0 2 * * 1'
+
+  # Allow manual trigger
+  workflow_dispatch:
+    inputs:
+      verbose:
+        description: 'Enable verbose output'
+        required: false
+        default: 'false'
+
+jobs:
+  performance-tests:
+    name: Performance Validation (NFR-P1, NFR-P2)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30  # Performance tests can take 10+ minutes
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('pyproject.toml') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev]"
+
+      - name: Create 100-file performance batch
+        run: |
+          python -m scripts.create_performance_batch
+
+      - name: Run performance tests
+        run: |
+          pytest -m performance tests/performance/test_throughput.py \
+            -v \
+            --tb=short \
+            --no-cov \
+            ${{ github.event.inputs.verbose == 'true' && '-s' || '' }}
+
+      - name: Upload performance results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: performance-results-${{ github.run_number }}
+          path: |
+            tests/performance/
+            !tests/performance/batch_100_files/
+            !tests/performance/__pycache__/
+          retention-days: 90
+
+      - name: Check for performance regressions
+        if: failure()
+        run: |
+          echo "::error::Performance regression detected! NFR-P1 or NFR-P2 targets not met."
+          echo "Review the test output above for details."
+          exit 1
+
+  performance-summary:
+    name: Performance Test Summary
+    runs-on: ubuntu-latest
+    needs: [performance-tests]
+    if: always()
+
+    steps:
+      - name: Check performance test status
+        run: |
+          if [ "${{ needs.performance-tests.result }}" == "success" ]; then
+            echo "✅ Performance tests PASSED"
+            echo "NFR-P1 (Throughput): PASS"
+            echo "NFR-P2 (Memory): PASS"
+            echo "Memory Leak Check: PASS"
+          elif [ "${{ needs.performance-tests.result }}" == "failure" ]; then
+            echo "❌ Performance tests FAILED"
+            echo "One or more NFRs not met. Review artifacts for details."
+            exit 1
+          else
+            echo "⚠️  Performance tests status: ${{ needs.performance-tests.result }}"
+            exit 1
+          fi
+
+# Notes:
+# - Performance tests run weekly to avoid slowing down regular CI
+# - Tests validate NFR-P1 (<10 min for 100 files) and NFR-P2 (<2GB memory)
+# - Current baseline: 6.86 min duration with 4 workers (Story 2.5-2.1 optimizations)
+# - Artifacts retained for 90 days for trend analysis
+# - Manual trigger available for ad-hoc performance validation
+# - Timeout set to 30 minutes to prevent hanging on performance regressions
