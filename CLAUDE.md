@@ -300,6 +300,115 @@ pytest tests/unit/test_extract/test_pdf.py
 pytest -m integration tests/integration/test_pipeline.py
 ```
 
+### Running UAT Workflows
+
+The UAT (User Acceptance Testing) workflow framework provides systematic validation of acceptance criteria through a 4-stage pipeline.
+
+**Pipeline**: `create-test-cases` → `build-test-context` → `execute-tests` → `review-uat-results`
+
+#### 1. Generate Test Cases from Story
+
+```bash
+workflow create-test-cases
+# Generates: docs/uat/test-cases/{story-key}-test-cases.md
+
+# Options:
+workflow create-test-cases story_path=docs/stories/2.5-3.1-uat-workflow-framework.md
+workflow create-test-cases test_coverage_level=comprehensive  # minimal|standard|comprehensive
+```
+
+**Output**: Test cases with scenarios (happy path, edge cases, error cases), mapped to test types (unit, integration, CLI, manual).
+
+#### 2. Build Test Context
+
+```bash
+workflow build-test-context
+# Generates: docs/uat/test-context/{story-key}-test-context.xml
+
+# Options:
+workflow build-test-context test_cases_file=docs/uat/test-cases/2.5-3.1-test-cases.md
+workflow build-test-context include_story_context=false  # Don't reuse story context
+```
+
+**Output**: Test context XML with fixtures, helpers, pytest config, code under test.
+
+#### 3. Execute Tests
+
+```bash
+workflow execute-tests
+# Generates: docs/uat/test-results/{story-key}-test-results.md
+
+# Options:
+workflow execute-tests test_execution_mode=automated  # automated|manual|hybrid
+workflow execute-tests capture_screenshots=true  # For CLI tests
+workflow execute-tests continue_on_failure=false  # Stop on first failure
+```
+
+**Execution Types**:
+- **Automated**: Runs pytest tests (unit, integration, performance)
+- **CLI**: Uses tmux-cli for interactive CLI testing
+- **Manual**: Guides user through manual test execution
+
+**Output**: Test results with pass/fail/blocked status, evidence, and recommendations.
+
+#### 4. Review UAT Results
+
+```bash
+workflow review-uat-results
+# Generates: docs/uat/reviews/{story-key}-uat-review.md
+
+# Options:
+workflow review-uat-results quality_gate_level=strict  # minimal|standard|strict
+workflow review-uat-results auto_approve_if_all_pass=true  # Auto-approve (not recommended)
+```
+
+**Quality Gates**:
+- **Minimal**: 80% pass rate, critical ACs 100%
+- **Standard**: 90% pass rate, critical ACs 100%, 70% edge case coverage *[default]*
+- **Strict**: 95% pass rate, critical ACs 100%, 85% edge case coverage, high evidence quality
+
+**Output**: UAT review with approval decision (APPROVED, CHANGES REQUESTED, BLOCKED), findings, and stakeholder summary.
+
+#### Complete UAT Flow Example
+
+```bash
+# 1. Generate test cases
+workflow create-test-cases
+
+# 2. Build test context
+workflow build-test-context
+
+# 3. Execute tests
+workflow execute-tests test_execution_mode=hybrid
+
+# 4. Review and approve
+workflow review-uat-results
+```
+
+**tmux-cli Integration** (for CLI tests):
+```bash
+# Always launch shell first
+tmux-cli launch "zsh"
+
+# Send commands and wait for completion
+tmux-cli send "data-extract process test.pdf" --pane=2
+tmux-cli wait_idle --pane=2 --idle-time=2.0
+
+# Capture output
+tmux-cli capture --pane=2
+```
+
+See `docs/tmux-cli-instructions.md` for full tmux-cli reference.
+
+**UAT Output Locations**:
+```
+docs/uat/
+├── test-cases/      # Generated test case specifications
+├── test-context/    # Test infrastructure context (XML)
+├── test-results/    # Test execution results
+└── reviews/         # QA review and approval reports
+```
+
 ## Key Architecture Decisions
 
 - **ADR-001**: Immutable models prevent pipeline state corruption

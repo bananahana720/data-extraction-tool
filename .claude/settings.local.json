@@ -11,7 +11,8 @@
       "Cmd(if exist venv\\Scripts\\python.exe echo venv ready)",
       "PowerShell(./venv/Scripts/python.exe -m pytest:*)",
       "PowerShell(./venv/Scripts/python.exe -m pip:*)",
-      "PowerShell(py -m venv venv)"
+      "PowerShell(py -m venv venv)",
+      "SlashCommand(/bmad:bmb:workflows:audit-workflow)"
     ],
     "deny": [],
     "ask": []
@@ -24,8 +25,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash -c 'command=$(echo \"$STDIN\" | jq -r \".tool_input.command\"); if [[ \"$command\" =~ ^/[a-z]/Users ]]; then echo \"ERROR: Unix-style path detected on Windows: $command\" >&2; exit 2; fi; if [[ \"$command\" =~ (ls|cat|grep)[[:space:]] ]] && ! [[ \"$command\" =~ (git|python|pytest|pip) ]]; then echo \"WARNING: Unix command without proper context: $command\" >&2; exit 2; fi; exit 0'",
-            "timeout": 5000
+            "command": "python \".claude\\hooks\\bash_hook.py\"",
+            "timeout": 10000
           }
         ]
       }
@@ -46,8 +47,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash -c 'if [[ \"%FILE_PATH%\" =~ \\.md$ ]]; then echo \"INFO: Markdown file modified: %FILE_PATH%\" >&2; fi'",
-            "timeout": 5000
+            "command": "python \".claude\\hooks\\markdown_info_hook.py\"",
+            "timeout": 2000
           }
         ]
       }
@@ -57,8 +58,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash -c 'prompt=$(echo \"$STDIN\" | jq -r \".prompt\"); if [[ \"$prompt\" =~ grep[[:space:]] ]] && ! [[ \"$prompt\" =~ (git|history) ]]; then echo \"REMINDER: Use rg (ripgrep) instead of grep\" >&2; fi; exit 0'",
-            "timeout": 5000
+            "command": "python \".claude\\hooks\\user_prompt_grep_reminder.py\"",
+            "timeout": 2000
           }
         ]
       }

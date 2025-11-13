@@ -18,13 +18,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python \"$CLAUDE_PROJECT_DIR\\.claude\\hooks\\bash_hook.py\"",
+            "command": "python \".claude\\hooks\\bash_hook.py\"",
             "timeout": 10000
-          },
-          {
-            "type": "command",
-            "command": "bash \"$CLAUDE_PROJECT_DIR\\.claude\\hooks\\venv_activator.sh\"",
-            "timeout": 5000
           }
         ]
       },
@@ -33,7 +28,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python \"$CLAUDE_PROJECT_DIR\\.claude\\hooks\\file_size_conditional_hook.py\"",
+            "command": "python \".claude\\hooks\\file_size_conditional_hook.py\"",
             "timeout": 5000
           }
         ]
@@ -43,7 +38,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python \"$CLAUDE_PROJECT_DIR\\.claude\\hooks\\pretask_subtask_flag.py\"",
+            "command": "python \".claude\\hooks\\pretask_subtask_flag.py\"",
             "timeout": 2000
           }
         ]
@@ -55,7 +50,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python \"$CLAUDE_PROJECT_DIR\\.claude\\hooks\\posttask_subtask_flag.py\"",
+            "command": "python \".claude\\hooks\\posttask_subtask_flag.py\"",
             "timeout": 2000
           }
         ]
