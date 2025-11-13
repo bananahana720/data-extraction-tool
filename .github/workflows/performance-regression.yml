@@ -8,7 +8,7 @@ on:
   push:
     branches: [main]
   schedule:
-    - cron: '0 2 * * 0'  # Weekly on Sunday 2am UTC
+    - cron: '0 2 * * 1'  # Weekly on Monday 2am UTC
   workflow_dispatch:  # Manual trigger
 
 jobs:
@@ -49,8 +49,9 @@ jobs:
           python -m spacy download en_core_web_md
 
       - name: Run performance benchmarks
+        id: perf_test
         run: |
-          pytest tests/performance/test_cli_benchmarks.py -v --tb=short
+          pytest tests/performance/test_cli_benchmarks.py -v --tb=short 2>&1 | tee performance_output.txt
 
       - name: Compare against baseline
         run: |
@@ -62,12 +63,99 @@ jobs:
           # Min throughput: 13.1 files/min
           # Max memory: 4.56 GB
 
+          BASELINE_THROUGHPUT=14.57
+          BASELINE_MEMORY=4.15
+          MIN_THROUGHPUT=13.1
+          MAX_MEMORY=4.56
+
           echo "⚡ Performance Baseline Validation"
-          echo "Baseline: 14.57 files/min, 4.15 GB peak memory"
+          echo "Baseline: ${BASELINE_THROUGHPUT} files/min, ${BASELINE_MEMORY} GB peak memory"
           echo "Threshold: ±10% regression allowed"
           echo ""
-          echo "Results from test execution above - manual review required"
-          echo "TODO: Add automated parsing when performance tests output structured data"
+
+          # Parse test output for throughput (files/s) and convert to files/min
+          # Looking for pattern: "Throughput: X.XX files/s"
+          THROUGHPUT_FILES_PER_SEC=$(grep -oP 'Throughput:\s+\K[0-9]+\.[0-9]+(?=\s+files/s)' performance_output.txt | tail -1)
+
+          if [ -n "$THROUGHPUT_FILES_PER_SEC" ]; then
+            # Convert files/s to files/min
+            THROUGHPUT_FILES_PER_MIN=$(echo "$THROUGHPUT_FILES_PER_SEC * 60" | bc -l)
+            echo "Measured Throughput: ${THROUGHPUT_FILES_PER_MIN} files/min (${THROUGHPUT_FILES_PER_SEC} files/s)"
+          else
+            echo "⚠️  Warning: Could not parse throughput from test output"
+            THROUGHPUT_FILES_PER_MIN=""
+          fi
+
+          # Parse test output for memory (MB) and convert to GB
+          # Looking for pattern: "Memory: XXX.XX MB"
+          MEMORY_MB=$(grep -oP 'Memory:\s+\K[0-9]+\.[0-9]+(?=\s+MB)' performance_output.txt | sort -n | tail -1)
+
+          if [ -n "$MEMORY_MB" ]; then
+            # Convert MB to GB
+            MEMORY_GB=$(echo "$MEMORY_MB / 1024" | bc -l)
+            printf "Measured Memory: %.2f GB (%.2f MB)\n" "$MEMORY_GB" "$MEMORY_MB"
+          else
+            echo "⚠️  Warning: Could not parse memory from test output"
+            MEMORY_GB=""
+          fi
+
+          echo ""
+          echo "===== Regression Analysis ====="
+
+          REGRESSION_DETECTED=0
+
+          # Check throughput regression
+          if [ -n "$THROUGHPUT_FILES_PER_MIN" ]; then
+            THROUGHPUT_CHECK=$(echo "$THROUGHPUT_FILES_PER_MIN >= $MIN_THROUGHPUT" | bc -l)
+            if [ "$THROUGHPUT_CHECK" -eq 1 ]; then
+              echo "✅ Throughput: PASS (${THROUGHPUT_FILES_PER_MIN} files/min >= ${MIN_THROUGHPUT} files/min)"
+            else
+              echo "❌ Throughput: FAIL (${THROUGHPUT_FILES_PER_MIN} files/min < ${MIN_THROUGHPUT} files/min)"
+              REGRESSION_PERCENT=$(echo "scale=2; (($BASELINE_THROUGHPUT - $THROUGHPUT_FILES_PER_MIN) / $BASELINE_THROUGHPUT) * 100" | bc -l)
+              echo "   Regression: ${REGRESSION_PERCENT}% below baseline"
+              REGRESSION_DETECTED=1
+            fi
+          else
+            echo "⚠️  Throughput: SKIPPED (parsing failed)"
+          fi
+
+          # Check memory regression
+          if [ -n "$MEMORY_GB" ]; then
+            MEMORY_CHECK=$(echo "$MEMORY_GB <= $MAX_MEMORY" | bc -l)
+            if [ "$MEMORY_CHECK" -eq 1 ]; then
+              printf "✅ Memory: PASS (%.2f GB <= %.2f GB)\n" "$MEMORY_GB" "$MAX_MEMORY"
+            else
+              printf "❌ Memory: FAIL (%.2f GB > %.2f GB)\n" "$MEMORY_GB" "$MAX_MEMORY"
+              REGRESSION_PERCENT=$(echo "scale=2; (($MEMORY_GB - $BASELINE_MEMORY) / $BASELINE_MEMORY) * 100" | bc -l)
+              echo "   Regression: ${REGRESSION_PERCENT}% above baseline"
+              REGRESSION_DETECTED=1
+            fi
+          else
+            echo "⚠️  Memory: SKIPPED (parsing failed)"
+          fi
+
+          echo ""
+
+          if [ "$REGRESSION_DETECTED" -eq 1 ]; then
+            echo "❌ PERFORMANCE REGRESSION DETECTED"
+            echo ""
+            echo "Expected Metrics:"
+            echo "  - Throughput: >= ${MIN_THROUGHPUT} files/min (baseline: ${BASELINE_THROUGHPUT} files/min)"
+            echo "  - Memory: <= ${MAX_MEMORY} GB (baseline: ${BASELINE_MEMORY} GB)"
+            echo ""
+            echo "Actual Metrics:"
+            if [ -n "$THROUGHPUT_FILES_PER_MIN" ]; then
+              echo "  - Throughput: ${THROUGHPUT_FILES_PER_MIN} files/min"
+            fi
+            if [ -n "$MEMORY_GB" ]; then
+              printf "  - Memory: %.2f GB\n" "$MEMORY_GB"
+            fi
+            echo ""
+            echo "Action Required: Investigate performance degradation before merging."
+            exit 1
+          else
+            echo "✅ ALL CHECKS PASSED - No performance regression detected"
+          fi
 
       - name: Upload performance results
         if: always()
@@ -77,4 +165,4 @@ jobs:
           path: |
             test-results/
             .pytest_cache/
-          retention-days: 30
+          retention-days: 90

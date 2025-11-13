@@ -82,3 +82,4 @@ uv.lock
 .npl/personas/*/kb/
 .npl/personas/*/session-*.md
 .npl/.cache/
+tests/outputs/

@@ -31,7 +31,7 @@ Runs on every push and pull request.
 
 ### 2. Performance Regression (`.github/workflows/performance-regression.yml`)
 
-Runs on push to main, weekly schedule, and manual dispatch.
+Runs on push to main, weekly schedule (Monday 2:00 AM UTC), and manual dispatch (workflow_dispatch).
 
 **Purpose**: Detect performance regressions before they impact users.
 
@@ -49,7 +49,7 @@ Runs on push to main, weekly schedule, and manual dispatch.
 
 ### 3. Performance Baseline (`.github/workflows/performance.yml`)
 
-Existing performance tracking workflow (lightweight).
+Existing performance tracking workflow (lightweight). Runs on weekly schedule and supports manual dispatch (workflow_dispatch).
 
 ## Branch Protection Rules
 

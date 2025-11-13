@@ -81,6 +81,8 @@ python -c "import spacy; nlp = spacy.load('en_core_web_md'); print(f'Model loade
 
 **Performance**: Model loads in ~1.2 seconds, processes 4000+ words/second.
 
+**CI/CD Caching**: spaCy models are automatically cached in CI (transparent to developers - no manual action needed).
+
 **Troubleshooting**: See `docs/troubleshooting-spacy.md` for common issues.
 
 ### Testing (pytest with markers)
@@ -141,7 +143,7 @@ mypy src/data_extract/
 pre-commit run --all-files
 ```
 
-**Note**: Pre-commit hooks run automatically on `git commit`. If blocked, fix the issues or ask user to check hook configuration.
+**Pre-commit Enforcement**: Pre-commit hooks run automatically on `git commit` AND are validated in CI. This ensures consistency between local development and CI environments. Always run `pre-commit run --all-files` before pushing to catch issues early. CI will fail if pre-commit checks don't pass.
 
 ### CLI Entry Point
 ```bash
@@ -158,9 +160,11 @@ Tests mirror `src/` structure exactly:
 - `tests/fixtures/` - Shared test data
 
 ### Coverage Requirements
-- Epic 1: >60% baseline
+- Epic 1: >60% baseline (enforced in CI)
 - Epic 2-4: >80% overall
 - Epic 5: >90% critical paths
+
+**Coverage Reporting Note**: CI enforces 60% threshold via `coverage report --fail-under=60`. The coverage percentage applies to the entire codebase (greenfield + brownfield). While greenfield code (`src/data_extract/`) has higher coverage, the aggregate includes legacy brownfield code, which may show lower overall percentages during migration.
 
 ### Key Patterns
 - Use pytest fixtures for test data (see `tests/conftest.py`)
