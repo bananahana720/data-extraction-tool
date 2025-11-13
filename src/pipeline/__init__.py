@@ -9,8 +9,8 @@ Public API:
     BatchProcessor - Parallel batch file processing
 """
 
-from .extraction_pipeline import ExtractionPipeline
 from .batch_processor import BatchProcessor
+from .extraction_pipeline import ExtractionPipeline
 
 __all__ = [
     "ExtractionPipeline",

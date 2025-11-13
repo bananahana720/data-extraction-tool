@@ -14,12 +14,11 @@ Test IDs: EP-001 through EP-010
 
 import pytest
 
-from src.core import ContentType, ProcessingStage
-from src.extractors import DocxExtractor, PdfExtractor
 from extractors.excel_extractor import ExcelExtractor
 from extractors.pptx_extractor import PptxExtractor
+from src.core import ContentType, ProcessingStage
+from src.extractors import DocxExtractor, PdfExtractor
 from src.processors import ContextLinker, MetadataAggregator, QualityValidator
-
 
 # ==============================================================================
 # Test Markers

@@ -14,21 +14,16 @@ Test Organization:
 - Cycle 7: Advanced Features (Charts)
 """
 
-import pytest
-from pathlib import Path
-from unittest.mock import Mock, patch
 import sys
+from pathlib import Path
+
+import pytest
 
 # Add src to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
 from core import (
-    ContentBlock,
     ContentType,
-    DocumentMetadata,
-    ExtractionResult,
-    Position,
-    TableMetadata,
 )
 
 # Import will fail initially - this is expected in RED phase
@@ -502,6 +497,7 @@ class TestEdgeCases:
         """Test handling of permission denied error."""
         # This test is platform-specific and may not work on all systems
         import os
+
         from openpyxl import Workbook
 
         wb = Workbook()
@@ -552,8 +548,8 @@ class TestEdgeCases:
 
     def test_document_properties_extraction(self, tmp_path):
         """Test extraction of document properties."""
+
         from openpyxl import Workbook
-        from datetime import datetime
 
         # Create workbook with properties
         wb = Workbook()

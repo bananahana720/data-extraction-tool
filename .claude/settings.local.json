@@ -23,8 +23,9 @@
         "matcher": "Bash",
         "hooks": [
           {
-            "type": "prompt",
-            "prompt": "Analyze this Bash command for critical errors on Windows (platform: win32).\n\n$ARGUMENTS\n\nONLY block if you detect ANY of these critical issues:\n1. Unix-style paths when Windows paths are required (e.g., /c/Users instead of C:\\Users)\n2. Forward slashes in Windows-native commands (excluding WSL/Git Bash contexts)\n3. Unix commands that don't exist on Windows (e.g., ls, cat, grep without .exe or bash prefix)\n4. Missing quotes around paths with spaces in Windows commands\n\nIGNORE these (they are NOT errors):\n- Commands in virtual environments (venv/Scripts/python.exe)\n- Git commands (git works cross-platform)\n- Python module commands (python -m)\n- pytest, pip, or other Python tools\n- Commands with proper Windows syntax\n\nRespond:\n```json\n{\n  \"hookEventName\": \"PreToolUse\",\n  \"permissionDecision\": \"block\",\n  \"permissionDecisionReason\": \"Critical Windows compatibility error\",\n  \"additionalContext\": \"[Specific issue found]\"\n}\n```\n\nOR if no critical issues:\n```json\n{\n  \"hookEventName\": \"PreToolUse\",\n  \"permissionDecision\": \"allow\"\n}\n```"
+            "type": "command",
+            "command": "bash -c 'command=$(echo \"$STDIN\" | jq -r \".tool_input.command\"); if [[ \"$command\" =~ ^/[a-z]/Users ]]; then echo \"ERROR: Unix-style path detected on Windows: $command\" >&2; exit 2; fi; if [[ \"$command\" =~ (ls|cat|grep)[[:space:]] ]] && ! [[ \"$command\" =~ (git|python|pytest|pip) ]]; then echo \"WARNING: Unix command without proper context: $command\" >&2; exit 2; fi; exit 0'",
+            "timeout": 5000
           }
         ]
       }
@@ -35,7 +36,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "black --line-length 100 \"%FILE_PATH%\" && ruff check --fix \"%FILE_PATH%\""
+            "command": "black --line-length 100 \"%FILE_PATH%\" && ruff check --fix \"%FILE_PATH%\"",
+            "timeout": 30000
           }
         ]
       },
@@ -43,8 +45,20 @@
         "matcher": "Edit|Write",
         "hooks": [
           {
-            "type": "prompt",
-            "prompt": "Review the file modification for markdown files (.md extension).\n\nFile: %FILE_PATH%\nTool: %TOOL_NAME%\nArguments: $ARGUMENTS\n\nIf this is a .md file, check for:\n1. Proper markdown syntax (headers, lists, links, code blocks)\n2. No broken internal links\n3. Consistent formatting\n4. Proper heading hierarchy (h1 → h2 → h3, no skipping levels)\n\nRespond with JSON:\n```json\n{\n  \"hookEventName\": \"PostToolUse\",\n  \"permissionDecision\": \"allow\",\n  \"additionalContext\": \"Markdown validation passed\" or \"Issues found: [describe]\"\n}\n```"
+            "type": "command",
+            "command": "bash -c 'if [[ \"%FILE_PATH%\" =~ \\.md$ ]]; then echo \"INFO: Markdown file modified: %FILE_PATH%\" >&2; fi'",
+            "timeout": 5000
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash -c 'prompt=$(echo \"$STDIN\" | jq -r \".prompt\"); if [[ \"$prompt\" =~ grep[[:space:]] ]] && ! [[ \"$prompt\" =~ (git|history) ]]; then echo \"REMINDER: Use rg (ripgrep) instead of grep\" >&2; fi; exit 0'",
+            "timeout": 5000
           }
         ]
       }
@@ -55,7 +69,7 @@
           {
             "type": "prompt",
             "prompt": "You are evaluating whether Claude should stop working. Context: $ARGUMENTS\n\nAnalyze the conversation and determine if:\n1. All user-requested tasks are complete\n2. Any errors need to be addressed\n3. Follow-up work is needed\n\nRespond with JSON: {\"decision\": \"approve\" or \"ask\", \"reason\": \"your explanation\"}",
-            "timeout": 30
+            "timeout": 30000
           }
         ]
       }
@@ -65,17 +79,8 @@
         "hooks": [
           {
             "type": "prompt",
-            "prompt": "Evaluate if this subagent should stop. Input: $ARGUMENTS\n\nCheck if:\n- The subagent completed its assigned task\n- Any errors occurred that need fixing\n- Additional context gathering is needed\n\nReturn: {\"decision\": \"approve\" or \"block\", \"reason\": \"explanation\"}"
-          }
-        ]
-      }
-    ],
-    "UserPromptSubmit": [
-      {
-        "hooks": [
-          {
-            "type": "prompt",
-            "prompt": "Analyze the user request and provide guidance for code-related tasks.\n\nRequest: $ARGUMENTS\n\nCheck for common issues:\n1. Command typos: 'grep' → 'rg', 'flake8' → 'ruff check', missing pytest markers\n2. If involves code changes, remind about:\n   - Use rg (ripgrep), never grep\n   - Run pytest with markers for targeted tests\n   - Don't break brownfield code during Epic 1\n   - All new code must pass mypy strict typing\n   - Follow 5-stage pipeline architecture\n\nRespond:\n```json\n{\n  \"hookEventName\": \"UserPromptSubmit\",\n  \"permissionDecision\": \"allow\",\n  \"additionalContext\": \"[Include typo corrections or project reminders, or empty string if not applicable]\"\n}\n```"
+            "prompt": "Evaluate if this subagent should stop. Input: $ARGUMENTS\n\nCheck if:\n- The subagent completed its assigned task\n- Any errors occurred that need fixing\n- Additional context gathering is needed\n\nReturn: {\"decision\": \"approve\" or \"block\", \"reason\": \"explanation\"}",
+            "timeout": 30000
           }
         ]
       }

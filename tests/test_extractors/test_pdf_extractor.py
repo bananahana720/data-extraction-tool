@@ -15,28 +15,21 @@ Test Coverage:
 - Edge cases (empty, encrypted, malformed)
 """
 
-import pytest
-from pathlib import Path
-import time
-from unittest.mock import Mock, patch, MagicMock
-
 # Import foundation
 import sys
+import time
+from pathlib import Path
+
+import pytest
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
 from core import (
-    ContentBlock,
     ContentType,
-    DocumentMetadata,
-    ExtractionResult,
-    ImageMetadata,
-    TableMetadata,
-    Position,
 )
 
 # Import infrastructure
-from infrastructure import ConfigManager, ErrorHandler
+from infrastructure import ConfigManager
 
 
 class TestPdfExtractorBasics:
@@ -141,8 +134,8 @@ class TestNativeTextExtraction:
 
         Uses reportlab to create a test PDF with known content.
         """
-        from reportlab.pdfgen import canvas
         from reportlab.lib.pagesizes import letter
+        from reportlab.pdfgen import canvas
 
         pdf_path = tmp_path / "simple.pdf"
 
@@ -183,8 +176,9 @@ class TestNativeTextExtraction:
         """
         RED TEST: Should track page numbers in Position metadata.
         """
-        from reportlab.pdfgen import canvas
         from reportlab.lib.pagesizes import letter
+        from reportlab.pdfgen import canvas
+
         from extractors.pdf_extractor import PdfExtractor
 
         # Create 2-page PDF
@@ -245,9 +239,9 @@ class TestOCRFallback:
 
         This creates a PDF with an embedded image instead of text.
         """
-        from reportlab.pdfgen import canvas
+        from PIL import Image, ImageDraw
         from reportlab.lib.pagesizes import letter
-        from PIL import Image, ImageDraw, ImageFont
+        from reportlab.pdfgen import canvas
 
         # Create image with text
         img_path = tmp_path / "text_image.png"
@@ -335,9 +329,9 @@ class TestTableExtraction:
         """
         Create a PDF containing a table.
         """
+        from reportlab.lib import colors
         from reportlab.lib.pagesizes import letter
         from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
-        from reportlab.lib import colors
 
         pdf_path = tmp_path / "table.pdf"
 
@@ -406,9 +400,9 @@ class TestImageExtraction:
         """
         Create a PDF with embedded images.
         """
-        from reportlab.pdfgen import canvas
-        from reportlab.lib.pagesizes import letter
         from PIL import Image
+        from reportlab.lib.pagesizes import letter
+        from reportlab.pdfgen import canvas
 
         # Create test image
         img_path = tmp_path / "test_img.png"
@@ -466,8 +460,8 @@ extractors:
     @pytest.fixture
     def simple_pdf(self, tmp_path):
         """Create a simple PDF with native text for testing."""
-        from reportlab.pdfgen import canvas
         from reportlab.lib.pagesizes import letter
+        from reportlab.pdfgen import canvas
 
         pdf_path = tmp_path / "simple.pdf"
 
@@ -546,8 +540,9 @@ class TestPerformance:
         in reasonable time. Target: <2s/MB for small files, relaxed for very
         small test files which have overhead from PDF structure.
         """
-        from reportlab.pdfgen import canvas
         from reportlab.lib.pagesizes import letter
+        from reportlab.pdfgen import canvas
+
         from extractors.pdf_extractor import PdfExtractor
 
         # Create test PDF with 10 pages
@@ -593,6 +588,7 @@ class TestEdgeCases:
         RED TEST: Empty PDF should succeed with no content blocks.
         """
         from reportlab.pdfgen import canvas
+
         from extractors.pdf_extractor import PdfExtractor
 
         # Create PDF with no content
@@ -689,7 +685,6 @@ class TestDependencyHandling:
             sys.modules.pop(mod, None)
 
         # Reload extractor module to trigger import check
-        import importlib
         import extractors.pdf_extractor as pdf_mod
 
         monkeypatch.setattr(pdf_mod, "PYPDF_AVAILABLE", False)
@@ -771,6 +766,7 @@ class TestMetadataExtractionEdgeCases:
         Extraction should still work, returning None for missing fields.
         """
         from reportlab.pdfgen import canvas
+
         from extractors.pdf_extractor import PdfExtractor
 
         # Create PDF without setting any metadata
@@ -796,7 +792,7 @@ class TestMetadataExtractionEdgeCases:
         We should handle these gracefully and continue extraction.
         """
         from reportlab.pdfgen import canvas
-        from pypdf import PdfWriter, PdfReader
+
         from extractors.pdf_extractor import PdfExtractor
 
         # Create basic PDF
@@ -824,8 +820,9 @@ class TestMetadataExtractionEdgeCases:
         Keywords, titles with special characters (unicode, emoji, etc.)
         should not break extraction.
         """
-        from reportlab.pdfgen import canvas
         from reportlab.lib.pagesizes import letter
+        from reportlab.pdfgen import canvas
+
         from extractors.pdf_extractor import PdfExtractor
 
         pdf_path = tmp_path / "special_chars.pdf"
@@ -857,6 +854,7 @@ class TestTextSplittingEdgeCases:
         Should create heading blocks without crashing.
         """
         from reportlab.pdfgen import canvas
+
         from extractors.pdf_extractor import PdfExtractor
 
         pdf_path = tmp_path / "only_headings.pdf"
@@ -886,6 +884,7 @@ class TestTextSplittingEdgeCases:
         Lines longer than 100 characters should be treated as paragraphs.
         """
         from reportlab.pdfgen import canvas
+
         from extractors.pdf_extractor import PdfExtractor
 
         pdf_path = tmp_path / "long_lines.pdf"
@@ -911,6 +910,7 @@ class TestTextSplittingEdgeCases:
         Should handle gracefully without creating empty blocks.
         """
         from reportlab.pdfgen import canvas
+
         from extractors.pdf_extractor import PdfExtractor
 
         pdf_path = tmp_path / "whitespace.pdf"
@@ -937,6 +937,7 @@ class TestExceptionHandlingPaths:
         If one page fails, extraction should continue with warnings.
         """
         from reportlab.pdfgen import canvas
+
         from extractors.pdf_extractor import PdfExtractor
 
         # Create multi-page PDF
@@ -977,6 +978,7 @@ class TestExceptionHandlingPaths:
         Table extraction failures should result in warnings, not crashes.
         """
         from reportlab.pdfgen import canvas
+
         from extractors.pdf_extractor import PdfExtractor
 
         # Create simple PDF
@@ -1008,6 +1010,7 @@ class TestExceptionHandlingPaths:
         TEST: Exceptions during image metadata extraction should be caught.
         """
         from reportlab.pdfgen import canvas
+
         from extractors.pdf_extractor import PdfExtractor
 
         pdf_path = tmp_path / "test.pdf"
@@ -1047,6 +1050,7 @@ class TestHeadingDetectionEdgeCases:
         to separate sections for proper heading detection.
         """
         from reportlab.pdfgen import canvas
+
         from extractors.pdf_extractor import PdfExtractor
 
         pdf_path = tmp_path / "numbered_sections.pdf"
@@ -1098,6 +1102,7 @@ class TestHeadingDetectionEdgeCases:
         TEST: Title Case lines should be detected as headings if short.
         """
         from reportlab.pdfgen import canvas
+
         from extractors.pdf_extractor import PdfExtractor
 
         pdf_path = tmp_path / "title_case.pdf"
@@ -1133,6 +1138,7 @@ class TestTextBlockFlushing:
         This tests lines 813-825 (final paragraph flush).
         """
         from reportlab.pdfgen import canvas
+
         from extractors.pdf_extractor import PdfExtractor
 
         pdf_path = tmp_path / "final_para.pdf"
@@ -1164,6 +1170,7 @@ class TestTextBlockFlushing:
         This tests paragraph flushing logic (lines 775-789).
         """
         from reportlab.pdfgen import canvas
+
         from extractors.pdf_extractor import PdfExtractor
 
         pdf_path = tmp_path / "para_then_heading.pdf"
@@ -1203,9 +1210,10 @@ class TestImageMetadataExtraction:
 
         Tests lines 549-550 (format detection without filter).
         """
-        from reportlab.pdfgen import canvas
-        from extractors.pdf_extractor import PdfExtractor
         from PIL import Image
+        from reportlab.pdfgen import canvas
+
+        from extractors.pdf_extractor import PdfExtractor
 
         # Create image
         img_path = tmp_path / "test.png"
@@ -1236,8 +1244,9 @@ class TestDateParsingEdgeCases:
 
         Tests lines 618-619, 626-627 (date parsing exceptions).
         """
-        from reportlab.pdfgen import canvas
         from pypdf import PdfReader
+        from reportlab.pdfgen import canvas
+
         from extractors.pdf_extractor import PdfExtractor
 
         # Create basic PDF
@@ -1309,6 +1318,7 @@ class TestTextSplittingFinalParagraph:
         Tests lines 813-825 (final paragraph flush).
         """
         from reportlab.pdfgen import canvas
+
         from extractors.pdf_extractor import PdfExtractor
 
         pdf_path = tmp_path / "no_trailing_newline.pdf"
@@ -1338,8 +1348,9 @@ class TestTextSplittingFinalParagraph:
 
         Tests various text splitting paths including final paragraph flush.
         """
-        from reportlab.pdfgen import canvas
         from reportlab.lib.pagesizes import letter
+        from reportlab.pdfgen import canvas
+
         from extractors.pdf_extractor import PdfExtractor
 
         pdf_path = tmp_path / "complex_structure.pdf"
@@ -1387,6 +1398,7 @@ class TestOCRFallbackMocked:
         Mock OCR dependencies and verify they're never called for text PDFs.
         """
         from reportlab.pdfgen import canvas
+
         from extractors.pdf_extractor import PdfExtractor
 
         # Create text PDF
@@ -1423,9 +1435,10 @@ class TestOCRFallbackMocked:
 
         Image-based PDF with OCR disabled should warn user.
         """
-        from extractors.pdf_extractor import PdfExtractor
-        from reportlab.pdfgen import canvas
         from PIL import Image
+        from reportlab.pdfgen import canvas
+
+        from extractors.pdf_extractor import PdfExtractor
 
         # Create image-only PDF (minimal text)
         img_path = tmp_path / "img.png"

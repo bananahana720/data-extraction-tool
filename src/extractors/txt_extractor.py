@@ -158,16 +158,16 @@ This shows how the foundation models work together."""
 
     # Display results
     if result.success:
-        print(f"\n[SUCCESS] Extraction successful!")
+        print("\n[SUCCESS] Extraction successful!")
         print(f"  Blocks: {len(result.content_blocks)}")
         print(f"  Words: {result.document_metadata.word_count}")
         print(f"  Characters: {result.document_metadata.character_count}")
 
-        print(f"\nContent blocks:")
+        print("\nContent blocks:")
         for block in result.content_blocks:
             print(f"  - [{block.block_type.value}] {block.content[:60]}...")
     else:
-        print(f"\n[FAILED] Extraction failed:")
+        print("\n[FAILED] Extraction failed:")
         for error in result.errors:
             print(f"  - {error}")
 

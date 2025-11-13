@@ -12,14 +12,13 @@ Extracts content from CSV/TSV files with support for:
 Implementation follows strict TDD methodology with infrastructure integration.
 """
 
-from pathlib import Path
-from typing import Optional, Union, List, Tuple, Dict, Any
-from datetime import datetime, timezone
+import csv
 import hashlib
 import logging
 import time
-import csv
-import io
+from datetime import datetime, timezone
+from pathlib import Path
+from typing import List, Optional, Union
 
 # Try to import chardet for encoding detection
 try:
@@ -47,10 +46,10 @@ from src.core import (
 try:
     from src.infrastructure import (
         ConfigManager,
-        get_logger,
         ErrorHandler,
         ProgressTracker,
         RecoveryAction,
+        get_logger,
     )
 
     INFRASTRUCTURE_AVAILABLE = True
@@ -347,7 +346,7 @@ class CSVExtractor(BaseExtractor):
                 warnings=tuple(warnings),
             )
 
-        except PermissionError as e:
+        except PermissionError:
             if self.error_handler:
                 error = self.error_handler.create_error("E500", file_path=str(file_path))
                 errors.append(self.error_handler.format_for_user(error))

@@ -16,22 +16,18 @@ Benchmarks Include:
 
 import subprocess
 import time
-import signal
-from pathlib import Path
-from typing import List, Dict, Any
-import json
-import pytest
 from datetime import datetime
+from pathlib import Path
+from typing import Any, Dict, List
+
 import psutil
-import os
+import pytest
 
 from tests.performance.conftest import (
     BenchmarkResult,
-    PerformanceMeasurement,
     assert_memory_limit,
     assert_performance_target,
 )
-
 
 # ============================================================================
 # Test Configuration
@@ -185,7 +181,7 @@ class TestSingleFilePerformance:
 
         # Log results
         print(f"\n{'='*60}")
-        print(f"CLI TXT Extraction Benchmark:")
+        print("CLI TXT Extraction Benchmark:")
         print(f"  File: {txt_file.name} ({file_size_kb:.2f} KB)")
         print(f"  Duration: {result['duration_ms']:.2f} ms ({result['duration_ms']/1000:.2f}s)")
         print(f"  Memory: {result['memory_peak_mb']:.2f} MB")
@@ -239,7 +235,7 @@ class TestSingleFilePerformance:
 
         # Log results
         print(f"\n{'='*60}")
-        print(f"CLI PDF Extraction Benchmark:")
+        print("CLI PDF Extraction Benchmark:")
         print(f"  File: {pdf_file.name} ({file_size_kb:.2f} KB)")
         print(f"  Duration: {result['duration_ms']:.2f} ms ({result['duration_ms']/1000:.2f}s)")
         print(f"  Memory: {result['memory_peak_mb']:.2f} MB")
@@ -420,9 +416,9 @@ class TestThreadSafetyStress:
 
         # Log results
         print(f"\n{'='*60}")
-        print(f"CLI High Concurrency Stress Test:")
+        print("CLI High Concurrency Stress Test:")
         print(f"  Files: {len(test_files)}")
-        print(f"  Workers: 16 (maximum)")
+        print("  Workers: 16 (maximum)")
         print(f"  Duration: {result['duration_ms']:.2f} ms ({result['duration_ms']/1000:.2f}s)")
         print(f"  Memory: {result['memory_peak_mb']:.2f} MB")
         print(f"  CPU: {result['cpu_percent']:.1f}%")
@@ -498,7 +494,7 @@ class TestProgressDisplayOverhead:
 
         # Log results
         print(f"\n{'='*60}")
-        print(f"Progress Display Overhead Test:")
+        print("Progress Display Overhead Test:")
         print(f"  With Progress: {result_with_progress['duration_ms']:.2f} ms")
         print(f"  Quiet Mode: {result_quiet['duration_ms']:.2f} ms")
         print(f"  Overhead: {overhead_ms:.2f} ms ({overhead_pct:.1f}%)")
@@ -562,7 +558,7 @@ class TestEncodingPerformance:
 
         # Log results
         print(f"\n{'='*60}")
-        print(f"Unicode Encoding Performance Test:")
+        print("Unicode Encoding Performance Test:")
         print(f"  File: {test_file.name} ({file_size_kb:.2f} KB)")
         print(f"  Duration: {result['duration_ms']:.2f} ms ({result['duration_ms']/1000:.2f}s)")
         print(f"  Memory: {result['memory_peak_mb']:.2f} MB")

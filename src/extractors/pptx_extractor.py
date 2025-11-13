@@ -13,11 +13,11 @@ Design:
 - Infrastructure integration (ConfigManager, logging, error handling)
 """
 
-from pathlib import Path
-from typing import Optional, Union
-from datetime import datetime, timezone
 import hashlib
 import logging
+from datetime import datetime, timezone
+from pathlib import Path
+from typing import Optional, Union
 
 try:
     from pptx import Presentation
@@ -45,8 +45,8 @@ from core import (
 try:
     from infrastructure import (
         ConfigManager,
-        get_logger,
         ErrorHandler,
+        get_logger,
     )
 
     INFRASTRUCTURE_AVAILABLE = True

@@ -13,13 +13,8 @@ Test strategy:
 
 import json
 import logging
-import tempfile
 import time
-from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor
-from typing import Any
-
-import pytest
 
 from infrastructure.logging_framework import get_logger
 

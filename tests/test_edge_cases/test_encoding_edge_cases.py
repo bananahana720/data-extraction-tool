@@ -15,14 +15,14 @@ Design: Equivalency partitioning methodology
 Status: v1.0.2 edge case validation
 """
 
-import tempfile
 import json
+import tempfile
 from pathlib import Path
-from typing import List
+
 import pytest
+from click.testing import CliRunner
 
 from cli.main import cli
-from click.testing import CliRunner
 
 
 class TestEncodingEdgeCases:

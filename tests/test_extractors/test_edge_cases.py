@@ -24,21 +24,15 @@ Markers:
     @pytest.mark.stress - Resource-intensive tests
 """
 
-import pytest
-from pathlib import Path
 import sys
 import time
-from unittest.mock import Mock, patch
+from pathlib import Path
+
+import pytest
 
 # Import foundation
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
-from core import (
-    ContentBlock,
-    ContentType,
-    DocumentMetadata,
-    ExtractionResult,
-)
 
 
 # ==============================================================================
@@ -58,6 +52,7 @@ class TestFileSystemEdgeCases:
         Boundary: Spaces in path components
         """
         from reportlab.pdfgen import canvas
+
         from extractors.pdf_extractor import PdfExtractor
 
         # Create directory and file with spaces
@@ -85,6 +80,7 @@ class TestFileSystemEdgeCases:
         Boundary: Non-ASCII characters in filename
         """
         from reportlab.pdfgen import canvas
+
         from extractors.pdf_extractor import PdfExtractor
 
         # Create file with unicode name
@@ -108,6 +104,7 @@ class TestFileSystemEdgeCases:
         Boundary: Near OS path length limits
         """
         from reportlab.pdfgen import canvas
+
         from extractors.pdf_extractor import PdfExtractor
 
         # Create deeply nested path (but stay under 260 for Windows)
@@ -153,6 +150,7 @@ class TestFileSystemEdgeCases:
         Expected: Extraction failure with clear error
         """
         from reportlab.pdfgen import canvas
+
         from extractors.docx_extractor import DocxExtractor
 
         # Create PDF but name it .docx
@@ -197,9 +195,11 @@ class TestFileSystemEdgeCases:
         Partition: File system → Valid → Permission boundary
         Note: This tests read access, not write
         """
-        from reportlab.pdfgen import canvas
-        from extractors.pdf_extractor import PdfExtractor
         import stat
+
+        from reportlab.pdfgen import canvas
+
+        from extractors.pdf_extractor import PdfExtractor
 
         pdf_path = tmp_path / "readonly.pdf"
         c = canvas.Canvas(str(pdf_path))
@@ -238,6 +238,7 @@ class TestContentSizeEdgeCases:
         Boundary: Minimum useful content (0 blocks)
         """
         from reportlab.pdfgen import canvas
+
         from extractors.pdf_extractor import PdfExtractor
 
         # PDF with blank page
@@ -261,6 +262,7 @@ class TestContentSizeEdgeCases:
         Boundary: Smallest valid content (1 char)
         """
         from reportlab.pdfgen import canvas
+
         from extractors.pdf_extractor import PdfExtractor
 
         pdf_path = tmp_path / "single_char.pdf"
@@ -285,8 +287,9 @@ class TestContentSizeEdgeCases:
         Boundary: Large content stress test
         Note: This is slow and resource-intensive
         """
-        from reportlab.pdfgen import canvas
         from reportlab.lib.pagesizes import letter
+        from reportlab.pdfgen import canvas
+
         from extractors.pdf_extractor import PdfExtractor
 
         pdf_path = tmp_path / "large.pdf"
@@ -331,6 +334,7 @@ class TestContentSizeEdgeCases:
         Boundary: Very long single text block
         """
         from reportlab.pdfgen import canvas
+
         from extractors.pdf_extractor import PdfExtractor
 
         pdf_path = tmp_path / "long_line.pdf"
@@ -384,6 +388,7 @@ class TestMalformedDocumentEdgeCases:
         Expected: Error handling, partial recovery if possible
         """
         from reportlab.pdfgen import canvas
+
         from extractors.pdf_extractor import PdfExtractor
 
         # Create valid PDF
@@ -517,8 +522,9 @@ class TestSpecialContentEdgeCases:
         Partition: Content → Valid → Image-only
         Expected: Should detect images, warn about no text
         """
-        from reportlab.pdfgen import canvas
         from PIL import Image
+        from reportlab.pdfgen import canvas
+
         from extractors.pdf_extractor import PdfExtractor
 
         # Create image
@@ -548,6 +554,7 @@ class TestSpecialContentEdgeCases:
         Expected: Should extract formulas or calculated results
         """
         from openpyxl import Workbook
+
         from extractors.excel_extractor import ExcelExtractor
 
         xlsx_path = tmp_path / "formulas_only.xlsx"
@@ -575,6 +582,7 @@ class TestSpecialContentEdgeCases:
         Expected: Should extract table structure
         """
         from docx import Document
+
         from extractors.docx_extractor import DocxExtractor
 
         docx_path = tmp_path / "tables_only.docx"
@@ -614,6 +622,7 @@ class TestMetadataEdgeCases:
         Boundary: Very long string values
         """
         from reportlab.pdfgen import canvas
+
         from extractors.pdf_extractor import PdfExtractor
 
         pdf_path = tmp_path / "long_metadata.pdf"
@@ -643,6 +652,7 @@ class TestMetadataEdgeCases:
         Boundary: Unicode and special characters
         """
         from reportlab.pdfgen import canvas
+
         from extractors.pdf_extractor import PdfExtractor
 
         pdf_path = tmp_path / "special_metadata.pdf"
@@ -680,6 +690,7 @@ class TestConcurrentAccessEdgeCases:
         Expected: All extractions should succeed
         """
         from reportlab.pdfgen import canvas
+
         from extractors.pdf_extractor import PdfExtractor
 
         pdf_path = tmp_path / "shared.pdf"

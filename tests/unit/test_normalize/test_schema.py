@@ -992,7 +992,6 @@ class TestEdgeCases:
         self, schema_standardizer: SchemaStandardizer, mock_metadata: Metadata, monkeypatch
     ) -> None:
         """Test Archer parsing when BeautifulSoup raises exception."""
-        from bs4 import BeautifulSoup
 
         # Mock BeautifulSoup to raise an exception
         def mock_soup_raises(*args, **kwargs):

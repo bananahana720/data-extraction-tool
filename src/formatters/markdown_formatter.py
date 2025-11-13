@@ -15,8 +15,6 @@ Design:
 - Clean, idiomatic markdown
 """
 
-from pathlib import Path
-from typing import Any
 
 from core.interfaces import BaseFormatter
 from core.models import (

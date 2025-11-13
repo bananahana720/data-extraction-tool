@@ -9,17 +9,16 @@ QualityValidator scores extraction quality by checking:
 - Issues: What quality problems exist?
 """
 
-import pytest
 from pathlib import Path
 
+from processors.quality_validator import QualityValidator
 from src.core import (
     ContentBlock,
     ContentType,
-    ExtractionResult,
     DocumentMetadata,
+    ExtractionResult,
     ProcessingStage,
 )
-from processors.quality_validator import QualityValidator
 
 
 class TestQualityValidatorBasics:

@@ -7,8 +7,9 @@ These tests actually execute (don't skip) to prove fixtures are working.
 Run with: pytest tests/test_fixtures_demo.py -v
 """
 
-import pytest
 from pathlib import Path
+
+import pytest
 
 from src.core import (
     ContentBlock,

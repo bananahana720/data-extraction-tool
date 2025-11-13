@@ -15,11 +15,10 @@ import json
 
 import pytest
 
-from src.core import ContentBlock, ContentType, Position, ProcessingResult, ProcessingStage
+from src.core import ContentBlock, ContentType, Position
 from src.extractors import DocxExtractor
 from src.formatters import ChunkedTextFormatter, JsonFormatter, MarkdownFormatter
 from src.processors import ContextLinker, MetadataAggregator, QualityValidator
-
 
 # ==============================================================================
 # Test Markers

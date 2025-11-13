@@ -5,11 +5,9 @@ TDD approach - tests written first, implementation follows.
 Target: >85% code coverage
 """
 
-import pytest
-from pathlib import Path
-from unittest.mock import Mock, patch
 import time
 
+import pytest
 
 # RED PHASE: These tests will fail until we implement the error_handler module
 
@@ -71,7 +69,7 @@ def test_data_extraction_error_with_original_exception():
 
 def test_validation_error_category():
     """Test ValidationError is a category of DataExtractionError."""
-    from infrastructure.error_handler import ValidationError, DataExtractionError
+    from infrastructure.error_handler import DataExtractionError, ValidationError
 
     error = ValidationError(error_code="E001", message="File not found")
 
@@ -81,7 +79,7 @@ def test_validation_error_category():
 
 def test_extraction_error_category():
     """Test ExtractionError is a category of DataExtractionError."""
-    from infrastructure.error_handler import ExtractionError, DataExtractionError
+    from infrastructure.error_handler import DataExtractionError, ExtractionError
 
     error = ExtractionError(error_code="E100", message="Failed to open document")
 
@@ -91,7 +89,7 @@ def test_extraction_error_category():
 
 def test_processing_error_category():
     """Test ProcessingError is a category of DataExtractionError."""
-    from infrastructure.error_handler import ProcessingError, DataExtractionError
+    from infrastructure.error_handler import DataExtractionError, ProcessingError
 
     error = ProcessingError(error_code="E200", message="Context linking failed")
 
@@ -101,7 +99,7 @@ def test_processing_error_category():
 
 def test_formatting_error_category():
     """Test FormattingError is a category of DataExtractionError."""
-    from infrastructure.error_handler import FormattingError, DataExtractionError
+    from infrastructure.error_handler import DataExtractionError, FormattingError
 
     error = FormattingError(error_code="E300", message="JSON serialization failed")
 
@@ -121,7 +119,7 @@ def test_config_error_category():
 
 def test_resource_error_category():
     """Test ResourceError is a category of DataExtractionError."""
-    from infrastructure.error_handler import ResourceError, DataExtractionError
+    from infrastructure.error_handler import DataExtractionError, ResourceError
 
     error = ResourceError(error_code="E500", message="Out of memory")
 

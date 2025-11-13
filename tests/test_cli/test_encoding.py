@@ -15,15 +15,13 @@ Test coverage:
 Related fix: ENCODING_FIX_SUMMARY.md
 """
 
-import pytest
 import sys
-import io
-from pathlib import Path
-from click.testing import CliRunner
+
+import pytest
 from docx import Document
 
+from cli.commands import console
 from cli.main import cli
-from cli.commands import write_outputs, console
 
 
 class TestConsoleEncodingConfiguration:

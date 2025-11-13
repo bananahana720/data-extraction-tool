@@ -47,7 +47,6 @@ if file_path and os.path.exists(file_path):
     
     # Skip line count check for binary files
     if is_binary_file(file_path):
-        print(json.dumps({"decision": "approve"}))
         sys.exit(0)
     
     import shutil
@@ -84,37 +83,31 @@ if file_path and os.path.exists(file_path):
         effective_lines = max(0, line_count - offset)
 
     if is_main_agent and line_count > 750:
-        print(json.dumps({
-            "decision": "block",
-            "reason": f"""
-                I see you are trying to read a file with {line_count} lines,
-                or a part of it. 
-                Please delegate the analysis to a SUB-AGENT using your Task tool,
-                so you don't bloat your context with the file content!
-                """,
-        }))
-        sys.exit(0)
+        error_msg = f"""File has {line_count} lines (threshold: 750).
+
+Please delegate the analysis to a SUB-AGENT using your Task tool
+to avoid bloating your context with the file content.
+
+Example:
+    Use the Task tool with subagent_type=Explore to analyze {file_path}
+"""
+        print(error_msg, file=sys.stderr)
+        sys.exit(2)
     elif (not is_main_agent) and line_count > 10_000:
-        # use gemini-cli to delegate the analysis
-        print(json.dumps({
-            "decision": "block",
-            "reason": f"""
-            File too large ({line_count} lines), please use the Gemini CLI
-            bash command to delegate the analysis to Gemini since it has
-            a 1M-token context window! This will help you avoid bloating 
-            your context.
-            
-            You can use Gemini CLI as in these EXAMPLES:
-            
-            `gemini -p "@src/somefile.py tell me at which line the definition of 
-                      the function 'my_function' is located"
+        # File is too large even for subagent
+        error_msg = f"""File too large ({line_count} lines) even for subagent analysis (threshold: 10,000).
 
-            `gemini -p "@package.json @src/index.js Analyze the dependencies used in the code"
+Consider these alternatives:
+1. Read specific sections using offset/limit parameters
+2. Use Grep tool to search for specific patterns
+3. If gemini-cli is available, use it for large file analysis:
 
-            See further guidelines in claude-mds/use-gemini-cli.md
-            """,
-        }))
-        sys.exit(0)
+   Example: gemini -p "@{file_path} analyze this file"
 
-print(json.dumps({"decision": "approve"}))
+Note: gemini-cli requires separate installation and API key setup.
+"""
+        print(error_msg, file=sys.stderr)
+        sys.exit(2)
+
+# File size is acceptable, allow reading
 sys.exit(0)

@@ -9,17 +9,16 @@ MetadataAggregator computes statistics and extracts entities:
 - Computed statistics in document metadata
 """
 
-import pytest
 from pathlib import Path
 
+from processors.metadata_aggregator import MetadataAggregator
 from src.core import (
     ContentBlock,
     ContentType,
-    ExtractionResult,
     DocumentMetadata,
+    ExtractionResult,
     ProcessingStage,
 )
-from processors.metadata_aggregator import MetadataAggregator
 
 
 class TestMetadataAggregatorBasics:

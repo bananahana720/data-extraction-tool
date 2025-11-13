@@ -15,10 +15,15 @@ Test Coverage Areas:
 Coverage Target: >85%
 """
 
+from unittest.mock import Mock
+
 import pytest
-from pathlib import Path
-from typing import List
-from unittest.mock import Mock, MagicMock, patch, call
+
+# Import BatchProcessor (will fail initially - RED phase)
+from pipeline.batch_processor import BatchProcessor
+
+# Import pipeline (ExtractionPipeline already exists)
+from pipeline.extraction_pipeline import ExtractionPipeline
 
 # Import core models
 from src.core import (
@@ -27,16 +32,6 @@ from src.core import (
 )
 
 # Import infrastructure
-from src.infrastructure import (
-    ProgressTracker,
-)
-
-# Import pipeline (ExtractionPipeline already exists)
-from pipeline.extraction_pipeline import ExtractionPipeline
-
-# Import BatchProcessor (will fail initially - RED phase)
-from pipeline.batch_processor import BatchProcessor
-
 
 # ==============================================================================
 # Test Fixtures

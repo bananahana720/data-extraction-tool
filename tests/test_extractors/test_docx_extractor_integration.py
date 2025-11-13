@@ -10,23 +10,17 @@ Tests DocxExtractor refactored to use:
 Follows TDD methodology - tests first, then implementation.
 """
 
-import pytest
-import logging
-import json
 import sys
 from pathlib import Path
-from io import StringIO
+
+import pytest
 from docx import Document
 
-from src.core import ContentType, ExtractionResult
 from extractors.docx_extractor import DocxExtractor
+from src.core import ContentType, ExtractionResult
 from src.infrastructure import (
     ConfigManager,
-    get_logger,
-    ErrorHandler,
-    ProgressTracker,
 )
-
 
 # ============================================================================
 # Test Fixtures

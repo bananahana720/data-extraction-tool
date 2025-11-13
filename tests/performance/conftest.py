@@ -12,10 +12,9 @@ import tracemalloc
 from dataclasses import asdict, dataclass
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Callable, Generator
+from typing import Any, Callable
 
 import pytest
-
 
 # ============================================================================
 # Performance Measurement Models

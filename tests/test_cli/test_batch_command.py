@@ -11,9 +11,6 @@ Test coverage for:
 - Exit codes
 """
 
-import pytest
-from pathlib import Path
-from click.testing import CliRunner
 
 from cli.main import cli
 

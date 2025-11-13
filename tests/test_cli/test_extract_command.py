@@ -10,9 +10,6 @@ Test coverage for:
 - User-friendly error messages
 """
 
-import pytest
-from pathlib import Path
-from click.testing import CliRunner
 
 from cli.main import cli
 

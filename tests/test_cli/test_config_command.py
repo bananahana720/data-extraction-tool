@@ -9,9 +9,6 @@ Test coverage for:
 - Error reporting
 """
 
-import pytest
-from pathlib import Path
-from click.testing import CliRunner
 
 from cli.main import cli
 

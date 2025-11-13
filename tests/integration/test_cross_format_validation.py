@@ -20,7 +20,6 @@ from src.formatters import ChunkedTextFormatter, JsonFormatter, MarkdownFormatte
 from src.pipeline import BatchProcessor, ExtractionPipeline
 from src.processors import ContextLinker, MetadataAggregator, QualityValidator
 
-
 # ==============================================================================
 # Test Markers
 # ==============================================================================

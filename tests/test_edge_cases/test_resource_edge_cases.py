@@ -17,10 +17,11 @@ Status: v1.0.2 edge case validation
 
 import tempfile
 from pathlib import Path
+
 import pytest
+from click.testing import CliRunner
 
 from cli.main import cli
-from click.testing import CliRunner
 
 
 class TestResourceEdgeCases:

@@ -17,37 +17,34 @@ Test Coverage Areas:
 Coverage Target: >85%
 """
 
-import pytest
 from pathlib import Path
-from typing import Optional
-from unittest.mock import Mock, MagicMock, patch, call
+from unittest.mock import Mock
+
+import pytest
+
+# Import pipeline (will fail initially - RED phase)
+from pipeline.extraction_pipeline import ExtractionPipeline
 
 # Import core models and interfaces
 from src.core import (
     BaseExtractor,
-    BaseProcessor,
     BaseFormatter,
+    BaseProcessor,
     ContentBlock,
     ContentType,
     DocumentMetadata,
     ExtractionResult,
-    ProcessingResult,
     FormattedOutput,
     PipelineResult,
+    ProcessingResult,
     ProcessingStage,
-    Position,
 )
 
 # Import infrastructure
 from src.infrastructure import (
     ConfigManager,
     ErrorHandler,
-    ProgressTracker,
 )
-
-# Import pipeline (will fail initially - RED phase)
-from pipeline.extraction_pipeline import ExtractionPipeline
-
 
 # ==============================================================================
 # Test Fixtures and Mocks

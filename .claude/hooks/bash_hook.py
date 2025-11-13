@@ -16,6 +16,7 @@ from git_checkout_safety_hook import check_git_checkout_command
 from git_commit_block_hook import check_git_commit_command
 from rm_block_hook import check_rm_command
 from env_file_protection_hook import check_env_file_access
+from bash_grep_check import check_grep_usage
 
 
 def main():
@@ -24,7 +25,7 @@ def main():
     # Check if this is a Bash tool call
     tool_name = data.get("tool_name")
     if tool_name != "Bash":
-        print(json.dumps({"decision": "approve"}))
+        # Not a Bash command, allow
         sys.exit(0)
     
     # Get the command being executed
@@ -37,6 +38,7 @@ def main():
         check_git_checkout_command,
         check_git_commit_command,
         check_env_file_access,
+        check_grep_usage,
     ]
     
     blocking_reasons = []
@@ -55,15 +57,13 @@ def main():
             combined_reason = "Multiple safety checks failed:\n\n"
             for i, reason in enumerate(blocking_reasons, 1):
                 combined_reason += f"{i}. {reason}\n\n"
-        
-        print(json.dumps({
-            "decision": "block",
-            "reason": combined_reason
-        }, ensure_ascii=False))
+
+        # Exit code 2 blocks execution, stderr is shown to Claude
+        print(combined_reason, file=sys.stderr)
+        sys.exit(2)
     else:
-        print(json.dumps({"decision": "approve"}))
-    
-    sys.exit(0)
+        # Exit code 0 allows execution
+        sys.exit(0)
 
 
 if __name__ == "__main__":

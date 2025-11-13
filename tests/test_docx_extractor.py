@@ -4,12 +4,10 @@ Test script for DocxExtractor.
 Creates a sample DOCX file and tests extraction.
 """
 
-from pathlib import Path
-from docx import Document
-from docx.shared import Pt
-from docx.enum.style import WD_STYLE_TYPE
-
 import sys
+from pathlib import Path
+
+from docx import Document
 
 sys.path.insert(0, str(Path(__file__).parent / "src"))
 
@@ -96,7 +94,7 @@ def test_docx_extractor():
 
         # Document metadata
         meta = result.document_metadata
-        print(f"\nDocument Metadata:")
+        print("\nDocument Metadata:")
         print(f"  File: {meta.source_file.name}")
         print(f"  Format: {meta.file_format}")
         print(f"  Size: {meta.file_size_bytes:,} bytes")
@@ -109,7 +107,7 @@ def test_docx_extractor():
         if meta.author:
             print(f"  Author: {meta.author}")
 
-        print(f"\nExtraction Statistics:")
+        print("\nExtraction Statistics:")
         print(f"  Content blocks: {len(result.content_blocks)}")
         print(f"  Images: {len(result.images)}")
         print(f"  Tables: {len(result.tables)}")
@@ -132,7 +130,7 @@ def test_docx_extractor():
 
             # Show metadata
             if block.metadata:
-                print(f"  Metadata:")
+                print("  Metadata:")
                 for key, value in block.metadata.items():
                     print(f"    {key}: {value}")
 
@@ -153,7 +151,7 @@ def test_docx_extractor():
             print(f"  - {error}")
 
         if result.warnings:
-            print(f"\nWarnings:")
+            print("\nWarnings:")
             for warning in result.warnings:
                 print(f"  - {warning}")
 
@@ -162,7 +160,7 @@ def test_docx_extractor():
         print("=" * 70)
 
     # Cleanup
-    print(f"\n[CLEANUP] Removing test file...")
+    print("\n[CLEANUP] Removing test file...")
     test_file.unlink()
     print("[COMPLETE]")
 

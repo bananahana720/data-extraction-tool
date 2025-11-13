@@ -34,24 +34,23 @@ Example Batch:
     >>>     results = batch_processor.process_batch(files, progress_callback=callback)
 """
 
-from pathlib import Path
-from typing import Optional, Dict, Any, List
-from contextlib import contextmanager
-import time
-import sys
 import threading
+import time
+from contextlib import contextmanager
+from pathlib import Path
+from typing import Any, Dict, List, Optional
 
+from rich.console import Console
+from rich.live import Live
 from rich.progress import (
+    BarColumn,
     Progress,
     SpinnerColumn,
-    BarColumn,
+    TaskID,
     TextColumn,
     TimeRemainingColumn,
-    TaskID,
 )
 from rich.table import Table
-from rich.live import Live
-from rich.console import Console
 
 
 def _create_safe_console(**kwargs) -> Console:
@@ -192,7 +191,7 @@ class SingleFileProgress:
 
                 # Update progress
                 self._progress.update(self._task_id, completed=percentage, description=description)
-            except Exception as e:
+            except Exception:
                 # Silently ignore progress update errors to prevent deadlock
                 # (worker thread exceptions should not crash the process)
                 pass
@@ -353,7 +352,7 @@ class BatchProgress:
                     self.console.print(
                         f"  [{percentage:>3.0f}%] {current_file}: {stage}", style="dim"
                     )
-            except Exception as e:
+            except Exception:
                 # Silently ignore progress update errors to prevent deadlock
                 # (worker thread exceptions should not crash the process)
                 pass

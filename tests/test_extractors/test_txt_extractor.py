@@ -15,23 +15,19 @@ Test Coverage:
 Coverage Target: 85%+ (20+ tests)
 """
 
-import pytest
 import sys
 from pathlib import Path
 from uuid import UUID
 
-# Import core models
-from src.core import (
-    ContentBlock,
-    ContentType,
-    DocumentMetadata,
-    ExtractionResult,
-    Position,
-)
+import pytest
 
 # Import the extractor under test
 from extractors.txt_extractor import TextFileExtractor
 
+# Import core models
+from src.core import (
+    ContentType,
+)
 
 # ============================================================================
 # Test Fixtures

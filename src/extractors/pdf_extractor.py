@@ -18,12 +18,12 @@ Performance Targets:
 - 85% accuracy for OCR extraction
 """
 
-from pathlib import Path
-from typing import Optional, Union, List, Tuple, TYPE_CHECKING
-from datetime import datetime
 import hashlib
 import logging
 import time
+from datetime import datetime
+from pathlib import Path
+from typing import TYPE_CHECKING, List, Optional, Union
 
 try:
     import pypdf
@@ -36,9 +36,9 @@ except ImportError:
         from pypdf import PdfReader
 
 try:
+    import pdf2image
     import pytesseract
     from PIL import Image
-    import pdf2image
 
     TESSERACT_AVAILABLE = True
 except ImportError:
@@ -62,17 +62,17 @@ from core import (
     DocumentMetadata,
     ExtractionResult,
     ImageMetadata,
-    TableMetadata,
     Position,
+    TableMetadata,
 )
 
 # Import infrastructure components
 try:
     from infrastructure import (
         ConfigManager,
-        get_logger,
         ErrorHandler,
         ProgressTracker,
+        get_logger,
     )
 
     INFRASTRUCTURE_AVAILABLE = True

@@ -33,28 +33,24 @@ Example:
     >>>     print(f"Extracted {len(result.extraction_result.content_blocks)} blocks")
 """
 
-from pathlib import Path
-from typing import Optional, Callable, Any
 from datetime import datetime, timezone
-import time
+from pathlib import Path
+from typing import Any, Callable, Optional
 
 from core import (
-    BasePipeline,
     BaseExtractor,
-    BaseProcessor,
     BaseFormatter,
+    BasePipeline,
+    BaseProcessor,
     ExtractionResult,
-    ProcessingResult,
     PipelineResult,
+    ProcessingResult,
     ProcessingStage,
-    DocumentMetadata,
 )
-
 from infrastructure import (
     ConfigManager,
-    get_logger,
     ErrorHandler,
-    RecoveryAction,
+    get_logger,
     timed,
 )
 
@@ -118,6 +114,7 @@ class ExtractionPipeline(BasePipeline):
         """
         # Create in-memory config with defaults
         from tempfile import NamedTemporaryFile
+
         import yaml
 
         # Create temporary YAML file with defaults

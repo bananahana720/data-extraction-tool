@@ -10,14 +10,13 @@ Performance Targets (from requirements):
     - Memory: <500MB per file
 """
 
-import pytest
 from datetime import datetime
 from pathlib import Path
 
-from extractors.docx_extractor import DocxExtractor
+import pytest
+
 from extractors.excel_extractor import ExcelExtractor
 from extractors.pdf_extractor import PdfExtractor
-from extractors.pptx_extractor import PptxExtractor
 from extractors.txt_extractor import TextFileExtractor
 from tests.performance.conftest import (
     BenchmarkResult,
@@ -26,7 +25,6 @@ from tests.performance.conftest import (
     assert_performance_target,
     categorize_file_size,
 )
-
 
 # ============================================================================
 # Test Configuration

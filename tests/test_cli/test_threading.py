@@ -16,16 +16,16 @@ Test coverage:
 Related fix: BATCH_STALLING_FIX.md
 """
 
-import pytest
 import threading
 import time
-from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor
+
+import pytest
 from click.testing import CliRunner
 from docx import Document
 
 from cli.main import cli
-from cli.progress_display import SingleFileProgress, BatchProgress, _create_safe_console
+from cli.progress_display import BatchProgress, SingleFileProgress
 
 
 class TestProgressDisplayThreadSafety:

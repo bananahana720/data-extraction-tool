@@ -23,15 +23,15 @@ Usage:
     >>>     handler.retry_with_backoff(operation, max_retries=3)
 """
 
+import logging
+import time
+import traceback
 from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
 from typing import Any, Callable, Optional, TypeVar
-import logging
-import time
-import traceback
-import yaml
 
+import yaml
 
 T = TypeVar("T")
 

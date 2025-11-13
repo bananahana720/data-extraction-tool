@@ -17,25 +17,24 @@ Test Categories:
 - Hierarchical structure edge cases
 """
 
-import pytest
-from pathlib import Path
-import sys
 import json
+import sys
+from pathlib import Path
+
+import pytest
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
 from core import (
     ContentBlock,
     ContentType,
-    ProcessingResult,
     DocumentMetadata,
+    ProcessingResult,
     ProcessingStage,
-    Position,
 )
+from formatters.chunked_text_formatter import ChunkedTextFormatter
 from formatters.json_formatter import JsonFormatter
 from formatters.markdown_formatter import MarkdownFormatter
-from formatters.chunked_text_formatter import ChunkedTextFormatter
-
 
 # ==============================================================================
 # JsonFormatter Edge Cases

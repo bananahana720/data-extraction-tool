@@ -10,23 +10,24 @@ Test Status: PRODUCTION VALIDATION
 Purpose: Certify bug fixes are complete and no regressions exist
 """
 
-import pytest
-import sys
 import io
-import time
 import signal
+import sys
 import threading
-from pathlib import Path
-from unittest.mock import Mock, patch, MagicMock
+import time
 from concurrent.futures import ThreadPoolExecutor
+from datetime import datetime, timezone
+from pathlib import Path
+from unittest.mock import Mock
+
+import pytest
 
 # Import components being tested
 from cli.commands import write_outputs
+from cli.progress_display import BatchProgress, SingleFileProgress, _create_safe_console
+from core import ExtractionResult, PipelineResult, ProcessingResult
 from infrastructure import ProgressTracker
-from cli.progress_display import SingleFileProgress, BatchProgress, _create_safe_console
 from pipeline import BatchProcessor, ExtractionPipeline
-from core import PipelineResult, ProcessingStage, ExtractionResult, ProcessingResult
-from datetime import datetime, timezone
 
 
 class TestIssue1_UnicodeEncodingFix:
@@ -41,7 +42,6 @@ class TestIssue1_UnicodeEncodingFix:
     def test_windows_console_encoding_configured(self):
         """Verify Windows console is reconfigured with UTF-8."""
         # Import triggers the encoding setup
-        import cli.commands as commands
 
         if sys.platform == "win32":
             # Verify stdout/stderr are configured for UTF-8
@@ -192,7 +192,7 @@ class TestIssue2_BatchStallingFix:
         ), f"Expected 100 increments completed, got {completed_count[0]}"
 
         # Items processed should be >= 1 (at least some updates succeeded)
-        assert tracker.items_processed >= 1, f"Progress tracker should have processed items"
+        assert tracker.items_processed >= 1, "Progress tracker should have processed items"
 
     def test_progress_display_lock_prevents_deadlock(self):
         """Verify progress display locks don't cause deadlock."""
@@ -299,10 +299,10 @@ class TestIssue3_SignalHandlingFix:
     def test_signal_handler_registered_early(self):
         """Verify signal handler is registered before CLI execution."""
         # This tests that the handler registration code exists
-        from cli.main import main
-
         # Verify main() contains signal handler setup
         import inspect
+
+        from cli.main import main
 
         source = inspect.getsource(main)
 
@@ -312,10 +312,10 @@ class TestIssue3_SignalHandlingFix:
 
     def test_signal_handler_exits_with_130(self):
         """Verify signal handler exits with code 130 (SIGINT convention)."""
-        from cli.main import main
-
         # Extract signal handler from main function
         import inspect
+
+        from cli.main import main
 
         source = inspect.getsource(main)
 
@@ -324,9 +324,9 @@ class TestIssue3_SignalHandlingFix:
 
     def test_keyboard_interrupt_caught(self):
         """Verify KeyboardInterrupt is caught and handled properly."""
-        from cli.main import main
-
         import inspect
+
+        from cli.main import main
 
         source = inspect.getsource(main)
 

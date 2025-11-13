@@ -15,8 +15,6 @@ Tests organized by requirement:
 import json
 from pathlib import Path
 
-import pytest
-
 from core.models import ContentType, ProcessingResult
 from formatters.json_formatter import JsonFormatter
 
@@ -299,10 +297,8 @@ class TestJsonFormatterEdgeCases:
         """Should handle Position with all fields populated."""
         from core.models import (
             ContentBlock,
-            ContentType,
-            Position,
-            ProcessingResult,
             DocumentMetadata,
+            Position,
         )
 
         result = ProcessingResult(
@@ -346,7 +342,8 @@ class TestJsonFormatterEdgeCases:
     def test_serializes_all_optional_metadata_fields(self):
         """Should handle DocumentMetadata with all fields populated."""
         from datetime import datetime
-        from core.models import DocumentMetadata, ProcessingResult
+
+        from core.models import DocumentMetadata
 
         result = ProcessingResult(
             content_blocks=tuple(),
@@ -399,7 +396,8 @@ class TestJsonFormatterEdgeCases:
     def test_serializes_content_block_optional_fields(self):
         """Should handle ContentBlock with all optional fields."""
         from uuid import uuid4
-        from core.models import ContentBlock, ContentType, ProcessingResult, DocumentMetadata
+
+        from core.models import ContentBlock, DocumentMetadata
 
         block_id = uuid4()
         related_id = uuid4()
@@ -436,7 +434,7 @@ class TestJsonFormatterEdgeCases:
 
     def test_error_handling_during_serialization(self):
         """Should handle serialization errors gracefully."""
-        from core.models import ProcessingResult, DocumentMetadata
+        from core.models import DocumentMetadata
 
         # Create a result that might cause issues
         result = ProcessingResult(

@@ -8,19 +8,16 @@ ContextLinker builds hierarchical document structure by:
 - Preserving relationships in metadata
 """
 
-import pytest
 from pathlib import Path
-from uuid import UUID
 
+from processors.context_linker import ContextLinker
 from src.core import (
     ContentBlock,
     ContentType,
-    ExtractionResult,
     DocumentMetadata,
+    ExtractionResult,
     ProcessingStage,
-    Position,
 )
-from processors.context_linker import ContextLinker
 
 
 class TestContextLinkerBasics:

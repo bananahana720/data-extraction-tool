@@ -4,8 +4,9 @@ Test fixtures for extractor tests.
 Provides sample files and data structures for testing extractors.
 """
 
-import pytest
 from pathlib import Path
+
+import pytest
 
 
 @pytest.fixture

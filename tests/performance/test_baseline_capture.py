@@ -8,12 +8,13 @@ failing on threshold violations.
 Run with: pytest tests/performance/test_baseline_capture.py -v -s
 """
 
-import pytest
 from datetime import datetime
 from pathlib import Path
 
-from extractors.pdf_extractor import PdfExtractor
+import pytest
+
 from extractors.excel_extractor import ExcelExtractor
+from extractors.pdf_extractor import PdfExtractor
 from extractors.txt_extractor import TextFileExtractor
 from tests.performance.conftest import (
     BenchmarkResult,
@@ -262,7 +263,7 @@ class TestBaselineCapture:
     def test_capture_formatter_baselines(self, perf_measure, production_baseline_manager):
         """Capture formatter baselines."""
         from src.core import ContentBlock, ContentType, Position
-        from src.formatters import JsonFormatter, MarkdownFormatter, ChunkedTextFormatter
+        from src.formatters import ChunkedTextFormatter, JsonFormatter, MarkdownFormatter
 
         # Create sample data
         blocks = []

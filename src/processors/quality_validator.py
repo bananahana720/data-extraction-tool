@@ -19,8 +19,6 @@ Design:
 - Configurable: Thresholds and penalties can be adjusted
 """
 
-import re
-from typing import Optional
 
 from core import (
     BaseProcessor,

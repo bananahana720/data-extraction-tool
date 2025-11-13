@@ -12,10 +12,8 @@ Usage:
         assert sample_content_block.block_type == ContentType.PARAGRAPH
 """
 
-import tempfile
 from pathlib import Path
 from typing import Generator
-from uuid import uuid4
 
 import pytest
 
@@ -25,13 +23,11 @@ from src.core import (
     ContentType,
     DocumentMetadata,
     ExtractionResult,
-    ImageMetadata,
     Position,
     ProcessingResult,
     ProcessingStage,
     TableMetadata,
 )
-
 
 # ============================================================================
 # ContentBlock Fixtures

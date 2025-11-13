@@ -4,7 +4,6 @@ Configuration for edge case tests.
 Provides shared fixtures and markers for edge case testing.
 """
 
-import pytest
 
 
 def pytest_configure(config):

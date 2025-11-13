@@ -11,12 +11,11 @@ Test coverage for:
 - Integration with other commands
 """
 
-import pytest
 import sys
-import platform
-from click.testing import CliRunner
 
-from cli.main import cli, __version__
+import pytest
+
+from cli.main import __version__, cli
 
 
 class TestVersionCommand:

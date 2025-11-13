@@ -14,8 +14,6 @@ Tests organized by requirement:
 
 from pathlib import Path
 
-import pytest
-
 from core.models import ContentBlock, ContentType, DocumentMetadata, ProcessingResult
 from formatters.chunked_text_formatter import ChunkedTextFormatter
 

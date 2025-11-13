@@ -37,10 +37,9 @@ from contextlib import contextmanager
 from contextvars import ContextVar
 from functools import wraps
 from pathlib import Path
-from typing import Any, Callable, Optional
+from typing import Callable, Optional
 
 import yaml
-
 
 # Context variable for correlation ID (thread-safe)
 _correlation_id: ContextVar[Optional[str]] = ContextVar("correlation_id", default=None)

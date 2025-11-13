@@ -22,7 +22,6 @@ Design:
 """
 
 from typing import Optional
-from pathlib import Path
 
 from core import (
     BaseProcessor,

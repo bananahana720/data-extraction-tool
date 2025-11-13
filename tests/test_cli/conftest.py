@@ -8,16 +8,15 @@ Provides reusable fixtures for CLI testing including:
 - Temporary output directories
 """
 
+
 import pytest
-from pathlib import Path
 from click.testing import CliRunner
 from docx import Document
 
-from src.pipeline import ExtractionPipeline, BatchProcessor
 from src.extractors import DocxExtractor
-from src.processors import ContextLinker, MetadataAggregator
 from src.formatters import JsonFormatter, MarkdownFormatter
-from src.infrastructure import ConfigManager
+from src.pipeline import BatchProcessor, ExtractionPipeline
+from src.processors import ContextLinker, MetadataAggregator
 
 
 @pytest.fixture

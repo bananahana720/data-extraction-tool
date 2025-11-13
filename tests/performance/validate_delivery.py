@@ -4,8 +4,8 @@ Validation script for performance baseline suite delivery.
 Run this to verify all deliverables are in place.
 """
 
-from pathlib import Path
 import json
+from pathlib import Path
 
 
 def validate_delivery():
@@ -61,7 +61,7 @@ def validate_delivery():
         if num_baselines < 10:
             issues.append(f"Only {num_baselines} baselines (expected 11+)")
     else:
-        print(f"   ❌ baselines.json MISSING")
+        print("   ❌ baselines.json MISSING")
         issues.append("Missing baselines.json")
 
     # Check documentation
@@ -98,10 +98,10 @@ def validate_delivery():
             print(f"   ✅ pytest.ini configured with markers: {', '.join(markers_found)}")
             successes.append("Pytest markers configured")
         else:
-            print(f"   ⚠️  pytest.ini exists but markers not found")
+            print("   ⚠️  pytest.ini exists but markers not found")
             issues.append("Pytest markers not configured")
     else:
-        print(f"   ❌ pytest.ini MISSING")
+        print("   ❌ pytest.ini MISSING")
         issues.append("Missing pytest.ini")
 
     # Summary

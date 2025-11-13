@@ -3,8 +3,8 @@
 Test script to verify poppler_path configuration works correctly.
 """
 
-from pathlib import Path
 import sys
+from pathlib import Path
 
 # Add src to path
 sys.path.insert(0, str(Path(__file__).parent / "src"))

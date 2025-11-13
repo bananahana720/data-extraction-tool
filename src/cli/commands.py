@@ -11,24 +11,24 @@ Each command provides user-friendly messages and error handling
 for non-technical users.
 """
 
-from pathlib import Path
-from typing import Optional, List
-import sys
 import glob as glob_module
 import io
+import sys
+from pathlib import Path
+from typing import Optional
 
 import click
-from rich.progress import Progress, SpinnerColumn, BarColumn, TextColumn, TimeRemainingColumn
 from rich.console import Console
+
+from cli.progress_display import BatchProgress, SingleFileProgress
+from extractors import DocxExtractor, PdfExtractor, TextFileExtractor
+from formatters import ChunkedTextFormatter, JsonFormatter, MarkdownFormatter
+from infrastructure import ConfigManager, ErrorHandler
 
 # Use absolute imports that work both in development and installed package
 # When installed via wheel, cli/extractors/etc become top-level packages
-from pipeline import ExtractionPipeline, BatchProcessor
-from extractors import DocxExtractor, PdfExtractor, TextFileExtractor
+from pipeline import BatchProcessor, ExtractionPipeline
 from processors import ContextLinker, MetadataAggregator, QualityValidator
-from formatters import JsonFormatter, MarkdownFormatter, ChunkedTextFormatter
-from infrastructure import ConfigManager, ErrorHandler, get_logger
-from cli.progress_display import SingleFileProgress, BatchProgress
 
 # Try to import additional extractors if available
 try:
@@ -316,7 +316,7 @@ def extract_command(ctx, file_path: Path, output: Optional[Path], format: str, f
 
         # Check result
         if not result.success:
-            console.print(f"[red]Error: Extraction failed[/red]")
+            console.print("[red]Error: Extraction failed[/red]")
             if result.all_errors:
                 error_msg = result.all_errors[0]
                 user_msg = format_user_error(error_msg)
@@ -499,8 +499,8 @@ def version_command(verbose: bool):
     console.print(f"[bold]Data Extraction Tool[/bold] version {__version__}")
 
     if verbose:
-        import sys
         import platform
+        import sys
 
         console.print(f"\nPython version: {sys.version.split()[0]}")
         console.print(f"Platform: {platform.platform()}")
@@ -565,10 +565,10 @@ def config_validate(ctx):
 
     try:
         config = ConfigManager(config_path)
-        console.print(f"[green]VALID: Configuration is valid[/green]")
+        console.print("[green]VALID: Configuration is valid[/green]")
         console.print(f"  File: {config_path}")
     except Exception as e:
-        console.print(f"[red]INVALID: Configuration is invalid[/red]")
+        console.print("[red]INVALID: Configuration is invalid[/red]")
         console.print(f"\nError: {e}")
         sys.exit(1)
 

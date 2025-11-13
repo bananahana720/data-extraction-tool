@@ -17,19 +17,16 @@ Usage:
     pytest tests/test_extractors/test_docx_extractor.py -k "test_name"
 """
 
-import pytest
 from pathlib import Path
+
+import pytest
 
 # When DocxExtractor is implemented, import like this:
 # from extractors.docx_extractor import DocxExtractor
-
 from src.core import (
-    BaseExtractor,
-    ContentBlock,
     ContentType,
     ExtractionResult,
 )
-
 
 # ============================================================================
 # Basic Extraction Tests

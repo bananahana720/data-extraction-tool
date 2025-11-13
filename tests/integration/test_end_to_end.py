@@ -11,15 +11,12 @@ Test IDs: E2E-001 through E2E-012
 """
 
 import json
-from pathlib import Path
 
 import pytest
 
-from src.core import ProcessingStage
 from src.formatters import ChunkedTextFormatter, JsonFormatter, MarkdownFormatter
 from src.pipeline import BatchProcessor, ExtractionPipeline
 from src.processors import ContextLinker, MetadataAggregator, QualityValidator
-
 
 # ==============================================================================
 # Test Markers

@@ -210,7 +210,6 @@ class TestOCRConfidenceCalculation:
         assert confidence == pytest.approx(0.923, abs=0.001)
 
 
-
 class TestDocumentAverageConfidence:
     """Test document-level average confidence calculation."""
 

@@ -15,17 +15,14 @@ Tests complete pipeline orchestration and coordination:
 Test IDs: PO-001 through PO-012
 """
 
-import json
-from pathlib import Path
 
 import pytest
 
-from src.core import ContentType, ProcessingStage
+from src.core import ProcessingStage
 from src.extractors import DocxExtractor, PdfExtractor
 from src.formatters import ChunkedTextFormatter, JsonFormatter, MarkdownFormatter
 from src.pipeline import BatchProcessor, ExtractionPipeline
 from src.processors import ContextLinker, MetadataAggregator, QualityValidator
-
 
 # ==============================================================================
 # Test Markers

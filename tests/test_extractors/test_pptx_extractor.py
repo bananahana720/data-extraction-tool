@@ -5,20 +5,15 @@ TDD approach: Each test written before implementation.
 Organized by requirement from test plan.
 """
 
-import pytest
-from pathlib import Path
-from datetime import datetime
-
 import sys
+from pathlib import Path
+
+import pytest
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
 from core import (
-    ContentBlock,
     ContentType,
-    DocumentMetadata,
-    ExtractionResult,
-    Position,
 )
 
 # Import will fail initially - that's expected in TDD

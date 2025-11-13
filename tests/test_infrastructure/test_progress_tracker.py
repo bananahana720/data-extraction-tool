@@ -5,11 +5,9 @@ TDD approach - tests written first, implementation follows.
 Target: >85% code coverage
 """
 
-import pytest
-from unittest.mock import Mock, call
-import time
 import threading
-
+import time
+from unittest.mock import Mock
 
 # RED PHASE: These tests will fail until we implement progress_tracker module
 

@@ -15,14 +15,9 @@ Test coverage:
 Related fix: BATCH_STALLING_FIX.md
 """
 
-import pytest
-import signal
 import sys
-import os
-import time
-import subprocess
-from pathlib import Path
-from click.testing import CliRunner
+
+import pytest
 from docx import Document
 
 from cli.main import cli, main

@@ -15,17 +15,16 @@ Test Categories:
 - Concurrent processing
 """
 
-import pytest
-from pathlib import Path
 import sys
 import time
+from pathlib import Path
+
+import pytest
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
-from core import ContentBlock, ContentType
-from pipeline.extraction_pipeline import ExtractionPipeline
 from pipeline.batch_processor import BatchProcessor
-
+from pipeline.extraction_pipeline import ExtractionPipeline
 
 # ==============================================================================
 # Format Detection Edge Cases
@@ -294,8 +293,8 @@ class TestBatchProcessingEdgeCases:
         Partition: Format → Valid → Mixed
         Expected: Each file processed by correct extractor
         """
-        from reportlab.pdfgen import canvas
         from docx import Document
+        from reportlab.pdfgen import canvas
 
         processor = BatchProcessor()
 

@@ -13,7 +13,6 @@ Test IDs: II-001 through II-008
 """
 
 import logging
-from pathlib import Path
 
 import pytest
 
@@ -21,13 +20,10 @@ from src.extractors import DocxExtractor, TextFileExtractor
 from src.formatters import JsonFormatter
 from src.infrastructure import (
     ConfigManager,
-    ErrorHandler,
-    ProgressTracker,
     get_logger,
 )
 from src.pipeline import ExtractionPipeline
 from src.processors import ContextLinker
-
 
 # ==============================================================================
 # Test Markers

@@ -14,8 +14,6 @@ Tests organized by requirement:
 
 from pathlib import Path
 
-import pytest
-
 from core.models import ContentType
 from formatters.markdown_formatter import MarkdownFormatter
 
@@ -188,7 +186,7 @@ class TestMarkdownFormatterTables:
 
     def test_formats_table_with_metadata(self, table_metadata_sample):
         """Should format table data as markdown table if available."""
-        from core.models import ContentBlock, ContentType, DocumentMetadata, ProcessingResult
+        from core.models import ContentBlock, DocumentMetadata, ProcessingResult
 
         result = ProcessingResult(
             content_blocks=(

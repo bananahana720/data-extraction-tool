@@ -8,21 +8,19 @@ This module benchmarks end-to-end pipeline performance, including:
 - Batch processing throughput
 """
 
-import pytest
 from datetime import datetime
 from pathlib import Path
-from typing import List
+
+import pytest
 
 from src.core import ContentBlock, ContentType, ExtractionResult, Position
+from src.formatters import ChunkedTextFormatter, JsonFormatter, MarkdownFormatter
 from src.processors import ContextLinker, MetadataAggregator, QualityValidator
-from src.formatters import JsonFormatter, MarkdownFormatter, ChunkedTextFormatter
 from tests.performance.conftest import (
     BenchmarkResult,
-    PerformanceMeasurement,
     assert_memory_limit,
     assert_performance_target,
 )
-
 
 # ============================================================================
 # Test Configuration
@@ -141,7 +139,7 @@ class TestProcessorChainBenchmarks:
 
         # Log for baseline
         print(f"\n{'='*60}")
-        print(f"Context Linker Benchmark:")
+        print("Context Linker Benchmark:")
         print(f"  Blocks Processed: {len(extraction_result.content_blocks)}")
         print(f"  Duration: {perf.duration_ms:.2f} ms ({perf.duration_seconds:.3f}s)")
         print(f"  Peak Memory: {perf.peak_memory_mb:.2f} MB")
@@ -187,7 +185,7 @@ class TestProcessorChainBenchmarks:
 
         # Log for baseline
         print(f"\n{'='*60}")
-        print(f"Metadata Aggregator Benchmark:")
+        print("Metadata Aggregator Benchmark:")
         print(f"  Blocks Processed: {len(extraction_result.content_blocks)}")
         print(f"  Duration: {perf.duration_ms:.2f} ms ({perf.duration_seconds:.3f}s)")
         print(f"  Peak Memory: {perf.peak_memory_mb:.2f} MB")
@@ -234,7 +232,7 @@ class TestProcessorChainBenchmarks:
 
         # Log for baseline
         print(f"\n{'='*60}")
-        print(f"Quality Validator Benchmark:")
+        print("Quality Validator Benchmark:")
         print(f"  Blocks Processed: {len(extraction_result.content_blocks)}")
         print(f"  Duration: {perf.duration_ms:.2f} ms ({perf.duration_seconds:.3f}s)")
         print(f"  Peak Memory: {perf.peak_memory_mb:.2f} MB")
@@ -288,9 +286,9 @@ class TestProcessorChainBenchmarks:
 
         # Log for baseline
         print(f"\n{'='*60}")
-        print(f"Full Processor Chain Benchmark:")
+        print("Full Processor Chain Benchmark:")
         print(f"  Blocks Processed: {len(extraction_result.content_blocks)}")
-        print(f"  Processors: Context → Metadata → Quality")
+        print("  Processors: Context → Metadata → Quality")
         print(f"  Duration: {perf.duration_ms:.2f} ms ({perf.duration_seconds:.3f}s)")
         print(f"  Peak Memory: {perf.peak_memory_mb:.2f} MB")
         print(f"  Throughput: {benchmark.throughput:.2f} blocks/s")
@@ -357,7 +355,7 @@ class TestFormatterBenchmarks:
 
         # Log for baseline
         print(f"\n{'='*60}")
-        print(f"JSON Formatter Benchmark:")
+        print("JSON Formatter Benchmark:")
         print(f"  Blocks Formatted: {len(extraction_result.content_blocks)}")
         print(f"  Duration: {perf.duration_ms:.2f} ms ({perf.duration_seconds:.3f}s)")
         print(f"  Peak Memory: {perf.peak_memory_mb:.2f} MB")
@@ -406,7 +404,7 @@ class TestFormatterBenchmarks:
 
         # Log for baseline
         print(f"\n{'='*60}")
-        print(f"Markdown Formatter Benchmark:")
+        print("Markdown Formatter Benchmark:")
         print(f"  Blocks Formatted: {len(extraction_result.content_blocks)}")
         print(f"  Duration: {perf.duration_ms:.2f} ms ({perf.duration_seconds:.3f}s)")
         print(f"  Peak Memory: {perf.peak_memory_mb:.2f} MB")
@@ -455,7 +453,7 @@ class TestFormatterBenchmarks:
 
         # Log for baseline
         print(f"\n{'='*60}")
-        print(f"Chunked Formatter Benchmark:")
+        print("Chunked Formatter Benchmark:")
         print(f"  Blocks Formatted: {len(extraction_result.content_blocks)}")
         print(f"  Duration: {perf.duration_ms:.2f} ms ({perf.duration_seconds:.3f}s)")
         print(f"  Peak Memory: {perf.peak_memory_mb:.2f} MB")
@@ -532,7 +530,7 @@ class TestBatchProcessingBenchmarks:
 
         # Log for baseline
         print(f"\n{'='*60}")
-        print(f"Sequential Batch Processing Benchmark:")
+        print("Sequential Batch Processing Benchmark:")
         print(f"  Files Processed: {len(pdf_files)}")
         print(f"  Total Size: {total_size_kb:.2f} KB")
         print(f"  Duration: {perf.duration_ms:.2f} ms ({perf.duration_seconds:.2f}s)")

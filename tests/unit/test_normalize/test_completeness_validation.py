@@ -10,9 +10,6 @@ Tests for QualityValidator methods:
 
 from datetime import datetime
 from pathlib import Path
-from unittest.mock import MagicMock
-
-import pytest
 
 from src.data_extract.core.models import Document, Metadata, ProcessingContext
 from src.data_extract.normalize.validation import QualityValidator
@@ -416,9 +413,7 @@ class TestCompletenessRatioCalculation:
             {"block_type": "text", "content": f"Block {i}", "metadata": {}, "position": {}}
             for i in range(1, 10)
         ]
-        content_blocks.append(
-            {"block_type": "text", "content": "", "metadata": {}, "position": {}}
-        )
+        content_blocks.append({"block_type": "text", "content": "", "metadata": {}, "position": {}})
         document = Document(
             id="DOC-001",
             text="Test content",
@@ -509,8 +504,7 @@ class TestCompletenessValidationIntegration:
 
         # Check quality flags added
         assert any(
-            flag in result.metadata.quality_flags
-            for flag in ["missing_images", "complex_objects"]
+            flag in result.metadata.quality_flags for flag in ["missing_images", "complex_objects"]
         )
 
     def test_process_quarantine_on_low_completeness(self, tmp_path):
@@ -541,9 +535,7 @@ class TestCompletenessValidationIntegration:
         )
         context = ProcessingContext(config={"output_dir": tmp_path})
 
-        validator = QualityValidator(
-            completeness_threshold=0.90, quarantine_low_confidence=True
-        )
+        validator = QualityValidator(completeness_threshold=0.90, quarantine_low_confidence=True)
         result = validator.process(document, context)
 
         # Quarantine should have been triggered

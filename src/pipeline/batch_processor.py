@@ -31,18 +31,19 @@ Example:
     >>> print(f"Processed {summary['successful']}/{summary['total_files']} files")
 """
 
-from pathlib import Path
-from typing import List, Optional, Callable, Any, Dict
+import os
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timezone
-import os
+from pathlib import Path
+from typing import Any, Callable, Dict, List, Optional
 
 from core import PipelineResult, ProcessingStage
 from infrastructure import (
-    get_logger,
     ErrorHandler,
     ProgressTracker,
+    get_logger,
 )
+
 from .extraction_pipeline import ExtractionPipeline
 
 

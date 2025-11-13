@@ -19,21 +19,16 @@ Test Organization:
 Coverage: 40+ tests for comprehensive CSV/TSV extraction validation
 """
 
-import pytest
-from pathlib import Path
-from unittest.mock import Mock, patch
 import sys
+from pathlib import Path
+
+import pytest
 
 # Add src to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
 from core import (
-    ContentBlock,
     ContentType,
-    DocumentMetadata,
-    ExtractionResult,
-    Position,
-    TableMetadata,
 )
 
 # Import will fail initially - this is expected in RED phase

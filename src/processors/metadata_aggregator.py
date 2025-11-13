@@ -19,7 +19,6 @@ Design:
 - Safe: Handles missing data gracefully
 """
 
-from typing import Optional
 from collections import defaultdict
 
 from core import (

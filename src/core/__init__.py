@@ -23,6 +23,13 @@ Public API:
 """
 
 # Data models
+# Interfaces
+from .interfaces import (
+    BaseExtractor,
+    BaseFormatter,
+    BasePipeline,
+    BaseProcessor,
+)
 from .models import (
     ContentBlock,
     ContentType,
@@ -35,14 +42,6 @@ from .models import (
     ProcessingResult,
     ProcessingStage,
     TableMetadata,
-)
-
-# Interfaces
-from .interfaces import (
-    BaseExtractor,
-    BaseFormatter,
-    BasePipeline,
-    BaseProcessor,
 )
 
 __all__ = [

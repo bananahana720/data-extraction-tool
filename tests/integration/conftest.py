@@ -10,12 +10,9 @@ This module provides shared fixtures for integration testing including:
 """
 
 import shutil
-import tempfile
 from pathlib import Path
-from typing import Generator
 
 import pytest
-
 
 # ==============================================================================
 # Sample Document Fixtures
@@ -356,10 +353,10 @@ def configured_pipeline():
     Returns:
         Configured ExtractionPipeline instance
     """
-    from src.pipeline import ExtractionPipeline
     from src.extractors import DocxExtractor, PdfExtractor, TextFileExtractor
+    from src.formatters import ChunkedTextFormatter, JsonFormatter, MarkdownFormatter
+    from src.pipeline import ExtractionPipeline
     from src.processors import ContextLinker, MetadataAggregator, QualityValidator
-    from src.formatters import JsonFormatter, MarkdownFormatter, ChunkedTextFormatter
 
     pipeline = ExtractionPipeline()
 

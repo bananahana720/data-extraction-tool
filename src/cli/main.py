@@ -14,19 +14,18 @@ Design:
 - Configurable via command-line options
 """
 
+import sys
 from pathlib import Path
 from typing import Optional
-import sys
 
 import click
 
 from .commands import (
-    extract_command,
     batch_command,
-    version_command,
     config_command,
+    extract_command,
+    version_command,
 )
-
 
 # Version information
 __version__ = "1.0.0"

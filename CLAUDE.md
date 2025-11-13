@@ -220,6 +220,58 @@ Epic 1 sets up infrastructure; Epic 5 implements full cascade.
 
 **Enterprise Constraint**: Classical NLP only - no transformer models allowed.
 
+## Lessons from Epic 2
+
+Epic 2 (Extract & Normalize) established critical patterns from 6 stories with multiple code review cycles.
+
+### Quality Gates Workflow
+
+**Run BEFORE committing** (shift-left approach):
+1. Write code
+2. `black src/ tests/` → Fix formatting
+3. `ruff check src/ tests/` → Fix linting
+4. `mypy src/data_extract/` → Fix type violations (**must run from project root**)
+5. Run tests → Fix failures
+6. Commit clean code
+
+**Quality Bar**: 0 violations required. No exceptions.
+
+### Key Anti-Patterns (DO NOT REPEAT)
+
+1. **Deferred Validation Fixes**: Fix mypy/ruff violations immediately, not in later stories. Accumulating tech debt slows velocity.
+2. **Skipping Integration Tests**: Unit tests alone miss memory leaks, resource issues, and NFR violations. Always test multi-component workflows.
+3. **Premature Optimization**: Profile first (establish baseline), measure actual behavior, then optimize. Don't guess at bottlenecks.
+4. **Missing Context Docs**: Document architectural decisions and patterns as you go. Future stories depend on this context.
+
+### Architecture Patterns
+
+**PipelineStage Protocol**: All processing stages implement `process(ProcessingResult) -> ProcessingResult` interface. Enables easy testing, flexible composition, gradual refactoring.
+
+**Memory Monitoring**: Reuse `get_total_memory()` from `scripts/profile_pipeline.py:151-167` (aggregates main + worker processes, 9.6ms overhead).
+
+**Test Fixtures**: Keep total <100MB, use synthetic/sanitized data, document in `tests/fixtures/README.md`, provide regeneration scripts.
+
+**spaCy Integration**: Download models via setup (not runtime), lazy-load on first use, cache globally. See `docs/troubleshooting-spacy.md`.
+
+### NFR Validation Approach
+
+Validate continuously against baselines (established in Story 2.5.1):
+- **NFR-P1**: <10 min for 100 PDFs (achieved: 6.86 min, 148% improvement)
+- **NFR-P2**: <2GB memory (individual files: 167MB ✅, batch: 4.15GB ⚠️ trade-off documented)
+- **NFR-R2**: Graceful degradation via continue-on-error pattern
+- **NFR-O3**: Test reporting via pytest coverage + performance baselines
+
+Document trade-offs transparently when targets conflict with complexity.
+
+### Detailed References
+
+- **Quality gates**: See `## Code Quality` section above for command details
+- **spaCy setup**: `docs/troubleshooting-spacy.md`
+- **Memory monitoring**: `docs/stories/2.5-2.1-pipeline-throughput-optimization.md`
+- **Test fixtures**: `tests/fixtures/README.md`
+- **Performance baselines**: `docs/performance-baselines-story-2.5.1.md`
+- **Story details**: `docs/stories/2.5-*.md` for implementation patterns
+
 ## Common Tasks
 
 ### Adding a New Extractor

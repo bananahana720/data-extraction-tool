@@ -19,11 +19,11 @@ Not Yet Implemented:
 - Footnotes/comments (DOCX-META-001)
 """
 
-from pathlib import Path
-from typing import Optional, Union
-from datetime import datetime, timezone
 import hashlib
 import logging
+from datetime import datetime, timezone
+from pathlib import Path
+from typing import Optional, Union
 
 try:
     from docx import Document
@@ -51,12 +51,12 @@ from core import (
 try:
     from infrastructure import (
         ConfigManager,
-        get_logger,
-        timed,
-        timer,
         ErrorHandler,
         ProgressTracker,
         RecoveryAction,
+        get_logger,
+        timed,
+        timer,
     )
 
     INFRASTRUCTURE_AVAILABLE = True

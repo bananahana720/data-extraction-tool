@@ -18,25 +18,22 @@ Test Categories:
 - Missing/invalid metadata
 """
 
-import pytest
-from pathlib import Path
 import sys
-from uuid import uuid4
+from pathlib import Path
+
+import pytest
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
 from core import (
     ContentBlock,
     ContentType,
-    ExtractionResult,
     DocumentMetadata,
-    ProcessingStage,
-    Position,
+    ExtractionResult,
 )
 from processors.context_linker import ContextLinker
 from processors.metadata_aggregator import MetadataAggregator
 from processors.quality_validator import QualityValidator
-
 
 # ==============================================================================
 # ContextLinker Edge Cases

@@ -14,12 +14,10 @@ Test IDs: CLI-001 through CLI-013
 """
 
 import json
-from pathlib import Path
 
 import pytest
 
 from cli.main import cli
-
 
 # ==============================================================================
 # Test Markers

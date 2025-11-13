@@ -14,14 +14,13 @@ Tests verify:
 import json
 import os
 import sys
-import tempfile
 import threading
 from pathlib import Path
 from typing import Optional
 
 import pytest
 import yaml
-from pydantic import BaseModel, Field, ValidationError
+from pydantic import BaseModel, Field
 
 # Add src to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
