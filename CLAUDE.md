@@ -64,6 +64,25 @@ pip install -e ".[dev]"
 pre-commit install
 ```
 
+### spaCy Model Setup (Required for Epic 3)
+
+**Story 2.5.2** integrates spaCy 3.7.2+ for sentence boundary detection used in Epic 3 chunking.
+
+```bash
+# Download required language model (43MB, one-time setup)
+python -m spacy download en_core_web_md
+
+# Verify installation
+python -m spacy validate
+
+# Test in Python
+python -c "import spacy; nlp = spacy.load('en_core_web_md'); print(f'Model loaded: {nlp.meta[\"version\"]}')"
+```
+
+**Performance**: Model loads in ~1.2 seconds, processes 4000+ words/second.
+
+**Troubleshooting**: See `docs/troubleshooting-spacy.md` for common issues.
+
 ### Testing (pytest with markers)
 ```bash
 # Run all tests (includes 1000+ brownfield tests)

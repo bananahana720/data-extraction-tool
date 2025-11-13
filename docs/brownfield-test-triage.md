@@ -67,6 +67,39 @@ The brownfield `ExtractionPipeline` class (location TBD - Story 1.2 assessment) 
 
 ---
 
+#### 📌 **Story 2.5.1 Real-World Impact: Brownfield Pipeline Failure**
+
+**Context**: Story 2.5.1 (Large Document Validation and Performance) initially attempted to validate the extraction pipeline performance using brownfield code paths in `src/pipeline/` and legacy extractors.
+
+**Results**:
+- **Success Rate**: 0/100 files (0% completion)
+- **Error Pattern**: "No extractor registered for format" across all formats (PDF, DOCX, XLSX)
+- **Scope**: Batch processing of 100 test documents completely failed
+
+**Investigation**:
+The brownfield pipeline's extractor registration mechanism has critical gaps:
+1. Format auto-detection occurs but no extractors are instantiated
+2. Registry lookup fails silently or throws unhandled exceptions
+3. No fallback mechanism to attempt other extraction methods
+4. Error handling doesn't distinguish between "format not supported" vs "extractor not registered"
+
+**Resolution**:
+Story 2.5.1 was corrected to use the **greenfield architecture** (`src/data_extract/`):
+- New modular extractors in `src/data_extract/extract/`
+- Proper extractor registration in pipeline initialization
+- Clear error messages and graceful format-specific failures
+- Result: ✅ 100/100 files processed successfully with performance metrics
+
+**Lessons**:
+- **Validates brownfield assessment**: This real-world failure demonstrates why Category A is critical
+- **Justifies greenfield investment**: Greenfield extractors proved production-ready immediately
+- **Risk mitigation**: Future stories should avoid brownfield pipeline code entirely
+- **Timeline acceleration**: Migration to greenfield unlocked Story 2.5+ work that was blocked
+
+**Recommendation**: Explicitly document in Story 1.4 (Core Pipeline Consolidation) that brownfield `ExtractionPipeline` and all extractor registration code should be **deprecated and removed** once greenfield equivalents are verified.
+
+---
+
 ### 🟡 **Category B: QualityValidator Implementation Incomplete (23 tests)**
 **Root Cause**: `QualityValidator` processor doesn't calculate quality scores or populate metadata
 **Error Pattern**: `assert 'quality_score' in metadata` failures, scores return 0

@@ -48,9 +48,60 @@ cat docs/reports/PERFORMANCE_BASELINE.md
 | `test_baseline_capture.py` | Establish baselines without strict assertions | 5 |
 | `test_extractor_benchmarks.py` | Extractor performance tests (PDF, Excel, TXT) | 8 |
 | `test_pipeline_benchmarks.py` | Processor, formatter, batch performance | 7 |
+| `test_throughput.py` | NFR validation: 100-file batch throughput & memory (Story 2.5.1) | 4+ |
 | `baselines.json` | Performance baseline data | - |
+| `batch_100_files/` | 100-file test batch for NFR-P1/P2 validation | - |
 
 **Total**: ~1,976 lines of code, 20+ benchmark tests
+
+## 100-File Test Batch (Story 2.5.1)
+
+Location: `batch_100_files/`
+
+### Batch Composition
+
+The performance test batch contains 100 files distributed as follows:
+
+| File Type | Count | Location | Purpose |
+|-----------|-------|----------|---------|
+| PDF | 40 | `batch_100_files/pdfs/` | Test PDF extraction performance (native + OCR paths) |
+| DOCX | 30 | `batch_100_files/docx/` | Test Office document extraction |
+| XLSX | 20 | `batch_100_files/xlsx/` | Test spreadsheet extraction with varying row counts |
+| Mixed | 10 | `batch_100_files/mixed/` | PPTX, images, and other formats |
+| **Total** | **100** | | |
+
+### File Size Distribution
+
+Files are duplicated from existing fixtures in round-robin fashion to create variety:
+- **PDFs**: Mix of 1-50 page documents (including large COBIT and NIST standards)
+- **DOCX**: Mix of 1-20 page documents with tables and images
+- **XLSX**: Mix of 10-1000 row spreadsheets with formulas and multiple sheets
+- **Mixed**: PowerPoint presentations and images
+
+### Batch Creation
+
+The batch is created by `scripts/create_performance_batch.py`:
+
+```bash
+python -m scripts.create_performance_batch
+```
+
+### NFR Validation Tests
+
+The 100-file batch validates:
+
+1. **NFR-P1: Batch Processing Throughput**
+   - 100 files process in <10 minutes
+   - Sustained throughput ~10 files/minute
+   - Test: `test_batch_throughput_100_files()` in `test_throughput.py`
+
+2. **NFR-P2: Memory Efficiency**
+   - Peak memory <2GB (2048MB) during batch processing
+   - No memory leaks detected (memory returns to baseline)
+   - Tests: `test_memory_usage_within_limits()`, `test_no_memory_leaks()` in `test_throughput.py`
+
+3. **ADR-005 Validation**: Streaming pipeline architecture maintains constant memory
+4. **ADR-006 Validation**: Continue-on-error pattern enables graceful degradation
 
 ## Performance Metrics
 

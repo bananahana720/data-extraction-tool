@@ -2,11 +2,11 @@
   "baselines": {
     "pdf_small": {
       "operation": "pdf_small",
-      "duration_ms": 65929.12380001508,
-      "memory_mb": 304.290491104126,
+      "duration_ms": 64943.57740000123,
+      "memory_mb": 304.2716484069824,
       "file_size_kb": 807.28515625,
-      "throughput": 12.244742683047994,
-      "timestamp": "2025-11-10T10:57:09.212914",
+      "throughput": 12.430561859531696,
+      "timestamp": "2025-11-12T12:26:23.825486",
       "metadata": {
         "file_name": "COBIT-2019-Framework-Introduction-and-Methodology_res_eng_1118.pdf",
         "pages": 64
@@ -14,11 +14,11 @@
     },
     "pdf_medium": {
       "operation": "pdf_medium",
-      "duration_ms": 136044.19649997726,
-      "memory_mb": 1234.473976135254,
+      "duration_ms": 135117.52780000097,
+      "memory_mb": 1234.3601274490356,
       "file_size_kb": 2217.1162109375,
-      "throughput": 16.29702896542059,
-      "timestamp": "2025-11-10T10:59:27.401782",
+      "throughput": 16.408797933449787,
+      "timestamp": "2025-11-12T12:28:41.139010",
       "metadata": {
         "file_name": "NIST.SP.800-37r2.pdf",
         "pages": 183
@@ -26,11 +26,11 @@
     },
     "pdf_large": {
       "operation": "pdf_large",
-      "duration_ms": 369074.824100011,
-      "memory_mb": 1211.7084341049194,
+      "duration_ms": 341898.1691000008,
+      "memory_mb": 1211.679370880127,
       "file_size_kb": 11633.4384765625,
-      "throughput": 31.520541952246784,
-      "timestamp": "2025-11-10T11:05:38.968803",
+      "throughput": 34.026033269455354,
+      "timestamp": "2025-11-12T12:34:25.417871",
       "metadata": {
         "file_name": "COBIT-2019-Design-Guide_res_eng_1218.pdf",
         "pages": 150
@@ -38,44 +38,44 @@
     },
     "excel_small": {
       "operation": "excel_small",
-      "duration_ms": 16.31919999999809,
-      "memory_mb": 0.23175430297851562,
+      "duration_ms": 14.740300000994466,
+      "memory_mb": 0.22366046905517578,
       "file_size_kb": 4.76171875,
-      "throughput": 291.78628547971454,
-      "timestamp": "2025-11-06T19:05:53.869674",
+      "throughput": 323.04083021911,
+      "timestamp": "2025-11-12T12:34:25.460033",
       "metadata": {
         "file_name": "simple_single_sheet.xlsx"
       }
     },
     "excel_medium": {
       "operation": "excel_medium",
-      "duration_ms": 7844.891400000051,
-      "memory_mb": 115.6740312576294,
+      "duration_ms": 6577.966600001673,
+      "memory_mb": 115.67797565460205,
       "file_size_kb": 113.234375,
-      "throughput": 14.43415456331228,
-      "timestamp": "2025-11-06T19:06:01.907991",
+      "throughput": 17.214191236539754,
+      "timestamp": "2025-11-12T12:34:32.208850",
       "metadata": {
         "file_name": "NIST-Privacy-Framework-V1.0-Core.xlsx"
       }
     },
     "excel_large": {
       "operation": "excel_large",
-      "duration_ms": 4156.656099999964,
-      "memory_mb": 38.97264289855957,
+      "duration_ms": 3363.7218000003486,
+      "memory_mb": 38.96723747253418,
       "file_size_kb": 457.57421875,
-      "throughput": 110.0822891626767,
-      "timestamp": "2025-11-06T19:06:06.156383",
+      "throughput": 136.0321233313506,
+      "timestamp": "2025-11-12T12:34:35.656664",
       "metadata": {
         "file_name": "sp800-53ar5-assessment-procedures.xlsx"
       }
     },
     "txt_small": {
       "operation": "txt_small",
-      "duration_ms": 0.8387999987462536,
-      "memory_mb": 0.01181793212890625,
+      "duration_ms": 1.0750000001280569,
+      "memory_mb": 0.011761665344238281,
       "file_size_kb": 0.87890625,
-      "throughput": 1047.8138427678741,
-      "timestamp": "2025-11-06T19:06:06.169610",
+      "throughput": 817.5872092049324,
+      "timestamp": "2025-11-12T12:34:35.669669",
       "metadata": {
         "file_name": "sample.txt"
       }
@@ -93,33 +93,33 @@
     },
     "processor_context": {
       "operation": "processor_context",
-      "duration_ms": 1.065000000380678,
-      "memory_mb": 0.03740692138671875,
+      "duration_ms": 0.9982000046875328,
+      "memory_mb": 0.0374603271484375,
       "file_size_kb": 0,
-      "throughput": 93896.71358146063,
-      "timestamp": "2025-11-06T19:06:06.181772",
+      "throughput": 100180.3241138063,
+      "timestamp": "2025-11-12T12:34:35.679414",
       "metadata": {
         "num_blocks": 100
       }
     },
     "processor_metadata": {
       "operation": "processor_metadata",
-      "duration_ms": 1.274300000659423,
+      "duration_ms": 1.1629000000539236,
       "memory_mb": 0.03635406494140625,
       "file_size_kb": 0,
-      "throughput": 78474.45652377944,
-      "timestamp": "2025-11-06T19:06:06.183142",
+      "throughput": 85991.91675583714,
+      "timestamp": "2025-11-12T12:34:35.680650",
       "metadata": {
         "num_blocks": 100
       }
     },
     "processor_quality": {
       "operation": "processor_quality",
-      "duration_ms": 1.1639999975159299,
+      "duration_ms": 1.1732000057236291,
       "memory_mb": 0.03061389923095703,
       "file_size_kb": 0,
-      "throughput": 85910.65310430249,
-      "timestamp": "2025-11-06T19:06:06.184379",
+      "throughput": 85236.9583294709,
+      "timestamp": "2025-11-12T12:34:35.681886",
       "metadata": {
         "num_blocks": 100
       }
@@ -184,15 +184,15 @@
     },
     "cli_progress_overhead": {
       "operation": "cli_progress_overhead",
-      "duration_ms": -0.6539000023622066,
+      "duration_ms": 0.7803999978932552,
       "memory_mb": 0.0,
       "file_size_kb": 0.87890625,
       "throughput": 0.0,
-      "timestamp": "2025-11-06T19:06:14.407211",
+      "timestamp": "2025-11-12T12:34:36.727496",
       "metadata": {
-        "with_progress_ms": 909.3107999979111,
-        "quiet_ms": 909.9647000002733,
-        "overhead_pct": -0.071859930650278
+        "with_progress_ms": 104.70440000062808,
+        "quiet_ms": 103.92400000273483,
+        "overhead_pct": 0.7509333723420177
       }
     },
     "processor_quality_validation": {
@@ -221,5 +221,5 @@
       }
     }
   },
-  "updated_at": "2025-11-10T11:05:38.969048"
+  "updated_at": "2025-11-12T12:34:36.727781"
 }
