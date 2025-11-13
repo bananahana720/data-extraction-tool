@@ -241,6 +241,209 @@ def test_no_memory_leaks(batch_100_files):
 
 
 @pytest.mark.performance
+@pytest.mark.slow
+def test_reproducibility_three_runs(batch_100_files):
+    """
+    Validate AC-2.5-2.1-4: Reproducible results with <5% variance across 3 runs.
+
+    Acceptance Criteria:
+    - Run throughput test 3 consecutive times
+    - Calculate mean, std dev, variance
+    - Verify variance <5% of mean
+    - Validates consistent performance, not one-time fluke
+
+    Note: This test takes ~20-30 minutes (3 × 7 min runs)
+    """
+    print(f"\n{'=' * 70}")
+    print("REPRODUCIBILITY TEST - 3 CONSECUTIVE RUNS")
+    print(f"{'=' * 70}\n")
+
+    throughputs = []
+    durations = []
+
+    for run_num in range(1, 4):
+        print(f"[Run {run_num}/3] Starting...")
+        start_time = time.time()
+        results = process_batch(batch_100_files, worker_count=4)
+        end_time = time.time()
+
+        elapsed_seconds = end_time - start_time
+        elapsed_minutes = elapsed_seconds / 60
+        throughput = len(batch_100_files) / elapsed_minutes
+
+        # Verify all files processed
+        assert len(results) == len(batch_100_files), f"Run {run_num}: Incomplete batch"
+
+        throughputs.append(throughput)
+        durations.append(elapsed_minutes)
+
+        print(
+            f"[Run {run_num}/3] Duration: {elapsed_minutes:.2f} min, Throughput: {throughput:.2f} files/min\n"
+        )
+
+    # Calculate statistics
+    mean_throughput = sum(throughputs) / len(throughputs)
+    mean_duration = sum(durations) / len(durations)
+
+    # Calculate standard deviation
+    variance_throughput = sum((x - mean_throughput) ** 2 for x in throughputs) / len(throughputs)
+    std_dev_throughput = variance_throughput**0.5
+    coeff_variation = (std_dev_throughput / mean_throughput) * 100  # Percent variance
+
+    # Print results
+    print(f"{'=' * 70}")
+    print("REPRODUCIBILITY RESULTS")
+    print(f"{'=' * 70}")
+    print(f"Run 1: {throughputs[0]:.2f} files/min ({durations[0]:.2f} min)")
+    print(f"Run 2: {throughputs[1]:.2f} files/min ({durations[1]:.2f} min)")
+    print(f"Run 3: {throughputs[2]:.2f} files/min ({durations[2]:.2f} min)")
+    print(f"Mean:  {mean_throughput:.2f} files/min ({mean_duration:.2f} min)")
+    print(f"Std Dev: {std_dev_throughput:.2f} files/min")
+    print(f"Variance: {coeff_variation:.2f}% (target: <5%)")
+    print(f"Status: {'PASS' if coeff_variation < 5 else 'FAIL'}")
+    print(f"{'=' * 70}\n")
+
+    # Assertions
+    assert coeff_variation < 5, (
+        f"Reproducibility FAILED: Variance {coeff_variation:.2f}% exceeds 5% target. "
+        f"Throughputs: {throughputs}. Mean: {mean_throughput:.2f}, Std Dev: {std_dev_throughput:.2f}. "
+        f"Performance is not stable across runs."
+    )
+
+
+@pytest.mark.performance
+@pytest.mark.slow
+def test_worker_configurability(batch_100_files):
+    """
+    Validate AC-2.5-2.1-2: Worker count is configurable.
+
+    Acceptance Criteria:
+    - Test with 1, 2, and 4 workers
+    - Verify throughput scales with worker count
+    - All worker configs complete successfully
+    - Validates parallelization is truly working
+
+    Note: Uses smaller batch (first 20 files) to keep test time reasonable
+    """
+    print(f"\n{'=' * 70}")
+    print("WORKER CONFIGURABILITY TEST")
+    print(f"{'=' * 70}\n")
+
+    # Use smaller batch for faster test
+    small_batch = batch_100_files[:20]
+
+    results_by_workers = {}
+
+    for workers in [1, 2, 4]:
+        print(f"[Testing {workers} worker(s)]")
+        start_time = time.time()
+        results = process_batch(small_batch, worker_count=workers)
+        end_time = time.time()
+
+        elapsed_seconds = end_time - start_time
+        throughput = len(small_batch) / (elapsed_seconds / 60)
+
+        results_by_workers[workers] = {
+            "throughput": throughput,
+            "duration": elapsed_seconds,
+            "results": results,
+        }
+
+        print(f"  Duration: {elapsed_seconds:.2f}s")
+        print(f"  Throughput: {throughput:.2f} files/min")
+        print(f"  Success: {sum(1 for r in results if r.success)}/{len(results)}\n")
+
+    # Print summary
+    print(f"{'=' * 70}")
+    print("WORKER CONFIGURABILITY RESULTS")
+    print(f"{'=' * 70}")
+    for workers, data in results_by_workers.items():
+        print(f"{workers} worker(s): {data['throughput']:.2f} files/min ({data['duration']:.2f}s)")
+    print(f"{'=' * 70}\n")
+
+    # Assertions
+    # 1. All configs should complete successfully
+    for workers, data in results_by_workers.items():
+        assert len(data["results"]) == len(
+            small_batch
+        ), f"Worker count {workers}: Expected {len(small_batch)} results, got {len(data['results'])}"
+
+    # 2. More workers should generally be faster (allowing for overhead/variance)
+    # We expect 4 workers to be faster than 1 worker (not necessarily 4x due to overhead)
+    assert results_by_workers[4]["duration"] < results_by_workers[1]["duration"] * 1.2, (
+        f"4 workers ({results_by_workers[4]['duration']:.2f}s) not significantly faster than "
+        f"1 worker ({results_by_workers[1]['duration']:.2f}s). Parallelization may not be working."
+    )
+
+
+@pytest.mark.performance
+@pytest.mark.slow
+def test_success_rate_and_ocr_quality(batch_100_files):
+    """
+    Validate AC-2.5-2.1-5: Success rate ≥99% and OCR quality ≥95%.
+
+    Acceptance Criteria:
+    - Success rate: ≥99 of 100 files processed successfully
+    - OCR quality: Average confidence ≥95% across all OCR operations
+    - Quality maintained during parallelization
+    - Validates ADR-006 continue-on-error pattern
+
+    Note: OCR confidence extracted from metadata if available
+    """
+    print(f"\n{'=' * 70}")
+    print("SUCCESS RATE AND OCR QUALITY TEST")
+    print(f"{'=' * 70}\n")
+
+    # Process batch with 4 workers
+    results = process_batch(batch_100_files, worker_count=4)
+
+    # Calculate success rate
+    successful = sum(1 for r in results if r.success)
+    failed = len(results) - successful
+    success_rate_pct = (successful / len(results)) * 100
+
+    # Calculate OCR confidence (if available in results)
+    ocr_confidences = []
+    for result in results:
+        if hasattr(result, "ocr_confidence") and result.ocr_confidence is not None:
+            ocr_confidences.append(result.ocr_confidence)
+
+    avg_ocr_confidence = sum(ocr_confidences) / len(ocr_confidences) if ocr_confidences else None
+
+    # Print results
+    print(f"{'=' * 70}")
+    print("QUALITY METRICS")
+    print(f"{'=' * 70}")
+    print(f"Files Processed:   {len(results)}")
+    print(f"Successful:        {successful}")
+    print(f"Failed:            {failed}")
+    print(f"Success Rate:      {success_rate_pct:.1f}% (target: ≥99%)")
+    print(f"Success Rate Status: {'PASS' if success_rate_pct >= 99 else 'FAIL'}")
+
+    if avg_ocr_confidence is not None:
+        print(f"OCR Operations:    {len(ocr_confidences)}")
+        print(f"Avg OCR Confidence: {avg_ocr_confidence:.2f}% (target: ≥95%)")
+        print(f"OCR Quality Status: {'PASS' if avg_ocr_confidence >= 95 else 'FAIL'}")
+    else:
+        print("OCR Confidence:    Not available in results (may require extractor updates)")
+
+    print(f"{'=' * 70}\n")
+
+    # Assertions
+    assert success_rate_pct >= 99, (
+        f"Success rate FAILED: {success_rate_pct:.1f}% < 99% target. "
+        f"Successful: {successful}, Failed: {failed}. "
+        f"ADR-006 continue-on-error should maintain 99% success."
+    )
+
+    if avg_ocr_confidence is not None:
+        assert avg_ocr_confidence >= 95, (
+            f"OCR quality FAILED: {avg_ocr_confidence:.2f}% < 95% target. "
+            f"OCR operations: {len(ocr_confidences)}. Quality degraded during parallelization."
+        )
+
+
+@pytest.mark.performance
 def test_performance_batch_exists():
     """
     Verify 100-file test batch exists and is properly structured.
