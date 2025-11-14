@@ -69,3 +69,5 @@
 **After Cleanup**: ~50-60 high-quality, BMAD-aligned documentation files
 **Context Bloat Reduction**: ~170 files removed from active docs
 **Archive Preservation**: All removed files backed up in `docs/.archive/pre-bmad/`
+story-review-append.txt - moved to TRASH/ - temporary review content file
+docs/uat/test-context/3-2-test-context.xml - moved to TRASH/ - template placeholder, regenerating with actual content

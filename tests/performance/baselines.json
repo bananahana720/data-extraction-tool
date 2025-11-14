@@ -38,11 +38,11 @@
     },
     "excel_small": {
       "operation": "excel_small",
-      "duration_ms": 14.740300000994466,
-      "memory_mb": 0.22366046905517578,
+      "duration_ms": 24.967899997136556,
+      "memory_mb": 0.22224807739257812,
       "file_size_kb": 4.76171875,
-      "throughput": 323.04083021911,
-      "timestamp": "2025-11-12T12:34:25.460033",
+      "throughput": 190.71362631803626,
+      "timestamp": "2025-11-14T16:06:29.458498",
       "metadata": {
         "file_name": "simple_single_sheet.xlsx"
       }
@@ -71,11 +71,11 @@
     },
     "txt_small": {
       "operation": "txt_small",
-      "duration_ms": 1.0750000001280569,
-      "memory_mb": 0.011761665344238281,
+      "duration_ms": 0.8312999998452142,
+      "memory_mb": 0.0121917724609375,
       "file_size_kb": 0.87890625,
-      "throughput": 817.5872092049324,
-      "timestamp": "2025-11-12T12:34:35.669669",
+      "throughput": 1057.267232243053,
+      "timestamp": "2025-11-14T16:06:29.473423",
       "metadata": {
         "file_name": "sample.txt"
       }
@@ -93,44 +93,44 @@
     },
     "processor_context": {
       "operation": "processor_context",
-      "duration_ms": 0.9982000046875328,
-      "memory_mb": 0.0374603271484375,
+      "duration_ms": 1.2162000057287514,
+      "memory_mb": 0.03820037841796875,
       "file_size_kb": 0,
-      "throughput": 100180.3241138063,
-      "timestamp": "2025-11-12T12:34:35.679414",
+      "throughput": 82223.31814583378,
+      "timestamp": "2025-11-14T16:06:29.486869",
       "metadata": {
         "num_blocks": 100
       }
     },
     "processor_metadata": {
       "operation": "processor_metadata",
-      "duration_ms": 1.1629000000539236,
-      "memory_mb": 0.03635406494140625,
+      "duration_ms": 1.8521000019973144,
+      "memory_mb": 0.0371856689453125,
       "file_size_kb": 0,
-      "throughput": 85991.91675583714,
-      "timestamp": "2025-11-12T12:34:35.680650",
+      "throughput": 53992.76491126801,
+      "timestamp": "2025-11-14T16:06:29.488820",
       "metadata": {
         "num_blocks": 100
       }
     },
     "processor_quality": {
       "operation": "processor_quality",
-      "duration_ms": 1.1732000057236291,
-      "memory_mb": 0.03061389923095703,
+      "duration_ms": 2.1933999960310757,
+      "memory_mb": 0.03141498565673828,
       "file_size_kb": 0,
-      "throughput": 85236.9583294709,
-      "timestamp": "2025-11-12T12:34:35.681886",
+      "throughput": 45591.319495280615,
+      "timestamp": "2025-11-14T16:06:29.491128",
       "metadata": {
         "num_blocks": 100
       }
     },
     "txt_extract_small": {
       "operation": "txt_extract_small",
-      "duration_ms": 0.7575000017823186,
-      "memory_mb": 0.0118408203125,
+      "duration_ms": 0.6416000105673447,
+      "memory_mb": 0.01244354248046875,
       "file_size_kb": 0.87890625,
-      "throughput": 1160.272274497723,
-      "timestamp": "2025-11-06T19:15:49.021304",
+      "throughput": 1369.8663271885137,
+      "timestamp": "2025-11-14T16:07:24.295326",
       "metadata": {
         "file_name": "sample.txt",
         "file_category": "small"
@@ -150,11 +150,11 @@
     },
     "excel_extract_small": {
       "operation": "excel_extract_small",
-      "duration_ms": 15.71200000034878,
-      "memory_mb": 0.22166156768798828,
+      "duration_ms": 27.567899989662692,
+      "memory_mb": 0.21851444244384766,
       "file_size_kb": 4.76171875,
-      "throughput": 303.0625477274884,
-      "timestamp": "2025-11-06T19:15:36.414118",
+      "throughput": 172.7269306615858,
+      "timestamp": "2025-11-14T16:07:24.200702",
       "metadata": {
         "file_name": "simple_single_sheet.xlsx",
         "file_category": "small"
@@ -162,46 +162,46 @@
     },
     "processor_context_linking": {
       "operation": "processor_context_linking",
-      "duration_ms": 1.244900002348004,
-      "memory_mb": 0.03900146484375,
+      "duration_ms": 1.4416999911190942,
+      "memory_mb": 0.0418243408203125,
       "file_size_kb": 0,
-      "throughput": 80327.73701613797,
-      "timestamp": "2025-11-06T19:15:49.048144",
+      "throughput": 69362.55851841738,
+      "timestamp": "2025-11-14T16:07:24.314311",
       "metadata": {
         "num_blocks": 100
       }
     },
     "processor_metadata_aggregation": {
       "operation": "processor_metadata_aggregation",
-      "duration_ms": 1.3829999988956843,
-      "memory_mb": 0.03641510009765625,
+      "duration_ms": 1.513299997895956,
+      "memory_mb": 0.0372467041015625,
       "file_size_kb": 0,
-      "throughput": 72306.57995650708,
-      "timestamp": "2025-11-06T19:15:49.059862",
+      "throughput": 66080.75076920426,
+      "timestamp": "2025-11-14T16:07:24.328616",
       "metadata": {
         "num_blocks": 100
       }
     },
     "cli_progress_overhead": {
       "operation": "cli_progress_overhead",
-      "duration_ms": 0.7803999978932552,
+      "duration_ms": -0.3394000086700544,
       "memory_mb": 0.0,
       "file_size_kb": 0.87890625,
       "throughput": 0.0,
-      "timestamp": "2025-11-12T12:34:36.727496",
+      "timestamp": "2025-11-14T16:07:24.012986",
       "metadata": {
-        "with_progress_ms": 104.70440000062808,
-        "quiet_ms": 103.92400000273483,
-        "overhead_pct": 0.7509333723420177
+        "with_progress_ms": 104.94489999837242,
+        "quiet_ms": 105.28430000704248,
+        "overhead_pct": -0.32236526115228187
       }
     },
     "processor_quality_validation": {
       "operation": "processor_quality_validation",
-      "duration_ms": 1.5616999990015756,
-      "memory_mb": 0.03560352325439453,
+      "duration_ms": 2.1521999879041687,
+      "memory_mb": 0.03645038604736328,
       "file_size_kb": 0,
-      "throughput": 64032.78482674771,
-      "timestamp": "2025-11-06T19:15:49.070496",
+      "throughput": 46464.083524775444,
+      "timestamp": "2025-11-14T16:07:24.341790",
       "metadata": {
         "num_blocks": 100,
         "quality_score": 66.66666666666667
@@ -209,11 +209,11 @@
     },
     "processor_chain_full": {
       "operation": "processor_chain_full",
-      "duration_ms": 4.167400002188515,
-      "memory_mb": 0.09302234649658203,
+      "duration_ms": 5.834799987496808,
+      "memory_mb": 0.09384632110595703,
       "file_size_kb": 0,
-      "throughput": 23995.77673069177,
-      "timestamp": "2025-11-06T19:15:49.083906",
+      "throughput": 17138.548058937162,
+      "timestamp": "2025-11-14T16:07:24.358983",
       "metadata": {
         "num_blocks": 100,
         "num_processors": 3,
@@ -221,5 +221,5 @@
       }
     }
   },
-  "updated_at": "2025-11-12T12:34:36.727781"
+  "updated_at": "2025-11-14T16:07:24.359350"
 }

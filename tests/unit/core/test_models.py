@@ -414,6 +414,56 @@ class TestMetadata:
             )
         assert "completeness_ratio" in str(exc_info.value).lower()
 
+    def test_metadata_with_entity_relationships(self):
+        """Test Metadata with entity_relationships triples (Story 3.2 - AC 3.2-3)."""
+        metadata = Metadata(
+            source_file=Path("audit_report.pdf"),
+            file_hash="hash123",
+            processing_timestamp=datetime.now(),
+            tool_version="1.0.0",
+            config_version="v1",
+            entity_relationships=[
+                ("RISK-001", "mitigated_by", "CTRL-042"),
+                ("POL-001", "implements", "REG-2024-001"),
+            ],
+        )
+        assert len(metadata.entity_relationships) == 2
+        assert ("RISK-001", "mitigated_by", "CTRL-042") in metadata.entity_relationships
+
+    def test_metadata_with_empty_entity_relationships(self):
+        """Test Metadata with empty entity_relationships (default case)."""
+        metadata = Metadata(
+            source_file=Path("doc.pdf"),
+            file_hash="hash456",
+            processing_timestamp=datetime.now(),
+            tool_version="1.0.0",
+            config_version="v1",
+        )
+        assert metadata.entity_relationships == []
+
+    def test_metadata_with_section_context(self):
+        """Test Metadata with section_context breadcrumb (Story 3.2 - AC 3.2-7)."""
+        metadata = Metadata(
+            source_file=Path("policy.pdf"),
+            file_hash="hash789",
+            processing_timestamp=datetime.now(),
+            tool_version="1.0.0",
+            config_version="v1",
+            section_context="Risk Assessment > Identified Risks > Critical Risks",
+        )
+        assert metadata.section_context == "Risk Assessment > Identified Risks > Critical Risks"
+
+    def test_metadata_with_none_section_context(self):
+        """Test Metadata with section_context None (default case)."""
+        metadata = Metadata(
+            source_file=Path("doc.pdf"),
+            file_hash="hash000",
+            processing_timestamp=datetime.now(),
+            tool_version="1.0.0",
+            config_version="v1",
+        )
+        assert metadata.section_context is None
+
 
 class TestValidationReport:
     """Test ValidationReport model (Story 2.4 - AC 2.4.5, 2.4.6, 2.4.7)."""
@@ -888,6 +938,31 @@ class TestChunk:
                 metadata=metadata,
             )
         assert "greater than or equal to 0" in str(exc_info.value).lower()
+
+    def test_chunk_to_dict_with_entity_relationships(self):
+        """Test Chunk.to_dict() serializes entity_relationships correctly (Story 3.2)."""
+        metadata = Metadata(
+            source_file=Path("doc.pdf"),
+            file_hash="hash",
+            processing_timestamp=datetime.now(),
+            tool_version="1.0.0",
+            config_version="v1",
+            entity_relationships=[("RISK-001", "mitigates", "CTRL-001")],
+        )
+        chunk = Chunk(
+            id="doc_001",
+            text="Chunk text",
+            document_id="DOC-001",
+            position_index=0,
+            token_count=10,
+            word_count=8,
+            quality_score=0.9,
+            metadata=metadata,
+        )
+        chunk_dict = chunk.to_dict()
+        # Verify tuple serialized as list (JSON compatible)
+        assert "entity_relationships" in chunk_dict["metadata"]
+        assert isinstance(chunk_dict["metadata"]["entity_relationships"], list)
 
 
 class TestProcessingContext:

@@ -19,9 +19,55 @@ All models use Pydantic v2 for runtime validation and type safety.
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Union
+from typing import TYPE_CHECKING, Any, Dict, List, Optional, Tuple, Union
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
+
+if TYPE_CHECKING:
+    pass
+
+
+# Content structure models for document parsing
+class ContentType(str, Enum):
+    """Content block types for document structure.
+
+    Intentional subset of brownfield ContentType for greenfield architecture.
+    Includes essential types for Epic 3 chunking and future expansion.
+
+    Note: UNKNOWN added for graceful degradation when content type cannot
+    be determined. Prevents extraction failures on unrecognized content.
+
+    Future expansion candidates (from brownfield): QUOTE, CHART, LIST_ITEM,
+    TABLE_CELL, METADATA, FOOTNOTE, COMMENT, HYPERLINK.
+    """
+
+    HEADING = "heading"
+    PARAGRAPH = "paragraph"
+    TABLE = "table"
+    LIST = "list"
+    IMAGE = "image"
+    CODE = "code"
+    UNKNOWN = "unknown"  # Fallback for unrecognized content types
+
+
+class Position(BaseModel):
+    """Position information for content blocks."""
+
+    model_config = ConfigDict(frozen=True)
+
+    page: int = Field(..., description="Page number (1-indexed)")
+    sequence_index: int = Field(..., description="Sequence index within page")
+
+
+class ContentBlock(BaseModel):
+    """Content block representing a structural element in a document."""
+
+    model_config = ConfigDict(frozen=False)
+
+    block_type: ContentType = Field(..., description="Type of content block")
+    content: str = Field(..., description="Content text")
+    position: Position = Field(..., description="Position in document")
+    metadata: Dict[str, Any] = Field(default_factory=dict, description="Additional metadata")
 
 
 class EntityType(str, Enum):
@@ -99,7 +145,7 @@ class Entity(BaseModel):
         location: Character position in document (start and end indices)
     """
 
-    model_config = ConfigDict(frozen=False)
+    model_config = ConfigDict(frozen=True)
 
     type: EntityType = Field(..., description="Entity type from EntityType enum")
     id: str = Field(..., description="Canonical entity identifier (e.g., Risk-123)")
@@ -122,6 +168,10 @@ class Metadata(BaseModel):
     Embedded in Document and Chunk models to track processing history,
     quality metrics, and audit trail information.
 
+    Note: frozen=True ensures metadata immutability. Metadata should be
+    created once during processing and never modified. This prevents
+    pipeline state corruption and ensures audit trail integrity.
+
     Attributes:
         source_file: Path to original source file
         file_hash: SHA-256 hash of source file for integrity verification
@@ -140,7 +190,7 @@ class Metadata(BaseModel):
         validation_report: Serialized ValidationReport with quality validation results
     """
 
-    model_config = ConfigDict(frozen=False)
+    model_config = ConfigDict(frozen=True)
 
     source_file: Path = Field(..., description="Path to original source file")
     file_hash: str = Field(
@@ -202,6 +252,19 @@ class Metadata(BaseModel):
     entity_counts: Dict[str, int] = Field(
         default_factory=dict,
         description="Count of entities by type (e.g., {'risk': 5, 'control': 3})",
+    )
+    entity_relationships: List[Tuple[str, str, str]] = Field(
+        default_factory=list,
+        description="Entity relationships in chunk (entity1_id, relation_type, entity2_id). "
+        "Lightweight tuple design chosen for simplicity and JSON serializability. "
+        "Each tuple is (str, str, str) representing entity pair and relationship type. "
+        "Example: ('RISK-001', 'mitigated_by', 'CTRL-042'). "
+        "TODO(Epic 4): Consider structured EntityRelationship model for type safety if "
+        "relationship analysis becomes more complex.",
+    )
+    section_context: Optional[str] = Field(
+        None,
+        description="Section breadcrumb for chunk (e.g., 'Risk Assessment > Controls')",
     )
     config_snapshot: Dict[str, Any] = Field(
         default_factory=dict,
@@ -311,10 +374,10 @@ class Chunk(BaseModel):
         section_context: Section/heading context for this chunk
         quality_score: Overall quality score (0.0-1.0)
         readability_scores: Readability metrics dict (e.g., flesch_reading_ease)
-        metadata: Processing metadata and quality tracking
+        metadata: Processing metadata and quality tracking (Metadata or ChunkMetadata for entity-aware chunks)
     """
 
-    model_config = ConfigDict(frozen=False)
+    model_config = ConfigDict(frozen=False, arbitrary_types_allowed=True)
 
     id: str = Field(..., description="Unique chunk identifier (format: {source}_{index:03d})")
     text: str = Field(..., description="Chunk text content")
@@ -330,7 +393,42 @@ class Chunk(BaseModel):
     readability_scores: Dict[str, float] = Field(
         default_factory=dict, description="Readability metrics (e.g., flesch_reading_ease)"
     )
-    metadata: Metadata = Field(..., description="Processing metadata and quality tracking")
+    metadata: Union[Metadata, Any] = Field(
+        ...,
+        description="Processing metadata and quality tracking (Metadata or ChunkMetadata for entity-aware chunks)",
+    )
+
+    def to_dict(self) -> Dict[str, Any]:
+        """Convert chunk to dictionary (Pydantic v2 compatibility wrapper).
+
+        Returns:
+            Dict representation of chunk with all fields JSON-serializable
+        """
+        from datetime import datetime
+        from pathlib import Path
+
+        def make_json_serializable(obj: Any) -> Any:
+            """Recursively convert objects to JSON-serializable types."""
+            if isinstance(obj, dict):
+                return {k: make_json_serializable(v) for k, v in obj.items()}
+            elif isinstance(obj, list):
+                return [make_json_serializable(item) for item in obj]
+            elif isinstance(obj, (Path,)):
+                return str(obj)
+            elif isinstance(obj, datetime):
+                return obj.isoformat()
+            elif hasattr(obj, "value"):  # Enum types
+                return obj.value
+            elif hasattr(obj, "to_dict"):  # ChunkMetadata or other objects with to_dict()
+                return obj.to_dict()
+            else:
+                return obj
+
+        # Use mode="python" for full serialization
+        data: Dict[str, Any] = self.model_dump(mode="python")
+        # Make all nested objects JSON-serializable
+        result: Dict[str, Any] = make_json_serializable(data)
+        return result
 
 
 class ProcessingContext(BaseModel):

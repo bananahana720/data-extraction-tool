@@ -173,7 +173,7 @@ data-extraction-tool/
 |------|-------------------|-------------------|--------------|
 | **Epic 1: Foundation** | `core/`, `pyproject.toml`, `tests/` | All other epics depend on foundation | Pipeline pattern, Pydantic models, pytest framework |
 | **Epic 2: Normalization** | `normalize/` (cleaning, entities, schema, validation) | Receives from `extract/`, feeds to `chunk/` | Strategy pattern for cleaning rules, Entity registry |
-| **Epic 3: Chunking** | `chunk/` (semantic, entity_aware, metadata) | Uses spaCy from `normalize/`, feeds to `output/` | Sliding window chunking, Metadata enrichment |
+| **Epic 3: Chunking** | `chunk/` (engine, models, sentence_segmenter) | Uses spaCy from Story 2.5.2, feeds to `output/` | Semantic boundary-aware chunking, Generator-based streaming |
 | **Epic 4: Semantic Analysis** | `semantic/` (tfidf, similarity, lsa, quality) | Works on chunks from `chunk/`, uses scikit-learn/gensim | Vectorization pipeline, Similarity matrix |
 | **Epic 5: CLI UX** | `cli.py`, `config/`, `utils/progress.py`, `utils/errors.py` | Orchestrates all pipeline stages | Command pattern, Configuration cascade, Rich UI |
 
@@ -190,9 +190,13 @@ data-extraction-tool/
 - Validation produces quality scores stored in metadata for downstream filtering
 
 **Epic 3 (Chunking):**
-- Uses spaCy sentence segmentation for boundary detection
-- Entity-aware chunking analyzes entity spans before determining split points
-- Metadata includes: source_file, section_context, entity_tags, quality_score, position_index
+- **ChunkingEngine** respects sentence boundaries (never splits mid-sentence)
+- Uses **SentenceSegmenter** (Story 2.5.2) with spaCy `en_core_web_md` model
+- Generator-based streaming for constant memory usage (not batch-loading)
+- **Chunk data model** (frozen dataclass): text, metadata, position, token_count, source_block_id
+- Configuration: chunk_size (128-2048 tokens), overlap_pct (0.0-0.5)
+- Metadata includes: source_file, position_index, token_count, word_count, source_block_id
+- Performance: ~3s for 10k words, 255 MB memory (linear scaling validated)
 
 **Epic 4 (Semantic Analysis):**
 - TF-IDF vectors stored as scipy sparse matrices for memory efficiency
@@ -801,9 +805,143 @@ class ProcessingContext(BaseModel):
 
 **Type Contracts Between Pipeline Stages:**
 - Extract → Normalize: `Document` (with raw text)
-- Normalize → Chunk: `Document` (with cleaned text, normalized entities)
-- Chunk → Semantic: `List[Chunk]` (with metadata)
+- Normalize → Chunk: `ProcessingResult` (with cleaned content blocks)
+- Chunk → Semantic: `Iterator[Chunk]` or `List[Chunk]` (with metadata)
 - Semantic → Output: `ProcessingResult` (with analysis results)
+
+### ChunkingEngine Component Design (Epic 3)
+
+**Implementation:** `src/data_extract/chunk/` (Story 3.1)
+
+**Core Components:**
+
+```python
+from dataclasses import dataclass
+from typing import Iterator
+
+@dataclass(frozen=True)
+class Chunk:
+    """Immutable chunk for RAG workflows"""
+    text: str                    # Chunk text content
+    metadata: ChunkMetadata      # Source, position, quality
+    position_index: int          # Sequential position in document
+    token_count: int             # Estimated token count (GPT tokenizer)
+    word_count: int              # Actual word count
+    source_block_id: str         # Reference to source ContentBlock
+
+@dataclass(frozen=True)
+class ChunkMetadata:
+    """Chunk-level metadata"""
+    source_file: str             # Original document path
+    chunk_id: str                # Unique identifier (source_position)
+    source_block_id: str         # Parent ContentBlock ID
+
+@dataclass
+class ChunkingConfig:
+    """Chunking configuration"""
+    chunk_size: int = 512        # Target tokens (128-2048 range)
+    overlap_pct: float = 0.15    # Overlap percentage (0.0-0.5 range)
+
+class ChunkingEngine:
+    """Semantic boundary-aware chunking engine"""
+
+    def __init__(self, config: ChunkingConfig):
+        self.config = config
+        self.segmenter = SentenceSegmenter()  # Lazy-loaded spaCy
+
+    def chunk(self, result: ProcessingResult) -> Iterator[Chunk]:
+        """
+        Generator that yields chunks respecting sentence boundaries.
+
+        Memory-efficient: Streams chunks without buffering entire document.
+        Deterministic: Same input always produces same chunks.
+        """
+        for block in result.content_blocks:
+            if block.block_type != ContentBlockType.TEXT:
+                continue  # Only chunk text blocks
+
+            # Segment into sentences (spaCy)
+            sentences = self.segmenter.segment(block.text)
+
+            # Build chunks respecting sentence boundaries
+            current_chunk = []
+            current_tokens = 0
+
+            for sentence in sentences:
+                sentence_tokens = self._estimate_tokens(sentence)
+
+                # Yield chunk if adding sentence would exceed size
+                if current_tokens + sentence_tokens > self.config.chunk_size:
+                    if current_chunk:  # Yield accumulated sentences
+                        yield self._build_chunk(current_chunk, block)
+                        # Apply overlap (keep last N% of tokens)
+                        current_chunk = self._apply_overlap(current_chunk)
+                        current_tokens = sum(self._estimate_tokens(s) for s in current_chunk)
+
+                # Add sentence to current chunk
+                current_chunk.append(sentence)
+                current_tokens += sentence_tokens
+
+            # Yield final chunk
+            if current_chunk:
+                yield self._build_chunk(current_chunk, block)
+```
+
+**Key Design Decisions:**
+
+1. **Generator-Based Streaming** (ADR-005):
+   - Returns `Iterator[Chunk]` instead of `List[Chunk]`
+   - Constant memory usage (doesn't buffer all chunks)
+   - Enables progressive output writing
+
+2. **Sentence Boundary Respect** (ADR-011):
+   - Never splits mid-sentence (preserves semantic units)
+   - Long sentences (>chunk_size) become single chunks
+   - Uses spaCy for accurate boundary detection
+
+3. **Immutable Chunks**:
+   - Frozen dataclasses prevent mutations
+   - Deterministic output (same input → same chunks)
+   - Safe for parallel processing
+
+4. **Configurable Overlap**:
+   - Overlap preserves context across chunk boundaries
+   - Range: 0% (no overlap) to 50% (max recommended)
+   - Default: 15% balances context vs. redundancy
+
+**Epic 3 Pipeline Integration:**
+
+```
+Epic 2 Output (ProcessingResult)
+    ↓
+    └─→ ContentBlock[] (text blocks from extraction/normalization)
+         ↓
+    ChunkingEngine.chunk(result) → Iterator[Chunk]
+         ↓
+         ├─→ SentenceSegmenter (spaCy en_core_web_md)
+         │    └─→ Sentence boundaries detected
+         ↓
+         ├─→ Chunk Assembly (respecting boundaries)
+         │    ├─→ Accumulate sentences until ~chunk_size
+         │    ├─→ Apply overlap (keep last N% tokens)
+         │    └─→ Yield chunk (generator pattern)
+         ↓
+    Output Stage (Epic 3 Story 3.4+)
+         ├─→ JSON writer (structured metadata)
+         ├─→ TXT writer (individual chunk files)
+         └─→ CSV writer (chunk index)
+```
+
+**Performance Characteristics:**
+
+| Metric | Baseline | NFR Target | Status |
+|--------|----------|------------|--------|
+| 10k-word latency | 3.0s | <4.0s | ✅ 75% of threshold |
+| Memory (10k words) | 255 MB | <500 MB | ✅ 51% of limit |
+| Batch memory | ≤7.8 MB variance | <100 MB | ✅ Constant |
+| Scaling | 0.19s per 1k words | Linear | ✅ Validated |
+
+See `docs/performance-baselines-epic-3.md` for detailed benchmarks.
 
 ### Entity Relationships
 
@@ -1049,6 +1187,43 @@ black --check src/
 - ✅ Detailed error reporting at end
 - ✅ User can fix issues and re-run only failed files
 - ❌ Requires careful exception design (ProcessingError vs CriticalError)
+
+### ADR-011: Semantic Boundary-Aware Chunking
+**Status**: Accepted (Epic 3, Story 3.1) - **Amended 2025-11-13**
+**Context**: RAG systems require text chunks that preserve semantic meaning and context. Chunks split mid-sentence or mid-thought reduce LLM comprehension and retrieval accuracy.
+**Decision**: Chunking respects sentence boundaries detected by spaCy's sentence segmentation. Chunks never split in the middle of a sentence.
+**Implementation**:
+- ChunkingEngine uses SentenceSegmenter (Story 2.5.2) for accurate boundary detection
+- spaCy `en_core_web_md` model provides production-ready sentence boundary detection
+- Chunks respect target size (default 512 tokens) but extend to complete sentences
+- Very long sentences (>chunk_size) become single chunks to preserve context
+- **Section boundary detection deferred to Story 3.2** (see Amendment below)
+**Rationale**:
+- Preserves complete thoughts and context within each chunk
+- Improves LLM understanding during RAG retrieval
+- Maintains grammatical coherence for better embedding quality
+- Aligns with document structure (sentences are natural semantic units)
+**Trade-offs**:
+- ✅ Better semantic coherence and LLM comprehension
+- ✅ Deterministic chunking (same input → same chunks)
+- ✅ Respects document structure (sentences, paragraphs)
+- ❌ Chunks may exceed target size for very long sentences (acceptable - preserves meaning)
+- ❌ spaCy adds ~1.8s latency per 10k words (acceptable for batch processing)
+**Alternatives Considered**:
+- **Character-based splitting** (rejected): Breaks mid-sentence, destroys context
+- **Fixed token windows** (rejected): Splits thoughts arbitrarily
+- **Paragraph-based chunking** (rejected): Too coarse, paragraphs often exceed limits
+**Performance Impact**:
+- **Latency:** ~3s for 10k-word document (60% is spaCy segmentation)
+- **Memory:** 255 MB peak (51% of 500 MB limit per document)
+- **Scaling:** Linear (0.19s per 1,000 words)
+- **Acceptable:** Batch processing use case tolerates 3s latency
+
+**Amendment 2025-11-13 (Story 3.1 Code Review):**
+- **AC-3.1-2 (Section Boundary Detection) Deferred to Story 3.2**
+- **Rationale**: Current document.structure lacks section/heading markers (only contains page_count, word_count, image_count, etc.). Proper implementation requires Epic 2 enhancements to preserve ContentBlock structure (headings, sections) through extraction and normalization stages.
+- **Story 3.1 Scope**: Sentence-boundary chunking (AC-3.1-1) is fully implemented and production-ready.
+- **Future Work (Story 3.2)**: Section-aware chunking will be addressed alongside entity boundary detection, once Epic 2 provides the necessary structural metadata.
 
 ---
 
