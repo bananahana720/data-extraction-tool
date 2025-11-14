@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **Data Extraction Tool** - Enterprise document processing pipeline for RAG workflows. Transforms messy corporate audit documents into AI-optimized outputs using a five-stage modular pipeline architecture.
 
-**Status**: Brownfield modernization (Epic 1 - Foundation in progress)
+**Status**: Epic 3 - Chunk & Output (in progress, Stories 3.1-3.2 complete)
 **Python**: 3.12+ (mandatory enterprise requirement)
 **Architecture**: `Extract → Normalize → Chunk → Semantic → Output`
 
@@ -43,7 +43,7 @@ Each stage is a composable, testable component using frozen dataclasses and ABC 
 `src/data_extract/` - Modern pipeline implementation following Epic-based development
 
 ### Brownfield (Existing Code)
-`src/{cli,core,extractors,processors,formatters,infrastructure,pipeline}/` - Legacy code being assessed and consolidated (Story 1.2-1.4)
+`src/{cli,core,extractors,processors,formatters,infrastructure,pipeline}/` - Legacy code assessed and consolidated during Epic 1.
 
 **Important**: Both systems coexist during migration. Don't break existing brownfield code.
 
@@ -112,7 +112,7 @@ pytest -s tests/unit/test.py                 # Show print statements
 pytest -n auto
 ```
 
-**Test Markers**: `unit`, `integration`, `extraction`, `processing`, `formatting`, `pipeline`, `cli`, `slow`, `performance`
+**Test Markers**: `unit`, `integration`, `extraction`, `processing`, `formatting`, `chunking`, `pipeline`, `cli`, `slow`, `performance`
 
 ### CI/CD Pipeline
 
@@ -147,7 +147,7 @@ pre-commit run --all-files
 
 ### CLI Entry Point
 ```bash
-data-extract    # Typer-based CLI (Epic 5 - placeholder in Epic 1)
+data-extract    # Typer-based CLI (full implementation in Epic 5)
 ```
 
 ## Testing Strategy
@@ -160,11 +160,9 @@ Tests mirror `src/` structure exactly:
 - `tests/fixtures/` - Shared test data
 
 ### Coverage Requirements
-- Epic 1: >60% baseline (enforced in CI)
-- Epic 2-4: >80% overall
-- Epic 5: >90% critical paths
-
-**Coverage Reporting Note**: CI enforces 60% threshold via `coverage report --fail-under=60`. The coverage percentage applies to the entire codebase (greenfield + brownfield). While greenfield code (`src/data_extract/`) has higher coverage, the aggregate includes legacy brownfield code, which may show lower overall percentages during migration.
+- Baseline: >60% overall (enforced in CI, includes brownfield code)
+- Greenfield (`src/data_extract/`): >80% coverage
+- Epic 5 critical paths: >90% coverage
 
 ### Key Patterns
 - Use pytest fixtures for test data (see `tests/conftest.py`)
@@ -193,29 +191,29 @@ Tests mirror `src/` structure exactly:
 
 ## Epic-Based Development
 
-### Current: Epic 1 - Foundation
-- ✅ Story 1.1: Project Infrastructure (complete)
-- 🔄 Story 1.2: Brownfield Codebase Assessment (in progress)
-- 📋 Story 1.3: Testing Framework & CI Pipeline
-- 📋 Story 1.4: Core Pipeline Architecture Consolidation
+### Completed
+- **Epic 1**: Foundation (4 stories complete)
+- **Epic 2**: Extract & Normalize stages (6 stories complete)
+- **Epic 2.5**: Infrastructure & optimization (6 stories complete)
+
+### Current: Epic 3 - Chunk & Output
+- ✅ Story 3.1: Semantic boundary-aware chunking engine (complete)
+- ✅ Story 3.2: Entity-aware chunking (complete)
+- 📋 Stories 3.3-3.7: Metadata, output formats, configuration (backlog)
 
 ### Upcoming
-- **Epic 2**: Extract & Normalize stages
-- **Epic 3**: Chunk & Output stages
 - **Epic 4**: Semantic analysis stage
 - **Epic 5**: CLI, batch processing, configuration cascade
 
-See `docs/epics.md` and `docs/stories/` for detailed story specifications.
+See `docs/sprint-status.yaml` and `docs/stories/` for detailed specifications.
 
 ## Configuration (Epic 5)
 
-Four-tier precedence cascade:
+Four-tier precedence cascade (planned for Epic 5):
 1. CLI flags (highest)
 2. Environment variables (`DATA_EXTRACT_*` prefix)
 3. YAML config file (`~/.data-extract/config.yaml` or project-local)
 4. Hardcoded defaults (lowest)
-
-Epic 1 sets up infrastructure; Epic 5 implements full cascade.
 
 ## Technology Stack
 
@@ -238,57 +236,99 @@ Epic 1 sets up infrastructure; Epic 5 implements full cascade.
 
 **Enterprise Constraint**: Classical NLP only - no transformer models allowed.
 
-## Lessons from Epic 2
+## Epic 3: Chunking Engine
 
-Epic 2 (Extract & Normalize) established critical patterns from 6 stories with multiple code review cycles.
+Epic 3 implements semantic boundary-aware chunking that transforms normalized text into RAG-optimized chunks while preserving document structure and entity context.
 
-### Quality Gates Workflow
+### Entity-Aware Chunking (Story 3.2)
 
-**Run BEFORE committing** (shift-left approach):
-1. Write code
-2. `black src/ tests/` → Fix formatting
-3. `ruff check src/ tests/` → Fix linting
-4. `mypy src/data_extract/` → Fix type violations (**must run from project root**)
-5. Run tests → Fix failures
-6. Commit clean code
+Story 3.2 adds entity-aware boundary adjustment to prevent splitting entity definitions across chunks.
 
-**Quality Bar**: 0 violations required. No exceptions.
+**EntityPreserver Integration:**
+- `analyze_entities()`: Maps Epic 2 entities to EntityReference objects with positions
+- `find_entity_gaps()`: Identifies safe split zones between entity boundaries
+- `detect_entity_relationships()`: Finds relationship patterns (e.g., "RISK-001 mitigated by CTRL-042")
 
-### Key Anti-Patterns (DO NOT REPEAT)
+**How it works:**
+1. ChunkingEngine analyzes entities at document start (when `entity_aware=True`)
+2. During chunk generation, when target size reached, engine calls `find_entity_gaps()`
+3. Engine searches for nearest gap within ±20% of chunk_size to adjust boundary
+4. If suitable gap found, boundary shifts to preserve entity completeness
+5. Entities marked as `is_partial=True` if split is unavoidable (e.g., entity > chunk_size)
 
-1. **Deferred Validation Fixes**: Fix mypy/ruff violations immediately, not in later stories. Accumulating tech debt slows velocity.
-2. **Skipping Integration Tests**: Unit tests alone miss memory leaks, resource issues, and NFR violations. Always test multi-component workflows.
-3. **Premature Optimization**: Profile first (establish baseline), measure actual behavior, then optimize. Don't guess at bottlenecks.
-4. **Missing Context Docs**: Document architectural decisions and patterns as you go. Future stories depend on this context.
+**Preservation rate:** >95% of entities kept intact within single chunks (AC-3.2-1).
 
-### Architecture Patterns
+### ChunkingEngine Usage Patterns
 
-**PipelineStage Protocol**: All processing stages implement `process(ProcessingResult) -> ProcessingResult` interface. Enables easy testing, flexible composition, gradual refactoring.
+**Basic Usage:**
+```python
+from data_extract.chunk import ChunkingEngine, ChunkingConfig
 
-**Memory Monitoring**: Reuse `get_total_memory()` from `scripts/profile_pipeline.py:151-167` (aggregates main + worker processes, 9.6ms overhead).
+# Initialize engine with default configuration
+config = ChunkingConfig(
+    chunk_size=512,      # Target tokens per chunk (128-2048)
+    overlap_pct=0.15     # 15% overlap between chunks (0.0-0.5)
+)
+engine = ChunkingEngine(config)
 
-**Test Fixtures**: Keep total <100MB, use synthetic/sanitized data, document in `tests/fixtures/README.md`, provide regeneration scripts.
+# Chunk a ProcessingResult
+from data_extract.core.models import ProcessingResult
+result = ProcessingResult(...)  # From normalize stage
+chunks = engine.chunk(result)   # Returns List[Chunk]
+```
 
-**spaCy Integration**: Download models via setup (not runtime), lazy-load on first use, cache globally. See `docs/troubleshooting-spacy.md`.
+**Streaming Large Documents:**
+```python
+# Memory-efficient streaming using generator
+for chunk in engine.chunk(result):
+    # Process chunk immediately (constant memory)
+    output_writer.write_chunk(chunk)
+```
 
-### NFR Validation Approach
+**Configuration Options:**
+```python
+config = ChunkingConfig(
+    chunk_size=1024,       # Larger chunks for dense content
+    overlap_pct=0.25,      # Higher overlap preserves more context
+    respect_sentences=True # Always enabled (semantic boundaries)
+)
+```
 
-Validate continuously against baselines (established in Story 2.5.1):
-- **NFR-P1**: <10 min for 100 PDFs (achieved: 6.86 min, 148% improvement)
-- **NFR-P2**: <2GB memory (individual files: 167MB ✅, batch: 4.15GB ⚠️ trade-off documented)
-- **NFR-R2**: Graceful degradation via continue-on-error pattern
-- **NFR-O3**: Test reporting via pytest coverage + performance baselines
+### Chunk Configuration Reference
 
-Document trade-offs transparently when targets conflict with complexity.
+| Parameter | Range | Default | Description |
+|-----------|-------|---------|-------------|
+| `chunk_size` | 128-2048 tokens | 512 | Target chunk size (may exceed for long sentences) |
+| `overlap_pct` | 0.0-0.5 | 0.15 | Overlap between chunks (0% = no overlap, 50% = max) |
+| `respect_sentences` | N/A | True | Always respects sentence boundaries (spaCy-based) |
 
-### Detailed References
+**Key Behaviors:**
+- **Semantic Boundaries:** Chunks never split mid-sentence (uses spaCy sentence segmentation)
+- **Long Sentences:** Sentences >chunk_size become single chunks (preserves context)
+- **Metadata Preservation:** Each chunk includes source file, position, entity tags, quality scores
+- **Memory Efficiency:** Generator-based streaming (constant memory across batch sizes)
 
-- **Quality gates**: See `## Code Quality` section above for command details
-- **spaCy setup**: `docs/troubleshooting-spacy.md`
-- **Memory monitoring**: `docs/stories/2.5-2.1-pipeline-throughput-optimization.md`
-- **Test fixtures**: `tests/fixtures/README.md`
-- **Performance baselines**: `docs/performance-baselines-story-2.5.1.md`
-- **Story details**: `docs/stories/2.5-*.md` for implementation patterns
+**Performance Characteristics:**
+- **Latency:** ~0.19s per 1,000 words (linear scaling)
+- **Memory:** 255 MB peak for 10k-word document (51% of 500 MB limit)
+- **Throughput:** ~5,000 words/second (including spaCy segmentation)
+
+See `docs/performance-baselines-epic-3.md` for detailed performance baselines.
+
+### Quality Gates
+
+**Pre-commit workflow** (0 violations required):
+1. `black src/ tests/` → Fix formatting
+2. `ruff check src/ tests/` → Fix linting
+3. `mypy src/data_extract/` → Fix type violations (run from project root)
+4. Run tests → Fix failures
+5. Commit clean code
+
+**Key Patterns**:
+- Fix validation issues immediately (don't defer tech debt)
+- Always include integration tests (catch memory/NFR issues)
+- Profile before optimizing (establish baselines first)
+- Document architectural decisions as you go
 
 ## Common Tasks
 
@@ -318,128 +358,22 @@ pytest tests/unit/test_extract/test_pdf.py
 pytest -m integration tests/integration/test_pipeline.py
 ```
 
-### Running UAT Workflows
+### UAT Workflows (Story Validation)
 
-The UAT (User Acceptance Testing) workflow framework provides systematic validation of acceptance criteria through a 4-stage pipeline.
-
-**Pipeline**: `create-test-cases` → `build-test-context` → `execute-tests` → `review-uat-results`
-
-#### 1. Generate Test Cases from Story
+4-stage pipeline for systematic acceptance criteria validation:
 
 ```bash
-workflow create-test-cases
-# Generates: docs/uat/test-cases/{story-key}-test-cases.md
-
-# Options:
-workflow create-test-cases story_path=docs/stories/2.5-3.1-uat-workflow-framework.md
-workflow create-test-cases test_coverage_level=comprehensive  # minimal|standard|comprehensive
+workflow create-test-cases      # Generate test specs from story ACs
+workflow build-test-context     # Assemble test infrastructure context
+workflow execute-tests          # Run automated/CLI/manual tests
+workflow review-uat-results     # QA review with approval decision
 ```
 
-**Output**: Test cases with scenarios (happy path, edge cases, error cases), mapped to test types (unit, integration, CLI, manual).
+**Output locations**: `docs/uat/{test-cases,test-context,test-results,reviews}/`
 
-#### 2. Build Test Context
+**Full documentation**: See `docs/tech-spec-epic-2.5.md` (UAT Framework section) and workflow-specific docs in `bmad/bmm/workflows/`.
 
-```bash
-workflow build-test-context
-# Generates: docs/uat/test-context/{story-key}-test-context.xml
-
-# Options:
-workflow build-test-context test_cases_file=docs/uat/test-cases/2.5-3.1-test-cases.md
-workflow build-test-context include_story_context=false  # Don't reuse story context
-```
-
-**Output**: Test context XML with fixtures, helpers, pytest config, code under test.
-
-#### 3. Execute Tests
-
-```bash
-workflow execute-tests
-# Generates: docs/uat/test-results/{story-key}-test-results.md
-
-# Options:
-workflow execute-tests test_execution_mode=automated  # automated|manual|hybrid
-workflow execute-tests capture_screenshots=true  # For CLI tests
-workflow execute-tests continue_on_failure=false  # Stop on first failure
-```
-
-**Execution Types**:
-- **Automated**: Runs pytest tests (unit, integration, performance)
-- **CLI**: Uses tmux-cli for interactive CLI testing
-- **Manual**: Guides user through manual test execution
-
-**Output**: Test results with pass/fail/blocked status, evidence, and recommendations.
-
-#### 4. Review UAT Results
-
-```bash
-workflow review-uat-results
-# Generates: docs/uat/reviews/{story-key}-uat-review.md
-
-# Options:
-workflow review-uat-results quality_gate_level=strict  # minimal|standard|strict
-workflow review-uat-results auto_approve_if_all_pass=true  # Auto-approve (not recommended)
-```
-
-**Quality Gates**:
-- **Minimal**: 80% pass rate, critical ACs 100%
-- **Standard**: 90% pass rate, critical ACs 100%, 70% edge case coverage *[default]*
-- **Strict**: 95% pass rate, critical ACs 100%, 85% edge case coverage, high evidence quality
-
-**Output**: UAT review with approval decision (APPROVED, CHANGES REQUESTED, BLOCKED), findings, and stakeholder summary.
-
-#### Complete UAT Flow Example
-
-```bash
-# 1. Generate test cases
-workflow create-test-cases
-
-# 2. Build test context
-workflow build-test-context
-
-# 3. Execute tests
-workflow execute-tests test_execution_mode=hybrid
-
-# 4. Review and approve
-workflow review-uat-results
-```
-
-**tmux-cli Integration** (for CLI tests):
-
-**⚠️ Windows Users**: tmux-cli requires tmux, which is Unix/Linux only. On Windows, run workflows with CLI tests from WSL:
-```bash
-# Enter WSL environment
-wsl
-
-# Navigate to project (Windows filesystem mounted at /mnt/c/)
-cd /mnt/c/Users/Andrew/projects/data-extraction-tool-1
-
-# Run workflow with CLI tests
-workflow execute-tests test_execution_mode=hybrid
-```
-
-**Linux/macOS or WSL** - Standard tmux-cli usage:
-```bash
-# Always launch shell first
-tmux-cli launch "zsh"
-
-# Send commands and wait for completion
-tmux-cli send "data-extract process test.pdf" --pane=2
-tmux-cli wait_idle --pane=2 --idle-time=2.0
-
-# Capture output
-tmux-cli capture --pane=2
-```
-
-See `docs/tmux-cli-instructions.md` for full tmux-cli reference and `docs/uat/tmux-cli-windows-setup.md` for detailed Windows setup.
-
-**UAT Output Locations**:
-```
-docs/uat/
-├── test-cases/      # Generated test case specifications
-├── test-context/    # Test infrastructure context (XML)
-├── test-results/    # Test execution results
-└── reviews/         # QA review and approval reports
-```
+**Windows users**: CLI tests require tmux (WSL only). See `docs/uat/tmux-cli-windows-setup.md`.
 
 ## Key Architecture Decisions
 
@@ -448,6 +382,7 @@ docs/uat/
 - **ADR-003**: ContentBlocks preserve document structure over raw text
 - **ADR-004**: Classical NLP only (enterprise constraint - no transformers)
 - **ADR-005**: Gradual brownfield modernization (don't break production)
+- **ADR-011**: Semantic boundary-aware chunking (respects sentence boundaries via spaCy)
 
 See `docs/architecture.md` for full details.
 
@@ -455,10 +390,10 @@ See `docs/architecture.md` for full details.
 
 - `docs/architecture.md` - Technical architecture and ADRs
 - `docs/PRD.md` - Product requirements and vision
-- `docs/tech-spec-epic-1.md` - Epic 1 technical specification
-- `docs/brownfield-assessment.md` - Existing code analysis
-- `docs/epics.md` - Epic breakdown and roadmap
+- `docs/sprint-status.yaml` - Current development status (authoritative source)
+- `docs/tech-spec-epic-*.md` - Epic technical specifications
 - `docs/stories/` - Story-level implementation specs
+- `docs/performance-baselines-epic-*.md` - Performance benchmarks
 - `pyproject.toml` - Project configuration and dependencies
 - `.pre-commit-config.yaml` - Code quality hooks
 
@@ -468,7 +403,7 @@ See `docs/architecture.md` for full details.
 **Always use ripgrep (rg), never grep**. The tool is configured to use rg for performance.
 
 ### Brownfield Code
-Existing code in `src/{cli,extractors,processors,formatters,core,pipeline,infrastructure}/` is being assessed and consolidated. During Epic 1, both systems coexist. Don't remove or refactor brownfield code without checking Story 1.2 assessment first.
+Existing code in `src/{cli,extractors,processors,formatters,core,pipeline,infrastructure}/` has been assessed (Epic 1). Both brownfield and greenfield systems coexist. Don't break existing brownfield code during migration.
 
 ### Type Checking Exclusions
 Mypy excludes brownfield packages during migration (see `pyproject.toml` `[tool.mypy]` section). New code in `src/data_extract/` must pass strict type checking.

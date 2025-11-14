@@ -13,7 +13,13 @@
       "PowerShell(./venv/Scripts/python.exe -m pip:*)",
       "PowerShell(py -m venv venv)",
       "SlashCommand(/bmad:bmb:workflows:audit-workflow)",
-      "SlashCommand(/bmad:bmm:workflows:build-test-context)"
+      "SlashCommand(/bmad:bmm:workflows:build-test-context)",
+      "SlashCommand(/bmad:bmm:workflows:review-uat-results)",
+      "SlashCommand(/bmad:bmm:workflows:create-story)",
+      "SlashCommand(/bmad:bmm:workflows:story-context)",
+      "SlashCommand(/bmad:bmm:agents:tea)",
+      "SlashCommand(/bmad:bmm:workflows:code-review)",
+      "SlashCommand(/bmad:core:workflows:party-mode)"
     ],
     "deny": [],
     "ask": []

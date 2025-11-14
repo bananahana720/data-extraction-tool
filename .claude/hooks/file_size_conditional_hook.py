@@ -85,7 +85,7 @@ if file_path and os.path.exists(file_path):
     if is_main_agent and line_count > 750:
         error_msg = f"""File has {line_count} lines (threshold: 750).
 
-Please delegate the analysis to a SUB-AGENT using your Task tool
+Please utilize ripgrep (rg), Grep (capital G*), or delegate the analysis to a SUB-AGENT using your Task tool
 to avoid bloating your context with the file content.
 
 Example:
@@ -99,12 +99,7 @@ Example:
 
 Consider these alternatives:
 1. Read specific sections using offset/limit parameters
-2. Use Grep tool to search for specific patterns
-3. If gemini-cli is available, use it for large file analysis:
-
-   Example: gemini -p "@{file_path} analyze this file"
-
-Note: gemini-cli requires separate installation and API key setup.
+2. Use Grep tool or the rg bash command to search for specific patterns
 """
         print(error_msg, file=sys.stderr)
         sys.exit(2)
