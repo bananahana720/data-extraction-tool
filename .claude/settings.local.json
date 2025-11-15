@@ -14,7 +14,8 @@
       "PowerShell(py -m venv venv)",
       "SlashCommand(*)",
       "mcp__playwright",
-      "SlashCommand(/bmad:bmm:workflows:dev-story)"
+      "SlashCommand(/bmad:bmm:workflows:dev-story)",
+      "SlashCommand(/commit:*)"
     ],
     "deny": [],
     "ask": []
@@ -89,5 +90,6 @@
       }
     ]
   },
+  "disableAllHooks": true,
   "outputStyle": "default"
 }
