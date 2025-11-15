@@ -45,6 +45,9 @@ dependencies = [
     "lxml>=5.0.0,<6.0",
     "spacy>=3.7.2,<4.0",  # Story 2.5.2: Sentence boundary detection for Epic 3
 
+    # Epic 3 Output Formatting (Story 3.4 JSON schema validation)
+    "jsonschema>=4.0.0,<5.0",  # JSON Schema Draft 7 validation
+
     # Brownfield compatibility (existing dependencies, kept for Story 1.2 assessment)
     "python-docx>=0.8.11",
     "pypdf>=3.0.0",

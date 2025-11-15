@@ -19,7 +19,18 @@
       "SlashCommand(/bmad:bmm:workflows:story-context)",
       "SlashCommand(/bmad:bmm:agents:tea)",
       "SlashCommand(/bmad:bmm:workflows:code-review)",
-      "SlashCommand(/bmad:core:workflows:party-mode)"
+      "SlashCommand(/bmad:core:workflows:party-mode)",
+      "SlashCommand(/bmad:bmm:workflows:story-context 3.3 - ultrathink)",
+      "SlashCommand(/bmad:bmm:agents:tea 3.3 *atdd - yolo mode and ultrathink)",
+      "SlashCommand(/bmad:bmm:workflows:dev-story)",
+      "SlashCommand(/bmad:bmm:agents:tea *automate * yolo mode)",
+      "SlashCommand(/bmad:bmm:workflows:create-test-cases)",
+      "SlashCommand(/bmad:bmm:workflows:execute-tests)",
+      "SlashCommand(/bmad:bmm:workflows:story-done)",
+      "SlashCommand(/commit)",
+      "SlashCommand(/bmad:bmm:agents:tea:*)",
+      "SlashCommand(/bmad:bmm:workflows:story-context:*)",
+      "SlashCommand(/bmad:bmm:workflows:dev-story:*)"
     ],
     "deny": [],
     "ask": []
