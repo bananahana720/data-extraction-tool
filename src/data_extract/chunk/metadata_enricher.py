@@ -135,8 +135,12 @@ class MetadataEnricher:
         )
 
         # Extract source traceability (AC-3.3-1)
-        source_hash = source_metadata.get("source_hash", "")
-        document_type = source_metadata.get("document_type", "")
+        source_hash = source_metadata.get("source_hash") or None
+        document_type = source_metadata.get("document_type") or None
+
+        # Extract source file and config snapshot (AC-3.4-3, AC-3.4-6 - Story 3.4)
+        source_file = source_metadata.get("source_file") or None
+        config_snapshot = source_metadata.get("config_snapshot") or {}
 
         # Create enriched metadata
         enriched_metadata = ChunkMetadata(
@@ -167,6 +171,8 @@ class MetadataEnricher:
             token_count=token_count,
             created_at=datetime.now(),
             processing_version="1.0.0",
+            source_file=source_file,
+            config_snapshot=config_snapshot,
         )
 
         # Return new chunk with enriched metadata (immutability)

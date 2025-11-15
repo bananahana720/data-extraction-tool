@@ -15,6 +15,7 @@ These tests WILL FAIL until JsonFormatter is implemented (GREEN phase).
 
 import json
 from datetime import datetime
+from pathlib import Path
 from typing import List
 
 import pytest
@@ -67,6 +68,8 @@ def sample_enriched_chunk() -> Chunk:
         token_count=200,
         created_at=datetime(2025, 11, 14, 20, 30, 0),
         processing_version="1.0.0-epic3",
+        source_file=Path("tests/fixtures/audit_report.pdf"),
+        config_snapshot={"chunk_size": 512, "overlap_pct": 0.15, "entity_aware": True},
     )
 
     return Chunk(
@@ -152,7 +155,7 @@ class TestJsonStructureGeneration:
         assert output_path.exists()
 
         # AND: JSON should have metadata and chunks keys
-        with open(output_path, "r", encoding="utf-8") as f:
+        with open(output_path, "r", encoding="utf-8-sig") as f:
             json_data = json.load(f)
 
         assert "metadata" in json_data
@@ -171,7 +174,7 @@ class TestJsonStructureGeneration:
         json_formatter.format_chunks(iter(sample_chunks), output_path)
 
         # THEN: Metadata header should include required fields
-        with open(output_path, "r", encoding="utf-8") as f:
+        with open(output_path, "r", encoding="utf-8-sig") as f:
             json_data = json.load(f)
 
         metadata = json_data["metadata"]
@@ -192,7 +195,7 @@ class TestJsonStructureGeneration:
         json_formatter.format_chunks(iter(sample_chunks), output_path)
 
         # THEN: Configuration should include chunking parameters
-        with open(output_path, "r", encoding="utf-8") as f:
+        with open(output_path, "r", encoding="utf-8-sig") as f:
             json_data = json.load(f)
 
         config = json_data["metadata"]["configuration"]
@@ -210,7 +213,7 @@ class TestJsonStructureGeneration:
         json_formatter.format_chunks(iter(sample_chunks), output_path)
 
         # THEN: chunk_count should be 3
-        with open(output_path, "r", encoding="utf-8") as f:
+        with open(output_path, "r", encoding="utf-8-sig") as f:
             json_data = json.load(f)
 
         assert json_data["metadata"]["chunk_count"] == 3
@@ -229,7 +232,7 @@ class TestChunkSerialization:
         json_formatter.format_chunks(iter(sample_chunks), output_path)
 
         # THEN: Each chunk should have required fields
-        with open(output_path, "r", encoding="utf-8") as f:
+        with open(output_path, "r", encoding="utf-8-sig") as f:
             json_data = json.load(f)
 
         chunk = json_data["chunks"][0]
@@ -248,7 +251,7 @@ class TestChunkSerialization:
         json_formatter.format_chunks(iter(sample_chunks), output_path)
 
         # THEN: Chunk metadata should include all fields from Story 3.3
-        with open(output_path, "r", encoding="utf-8") as f:
+        with open(output_path, "r", encoding="utf-8-sig") as f:
             json_data = json.load(f)
 
         chunk_meta = json_data["chunks"][0]["metadata"]
@@ -276,7 +279,7 @@ class TestChunkSerialization:
         json_formatter.format_chunks(iter(sample_chunks), output_path)
 
         # THEN: Quality should be nested object with all fields
-        with open(output_path, "r", encoding="utf-8") as f:
+        with open(output_path, "r", encoding="utf-8-sig") as f:
             json_data = json.load(f)
 
         quality = json_data["chunks"][0]["quality"]
@@ -297,7 +300,7 @@ class TestChunkSerialization:
         json_formatter.format_chunks(iter(sample_chunks), output_path)
 
         # THEN: Entities should be array with entity fields
-        with open(output_path, "r", encoding="utf-8") as f:
+        with open(output_path, "r", encoding="utf-8-sig") as f:
             json_data = json.load(f)
 
         # Entities in metadata.entity_tags
@@ -321,7 +324,7 @@ class TestChunkSerialization:
         json_formatter.format_chunks(iter(sample_chunks), output_path)
 
         # THEN: Datetime fields should be ISO 8601 strings
-        with open(output_path, "r", encoding="utf-8") as f:
+        with open(output_path, "r", encoding="utf-8-sig") as f:
             json_data = json.load(f)
 
         # Metadata timestamp
@@ -347,7 +350,7 @@ class TestValidJsonOutput:
         json_formatter.format_chunks(iter(sample_chunks), output_path)
 
         # THEN: JSON should parse without errors
-        with open(output_path, "r", encoding="utf-8") as f:
+        with open(output_path, "r", encoding="utf-8-sig") as f:
             json_data = json.load(f)
 
         assert json_data is not None
@@ -362,10 +365,10 @@ class TestValidJsonOutput:
         json_formatter.format_chunks(iter(sample_chunks), output_path)
 
         # THEN: File should contain single JSON object (not multiple lines)
-        with open(output_path, "r", encoding="utf-8") as f:
+        with open(output_path, "r", encoding="utf-8-sig") as f:
             content = f.read()
 
-        # Single json.loads() should parse entire file
+        # Single json.loads() should parse entire file (BOM already stripped by utf-8-sig)
         json_data = json.loads(content)
         assert isinstance(json_data, dict)
         assert "chunks" in json_data
@@ -396,7 +399,7 @@ class TestValidJsonOutput:
         json_formatter.format_chunks(iter(sample_chunks), output_path)
 
         # THEN: JSON should parse (strict parser rejects trailing commas)
-        with open(output_path, "r", encoding="utf-8") as f:
+        with open(output_path, "r", encoding="utf-8-sig") as f:
             json_data = json.load(f)
 
         assert json_data is not None  # If parsing succeeds, no trailing commas
@@ -456,7 +459,7 @@ class TestEmptyAndEdgeCases:
         json_formatter.format_chunks(iter([]), output_path)
 
         # THEN: JSON should be valid with empty chunks array
-        with open(output_path, "r", encoding="utf-8") as f:
+        with open(output_path, "r", encoding="utf-8-sig") as f:
             json_data = json.load(f)
 
         assert json_data["metadata"]["chunk_count"] == 0
@@ -471,7 +474,7 @@ class TestEmptyAndEdgeCases:
         json_formatter.format_chunks(iter([sample_enriched_chunk]), output_path)
 
         # THEN: JSON should have exactly one chunk
-        with open(output_path, "r", encoding="utf-8") as f:
+        with open(output_path, "r", encoding="utf-8-sig") as f:
             json_data = json.load(f)
 
         assert json_data["metadata"]["chunk_count"] == 1
@@ -494,7 +497,7 @@ class TestEmptyAndEdgeCases:
         assert duration < 2.0, f"JSON generation took {duration:.2f}s (target: <1s)"
 
         # AND: JSON should have 100 chunks
-        with open(output_path, "r", encoding="utf-8") as f:
+        with open(output_path, "r", encoding="utf-8-sig") as f:
             json_data = json.load(f)
 
         assert json_data["metadata"]["chunk_count"] == 100

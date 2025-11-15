@@ -72,7 +72,7 @@ def valid_chunk_json():
                     "entity_tags": [],
                     "section_context": "Introduction",
                     "entity_relationships": [],
-                    "source_metadata": None,
+                    "source_metadata": {},
                     "quality": {
                         "readability_flesch_kincaid": 8.5,
                         "readability_gunning_fog": 10.2,
@@ -88,6 +88,8 @@ def valid_chunk_json():
                     "token_count": 10,
                     "created_at": "2025-11-14T20:30:00Z",
                     "processing_version": "1.0.0-epic3",
+                    "source_file": "tests/fixtures/test_doc.pdf",
+                    "config_snapshot": {"chunk_size": 512, "overlap_pct": 0.15, "entity_aware": True},
                 },
                 "entities": [],
                 "quality": {

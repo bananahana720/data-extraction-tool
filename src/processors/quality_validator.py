@@ -19,7 +19,6 @@ Design:
 - Configurable: Thresholds and penalties can be adjusted
 """
 
-
 from core import (
     BaseProcessor,
     ContentBlock,

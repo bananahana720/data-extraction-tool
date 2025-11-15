@@ -315,6 +315,47 @@ config = ChunkingConfig(
 
 See `docs/performance-baselines-epic-3.md` for detailed performance baselines.
 
+### JsonFormatter & JSON Schema (Story 3.4)
+
+**Location**
+- Formatter protocol/dataclasses: `src/data_extract/output/formatters/base.py`
+- Implementation: `src/data_extract/output/formatters/json_formatter.py`
+- JSON Schema (Draft 7): `src/data_extract/output/schemas/data-extract-chunk.schema.json`
+- Reference doc for downstream consumers: `docs/json-schema-reference.md`
+
+**Output Contract**
+- Root object: `{"metadata": {...}, "chunks": [...]}` (single JSON document, not JSON Lines)
+- `metadata` captures processing version, timestamp, chunking config, source files, and chunk count
+- Each `chunk` entry serializes the Chunk/ChunkMetadata/QualityScore/EntityReference models (ISO 8601 timestamps, stringified paths)
+- Schema validation is enabled by default; disable with `JsonFormatter(validate=False)` when high-throughput jobs already trust upstream validation
+
+**Dependencies**
+- `pip install textstat pandas`
+- `python -m spacy download en_core_web_md`
+- Install `jq` CLI (e.g., `curl -L https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64 -o venv/bin/jq && chmod +x venv/bin/jq`)
+- Node.js available on PATH (used to exercise `JSON.parse`)
+
+**Validation Commands**
+```bash
+# Unit coverage (structure, schema, serialization)
+pytest tests/unit/test_output/test_json_formatter.py tests/unit/test_output/test_json_schema.py
+
+# End-to-end pipeline validation (json.load, pandas, jq, Node, queryability, determinism)
+pytest tests/integration/test_output/test_json_output_pipeline.py
+
+# UTF-8 + path compatibility
+pytest tests/integration/test_output/test_json_compatibility.py
+
+# Performance baselines (<1s/doc target, validation toggle)
+pytest tests/performance/test_json_performance.py
+```
+
+**Gotchas**
+- JsonFormatter materializes the chunk iterator (array output). Large documents should stay under ~500 chunks; JSON Lines support is deferred to Story 3.7/5.x.
+- Schema expects `source_hash` to be 12–64 hex characters. Emit `None` when provenance isn’t available instead of empty strings.
+- pandas compatibility relies on `pd.json_normalize(json_data["chunks"])`; `pd.read_json` on the root object mixes dict + array and raises.
+- jq tests require the binary on PATH; install per instructions above.
+
 ### Quality Gates
 
 **Pre-commit workflow** (0 violations required):

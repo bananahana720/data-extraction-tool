@@ -32,7 +32,7 @@ class UATTestExecutor:
     def load_fixture(self, filename: str) -> str:
         """Load text from fixture file"""
         filepath = self.fixtures_path / filename
-        return filepath.read_text(encoding='utf-8')
+        return filepath.read_text(encoding="utf-8")
 
     def create_test_chunk(
         self,
@@ -40,7 +40,7 @@ class UATTestExecutor:
         ocr_conf: float = 1.0,
         completeness: float = 1.0,
         source_file: str = "test_document.txt",
-        chunk_id: str = "test-chunk-001"
+        chunk_id: str = "test-chunk-001",
     ) -> Chunk:
         """Create a test chunk with basic metadata"""
         chunk_metadata = ChunkMetadata(
@@ -55,14 +55,14 @@ class UATTestExecutor:
                 completeness=1.0,
                 coherence=1.0,
                 overall=1.0,
-                flags=[]
+                flags=[],
             ),
             source_hash="test_hash_" + "0" * 56,
             document_type="test",
             word_count=0,
             token_count=0,
             created_at=datetime.now(),
-            processing_version="1.0.0"
+            processing_version="1.0.0",
         )
 
         return Chunk(
@@ -76,15 +76,11 @@ class UATTestExecutor:
             section_context="",
             quality_score=1.0,
             readability_scores={},
-            metadata=chunk_metadata
+            metadata=chunk_metadata,
         )
 
     def verify_readability_range(
-        self,
-        score: float,
-        min_val: float,
-        max_val: float,
-        tolerance: float = 1.0
+        self, score: float, min_val: float, max_val: float, tolerance: float = 1.0
     ) -> Tuple[bool, float]:
         """Verify score is within expected range"""
         within_range = (min_val - tolerance) <= score <= (max_val + tolerance)
@@ -95,13 +91,7 @@ class UATTestExecutor:
             deviation = score - max_val
         return within_range, deviation
 
-    def calculate_expected_overall(
-        self,
-        ocr: float,
-        comp: float,
-        coh: float,
-        read: float
-    ) -> float:
+    def calculate_expected_overall(self, ocr: float, comp: float, coh: float, read: float) -> float:
         """Manual weighted calculation: 40% OCR, 30% comp, 20% coh, 10% read"""
         return (0.4 * ocr) + (0.3 * comp) + (0.2 * coh) + (0.1 * read)
 
@@ -150,7 +140,7 @@ class UATTestExecutor:
             "fog_deviation": round(fog_dev, 2),
             "within_tolerance": "YES" if passed else "NO",
             "evidence": f"textstat.flesch_kincaid_grade = {fk:.2f}, textstat.gunning_fog = {fog:.2f}",
-            "notes": "Standard business text readability validation"
+            "notes": "Standard business text readability validation",
         }
 
     def test_uat_3_3_4_2(self) -> Dict:
@@ -184,7 +174,7 @@ class UATTestExecutor:
             "fog_deviation": round(fog_dev, 2),
             "within_tolerance": "YES" if passed else "NO",
             "evidence": f"Simple text measured: FK={fk:.2f}, Fog={fog:.2f}",
-            "notes": "Elementary school level text validation"
+            "notes": "Elementary school level text validation",
         }
 
     def test_uat_3_3_4_3(self) -> Dict:
@@ -219,7 +209,7 @@ class UATTestExecutor:
             "high_complexity_flag": high_complexity_flag,
             "within_tolerance": "YES" if passed else "NO",
             "evidence": f"Complex text: FK={fk:.2f}, Fog={fog:.2f}, Flags={flags}",
-            "notes": "Post-graduate level complexity validation"
+            "notes": "Post-graduate level complexity validation",
         }
 
     def test_uat_3_3_4_4(self) -> Dict:
@@ -254,7 +244,7 @@ class UATTestExecutor:
                 "fog_valid": fog_valid,
                 "within_tolerance": "YES" if passed else "NO",
                 "evidence": f"Short text handled: FK={fk:.2f}, Fog={fog:.2f}",
-                "notes": "Edge case: Single sentence handled gracefully"
+                "notes": "Edge case: Single sentence handled gracefully",
             }
         except Exception as e:
             return {
@@ -266,7 +256,7 @@ class UATTestExecutor:
                 "actual_result": f"Exception raised: {str(e)}",
                 "within_tolerance": "NO",
                 "evidence": f"Error: {type(e).__name__}: {str(e)}",
-                "notes": "Failed - exception during short text processing"
+                "notes": "Failed - exception during short text processing",
             }
 
     def test_uat_3_3_4_5(self) -> Dict:
@@ -297,7 +287,7 @@ class UATTestExecutor:
                 "actual_fog": round(fog, 2),
                 "within_tolerance": "YES" if passed else "NO",
                 "evidence": f"Empty text handled: FK={fk:.2f}, Fog={fog:.2f}",
-                "notes": "Empty text defaults to 0.0 without exceptions"
+                "notes": "Empty text defaults to 0.0 without exceptions",
             }
         except Exception as e:
             return {
@@ -309,7 +299,7 @@ class UATTestExecutor:
                 "actual_result": f"Exception raised: {str(e)}",
                 "within_tolerance": "NO",
                 "evidence": f"Error: {type(e).__name__}: {str(e)}",
-                "notes": "Failed - exception during empty text processing"
+                "notes": "Failed - exception during empty text processing",
             }
 
     # =========================================================================
@@ -323,10 +313,7 @@ class UATTestExecutor:
         text = self.load_fixture("standard_text.txt")
         chunk = self.create_test_chunk(text)
 
-        source_metadata = {
-            "ocr_confidence": 0.99,
-            "completeness": 0.98
-        }
+        source_metadata = {"ocr_confidence": 0.99, "completeness": 0.98}
         enriched = self.enricher.enrich_chunk(chunk, source_metadata)
 
         quality = enriched.metadata.quality
@@ -347,7 +334,7 @@ class UATTestExecutor:
             "flags": quality.flags,
             "within_tolerance": "YES" if in_range else "NO",
             "evidence": f"OCR={quality.ocr_confidence:.3f}, Comp={quality.completeness:.3f}, Coh={quality.coherence:.3f}, Overall={overall:.3f}",
-            "notes": "High-quality chunk validation"
+            "notes": "High-quality chunk validation",
         }
 
     def test_uat_3_3_5_2(self) -> Dict:
@@ -357,10 +344,7 @@ class UATTestExecutor:
         text = self.load_fixture("standard_text.txt")
         chunk = self.create_test_chunk(text)
 
-        source_metadata = {
-            "ocr_confidence": 0.90,
-            "completeness": 0.85
-        }
+        source_metadata = {"ocr_confidence": 0.90, "completeness": 0.85}
         enriched = self.enricher.enrich_chunk(chunk, source_metadata)
 
         quality = enriched.metadata.quality
@@ -380,7 +364,7 @@ class UATTestExecutor:
             "deviation": round(dev, 3),
             "within_tolerance": "YES" if in_range else "NO",
             "evidence": f"Medium quality: Overall={overall:.3f}",
-            "notes": "Medium-quality chunk differentiation"
+            "notes": "Medium-quality chunk differentiation",
         }
 
     def test_uat_3_3_5_3(self) -> Dict:
@@ -390,10 +374,7 @@ class UATTestExecutor:
         text = self.load_fixture("simple_text.txt")
         chunk = self.create_test_chunk(text)
 
-        source_metadata = {
-            "ocr_confidence": 1.0,
-            "completeness": 1.0
-        }
+        source_metadata = {"ocr_confidence": 1.0, "completeness": 1.0}
         enriched = self.enricher.enrich_chunk(chunk, source_metadata)
 
         quality = enriched.metadata.quality
@@ -413,7 +394,7 @@ class UATTestExecutor:
             "actual_overall": round(overall, 3),
             "within_tolerance": "YES" if passed else "NO",
             "evidence": f"Perfect inputs: Overall={overall:.3f}",
-            "notes": "Perfect quality scenario validation"
+            "notes": "Perfect quality scenario validation",
         }
 
     def test_uat_3_3_5_4(self) -> Dict:
@@ -423,10 +404,7 @@ class UATTestExecutor:
         text = self.load_fixture("gibberish_text.txt")
         chunk = self.create_test_chunk(text)
 
-        source_metadata = {
-            "ocr_confidence": 0.70,
-            "completeness": 0.60
-        }
+        source_metadata = {"ocr_confidence": 0.70, "completeness": 0.60}
         enriched = self.enricher.enrich_chunk(chunk, source_metadata)
 
         quality = enriched.metadata.quality
@@ -452,7 +430,7 @@ class UATTestExecutor:
             "flag_count": len(flags),
             "within_tolerance": "YES" if passed else "NO",
             "evidence": f"Low quality: Overall={overall:.3f}, Flags={flags}",
-            "notes": "Low-quality chunk with multiple flags"
+            "notes": "Low-quality chunk with multiple flags",
         }
 
     def test_uat_3_3_5_5(self) -> Dict:
@@ -477,15 +455,17 @@ class UATTestExecutor:
             tolerance = 0.01
             passed = abs(calculated - expected) <= tolerance
 
-            results.append({
-                "ocr": tc["ocr"],
-                "comp": tc["comp"],
-                "coh": tc["coh"],
-                "read": tc["read"],
-                "expected": expected,
-                "calculated": round(calculated, 4),
-                "passed": passed
-            })
+            results.append(
+                {
+                    "ocr": tc["ocr"],
+                    "comp": tc["comp"],
+                    "coh": tc["coh"],
+                    "read": tc["read"],
+                    "expected": expected,
+                    "calculated": round(calculated, 4),
+                    "passed": passed,
+                }
+            )
 
             if not passed:
                 all_passed = False
@@ -498,7 +478,7 @@ class UATTestExecutor:
             "test_cases": results,
             "within_tolerance": "YES" if all_passed else "NO",
             "evidence": f"Tested {len(test_cases)} scenarios, all validated",
-            "notes": "Weighted formula mathematically correct"
+            "notes": "Weighted formula mathematically correct",
         }
 
     # =========================================================================
@@ -512,10 +492,7 @@ class UATTestExecutor:
         text = self.load_fixture("standard_text.txt")
         chunk = self.create_test_chunk(text)
 
-        source_metadata = {
-            "ocr_confidence": 0.99,
-            "completeness": 0.98
-        }
+        source_metadata = {"ocr_confidence": 0.99, "completeness": 0.98}
         enriched = self.enricher.enrich_chunk(chunk, source_metadata)
 
         flags = enriched.metadata.quality.flags
@@ -530,7 +507,7 @@ class UATTestExecutor:
             "flag_count": len(flags),
             "within_tolerance": "YES" if passed else "NO",
             "evidence": f"High-quality chunk: Flags={flags}",
-            "notes": "No false-positive flags for high-quality content"
+            "notes": "No false-positive flags for high-quality content",
         }
 
     def test_uat_3_3_8_2(self) -> Dict:
@@ -542,7 +519,7 @@ class UATTestExecutor:
 
         source_metadata = {
             "ocr_confidence": 0.90,  # Below 0.95 threshold
-            "completeness": 0.95     # High to avoid other flags
+            "completeness": 0.95,  # High to avoid other flags
         }
         enriched = self.enricher.enrich_chunk(chunk, source_metadata)
 
@@ -557,12 +534,12 @@ class UATTestExecutor:
             "status": "PASS" if passed else "FAIL",
             "execution_type": "Automated",
             "ocr_confidence": 0.90,
-            "expected_flags": "[\"low_ocr\"]",
+            "expected_flags": '["low_ocr"]',
             "actual_flags": flags,
             "has_low_ocr_flag": has_low_ocr,
             "within_tolerance": "YES" if passed else "NO",
             "evidence": f"OCR 0.90 < 0.95: Flags={flags}",
-            "notes": "low_ocr flag correctly triggered"
+            "notes": "low_ocr flag correctly triggered",
         }
 
     def test_uat_3_3_8_3(self) -> Dict:
@@ -574,7 +551,7 @@ class UATTestExecutor:
 
         source_metadata = {
             "ocr_confidence": 0.99,  # High to avoid OCR flag
-            "completeness": 0.85     # Below 0.90 threshold
+            "completeness": 0.85,  # Below 0.90 threshold
         }
         enriched = self.enricher.enrich_chunk(chunk, source_metadata)
 
@@ -588,12 +565,12 @@ class UATTestExecutor:
             "status": "PASS" if passed else "FAIL",
             "execution_type": "Automated",
             "completeness": 0.85,
-            "expected_flags": "[\"incomplete_extraction\"]",
+            "expected_flags": '["incomplete_extraction"]',
             "actual_flags": flags,
             "has_incomplete_flag": has_incomplete,
             "within_tolerance": "YES" if passed else "NO",
             "evidence": f"Completeness 0.85 < 0.90: Flags={flags}",
-            "notes": "incomplete_extraction flag correctly triggered"
+            "notes": "incomplete_extraction flag correctly triggered",
         }
 
     def test_uat_3_3_8_4(self) -> Dict:
@@ -603,10 +580,7 @@ class UATTestExecutor:
         text = self.load_fixture("complex_text.txt")
         chunk = self.create_test_chunk(text)
 
-        source_metadata = {
-            "ocr_confidence": 0.99,
-            "completeness": 0.98
-        }
+        source_metadata = {"ocr_confidence": 0.99, "completeness": 0.98}
         enriched = self.enricher.enrich_chunk(chunk, source_metadata)
 
         fk = enriched.metadata.quality.readability_flesch_kincaid
@@ -621,12 +595,12 @@ class UATTestExecutor:
             "execution_type": "Automated",
             "flesch_kincaid": round(fk, 2),
             "expected_fk": ">15.0",
-            "expected_flags": "[\"high_complexity\"]",
+            "expected_flags": '["high_complexity"]',
             "actual_flags": flags,
             "has_high_complexity_flag": has_high_complexity,
             "within_tolerance": "YES" if passed else "NO",
             "evidence": f"FK {fk:.2f} > 15.0: Flags={flags}",
-            "notes": "high_complexity flag correctly triggered"
+            "notes": "high_complexity flag correctly triggered",
         }
 
     def test_uat_3_3_8_5(self) -> Dict:
@@ -638,10 +612,7 @@ class UATTestExecutor:
 
         non_alpha_ratio = self.count_non_alpha_ratio(text)
 
-        source_metadata = {
-            "ocr_confidence": 0.99,
-            "completeness": 0.98
-        }
+        source_metadata = {"ocr_confidence": 0.99, "completeness": 0.98}
         enriched = self.enricher.enrich_chunk(chunk, source_metadata)
 
         flags = enriched.metadata.quality.flags
@@ -655,12 +626,12 @@ class UATTestExecutor:
             "execution_type": "Automated",
             "non_alpha_ratio": round(non_alpha_ratio, 3),
             "expected_ratio": ">0.30",
-            "expected_flags": "[\"gibberish\"]",
+            "expected_flags": '["gibberish"]',
             "actual_flags": flags,
             "has_gibberish_flag": has_gibberish,
             "within_tolerance": "YES" if passed else "NO",
             "evidence": f"Non-alpha ratio {non_alpha_ratio:.3f} > 0.30: Flags={flags}",
-            "notes": "gibberish flag correctly triggered"
+            "notes": "gibberish flag correctly triggered",
         }
 
     def test_uat_3_3_8_6(self) -> Dict:
@@ -672,7 +643,7 @@ class UATTestExecutor:
 
         source_metadata = {
             "ocr_confidence": 0.85,  # Triggers low_ocr
-            "completeness": 0.80     # Triggers incomplete_extraction
+            "completeness": 0.80,  # Triggers incomplete_extraction
         }
         # Text already has high non-alpha (gibberish flag)
 
@@ -698,25 +669,28 @@ class UATTestExecutor:
             "overall_score": round(overall, 3),
             "within_tolerance": "YES" if passed else "NO",
             "evidence": f"Multiple issues detected: {len(flags)} flags = {flags}, Overall={overall:.3f}",
-            "notes": "Multiple quality flags correctly detected simultaneously"
+            "notes": "Multiple quality flags correctly detected simultaneously",
         }
 
     def run_all_tests(self) -> List[Dict]:
         """Execute all 16 UAT test cases"""
-        print("\n" + "="*80)
+        print("\n" + "=" * 80)
         print("EXECUTING UAT TEST SUITE FOR STORY 3.3")
-        print("="*80 + "\n")
+        print("=" * 80 + "\n")
 
         # AC-3.3-4 tests (5 tests)
         print("AC-3.3-4: Readability Scores Calculated (5 tests)")
         print("-" * 80)
-        for i, test_func in enumerate([
-            self.test_uat_3_3_4_1,
-            self.test_uat_3_3_4_2,
-            self.test_uat_3_3_4_3,
-            self.test_uat_3_3_4_4,
-            self.test_uat_3_3_4_5,
-        ], 1):
+        for i, test_func in enumerate(
+            [
+                self.test_uat_3_3_4_1,
+                self.test_uat_3_3_4_2,
+                self.test_uat_3_3_4_3,
+                self.test_uat_3_3_4_4,
+                self.test_uat_3_3_4_5,
+            ],
+            1,
+        ):
             result = test_func()
             self.results.append(result)
             status_symbol = "[PASS]" if result["status"] == "PASS" else "[FAIL]"
@@ -727,13 +701,16 @@ class UATTestExecutor:
         # AC-3.3-5 tests (5 tests)
         print("AC-3.3-5: Composite Quality Score (5 tests)")
         print("-" * 80)
-        for i, test_func in enumerate([
-            self.test_uat_3_3_5_1,
-            self.test_uat_3_3_5_2,
-            self.test_uat_3_3_5_3,
-            self.test_uat_3_3_5_4,
-            self.test_uat_3_3_5_5,
-        ], 1):
+        for i, test_func in enumerate(
+            [
+                self.test_uat_3_3_5_1,
+                self.test_uat_3_3_5_2,
+                self.test_uat_3_3_5_3,
+                self.test_uat_3_3_5_4,
+                self.test_uat_3_3_5_5,
+            ],
+            1,
+        ):
             result = test_func()
             self.results.append(result)
             status_symbol = "[PASS]" if result["status"] == "PASS" else "[FAIL]"
@@ -744,20 +721,23 @@ class UATTestExecutor:
         # AC-3.3-8 tests (6 tests)
         print("AC-3.3-8: Quality Flags Detection (6 tests)")
         print("-" * 80)
-        for i, test_func in enumerate([
-            self.test_uat_3_3_8_1,
-            self.test_uat_3_3_8_2,
-            self.test_uat_3_3_8_3,
-            self.test_uat_3_3_8_4,
-            self.test_uat_3_3_8_5,
-            self.test_uat_3_3_8_6,
-        ], 1):
+        for i, test_func in enumerate(
+            [
+                self.test_uat_3_3_8_1,
+                self.test_uat_3_3_8_2,
+                self.test_uat_3_3_8_3,
+                self.test_uat_3_3_8_4,
+                self.test_uat_3_3_8_5,
+                self.test_uat_3_3_8_6,
+            ],
+            1,
+        ):
             result = test_func()
             self.results.append(result)
             status_symbol = "[PASS]" if result["status"] == "PASS" else "[FAIL]"
             print(f"{status_symbol} {result['test_id']}: {result['status']}")
 
-        print("\n" + "="*80)
+        print("\n" + "=" * 80)
         self.print_summary()
 
         return self.results
@@ -770,7 +750,7 @@ class UATTestExecutor:
         pass_rate = (passed / total * 100) if total > 0 else 0
 
         print(f"EXECUTION SUMMARY")
-        print("="*80)
+        print("=" * 80)
         print(f"Total Tests: {total}")
         print(f"Passed: {passed} ({pass_rate:.1f}%)")
         print(f"Failed: {failed}")
@@ -782,7 +762,7 @@ class UATTestExecutor:
                 if r["status"] == "FAIL":
                     print(f"  - {r['test_id']}")
 
-        print("="*80 + "\n")
+        print("=" * 80 + "\n")
 
 
 if __name__ == "__main__":
@@ -793,15 +773,19 @@ if __name__ == "__main__":
     output_file = project_root / "docs" / "uat" / "test-results" / "3-3-test-results.json"
     output_file.parent.mkdir(parents=True, exist_ok=True)
 
-    with open(output_file, 'w', encoding='utf-8') as f:
-        json.dump({
-            "story_id": "3.3",
-            "execution_date": datetime.now().isoformat(),
-            "total_tests": len(results),
-            "passed": sum(1 for r in results if r["status"] == "PASS"),
-            "failed": sum(1 for r in results if r["status"] == "FAIL"),
-            "results": results
-        }, f, indent=2)
+    with open(output_file, "w", encoding="utf-8") as f:
+        json.dump(
+            {
+                "story_id": "3.3",
+                "execution_date": datetime.now().isoformat(),
+                "total_tests": len(results),
+                "passed": sum(1 for r in results if r["status"] == "PASS"),
+                "failed": sum(1 for r in results if r["status"] == "FAIL"),
+                "results": results,
+            },
+            f,
+            indent=2,
+        )
 
     print(f"Results saved to: {output_file}")
 

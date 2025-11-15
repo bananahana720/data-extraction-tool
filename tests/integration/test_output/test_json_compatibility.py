@@ -74,7 +74,7 @@ class TestUTF8EncodingSpecialCharacters:
         json_formatter.format_chunks(iter([chunk]), output_path)
 
         # THEN: JSON should parse and preserve emojis
-        with open(output_path, "r", encoding="utf-8") as f:
+        with open(output_path, "r", encoding="utf-8-sig") as f:
             json_data = json.load(f)
 
         assert "🚨" in json_data["chunks"][0]["text"]
@@ -113,7 +113,7 @@ class TestUTF8EncodingSpecialCharacters:
         json_formatter.format_chunks(iter([chunk]), output_path)
 
         # THEN: JSON should preserve accented characters
-        with open(output_path, "r", encoding="utf-8") as f:
+        with open(output_path, "r", encoding="utf-8-sig") as f:
             json_data = json.load(f)
 
         text = json_data["chunks"][0]["text"]
@@ -153,7 +153,7 @@ class TestUTF8EncodingSpecialCharacters:
         json_formatter.format_chunks(iter([chunk]), output_path)
 
         # THEN: JSON should preserve CJK characters
-        with open(output_path, "r", encoding="utf-8") as f:
+        with open(output_path, "r", encoding="utf-8-sig") as f:
             json_data = json.load(f)
 
         text = json_data["chunks"][0]["text"]
@@ -197,7 +197,7 @@ class TestLargeChunkText:
         json_formatter.format_chunks(iter([chunk]), output_path)
 
         # THEN: JSON should be parsable
-        with open(output_path, "r", encoding="utf-8") as f:
+        with open(output_path, "r", encoding="utf-8-sig") as f:
             json_data = json.load(f)
 
         assert len(json_data["chunks"][0]["text"]) > 10000
@@ -251,7 +251,7 @@ class TestDeeplyNestedStructures:
         json_formatter.format_chunks(iter([chunk]), output_path)
 
         # THEN: JSON should be parsable with all entities
-        with open(output_path, "r", encoding="utf-8") as f:
+        with open(output_path, "r", encoding="utf-8-sig") as f:
             json_data = json.load(f)
 
         entity_tags = json_data["chunks"][0]["metadata"]["entity_tags"]
@@ -296,7 +296,7 @@ class TestPathCompatibility:
         json_formatter.format_chunks(iter([chunk]), output_path)
 
         # THEN: JSON should be parsable
-        with open(output_path, "r", encoding="utf-8") as f:
+        with open(output_path, "r", encoding="utf-8-sig") as f:
             json_data = json.load(f)
 
         # Paths should be strings (not Path objects)
@@ -338,7 +338,7 @@ class TestPathCompatibility:
         json_formatter.format_chunks(iter([chunk]), output_path)
 
         # THEN: JSON should be readable on any platform
-        with open(output_path, "r", encoding="utf-8") as f:
+        with open(output_path, "r", encoding="utf-8-sig") as f:
             json_data = json.load(f)
 
         assert json_data is not None
@@ -422,7 +422,7 @@ class TestFileEncodingDetails:
         # WHEN: Writing and reading back
         json_formatter.format_chunks(iter([chunk]), output_path)
 
-        with open(output_path, "r", encoding="utf-8") as f:
+        with open(output_path, "r", encoding="utf-8-sig") as f:
             json_data = json.load(f)
 
         # THEN: Text should be identical

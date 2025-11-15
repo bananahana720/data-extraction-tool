@@ -77,7 +77,7 @@ class TestEndToEndPipeline:
         # THEN: JSON file should exist and be parsable
         assert output_path.exists()
 
-        with open(output_path, "r", encoding="utf-8") as f:
+        with open(output_path, "r", encoding="utf-8-sig") as f:
             json_data = json.load(f)
 
         assert "metadata" in json_data
@@ -94,7 +94,7 @@ class TestEndToEndPipeline:
         json_formatter.format_chunks(chunks, output_path)
 
         # WHEN: Parsing with json.load()
-        with open(output_path, "r", encoding="utf-8") as f:
+        with open(output_path, "r", encoding="utf-8-sig") as f:
             json_data = json.load(f)
 
         # THEN: Should parse successfully
@@ -117,12 +117,14 @@ class TestCrossLibraryCompatibility:
         chunks = chunking_engine.chunk(sample_processing_result)
         json_formatter.format_chunks(chunks, output_path)
 
-        # WHEN: Reading with pandas
-        df = pd.read_json(output_path)
+        # WHEN: Reading with pandas by normalizing chunks array
+        with open(output_path, "r", encoding="utf-8-sig") as f:
+            json_data = json.load(f)
+        df = pd.json_normalize(json_data["chunks"])
 
-        # THEN: Should create DataFrame with chunks column
-        assert "chunks" in df.columns
-        assert len(df) > 0
+        # THEN: Should create DataFrame with chunk rows
+        assert not df.empty
+        assert "text" in df.columns
 
     def test_jq_command_line_parsing(
         self, sample_processing_result, chunking_engine, json_formatter, tmp_path
@@ -158,9 +160,13 @@ class TestCrossLibraryCompatibility:
         json_formatter.format_chunks(chunks, output_path)
 
         # WHEN: Parsing with Node.js (if available)
+        # Convert Windows backslashes to forward slashes for Node.js
+        node_path = str(output_path).replace("\\", "/")
         node_code = f"""
         const fs = require('fs');
-        const data = JSON.parse(fs.readFileSync('{output_path}', 'utf8'));
+        // Strip BOM (UTF-8 signature) that JsonFormatter writes for Windows compatibility
+        const content = fs.readFileSync('{node_path}', 'utf8').replace(/^\\uFEFF/, '');
+        const data = JSON.parse(content);
         console.log(JSON.stringify({{ chunks: data.chunks.length }}));
         """
 
@@ -247,13 +253,13 @@ class TestQueryability:
         json_formatter.format_chunks(chunks, output_path)
 
         # WHEN: Loading and filtering with pandas
-        with open(output_path, "r", encoding="utf-8") as f:
+        with open(output_path, "r", encoding="utf-8-sig") as f:
             json_data = json.load(f)
 
-        df = pd.DataFrame(json_data["chunks"])
+        df = pd.json_normalize(json_data["chunks"])
 
         # Filter by quality score
-        high_quality = df[df["quality"].apply(lambda q: q["overall"] >= 0.75)]
+        high_quality = df[df["quality.overall"] >= 0.75]
 
         # THEN: Should filter successfully
         assert len(high_quality) >= 0  # May be 0 if no high-quality chunks
@@ -268,7 +274,7 @@ class TestQueryability:
         json_formatter.format_chunks(chunks, output_path)
 
         # WHEN: Loading and accessing by index
-        with open(output_path, "r", encoding="utf-8") as f:
+        with open(output_path, "r", encoding="utf-8-sig") as f:
             json_data = json.load(f)
 
         # THEN: Should support array indexing
@@ -291,7 +297,7 @@ class TestMetadataAccuracy:
         json_formatter.format_chunks(chunks, output_path)
 
         # WHEN: Reading metadata
-        with open(output_path, "r", encoding="utf-8") as f:
+        with open(output_path, "r", encoding="utf-8-sig") as f:
             json_data = json.load(f)
 
         # THEN: Source documents should be listed
@@ -308,7 +314,7 @@ class TestMetadataAccuracy:
         json_formatter.format_chunks(chunks, output_path)
 
         # WHEN: Reading metadata and chunks
-        with open(output_path, "r", encoding="utf-8") as f:
+        with open(output_path, "r", encoding="utf-8-sig") as f:
             json_data = json.load(f)
 
         # THEN: chunk_count should match actual chunks
@@ -324,7 +330,7 @@ class TestMetadataAccuracy:
         json_formatter.format_chunks(chunks, output_path)
 
         # WHEN: Reading metadata configuration
-        with open(output_path, "r", encoding="utf-8") as f:
+        with open(output_path, "r", encoding="utf-8-sig") as f:
             json_data = json.load(f)
 
         config = json_data["metadata"]["configuration"]
@@ -352,10 +358,10 @@ class TestDeterminism:
         json_formatter.format_chunks(chunks_2, output_path_2)
 
         # WHEN: Loading both JSON files
-        with open(output_path_1, "r", encoding="utf-8") as f:
+        with open(output_path_1, "r", encoding="utf-8-sig") as f:
             json_data_1 = json.load(f)
 
-        with open(output_path_2, "r", encoding="utf-8") as f:
+        with open(output_path_2, "r", encoding="utf-8-sig") as f:
             json_data_2 = json.load(f)
 
         # THEN: Chunks should be identical (excluding processing_timestamp)
@@ -433,7 +439,7 @@ class TestSchemaValidationIntegration:
         json_formatter.format_chunks(chunks, output_path)
 
         # Load schema
-        project_root = Path(__file__).parent.parent.parent
+        project_root = Path(__file__).resolve().parents[3]
         schema_path = (
             project_root
             / "src"
@@ -450,7 +456,7 @@ class TestSchemaValidationIntegration:
             schema = json.load(f)
 
         # WHEN: Validating output
-        with open(output_path, "r", encoding="utf-8") as f:
+        with open(output_path, "r", encoding="utf-8-sig") as f:
             json_data = json.load(f)
 
         # THEN: Should validate without errors

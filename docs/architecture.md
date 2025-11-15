@@ -943,6 +943,42 @@ Epic 2 Output (ProcessingResult)
 
 See `docs/performance-baselines-epic-3.md` for detailed benchmarks.
 
+### JSON Output Format (Story 3.4)
+
+**Decision:** Emit a single JSON document per processed file with the shape:
+
+```json
+{
+  "metadata": {
+    "processing_version": "1.0.0-epic3",
+    "processing_timestamp": "2025-11-15T04:30:56Z",
+    "configuration": {"chunk_size": 512, "overlap_pct": 0.15, "entity_aware": false, "quality_enrichment": true},
+    "source_documents": [".../test_document.txt"],
+    "chunk_count": 123
+  },
+  "chunks": [
+    {
+      "chunk_id": "acme_report_chunk_000",
+      "text": "...",
+      "metadata": {...ChunkMetadata serialization...},
+      "entities": [...EntityReference...],
+      "quality": {...QualityScore...}
+    }
+  ]
+}
+```
+
+**Rationale**
+- Single document JSON is human readable, diff-friendly, and immediately parsable by `json.load()`, pandas (`pd.json_normalize(chunks)`), jq, Node.js, and downstream vector-database importers.
+- JSON Schema Draft 7 validation (`src/data_extract/output/schemas/data-extract-chunk.schema.json`) enforces structure, score ranges, enums, and string patterns. Validation is enabled by default and can be disabled per formatter instance.
+- Metadata header captures reproducibility details (tool version, timestamp, chunking configuration, source file list, chunk count) and is required for audit trails.
+
+**Implementation Notes**
+- Formatter protocol + dataclasses live in `src/data_extract/output/formatters/base.py`; `JsonFormatter` is in `.../json_formatter.py`.
+- Schema reference for consumers documented in `docs/json-schema-reference.md`.
+- Brownfield compatibility: `data_extract.chunk.engine` normalizes metadata emanating from both `data_extract.core` Pydantic objects and the legacy `src.core` dataclasses so JsonFormatter always receives a canonical `Metadata`.
+- Validation/compatibility tests: `tests/unit/test_output/test_json_schema.py`, `tests/unit/test_output/test_json_formatter.py`, `tests/integration/test_output/test_json_output_pipeline.py`, and `tests/integration/test_output/test_json_compatibility.py`.
+- Performance baselines (<1 second per document) tracked in `tests/performance/test_json_performance.py` with summary metrics published in `docs/performance-baselines-epic-3.md`.
 ### Entity Relationships
 
 **Six Audit Entity Types** (Domain-Specific):

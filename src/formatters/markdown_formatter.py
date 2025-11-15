@@ -15,7 +15,6 @@ Design:
 - Clean, idiomatic markdown
 """
 
-
 from core.interfaces import BaseFormatter
 from core.models import (
     ContentBlock,

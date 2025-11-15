@@ -23,9 +23,9 @@ logs/nul
 
 # Virtual Environments
 venv/
+my_venv/
 env/
 ENV/
-.venv
 test_install_env/
 test_env/
 test_final/

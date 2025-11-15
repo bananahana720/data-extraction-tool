@@ -18,6 +18,7 @@ Compliance:
 """
 
 from dataclasses import dataclass
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, Iterator, List, Optional, Tuple, Union
 
@@ -214,15 +215,19 @@ class ChunkingEngine:
 
         full_text = "\n".join(text_parts)
 
+        # Resolve metadata/state across brownfield (src.core) and greenfield models
+        document_metadata = self._resolve_document_metadata(result)
+        source_path = self._resolve_source_path(result, document_metadata)
+
         # Create Document-like object (duck typing for chunk_document)
         # Use a simple namespace object
         from types import SimpleNamespace
 
         document_ns = SimpleNamespace(
-            id=str(result.file_path.stem) if hasattr(result, "file_path") else "unknown",
+            id=self._resolve_document_id(result, source_path),
             text=full_text,
             entities=result.entities if hasattr(result, "entities") else [],
-            metadata=result.metadata if hasattr(result, "metadata") else None,
+            metadata=document_metadata,
             structure={"content_blocks": result.content_blocks},
         )
 
@@ -240,25 +245,11 @@ class ChunkingEngine:
             if self.quality_enrichment and self._enricher:
                 # Build source metadata from ProcessingResult
                 source_metadata = {
-                    "source_file": str(result.file_path) if hasattr(result, "file_path") else "",
-                    "source_hash": (
-                        result.metadata.file_hash
-                        if hasattr(result, "metadata") and result.metadata
-                        else ""
-                    ),
-                    "document_type": (
-                        result.document_type.value
-                        if hasattr(result, "document_type") and result.document_type
-                        else ""
-                    ),
-                    "ocr_confidence": self._extract_ocr_confidence(result),
-                    "completeness": (
-                        result.metadata.completeness_ratio
-                        if hasattr(result, "metadata")
-                        and result.metadata
-                        and hasattr(result.metadata, "completeness_ratio")
-                        else 1.0
-                    ),
+                    "source_file": str(source_path) if source_path else "",
+                    "source_hash": self._resolve_source_hash(document_metadata),
+                    "document_type": self._resolve_document_type(result, document_metadata),
+                    "ocr_confidence": self._extract_ocr_confidence(result, document_metadata),
+                    "completeness": self._resolve_completeness_ratio(document_metadata),
                 }
 
                 # Enrich chunk with quality metadata
@@ -986,7 +977,115 @@ class ChunkingEngine:
 
         return metadata
 
-    def _extract_ocr_confidence(self, result: ProcessingResult) -> float:
+    def _resolve_document_metadata(self, result: ProcessingResult) -> Metadata:
+        """Resolve metadata object from ProcessingResult (new or brownfield)."""
+        metadata = getattr(result, "metadata", None)
+        if isinstance(metadata, Metadata):
+            return metadata
+
+        legacy_metadata = metadata or getattr(result, "document_metadata", None)
+        source_path = self._resolve_source_path(result, legacy_metadata)
+        return self._build_metadata_from_legacy(result, legacy_metadata, source_path)
+
+    def _resolve_source_path(self, result: ProcessingResult, metadata: Any) -> Optional[Path]:
+        """Resolve source file path from ProcessingResult or metadata."""
+        if metadata and hasattr(metadata, "source_file") and metadata.source_file:
+            return Path(metadata.source_file)
+        if hasattr(result, "file_path") and getattr(result, "file_path"):
+            return Path(result.file_path)
+        return None
+
+    def _resolve_document_id(self, result: ProcessingResult, source_path: Optional[Path]) -> str:
+        """Determine identifier for document namespace."""
+        if source_path:
+            return source_path.stem
+        if hasattr(result, "file_path") and getattr(result, "file_path"):
+            return Path(result.file_path).stem
+        if hasattr(result, "document_id") and getattr(result, "document_id"):
+            return str(result.document_id)
+        return "unknown"
+
+    def _resolve_source_hash(self, metadata: Any) -> str:
+        """Extract file hash from metadata when available."""
+        if metadata and hasattr(metadata, "file_hash") and metadata.file_hash:
+            return metadata.file_hash
+        if metadata and hasattr(metadata, "hash") and metadata.hash:
+            return metadata.hash
+        return ""
+
+    def _resolve_document_type(self, result: ProcessingResult, metadata: Any) -> str:
+        """Resolve document type string."""
+        doc_type = getattr(result, "document_type", None)
+        if doc_type:
+            return doc_type.value if hasattr(doc_type, "value") else str(doc_type)
+        if metadata and hasattr(metadata, "document_type") and metadata.document_type:
+            doc_type = metadata.document_type
+            return doc_type.value if hasattr(doc_type, "value") else str(doc_type)
+        return ""
+
+    def _resolve_completeness_ratio(self, metadata: Any) -> float:
+        """Resolve completeness ratio from metadata."""
+        if metadata is None:
+            return 1.0
+        for attr in ("completeness_ratio", "completeness"):
+            if hasattr(metadata, attr):
+                value = getattr(metadata, attr)
+                if value is not None:
+                    try:
+                        return float(value)
+                    except (TypeError, ValueError):
+                        continue
+        return 1.0
+
+    def _build_metadata_from_legacy(
+        self, result: ProcessingResult, legacy_metadata: Any, source_path: Optional[Path]
+    ) -> Metadata:
+        """Build Metadata object from legacy DocumentMetadata structures."""
+        source_file = source_path or Path("unknown")
+        file_hash = ""
+        processing_timestamp = datetime.now(timezone.utc)
+        tool_version = "legacy-unknown"
+        config_version = "legacy"
+        document_subtype = None
+
+        if legacy_metadata:
+            file_hash = getattr(legacy_metadata, "file_hash", "") or ""
+            processing_timestamp = (
+                getattr(legacy_metadata, "processing_timestamp", None)
+                or getattr(legacy_metadata, "extracted_at", None)
+                or processing_timestamp
+            )
+            tool_version = (
+                getattr(legacy_metadata, "tool_version", None)
+                or getattr(legacy_metadata, "extractor_version", None)
+                or tool_version
+            )
+            config_version = getattr(legacy_metadata, "config_version", None) or config_version
+            document_subtype = getattr(legacy_metadata, "document_subtype", None)
+
+        document_type = self._resolve_document_type(result, legacy_metadata)
+
+        return Metadata(
+            source_file=source_file,
+            file_hash=file_hash,
+            processing_timestamp=processing_timestamp,
+            tool_version=tool_version,
+            config_version=config_version,
+            document_type=document_type,
+            document_subtype=document_subtype,
+            quality_scores={},
+            ocr_confidence={},
+            completeness_ratio=self._resolve_completeness_ratio(legacy_metadata),
+            quality_flags=[],
+            entity_tags=[],
+            entity_counts={},
+            entity_relationships=[],
+            section_context=None,
+            config_snapshot={},
+            validation_report={},
+        )
+
+    def _extract_ocr_confidence(self, result: ProcessingResult, metadata: Any) -> float:
         """Extract average OCR confidence from ProcessingResult metadata.
 
         Args:
@@ -995,14 +1094,20 @@ class ChunkingEngine:
         Returns:
             Average OCR confidence (0.0-1.0), defaults to 1.0 if not available
         """
+        candidate = None
         if (
-            not hasattr(result, "metadata")
-            or not result.metadata
-            or not hasattr(result.metadata, "ocr_confidence")
+            hasattr(result, "metadata")
+            and result.metadata
+            and hasattr(result.metadata, "ocr_confidence")
         ):
+            candidate = result.metadata.ocr_confidence
+        elif metadata and hasattr(metadata, "ocr_confidence"):
+            candidate = metadata.ocr_confidence
+
+        if candidate is None:
             return 1.0
 
-        ocr_conf = result.metadata.ocr_confidence
+        ocr_conf = candidate
 
         # Handle Dict[int, float] (per-page scores) - calculate average
         if isinstance(ocr_conf, dict):

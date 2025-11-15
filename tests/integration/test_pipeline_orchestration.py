@@ -15,7 +15,6 @@ Tests complete pipeline orchestration and coordination:
 Test IDs: PO-001 through PO-012
 """
 
-
 import pytest
 
 from src.core import ProcessingStage

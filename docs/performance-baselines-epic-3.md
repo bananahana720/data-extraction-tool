@@ -14,6 +14,28 @@
 **Batch Memory:** ✅ PASSED - Constant memory profile across batch sizes (≤100MB variance)
 **Linear Scaling:** ✅ VALIDATED - Performance scales linearly with document size
 
+## Story 3.4 JSON Output Performance (2025-11-15)
+
+**Component:** JsonFormatter (Story 3.4)
+
+- **100-chunk benchmark:** 0.10 seconds wall-clock, 0.16 MB peak memory (validate=True)
+- **1000-chunk benchmark:** 0.80 seconds wall-clock, 1.16 MB peak memory (validate=True)
+- **Validation toggle:** 0.21 seconds with validation vs. 0.03 seconds without validation (~8x faster)
+- **Performance Tests:** `tests/performance/test_json_performance.py` (3/3 passing)
+- **Integration Context:** Executed with ChunkingEngine + spaCy `en_core_web_md` + JsonFormatter schema validation enabled
+
+| Scenario | Duration (s) | Peak Memory (MB) | Status |
+|----------|--------------|------------------|--------|
+| 100 chunks (validate) | 0.10 | 0.16 | ✅ <1s target |
+| 1000 chunks (validate) | 0.80 | 1.16 | ✅ <5s target |
+| Validation enabled (250 chunks) | 0.21 | 0.32 | ✅ baseline |
+| Validation disabled (250 chunks) | 0.03 | 0.31 | ✅ 85% faster |
+
+**Findings:**
+- JSON generation stays comfortably below the <1 second per document NFR for typical 100–250 chunk outputs.
+- Memory materialization overhead remains under 2 MB even for 1000 chunk batches, validating the collector design.
+- Validation can be disabled for a ~85% speedup when downstream callers already trust the schema, but validation-on still completes under 0.25 seconds for medium documents.
+
 ## Baseline Measurements - Chunking Engine
 
 ### Primary Performance Test: 10,000-Word Document Chunking

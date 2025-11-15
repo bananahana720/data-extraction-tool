@@ -5,7 +5,6 @@ Provides shared fixtures and markers for edge case testing.
 """
 
 
-
 def pytest_configure(config):
     """Register custom markers."""
     config.addinivalue_line("markers", "slow: marks tests as slow (run with -m slow)")
