@@ -14,19 +14,43 @@ Compliance:
     - AC-3.1-5: Sentence tokenization uses spaCy (via get_sentence_boundaries)
     - AC-3.1-6: Edge cases handled gracefully (very long sentences, micro-sentences, etc.)
     - AC-3.1-7: Deterministic chunking (same input → same chunks)
+    - AC-3.3-1: Quality enrichment with source traceability (Story 3.3)
 """
 
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Dict, Iterator, List, Optional, Tuple, Union
 
 import structlog
 
 from ..core.exceptions import ProcessingError
-from ..core.models import Chunk, Document, Entity, Metadata, ProcessingContext
+from ..core.models import Chunk, Document, Entity, Metadata, ProcessingContext, ProcessingResult
 from .entity_preserver import EntityPreserver, EntityReference
+from .metadata_enricher import MetadataEnricher
 from .models import ChunkMetadata
 
 logger = structlog.get_logger(__name__)
+
+
+@dataclass
+class ChunkingConfig:
+    """Configuration for ChunkingEngine (Story 3.3).
+
+    Attributes:
+        chunk_size: Target chunk size in tokens (128-2048, default 512)
+        overlap_pct: Overlap percentage as float (0.0-0.5, default 0.15)
+        entity_aware: Enable entity-aware chunking (default False)
+        quality_enrichment: Enable quality metadata enrichment (default True)
+
+    Example:
+        >>> config = ChunkingConfig(chunk_size=1024, overlap_pct=0.25)
+        >>> engine = ChunkingEngine(config)
+    """
+
+    chunk_size: int = 512
+    overlap_pct: float = 0.15
+    entity_aware: bool = False
+    quality_enrichment: bool = True
 
 
 class ChunkingEngine:
@@ -63,65 +87,186 @@ class ChunkingEngine:
 
     def __init__(
         self,
-        segmenter: Any,
-        chunk_size: int = 512,
-        overlap_pct: float = 0.15,
-        entity_aware: bool = False,
+        config: Optional[ChunkingConfig] = None,
+        segmenter: Optional[Any] = None,
+        chunk_size: Optional[int] = None,
+        overlap_pct: Optional[float] = None,
+        entity_aware: Optional[bool] = None,
         entity_preserver: Optional[EntityPreserver] = None,
+        quality_enrichment: Optional[bool] = None,
     ):
         """Initialize chunking engine with configuration.
 
+        Supports two initialization patterns:
+        1. New pattern (Story 3.3): ChunkingEngine(config=ChunkingConfig(...))
+        2. Legacy pattern (Stories 3.1-3.2): ChunkingEngine(segmenter, chunk_size=512, ...)
+
         Args:
-            segmenter: SentenceSegmenter instance for sentence boundary detection
+            config: ChunkingConfig instance (new pattern, Story 3.3). If provided, overrides
+                individual parameters.
+            segmenter: SentenceSegmenter instance for sentence boundary detection.
+                If None, creates default SentenceSegmenter.
             chunk_size: Target chunk size in tokens. Range: 128-2048. Default: 512.
-                Tokens estimated as len(text) // 4 (industry standard approximation).
-            overlap_pct: Overlap percentage as float. Range: 0.0-0.5. Default: 0.15 (15%).
-                Overlap calculated as: overlap_tokens = int(chunk_size * overlap_pct).
+            overlap_pct: Overlap percentage as float. Range: 0.0-0.5. Default: 0.15.
             entity_aware: Enable entity-aware chunking (Story 3.2). Default: False.
-            entity_preserver: EntityPreserver instance for entity boundary detection.
-                If None and entity_aware=True, creates default EntityPreserver.
+            entity_preserver: EntityPreserver instance. If None and entity_aware=True,
+                creates default EntityPreserver.
+            quality_enrichment: Enable quality metadata enrichment (Story 3.3). Default: True.
 
         Raises:
             ValueError: If chunk_size < 1 or overlap_pct < 0.0 or overlap_pct > 1.0
 
-        Warnings:
-            - Logs warning if chunk_size < 128 or > 2048
-            - Logs warning if overlap_pct > 0.5
+        Example:
+            >>> # New pattern (Story 3.3)
+            >>> config = ChunkingConfig(chunk_size=1024, quality_enrichment=True)
+            >>> engine = ChunkingEngine(config)
+            >>> # Legacy pattern (backward compatibility)
+            >>> engine = ChunkingEngine(segmenter, chunk_size=512, overlap_pct=0.15)
         """
+        # Resolve configuration from config or individual parameters
+        if config is not None:
+            # New pattern: Use ChunkingConfig
+            _chunk_size = config.chunk_size
+            _overlap_pct = config.overlap_pct
+            _entity_aware = config.entity_aware
+            _quality_enrichment = config.quality_enrichment
+        else:
+            # Legacy pattern: Use individual parameters
+            _chunk_size = chunk_size if chunk_size is not None else 512
+            _overlap_pct = overlap_pct if overlap_pct is not None else 0.15
+            _entity_aware = entity_aware if entity_aware is not None else False
+            _quality_enrichment = quality_enrichment if quality_enrichment is not None else True
+
         # Validate configuration (AC-3.1-3, AC-3.1-4)
-        if chunk_size < 1:
-            raise ValueError(f"chunk_size must be >= 1, got {chunk_size}")
-        if overlap_pct < 0.0 or overlap_pct > 1.0:
-            raise ValueError(f"overlap_pct must be 0.0-1.0, got {overlap_pct}")
+        if _chunk_size < 1:
+            raise ValueError(f"chunk_size must be >= 1, got {_chunk_size}")
+        if _overlap_pct < 0.0 or _overlap_pct > 1.0:
+            raise ValueError(f"overlap_pct must be 0.0-1.0, got {_overlap_pct}")
+
+        # Initialize segmenter if not provided
+        if segmenter is None:
+            from .sentence_segmenter import SentenceSegmenter
+
+            segmenter = SentenceSegmenter()
 
         self.segmenter = segmenter
-        self.chunk_size = chunk_size
-        self.overlap_pct = overlap_pct
-        self.overlap_tokens = int(chunk_size * overlap_pct)
-        self.entity_aware = entity_aware
+        self.chunk_size = _chunk_size
+        self.overlap_pct = _overlap_pct
+        self.overlap_tokens = int(_chunk_size * _overlap_pct)
+        self.entity_aware = _entity_aware
         self.entity_preserver = entity_preserver if entity_preserver else EntityPreserver()
+        self.quality_enrichment = _quality_enrichment
+        self._enricher = MetadataEnricher() if _quality_enrichment else None
 
         # Configuration warnings
-        if chunk_size < 128 or chunk_size > 2048:
+        if _chunk_size < 128 or _chunk_size > 2048:
             logger.warning(
                 "chunk_size outside recommended range",
-                chunk_size=chunk_size,
+                chunk_size=_chunk_size,
                 recommended_range="128-2048",
             )
-        if overlap_pct > 0.5:
+        if _overlap_pct > 0.5:
             logger.warning(
                 "overlap_pct > 50% may cause excessive duplication",
-                overlap_pct=overlap_pct,
+                overlap_pct=_overlap_pct,
                 recommended_max=0.5,
             )
 
         logger.info(
             "ChunkingEngine initialized",
-            chunk_size=chunk_size,
-            overlap_pct=overlap_pct,
+            chunk_size=_chunk_size,
+            overlap_pct=_overlap_pct,
             overlap_tokens=self.overlap_tokens,
-            entity_aware=entity_aware,
+            entity_aware=_entity_aware,
+            quality_enrichment=_quality_enrichment,
         )
+
+    def chunk(self, result: ProcessingResult) -> Iterator[Chunk]:
+        """Chunk ProcessingResult and yield enriched chunks (Story 3.3 integration).
+
+        New unified entry point for Story 3.3. Accepts ProcessingResult from Epic 2,
+        extracts normalized text, performs chunking, and enriches with quality metadata.
+
+        Args:
+            result: ProcessingResult from Epic 2 normalize stage
+
+        Yields:
+            Chunk objects with quality-enriched metadata
+
+        Raises:
+            ProcessingError: For recoverable errors (empty doc, segmentation failures)
+
+        Example:
+            >>> config = ChunkingConfig(chunk_size=512, quality_enrichment=True)
+            >>> engine = ChunkingEngine(config)
+            >>> chunks = list(engine.chunk(processing_result))
+            >>> chunks[0].metadata.quality.overall
+            0.93
+        """
+        # Convert ProcessingResult to Document for chunk_document()
+        # Extract text from content_blocks
+        text_parts = []
+        for block in result.content_blocks:
+            if hasattr(block, "content"):
+                text_parts.append(block.content)
+            elif isinstance(block, dict):
+                text_parts.append(block.get("content", ""))
+
+        full_text = "\n".join(text_parts)
+
+        # Create Document-like object (duck typing for chunk_document)
+        # Use a simple namespace object
+        from types import SimpleNamespace
+
+        document_ns = SimpleNamespace(
+            id=str(result.file_path.stem) if hasattr(result, "file_path") else "unknown",
+            text=full_text,
+            entities=result.entities if hasattr(result, "entities") else [],
+            metadata=result.metadata if hasattr(result, "metadata") else None,
+            structure={"content_blocks": result.content_blocks},
+        )
+
+        # Create ProcessingContext
+        context = ProcessingContext(
+            config={},
+            logger=logger,
+            metrics={},
+        )
+
+        # Chunk document and enrich each chunk
+        # Type ignore: SimpleNamespace duck types as Document
+        for chunk in self.chunk_document(document_ns, context):  # type: ignore[arg-type]
+            # Enrich with quality metadata if enabled
+            if self.quality_enrichment and self._enricher:
+                # Build source metadata from ProcessingResult
+                source_metadata = {
+                    "source_file": str(result.file_path) if hasattr(result, "file_path") else "",
+                    "source_hash": (
+                        result.metadata.file_hash
+                        if hasattr(result, "metadata") and result.metadata
+                        else ""
+                    ),
+                    "document_type": (
+                        result.document_type.value
+                        if hasattr(result, "document_type") and result.document_type
+                        else ""
+                    ),
+                    "ocr_confidence": self._extract_ocr_confidence(result),
+                    "completeness": (
+                        result.metadata.completeness_ratio
+                        if hasattr(result, "metadata")
+                        and result.metadata
+                        and hasattr(result.metadata, "completeness_ratio")
+                        else 1.0
+                    ),
+                }
+
+                # Enrich chunk with quality metadata
+                enriched_chunk = self._enricher.enrich_chunk(chunk, source_metadata)
+                yield enriched_chunk
+            else:
+                # No enrichment - yield chunk as-is
+                yield chunk
 
     def process(self, document: Document, context: ProcessingContext) -> List[Chunk]:
         """Process document and return chunks (implements PipelineStage protocol).
@@ -840,6 +985,37 @@ class ChunkingEngine:
         metadata["entity_relationships"] = chunk_relationships
 
         return metadata
+
+    def _extract_ocr_confidence(self, result: ProcessingResult) -> float:
+        """Extract average OCR confidence from ProcessingResult metadata.
+
+        Args:
+            result: ProcessingResult with metadata containing OCR confidence
+
+        Returns:
+            Average OCR confidence (0.0-1.0), defaults to 1.0 if not available
+        """
+        if (
+            not hasattr(result, "metadata")
+            or not result.metadata
+            or not hasattr(result.metadata, "ocr_confidence")
+        ):
+            return 1.0
+
+        ocr_conf = result.metadata.ocr_confidence
+
+        # Handle Dict[int, float] (per-page scores) - calculate average
+        if isinstance(ocr_conf, dict):
+            if not ocr_conf:
+                return 1.0
+            return sum(ocr_conf.values()) / len(ocr_conf)
+
+        # Handle float (simple score)
+        if isinstance(ocr_conf, (int, float)):
+            return float(ocr_conf)
+
+        # Fallback
+        return 1.0
 
     def _extract_chunk_entities(
         self, chunk_text: str, document_entities: List[Entity], chunk_index: int

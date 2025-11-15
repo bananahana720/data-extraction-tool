@@ -431,6 +431,40 @@ class Chunk(BaseModel):
         return result
 
 
+class ProcessingResult(BaseModel):
+    """Output from Epic 2 normalization stage (Story 3.3 integration).
+
+    Represents normalized document content ready for chunking. Contains
+    extracted content blocks, entities, and quality metadata from Epic 2.
+
+    Attributes:
+        file_path: Path to source document
+        document_type: Classification from Epic 2 (report, matrix, export, image)
+        content_blocks: Normalized content blocks (text, tables, images)
+        entities: Extracted entities from document
+        metadata: Document-level metadata (OCR confidence, completeness, etc.)
+
+    Example:
+        >>> result = ProcessingResult(
+        ...     file_path=Path("/docs/report.pdf"),
+        ...     document_type=DocumentType.REPORT,
+        ...     content_blocks=[ContentBlock(...)],
+        ...     entities=[],
+        ...     metadata=Metadata(ocr_confidence=0.99, completeness=0.98)
+        ... )
+    """
+
+    model_config = ConfigDict(frozen=False, arbitrary_types_allowed=True)
+
+    file_path: Path = Field(description="Path to source document")
+    document_type: DocumentType = Field(description="Document classification")
+    content_blocks: List[ContentBlock] = Field(
+        default_factory=list, description="Normalized content blocks"
+    )
+    entities: List[Entity] = Field(default_factory=list, description="Extracted entities")
+    metadata: Metadata = Field(description="Document-level metadata")
+
+
 class ProcessingContext(BaseModel):
     """Shared pipeline state passed through all stages.
 

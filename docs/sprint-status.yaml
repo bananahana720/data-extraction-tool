@@ -65,7 +65,7 @@ development_status:
   epic-3: contexted  # Tech spec complete 2025-11-13: All sections generated (Overview, Detailed Design, NFRs, Dependencies, Traceability, Risks, Test Strategy), incorporates party-mode operational decisions (10-step UAT workflow, hybrid benchmarking, Winston's optimizations)
   3-1-semantic-boundary-aware-chunking-engine: done  # Story complete 2025-11-14: All quality gates pass (mypy 0 errors, black/ruff clean), 81/81 tests pass, performance baselines established, production-ready
   3-2-entity-aware-chunking: done  # UAT APPROVED 2025-11-14: All 8 ACs met, 120/120 tests passed (100%), entity preservation >95%, NFR-P3 +43% margin, NFR-P2 +47% margin. Implements deferred AC-3.1-2 from Story 3.1.
-  3-3-chunk-metadata-and-quality-scoring: backlog
+  3-3-chunk-metadata-and-quality-scoring: done  # Story complete 2025-11-14: All 8 ACs validated, 109/109 tests passing, code review approved, UAT approved, quality gates GREEN, NFR-P3 satisfied (4.6s < 5.0s per 10k words)
   3-4-json-output-format-with-full-metadata: backlog
   3-5-plain-text-output-format-for-llm-upload: backlog
   3-6-csv-output-format-for-analysis-and-tracking: backlog
