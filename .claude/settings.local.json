@@ -28,7 +28,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python \".claude\\hooks\\bash_hook.py\"",
+            "command": "python .claude/hooks/bash_hook.py",
             "timeout": 10000
           }
         ]
@@ -40,7 +40,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python \".claude\\hooks\\format_python_hook.py\"",
+            "command": "python .claude/hooks/format_python_hook.py",
             "timeout": 30000
           }
         ]
@@ -50,7 +50,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python \".claude\\hooks\\markdown_info_hook.py\"",
+            "command": "python .claude/hooks/markdown_info_hook.py",
             "timeout": 2000
           }
         ]
@@ -61,7 +61,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python \".claude\\hooks\\user_prompt_grep_reminder.py\"",
+            "command": "python .claude/hooks/user_prompt_grep_reminder.py",
             "timeout": 2000
           }
         ]
@@ -90,6 +90,5 @@
       }
     ]
   },
-  "disableAllHooks": true,
   "outputStyle": "default"
 }
