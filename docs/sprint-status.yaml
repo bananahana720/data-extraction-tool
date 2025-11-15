@@ -67,7 +67,7 @@ development_status:
   3-2-entity-aware-chunking: done  # UAT APPROVED 2025-11-14: All 8 ACs met, 120/120 tests passed (100%), entity preservation >95%, NFR-P3 +43% margin, NFR-P2 +47% margin. Implements deferred AC-3.1-2 from Story 3.1.
   3-3-chunk-metadata-and-quality-scoring: done  # Story complete 2025-11-14: All 8 ACs validated, 109/109 tests passing, code review approved, UAT approved, quality gates GREEN, NFR-P3 satisfied (4.6s < 5.0s per 10k words)
   3-4-json-output-format-with-full-metadata: done  # Re-review APPROVED 2025-11-15: All 5 action items verified resolved, all 7 ACs satisfied, 43/43 unit tests pass (100%), production-ready. Integration test failures are test-code bugs (BOM encoding mismatch), not production issues. JSON formatter complete with schema validation, UTF-8 BOM, fail-fast validation, complete metadata preservation.
-  3-5-plain-text-output-format-for-llm-upload: backlog
+  3-5-plain-text-output-format-for-llm-upload: done  # Story APPROVED 2025-11-15: All quality gates GREEN (Black/Ruff/Mypy clean), 171/171 tests passing (100%), 90% coverage exceeds 80% target. Production-ready TxtFormatter with comprehensive organization infrastructure (BY_DOCUMENT/BY_ENTITY/FLAT), full CLI integration, 100x performance vs targets. All 7 ACs validated, all 3 previous HIGH findings resolved.
   3-6-csv-output-format-for-analysis-and-tracking: backlog
   3-7-configurable-output-organization-strategies: backlog
   epic-3-retrospective: optional

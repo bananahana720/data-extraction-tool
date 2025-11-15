@@ -1,12 +1,14 @@
 # CLAUDE.md
 
+**[TMUX-CLI and TMUX Use Instructions - GAMECHANGER IN AI AGENTIC CODING](tmux-cli-instructions.md)
+
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ## Project Overview
 
 **Data Extraction Tool** - Enterprise document processing pipeline for RAG workflows. Transforms messy corporate audit documents into AI-optimized outputs using a five-stage modular pipeline architecture.
 
-**Status**: Epic 3 - Chunk & Output (in progress, Stories 3.1-3.2 complete)
+**Status**: Epic 3 - Chunk & Output (in progress, Stories 3.1-3.5 complete)
 **Python**: 3.12+ (mandatory enterprise requirement)
 **Architecture**: `Extract → Normalize → Chunk → Semantic → Output`
 
@@ -352,9 +354,208 @@ pytest tests/performance/test_json_performance.py
 
 **Gotchas**
 - JsonFormatter materializes the chunk iterator (array output). Large documents should stay under ~500 chunks; JSON Lines support is deferred to Story 3.7/5.x.
-- Schema expects `source_hash` to be 12–64 hex characters. Emit `None` when provenance isn’t available instead of empty strings.
+- Schema expects `source_hash` to be 12–64 hex characters. Emit `None` when provenance isn't available instead of empty strings.
 - pandas compatibility relies on `pd.json_normalize(json_data["chunks"])`; `pd.read_json` on the root object mixes dict + array and raises.
 - jq tests require the binary on PATH; install per instructions above.
+
+### TxtFormatter & Plain Text Output (Story 3.5)
+
+**Location**
+- Formatter implementation: `src/data_extract/output/formatters/txt_formatter.py`
+- Shared utilities: `src/data_extract/output/utils.py`
+- Reference documentation: `docs/txt-format-reference.md`
+
+**Output Contract**
+- Clean plain text optimized for direct LLM upload (ChatGPT/Claude)
+- Configurable chunk delimiters (default: `━━━ CHUNK {{n}} ━━━`)
+- Optional compact metadata headers (source, entities, quality)
+- UTF-8-sig encoding with BOM (Windows compatibility)
+- Zero formatting artifacts (no markdown/HTML/JSON/ANSI codes)
+
+**Usage Patterns**
+```python
+from data_extract.output.formatters import TxtFormatter
+from data_extract.chunk import ChunkingEngine, ChunkingConfig
+
+# Basic usage (clean text only)
+formatter = TxtFormatter()
+result = formatter.format_chunks(chunks, Path("output.txt"))
+
+# With metadata headers
+formatter = TxtFormatter(include_metadata=True)
+result = formatter.format_chunks(chunks, Path("output.txt"))
+
+# Custom delimiter
+formatter = TxtFormatter(delimiter="--- CHUNK {{n}} ---")
+result = formatter.format_chunks(chunks, Path("output.txt"))
+```
+
+**Validation Commands**
+```bash
+# Unit tests (26 tests)
+pytest tests/unit/test_output/test_txt_formatter.py -v
+
+# Integration tests (8 tests - end-to-end pipeline)
+pytest tests/integration/test_output/test_txt_pipeline.py -v
+
+# Compatibility tests (5 tests - Unicode, paths, artifacts)
+pytest tests/integration/test_output/test_txt_compatibility.py -v
+
+# Performance tests (2 tests - latency baselines)
+pytest tests/performance/test_txt_performance.py -v
+```
+
+**Output Format**
+- Single concatenated TXT file with all chunks
+- UTF-8-sig BOM for Windows compatibility
+- Delimiters between chunks with sequential numbering (001, 002, ...)
+- Optional metadata headers (1-3 lines when enabled)
+
+**Performance Characteristics**
+- Small documents (10 chunks): ~0.01s (100x faster than 1s target)
+- Large documents (100 chunks): ~0.03s (33x faster than 3s target)
+- Memory: ~5MB peak (constant across batch sizes)
+
+**Key Features**
+- Clean text (markdown/HTML artifacts removed automatically)
+- Deterministic output (same input → byte-identical files)
+- Cross-platform (Windows/Unix paths, Unicode filenames)
+- Multilingual support (preserves emoji, Chinese, Arabic, etc.)
+
+**Common Use Cases**
+1. **LLM Context Upload**: Copy/paste TXT output directly to ChatGPT/Claude
+2. **Audit Documentation**: Generate clean reports from messy corporate documents
+3. **Text Analysis**: Prepare corpus for downstream NLP tools
+4. **Human Review**: Readable format for manual QA workflows
+
+### OutputWriter & Production Integration (Story 3.5 - Bucket 2)
+
+**Location**
+- Writer implementation: `src/data_extract/output/writer.py`
+- CLI implementation: `src/data_extract/cli.py`
+- Integration tests: `tests/integration/test_output/test_writer_integration.py`
+
+**OutputWriter API**
+
+OutputWriter is the main entry point for generating formatted output from chunks. It coordinates formatters (JSON, TXT, CSV) with organization strategies.
+
+**Programmatic Usage:**
+```python
+from data_extract.output.writer import OutputWriter
+from data_extract.output.organization import OrganizationStrategy
+from pathlib import Path
+
+writer = OutputWriter()
+
+# Concatenated TXT output (default)
+result = writer.write(
+    chunks=my_chunks,
+    output_path=Path("output.txt"),
+    format_type="txt"
+)
+
+# Per-chunk TXT files
+result = writer.write(
+    chunks=my_chunks,
+    output_path=Path("output/"),
+    format_type="txt",
+    per_chunk=True
+)
+
+# With metadata headers
+result = writer.write(
+    chunks=my_chunks,
+    output_path=Path("output.txt"),
+    format_type="txt",
+    include_metadata=True
+)
+
+# Custom delimiter
+result = writer.write(
+    chunks=my_chunks,
+    output_path=Path("output.txt"),
+    format_type="txt",
+    delimiter="--- CHUNK {{n}} ---"
+)
+
+# Organized output with BY_DOCUMENT strategy
+result = writer.write(
+    chunks=my_chunks,
+    output_path=Path("output/"),
+    format_type="txt",
+    per_chunk=True,
+    organize=True,
+    strategy=OrganizationStrategy.BY_DOCUMENT
+)
+
+# JSON output (validation optional)
+result = writer.write(
+    chunks=my_chunks,
+    output_path=Path("output.json"),
+    format_type="json",
+    validate=False  # Disable schema validation for performance
+)
+```
+
+**CLI Usage (Minimal Implementation for Story 3.5):**
+
+```bash
+# Basic TXT output (concatenated)
+data-extract process input.pdf --format txt --output chunks.txt
+
+# Per-chunk TXT files
+data-extract process input.pdf --format txt --output output/ --per-chunk
+
+# With metadata headers
+data-extract process input.pdf --format txt --output chunks.txt --include-metadata
+
+# Custom delimiter
+data-extract process input.pdf --format txt --output chunks.txt --delimiter "--- CHUNK {{n}} ---"
+
+# Organized output with BY_DOCUMENT strategy
+data-extract process input.pdf --format txt --output output/ --per-chunk --organize --strategy by_document
+
+# Organized output with FLAT strategy
+data-extract process input.pdf --format txt --output output/ --per-chunk --organize --strategy flat
+
+# JSON output
+data-extract process input.pdf --format json --output output.json
+
+# Display version information
+data-extract version
+```
+
+**Available CLI Options:**
+- `--format {json,txt}`: Output format (default: txt)
+- `--output PATH`: Output file or directory path (required)
+- `--per-chunk`: Write each chunk to separate file (TXT only)
+- `--include-metadata`: Include metadata headers (TXT only)
+- `--organize`: Enable output organization (requires --strategy)
+- `--strategy {by_document,by_entity,flat}`: Organization strategy
+- `--delimiter TEXT`: Custom chunk delimiter (TXT only, use {{n}} for chunk number)
+
+**Organization Strategies:**
+- `by_document`: One folder per source document
+- `by_entity`: One folder per entity type (risks/, controls/, etc.)
+- `flat`: Single directory with prefixed filenames
+
+**Note:** This is a minimal implementation for Story 3.5 UAT validation. Epic 5 will implement full Typer-based CLI with:
+- Complete extraction pipeline integration
+- Configuration cascade (CLI → env vars → YAML → defaults)
+- Batch processing and progress indicators
+- Advanced error handling and recovery
+
+**Validation Commands:**
+```bash
+# Integration tests (17 test cases)
+pytest tests/integration/test_output/test_writer_integration.py -v
+
+# Run all output tests
+pytest tests/integration/test_output/ -v
+
+# CLI smoke tests
+pytest tests/integration/test_output/test_writer_integration.py::TestCLIIntegration -v
+```
 
 ### Quality Gates
 

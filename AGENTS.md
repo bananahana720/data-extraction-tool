@@ -1,5 +1,7 @@
 # Repository Guidelines
 
+[PROJECT AGENT INSTRUCTIONS](.claude\CLAUDE.md)
+
 ## Project Structure & Module Organization
 Source lives under `src/data_extract/` using a staged pipeline (`extract → normalize → chunk → semantic → output`). Brownfield legacy packages (e.g., `src/extractors/`, `src/processors/`) stay in place until migration stories land. Tests are split between `tests/` for new coverage and historical suites such as `testsunitcore/` and `testsunitpipeline/`; add new files alongside the module you touch. Docs and planning artifacts are in `docs/`, helper utilities in `scripts/`, and runtime artifacts land in `logs/`, `output/`, and `htmlcov/` (keep these out of commits).
 
@@ -17,3 +19,22 @@ Recent history favors imperative, scoped subjects (`docs: reorganize epics`, `Fi
 
 ## Security & Configuration Tips
 Never commit `.env`, raw documents, or customer data—use `.gitignore` entries already provided. Secrets should flow through environment variables or the YAML config cascade (CLI flags > env > config > defaults). When adding processors that touch external services, guard them behind feature flags in `config.yaml` and document required credentials under `docs/`.
+
+## Operational Notes
+- Codex CLI truncates command output around 10KB. For large files, dump the contents in chunks (e.g., via a short Python script writing `/tmp/...` files) to ensure every byte is read even if the terminal display is paged.
+
+
+# tmux-cli Command to interact with CLI applications
+
+`tmux-cli` is a bash command that enables Claude Code to control CLI applications 
+running in separate tmux panes - launch programs, send input, capture output, 
+and manage interactive sessions. Run `tmux-cli --help` for detailed usage 
+instructions.
+
+Example uses:
+- Interact with a script that waits for user input
+- Launch another Claude Code instance to have it perform some analysis or review or 
+  debugging etc
+- Run a Python script with the Pdb debugger to step thru its execution, for 
+  code-understanding and debugging
+- Launch web apps and test them with browser automation MCP tools like Puppeteer

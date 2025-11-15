@@ -89,7 +89,11 @@ def valid_chunk_json():
                     "created_at": "2025-11-14T20:30:00Z",
                     "processing_version": "1.0.0-epic3",
                     "source_file": "tests/fixtures/test_doc.pdf",
-                    "config_snapshot": {"chunk_size": 512, "overlap_pct": 0.15, "entity_aware": True},
+                    "config_snapshot": {
+                        "chunk_size": 512,
+                        "overlap_pct": 0.15,
+                        "entity_aware": True,
+                    },
                 },
                 "entities": [],
                 "quality": {

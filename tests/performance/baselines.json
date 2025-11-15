@@ -184,15 +184,15 @@
     },
     "cli_progress_overhead": {
       "operation": "cli_progress_overhead",
-      "duration_ms": -0.3394000086700544,
+      "duration_ms": 9.847200009971857,
       "memory_mb": 0.0,
       "file_size_kb": 0.87890625,
       "throughput": 0.0,
-      "timestamp": "2025-11-14T16:07:24.012986",
+      "timestamp": "2025-11-15T13:33:11.918961",
       "metadata": {
-        "with_progress_ms": 104.94489999837242,
-        "quiet_ms": 105.28430000704248,
-        "overhead_pct": -0.32236526115228187
+        "with_progress_ms": 116.04680001619272,
+        "quiet_ms": 106.19960000622086,
+        "overhead_pct": 9.272351317137764
       }
     },
     "processor_quality_validation": {
@@ -221,5 +221,5 @@
       }
     }
   },
-  "updated_at": "2025-11-14T16:07:24.359350"
+  "updated_at": "2025-11-15T13:33:11.919401"
 }
