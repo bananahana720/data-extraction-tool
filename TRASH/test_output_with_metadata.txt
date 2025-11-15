@@ -1,0 +1,17 @@
+﻿━━━ CHUNK 001 ━━━
+Source: test_input.txt | Chunk: demo_chunk_001
+Entities: {'entity_id': 'Risk-001', 'entity_type': 'risk', 'start_pos': 124, 'end_pos': 132}
+Quality: 0.95
+This is the first chunk of content from the document. It contains information about risk management processes and controls. Risk-001 has been identified as a critical risk requiring immediate attention.
+
+━━━ CHUNK 002 ━━━
+Source: test_input.txt | Chunk: demo_chunk_002
+Entities: {'entity_id': 'Control-042', 'entity_type': 'control', 'start_pos': 75, 'end_pos': 86}, {'entity_id': 'Risk-001', 'entity_type': 'risk', 'start_pos': 111, 'end_pos': 119}
+Quality: 0.95
+The second chunk discusses control frameworks and compliance requirements. Control-042 is designed to mitigate Risk-001 through automated monitoring. This control has been tested and validated by the audit team.
+
+━━━ CHUNK 003 ━━━
+Source: test_input.txt | Chunk: demo_chunk_003
+Entities: {'entity_id': 'Policy-123', 'entity_type': 'policy', 'start_pos': 66, 'end_pos': 76}
+Quality: 0.95
+Additional context about the organization's governance structure. Policy-123 establishes the framework for risk assessment and reporting. All business units must comply with quarterly review requirements.

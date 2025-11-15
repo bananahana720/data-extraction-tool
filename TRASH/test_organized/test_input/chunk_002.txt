@@ -1,0 +1,2 @@
+﻿━━━ CHUNK 001 ━━━
+The second chunk discusses control frameworks and compliance requirements. Control-042 is designed to mitigate Risk-001 through automated monitoring. This control has been tested and validated by the audit team.

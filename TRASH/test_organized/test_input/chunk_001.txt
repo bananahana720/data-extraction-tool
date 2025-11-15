@@ -1,0 +1,2 @@
+﻿━━━ CHUNK 001 ━━━
+This is the first chunk of content from the document. It contains information about risk management processes and controls. Risk-001 has been identified as a critical risk requiring immediate attention.

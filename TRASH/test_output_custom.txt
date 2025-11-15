@@ -1,0 +1,8 @@
+﻿--- CHUNK 001 ---
+This is the first chunk of content from the document. It contains information about risk management processes and controls. Risk-001 has been identified as a critical risk requiring immediate attention.
+
+--- CHUNK 002 ---
+The second chunk discusses control frameworks and compliance requirements. Control-042 is designed to mitigate Risk-001 through automated monitoring. This control has been tested and validated by the audit team.
+
+--- CHUNK 003 ---
+Additional context about the organization's governance structure. Policy-123 establishes the framework for risk assessment and reporting. All business units must comply with quarterly review requirements.

@@ -1,0 +1,3 @@
+﻿━━━ CHUNK 001 ━━━
+Source: sample_doc.pdf | Chunk: chunk_001
+This is the first chunk of plain text optimized for LLM upload. It contains clean, readable content without any formatting artifacts.
