@@ -42,16 +42,6 @@
             "timeout": 2000
           }
         ]
-      },
-      {
-        "matcher": "Grep",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "python .claude/hooks/grep_block_hook.py",
-            "timeout": 2000
-          }
-        ]
       }
     ],
     "PostToolUse": [
