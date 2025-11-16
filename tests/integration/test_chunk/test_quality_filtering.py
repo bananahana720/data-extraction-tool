@@ -9,7 +9,9 @@ Test Coverage:
     - AC-3.3-8: Filter by specific quality flags
 """
 
+from datetime import datetime, timezone
 from pathlib import Path
+from typing import Dict
 
 import pytest
 
@@ -36,6 +38,32 @@ except ImportError:
 
 pytestmark = [pytest.mark.integration, pytest.mark.chunking, pytest.mark.quality]
 
+_DEFAULT_TIMESTAMP = datetime(2025, 1, 1, tzinfo=timezone.utc)
+_TOOL_VERSION = "3.3.0-dev"
+_CONFIG_VERSION = "chunking-config-v1"
+
+
+def _build_metadata(
+    file_path: Path,
+    file_hash: str,
+    document_type: DocumentType,
+    ocr_confidence: float,
+    completeness: float,
+    quality_scores: Dict[str, float],
+) -> Metadata:
+    """Create Metadata instances with the full contract required by the core models."""
+    return Metadata(
+        source_file=file_path,
+        file_hash=file_hash,
+        processing_timestamp=_DEFAULT_TIMESTAMP,
+        tool_version=_TOOL_VERSION,
+        config_version=_CONFIG_VERSION,
+        document_type=document_type,
+        quality_scores=quality_scores,
+        ocr_confidence={1: ocr_confidence},
+        completeness_ratio=completeness,
+    )
+
 
 @pytest.fixture
 def mixed_quality_corpus():
@@ -55,11 +83,13 @@ def mixed_quality_corpus():
                 )
             ],
             entities=[],
-            metadata=Metadata(
-                source_file=Path("/test/high_quality.pdf"),
+            metadata=_build_metadata(
+                file_path=Path("/test/high_quality.pdf"),
                 file_hash="hash_high",
+                document_type=DocumentType.REPORT,
                 ocr_confidence=0.99,
                 completeness=0.98,
+                quality_scores={"overall": 0.94, "readability": 0.92},
             ),
         )
     )
@@ -81,11 +111,13 @@ def mixed_quality_corpus():
                 )
             ],
             entities=[],
-            metadata=Metadata(
-                source_file=Path("/test/medium_quality.pdf"),
+            metadata=_build_metadata(
+                file_path=Path("/test/medium_quality.pdf"),
                 file_hash="hash_medium",
+                document_type=DocumentType.REPORT,
                 ocr_confidence=0.96,
                 completeness=0.92,
+                quality_scores={"overall": 0.82, "readability": 0.65},
             ),
         )
     )
@@ -103,11 +135,13 @@ def mixed_quality_corpus():
                 )
             ],
             entities=[],
-            metadata=Metadata(
-                source_file=Path("/test/low_quality.pdf"),
+            metadata=_build_metadata(
+                file_path=Path("/test/low_quality.pdf"),
                 file_hash="hash_low",
+                document_type=DocumentType.IMAGE,
                 ocr_confidence=0.80,  # Low OCR
                 completeness=0.75,  # Incomplete
+                quality_scores={"overall": 0.55, "readability": 0.40},
             ),
         )
     )

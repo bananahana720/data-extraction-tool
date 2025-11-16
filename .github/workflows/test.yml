@@ -10,10 +10,84 @@ on:
   pull_request:
     branches: [main, develop]
 
+env:
+  SPACY_MODEL_VERSION: "3.8.0"
+  BURN_IN_ITERATIONS: "10"
+
 jobs:
+  burn-in:
+    name: Selective Burn-In
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('pyproject.toml') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Cache spaCy models
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/spacy
+          key: ${{ runner.os }}-spacy-${{ env.SPACY_MODEL_VERSION }}
+          restore-keys: |
+            ${{ runner.os }}-spacy-
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev]"
+          python -m spacy download en_core_web_md==${SPACY_MODEL_VERSION}
+
+      - name: Detect changed test specs
+        id: changed-tests
+        run: |
+          set -euo pipefail
+          BASE_BRANCH="${{ github.base_ref }}"
+          if [ -z "$BASE_BRANCH" ]; then
+            BASE_BRANCH="main"
+          fi
+          git fetch origin "$BASE_BRANCH":"refs/remotes/origin/$BASE_BRANCH"
+          CHANGED=$(git diff --name-only "origin/$BASE_BRANCH"...HEAD | grep -E '^tests/.+\.py$' || true)
+          if [ -z "$CHANGED" ]; then
+            echo "No changed test files detected"
+            echo "specs=" >> "$GITHUB_OUTPUT"
+          else
+            echo "Changed tests:\n$CHANGED"
+            SPECS=$(echo "$CHANGED" | tr '\n' ' ')
+            echo "specs=$SPECS" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Burn-in changed specs
+        if: ${{ steps.changed-tests.outputs.specs != '' }}
+        env:
+          CHANGED_SPECS: ${{ steps.changed-tests.outputs.specs }}
+        run: |
+          set -euo pipefail
+          echo "Running burn-in loop for: $CHANGED_SPECS"
+          for iteration in $(seq 1 ${BURN_IN_ITERATIONS}); do
+            echo "Iteration ${iteration}/${BURN_IN_ITERATIONS}"
+            pytest $CHANGED_SPECS || exit 1
+          done
+          echo "Burn-in completed successfully"
+
   test:
     name: Tests & Coverage
     runs-on: ubuntu-latest
+    needs: burn-in
 
     strategy:
       matrix:
@@ -40,7 +114,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.cache/spacy
-          key: ${{ runner.os }}-spacy-3.7.2-en_core_web_md
+          key: ${{ runner.os }}-spacy-${{ env.SPACY_MODEL_VERSION }}
           restore-keys: |
             ${{ runner.os }}-spacy-
 
@@ -48,27 +122,17 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -e ".[dev]"
-          python -m spacy download en_core_web_md
+          python -m spacy download en_core_web_md==${SPACY_MODEL_VERSION}
 
-      - name: Run unit tests
+      - name: Run full test suite
         run: |
-          pytest -m unit --cov=src --cov-report=term --cov-report=xml -v
-
-      - name: Run integration tests
-        run: |
-          pytest -m integration --cov=src --cov-append --cov-report=term --cov-report=xml -v
-
-      - name: Run remaining tests
-        run: |
-          pytest -m "not unit and not integration" --cov=src --cov-append --cov-report=term --cov-report=xml --cov-report=html \
-            --ignore=tests/performance/test_cli_benchmarks.py -v
+          pytest --cov=src --cov-report=term --cov-report=xml --cov-report=html -v
 
       - name: Validate coverage threshold
         run: |
           coverage report --fail-under=60 || {
             echo "❌ Coverage below 60% threshold"
             echo "Current coverage: $(coverage report | grep TOTAL | awk '{print $4}')"
-            echo "Review coverage report in artifacts for details"
             exit 1
           }
 
@@ -86,9 +150,6 @@ jobs:
         with:
           name: coverage-report
           path: htmlcov/
-
-      # Coverage threshold is enforced by pytest.ini (fail_under=60)
-      # No need to duplicate here - pytest --cov will fail if threshold not met
 
   lint:
     name: Linting (Ruff)
@@ -181,13 +242,14 @@ jobs:
   status-check:
     name: All Checks Passed
     runs-on: ubuntu-latest
-    needs: [test, lint, type-check, format-check, pre-commit]
+    needs: [burn-in, test, lint, type-check, format-check, pre-commit]
     if: always()
 
     steps:
       - name: Check all jobs status
         run: |
-          if [ "${{ needs.test.result }}" != "success" ] || \
+          if [ "${{ needs.burn-in.result }}" != "success" ] || \
+             [ "${{ needs.test.result }}" != "success" ] || \
              [ "${{ needs.lint.result }}" != "success" ] || \
              [ "${{ needs.type-check.result }}" != "success" ] || \
              [ "${{ needs.format-check.result }}" != "success" ] || \

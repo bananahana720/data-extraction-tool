@@ -1,7 +1,7 @@
 # Data Extraction Tool - Documentation Index
 
-**Updated**: 2025-11-15
-**Status**: Epic 3 in progress (Stories 3.1-3.5 complete, 3.6 in review)
+**Updated**: 2025-11-16
+**Status**: Epic 3 COMPLETE (all 7 stories done), ready for Epic 4
 **Architecture**: 5-Stage Pipeline (Extract → Normalize → Chunk → Semantic → Output)
 
 ---
@@ -36,6 +36,7 @@
 - **[atdd-checklist-3.4.md](./atdd-checklist-3.4.md)** - JSON output format with complete metadata acceptance criteria tests
 - **[atdd-checklist-3.5.md](./atdd-checklist-3.5.md)** - Plain text output format for LLM upload acceptance criteria checklist
 - **[atdd-checklist-3.6.md](./atdd-checklist-3.6.md)** - CSV output format for analysis and tracking acceptance criteria validation
+- **[atdd-checklist-3.7.md](./atdd-checklist-3.7.md)** - Configurable output organization strategies (BY_DOCUMENT/BY_ENTITY/FLAT)
 
 ---
 
@@ -108,8 +109,15 @@ Requirements-to-implementation traceability across all epics:
 
 ## 📖 Reference Documentation
 
-- **[json-schema-reference.md](./json-schema-reference.md)** - JSON schema reference documenting canonical chunk output structure
-- **[txt-format-reference.md](./txt-format-reference.md)** - Plain text output format reference with structure and configuration options
+### Output Format References (Epic 3)
+
+- **[json-schema-reference.md](./json-schema-reference.md)** - JSON schema reference documenting canonical chunk output structure (Story 3.4)
+- **[txt-format-reference.md](./txt-format-reference.md)** - Plain text output format reference with structure and configuration options (Story 3.5)
+- **[csv-format-reference.md](./csv-format-reference.md)** - CSV output format reference with RFC 4180 compliance and 10-column schema (Story 3.6)
+- **[organizer-reference.md](./organizer-reference.md)** - Output organization strategies (BY_DOCUMENT/BY_ENTITY/FLAT) with manifest schema (Story 3.7)
+
+### Other References
+
 - **[troubleshooting-spacy.md](./troubleshooting-spacy.md)** - spaCy 3.7.2+ troubleshooting guide with common errors and solutions
 
 ---
@@ -145,7 +153,9 @@ Requirements-to-implementation traceability across all epics:
 - **[reviews/](./reviews/)** - Code reviews, audit reports, and analysis findings
 
 ### Examples & Archive
-- **[examples/](./examples/)** - Sample documents and usage examples
+- **[examples/txt-output-samples/](./examples/txt-output-samples/)** - TXT formatter sample outputs (basic, with metadata, custom delimiter)
+- **[examples/csv-output-samples/](./examples/csv-output-samples/)** - CSV formatter sample outputs (basic, truncated, organized)
+- **[examples/manifest-samples/](./examples/manifest-samples/)** - Organization manifest examples (BY_DOCUMENT, BY_ENTITY, FLAT)
 - **[archive/](./archive/)** - Archived original monolithic documents (10 files moved after sharding)
 
 ---
@@ -161,6 +171,8 @@ Requirements-to-implementation traceability across all epics:
 | **Troubleshoot issues** | [troubleshooting-spacy.md](./troubleshooting-spacy.md) → [ERROR_HANDLING_GUIDE.md](./ERROR_HANDLING_GUIDE.md) |
 | **Check project status** | [sprint-status.yaml](./sprint-status.yaml) |
 | **Review performance** | [performance-baselines-epic-3.md](./performance-baselines-epic-3.md) |
+| **Understand output formats** | [json-schema-reference.md](./json-schema-reference.md), [txt-format-reference.md](./txt-format-reference.md), [csv-format-reference.md](./csv-format-reference.md) |
+| **Learn organization strategies** | [organizer-reference.md](./organizer-reference.md) |
 | **Understand BMad Method** | [bmm-index.md](./bmm-index.md) → [bmm-project-overview.md](./bmm-project-overview.md) |
 | **Find a specific epic spec** | [PRD/](./PRD/), [tech-spec-epic-2/](./tech-spec-epic-2/), [tech-spec-epic-2.5/](./tech-spec-epic-2.5/), [tech-spec-epic-3/](./tech-spec-epic-3/) |
 | **Learn about CI/CD** | [ci-cd-pipeline.md](./ci-cd-pipeline.md) → [ci-cd-infrastructure-analysis.md](./ci-cd-infrastructure-analysis.md) |
@@ -177,9 +189,11 @@ Requirements-to-implementation traceability across all epics:
 
 ---
 
-**Last Updated**: 2025-11-15
+**Last Updated**: 2025-11-16
 **Major Changes**:
+- ✅ Epic 3 COMPLETE: All 7 stories done (3.1-3.7)
+- Added Story 3.7 output organization reference docs (CSV format, organizer strategies, manifest samples)
+- Updated performance baselines with organization overhead measurements (<50ms)
+- Published sample outputs for CSV and manifest files in examples/ directory
 - Sharded 10 large documents (>1000 lines each) into organized section-based folders
 - Added index.md navigation files to all sharded directories
-- Archived original monolithic documents to docs/archive/
-- Updated descriptions based on actual file content

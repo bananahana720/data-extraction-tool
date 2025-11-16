@@ -8,7 +8,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **Data Extraction Tool** - Enterprise document processing pipeline for RAG workflows. Transforms messy corporate audit documents into AI-optimized outputs using a five-stage modular pipeline architecture.
 
-**Status**: Epic 3 - Chunk & Output (in progress, Stories 3.1-3.5 complete)
+**Status**: Epic 3 - Chunk & Output (COMPLETE - all 7 stories done)
 **Python**: 3.12+ (mandatory enterprise requirement)
 **Architecture**: `Extract → Normalize → Chunk → Semantic → Output`
 
@@ -204,8 +204,8 @@ Tests mirror `src/` structure exactly:
 - ✅ Story 3.3: Chunk metadata and quality scoring (complete)
 - ✅ Story 3.4: JSON output format with full metadata (complete)
 - ✅ Story 3.5: Plain text output format for LLM upload (complete)
-- 🔍 Story 3.6: CSV output format for analysis and tracking (in review - BLUE phase complete)
-- 📋 Story 3.7: Configurable output organization strategies (backlog)
+- ✅ Story 3.6: CSV output format for analysis and tracking (complete)
+- ✅ Story 3.7: Configurable output organization strategies (complete)
 
 ### Upcoming
 - **Epic 4**: Semantic analysis stage
@@ -472,7 +472,49 @@ python -m ruff check src/data_extract/output/
 python -m mypy src/data_extract/output/
 ```
 
-**Status**: Core formatter production-ready with RED→GREEN→BLUE TDD complete. OutputWriter/Organization/CLI integration deferred to Story 3.7 (shared infrastructure across JSON/TXT/CSV formatters).
+**Status**: Core formatter production-ready with RED→GREEN→BLUE TDD complete. OutputWriter/Organization/CLI integration completed in Story 3.7 (shared infrastructure across JSON/TXT/CSV formatters).
+
+### Output Organization Strategies (Story 3.7)
+
+**Purpose:** Organize output files (JSON/TXT/CSV) by document, entity, or flat layout with comprehensive manifests.
+
+**Strategies:**
+- **BY_DOCUMENT:** One folder per source document (audit_report/, risk_matrix/)
+- **BY_ENTITY:** Folders by entity type (risks/, controls/, processes/, unclassified/)
+- **FLAT:** Single directory with prefixed filenames + manifest.json
+
+**Manifest Enrichment (AC-3.7-6):**
+Each manifest includes:
+- `config_snapshot` - Chunking/formatter configuration for reproducibility
+- `source_hashes` - SHA-256 hashes for source file integrity verification
+- `entity_summary` - Entity statistics (total_entities, entity_types, unique_entity_ids)
+- `quality_summary` - Quality score aggregations (avg/min/max, quality_flags)
+- `generated_at` - ISO 8601 timestamp
+
+**Structured Logging (AC-3.7-7):**
+All organization operations emit structlog events:
+- organization_start, folder_created, manifest_generated, organization_complete
+- Timestamped entries for audit trail per FR-8.3
+
+**References:**
+- Format docs: `docs/csv-format-reference.md`, `docs/organizer-reference.md`
+- Samples: `docs/examples/csv-output-samples/`, `docs/examples/manifest-samples/`
+- Performance: `docs/performance-baselines-epic-3.md` (Organization overhead <50ms)
+
+**Usage:**
+```bash
+# BY_DOCUMENT organization
+data-extract process input.pdf --format csv --output output/ \
+  --organize --strategy by_document
+
+# BY_ENTITY organization
+data-extract process input.pdf --format json --output output/ \
+  --organize --strategy by_entity
+
+# FLAT organization
+data-extract process input.pdf --format txt --output output/ \
+  --organize --strategy flat
+```
 
 ### OutputWriter & Production Integration (Story 3.5 - Bucket 2)
 

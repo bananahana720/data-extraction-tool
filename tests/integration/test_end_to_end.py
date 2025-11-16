@@ -14,6 +14,7 @@ import json
 
 import pytest
 
+from src.extractors import DocxExtractor, PdfExtractor, TextFileExtractor
 from src.formatters import ChunkedTextFormatter, JsonFormatter, MarkdownFormatter
 from src.pipeline import BatchProcessor, ExtractionPipeline
 from src.processors import ContextLinker, MetadataAggregator, QualityValidator
@@ -25,11 +26,53 @@ from src.processors import ContextLinker, MetadataAggregator, QualityValidator
 pytestmark = [pytest.mark.integration, pytest.mark.slow]
 
 
+# Shared component factories keep fixtures deterministic and reduce per-test boilerplate.
+EXTRACTOR_FACTORIES = {
+    "docx": DocxExtractor,
+    "pdf": PdfExtractor,
+    "txt": TextFileExtractor,
+}
+
+PROCESSOR_FACTORIES = {
+    "context_linker": ContextLinker,
+    "metadata_aggregator": MetadataAggregator,
+    "quality_validator": QualityValidator,
+}
+
+FORMATTER_FACTORIES = {
+    "json": JsonFormatter,
+    "markdown": MarkdownFormatter,
+    "chunked": ChunkedTextFormatter,
+}
+
+
+@pytest.fixture
+def pipeline_factory():
+    """Factory fixture for building pipelines with consistent wiring."""
+
+    def _build(*, extractors=("docx",), processors=(), formatters=()):
+        pipeline = ExtractionPipeline()
+        for extractor_name in extractors:
+            pipeline.register_extractor(extractor_name, EXTRACTOR_FACTORIES[extractor_name]())
+
+        for processor_name in processors:
+            pipeline.add_processor(PROCESSOR_FACTORIES[processor_name]())
+
+        for formatter_name in formatters:
+            pipeline.add_formatter(FORMATTER_FACTORIES[formatter_name]())
+
+        return pipeline
+
+    return _build
+
+
 # ==============================================================================
 # End-to-End Pipeline Tests
 # ==============================================================================
 
 
+@pytest.mark.p0
+@pytest.mark.e2e("E2E-001-009")
 @pytest.mark.parametrize(
     "file_format,formatter_type",
     [
@@ -51,6 +94,7 @@ def test_full_pipeline_extraction(
     sample_pdf_file,
     sample_text_file,
     tmp_path,
+    pipeline_factory,
 ):
     """
     Test E2E-001 through E2E-009: Full pipeline for all format combinations.
@@ -77,27 +121,11 @@ def test_full_pipeline_extraction(
     test_file = file_map[file_format]
 
     # Arrange: Create pipeline
-    pipeline = ExtractionPipeline()
-
-    # Register extractors
-    from src.extractors import DocxExtractor, PdfExtractor, TextFileExtractor
-
-    pipeline.register_extractor("docx", DocxExtractor())
-    pipeline.register_extractor("pdf", PdfExtractor())
-    pipeline.register_extractor("txt", TextFileExtractor())  # Use correct text extractor
-
-    # Add processors
-    pipeline.add_processor(ContextLinker())
-    pipeline.add_processor(MetadataAggregator())
-    pipeline.add_processor(QualityValidator())
-
-    # Add appropriate formatter
-    formatter_map = {
-        "json": JsonFormatter(),
-        "markdown": MarkdownFormatter(),
-        "chunked": ChunkedTextFormatter(),
-    }
-    pipeline.add_formatter(formatter_map[formatter_type])
+    pipeline = pipeline_factory(
+        extractors=("docx", "pdf", "txt"),
+        processors=("context_linker", "metadata_aggregator", "quality_validator"),
+        formatters=(formatter_type,),
+    )
 
     # Act: Process file
     result = pipeline.process_file(test_file)
@@ -139,29 +167,22 @@ def test_full_pipeline_extraction(
         assert "chunk" in formatted_output.content.lower()
 
 
-def test_e2e_full_processor_chain(sample_docx_file):
+@pytest.mark.p1
+@pytest.mark.e2e("E2E-010")
+def test_e2e_full_processor_chain(sample_docx_file, pipeline_factory):
     """
-    Test E2E-003: Validate all processors run in correct dependency order.
+    Test E2E-010: Validate all processors run in correct dependency order.
 
     Verifies:
     - Processors ordered topologically
     - ContextLinker runs before MetadataAggregator
     - All processor metadata present in final result
     """
-    # Arrange: Create pipeline
-    pipeline = ExtractionPipeline()
-
-    from src.extractors import DocxExtractor
-
-    pipeline.register_extractor("docx", DocxExtractor())
-
-    # Add processors in wrong order (should be auto-sorted)
-    pipeline.add_processor(QualityValidator())  # Depends on MetadataAggregator
-    pipeline.add_processor(MetadataAggregator())  # Depends on ContextLinker
-    pipeline.add_processor(ContextLinker())  # No dependencies
-
-    # Add formatter
-    pipeline.add_formatter(JsonFormatter())
+    # Arrange: Create pipeline with intentionally misordered processors
+    pipeline = pipeline_factory(
+        processors=("quality_validator", "metadata_aggregator", "context_linker"),
+        formatters=("json",),
+    )
 
     # Act: Process file
     result = pipeline.process_file(sample_docx_file)
@@ -185,9 +206,11 @@ def test_e2e_full_processor_chain(sample_docx_file):
     assert isinstance(first_block.metadata, dict)
 
 
-def test_e2e_progress_tracking_integration(sample_docx_file, progress_tracker):
+@pytest.mark.p1
+@pytest.mark.e2e("E2E-011")
+def test_e2e_progress_tracking_integration(sample_docx_file, progress_tracker, pipeline_factory):
     """
-    Test E2E-006: Validate progress callbacks through full pipeline.
+    Test E2E-011: Validate progress callbacks through full pipeline.
 
     Verifies:
     - Progress updates from 0% to 100%
@@ -197,13 +220,10 @@ def test_e2e_progress_tracking_integration(sample_docx_file, progress_tracker):
     # Arrange
     progress_updates, progress_callback = progress_tracker
 
-    pipeline = ExtractionPipeline()
-
-    from src.extractors import DocxExtractor
-
-    pipeline.register_extractor("docx", DocxExtractor())
-    pipeline.add_processor(ContextLinker())
-    pipeline.add_formatter(JsonFormatter())
+    pipeline = pipeline_factory(
+        processors=("context_linker",),
+        formatters=("json",),
+    )
 
     # Act: Process with progress tracking
     result = pipeline.process_file(sample_docx_file, progress_callback=progress_callback)
@@ -224,11 +244,13 @@ def test_e2e_progress_tracking_integration(sample_docx_file, progress_tracker):
     assert len(stages_seen) > 0
 
 
+@pytest.mark.p1
+@pytest.mark.e2e("E2E-012")
 def test_e2e_multi_format_batch_pipeline(
     batch_test_directory, configured_pipeline, output_directory
 ):
     """
-    Test E2E-005: Process batch of files in different formats.
+    Test E2E-012: Process batch of files in different formats.
 
     Verifies:
     - Multiple formats processed successfully
@@ -260,7 +282,9 @@ def test_e2e_multi_format_batch_pipeline(
         assert result.extraction_result is not None
 
 
-def test_e2e_multiple_formatters_parallel(sample_docx_file, tmp_path):
+@pytest.mark.p1
+@pytest.mark.e2e("E2E-013")
+def test_e2e_multiple_formatters_parallel(sample_docx_file, tmp_path, pipeline_factory):
     """
     Test multiple formatters generate outputs independently.
 
@@ -270,16 +294,7 @@ def test_e2e_multiple_formatters_parallel(sample_docx_file, tmp_path):
     - Outputs are independent
     """
     # Arrange: Pipeline with multiple formatters
-    pipeline = ExtractionPipeline()
-
-    from src.extractors import DocxExtractor
-
-    pipeline.register_extractor("docx", DocxExtractor())
-
-    # Add all formatters
-    pipeline.add_formatter(JsonFormatter())
-    pipeline.add_formatter(MarkdownFormatter())
-    pipeline.add_formatter(ChunkedTextFormatter())
+    pipeline = pipeline_factory(formatters=("json", "markdown", "chunked"))
 
     # Act: Process file
     result = pipeline.process_file(sample_docx_file)
@@ -302,7 +317,9 @@ def test_e2e_multiple_formatters_parallel(sample_docx_file, tmp_path):
         assert len(output.content) > 0
 
 
-def test_e2e_quality_score_computation(sample_docx_file):
+@pytest.mark.p0
+@pytest.mark.e2e("E2E-014")
+def test_e2e_quality_score_computation(sample_docx_file, pipeline_factory):
     """
     Test quality score is computed correctly.
 
@@ -312,14 +329,9 @@ def test_e2e_quality_score_computation(sample_docx_file):
     - Score reflects extraction quality
     """
     # Arrange
-    pipeline = ExtractionPipeline()
-
-    from src.extractors import DocxExtractor
-
-    pipeline.register_extractor("docx", DocxExtractor())
-    pipeline.add_processor(ContextLinker())
-    pipeline.add_processor(MetadataAggregator())
-    pipeline.add_processor(QualityValidator())
+    pipeline = pipeline_factory(
+        processors=("context_linker", "metadata_aggregator", "quality_validator"),
+    )
 
     # Act
     result = pipeline.process_file(sample_docx_file)
@@ -338,7 +350,9 @@ def test_e2e_quality_score_computation(sample_docx_file):
     assert score > 85.0, f"Expected high quality score for valid DOCX, got {score}"
 
 
-def test_e2e_empty_file_handling(empty_docx_file):
+@pytest.mark.p2
+@pytest.mark.e2e("E2E-015")
+def test_e2e_empty_file_handling(empty_docx_file, pipeline_factory):
     """
     Test pipeline handles empty file gracefully.
 
@@ -348,26 +362,26 @@ def test_e2e_empty_file_handling(empty_docx_file):
     - Warning about empty file
     """
     # Arrange
-    pipeline = ExtractionPipeline()
-
-    from src.extractors import DocxExtractor
-
-    pipeline.register_extractor("docx", DocxExtractor())
-    pipeline.add_processor(ContextLinker())
-    pipeline.add_formatter(JsonFormatter())
+    pipeline = pipeline_factory(
+        processors=("context_linker",),
+        formatters=("json",),
+    )
 
     # Act
     result = pipeline.process_file(empty_docx_file)
 
     # Assert: Should succeed (valid but empty file)
-    assert result.success is True or len(result.all_warnings) > 0
+    assert result.success is True, result.all_errors
+    assert len(result.all_warnings) >= 1
 
     # Assert: Little or no content
     if result.extraction_result:
         assert len(result.extraction_result.content_blocks) <= 1
 
 
-def test_e2e_large_file_processing(large_docx_file):
+@pytest.mark.p1
+@pytest.mark.e2e("E2E-016")
+def test_e2e_large_file_processing(large_docx_file, pipeline_factory):
     """
     Test pipeline handles large files.
 
@@ -377,13 +391,10 @@ def test_e2e_large_file_processing(large_docx_file):
     - Performance acceptable
     """
     # Arrange
-    pipeline = ExtractionPipeline()
-
-    from src.extractors import DocxExtractor
-
-    pipeline.register_extractor("docx", DocxExtractor())
-    pipeline.add_processor(ContextLinker())
-    pipeline.add_formatter(JsonFormatter())
+    pipeline = pipeline_factory(
+        processors=("context_linker",),
+        formatters=("json",),
+    )
 
     # Act
     result = pipeline.process_file(large_docx_file)
@@ -398,7 +409,9 @@ def test_e2e_large_file_processing(large_docx_file):
     assert result.processing_result is not None
 
 
-def test_e2e_metadata_propagation(sample_docx_file):
+@pytest.mark.p2
+@pytest.mark.e2e("E2E-017")
+def test_e2e_metadata_propagation(sample_docx_file, pipeline_factory):
     """
     Test metadata propagates through pipeline.
 
@@ -408,13 +421,10 @@ def test_e2e_metadata_propagation(sample_docx_file):
     - All metadata accessible in final result
     """
     # Arrange
-    pipeline = ExtractionPipeline()
-
-    from src.extractors import DocxExtractor
-
-    pipeline.register_extractor("docx", DocxExtractor())
-    pipeline.add_processor(MetadataAggregator())
-    pipeline.add_formatter(JsonFormatter())
+    pipeline = pipeline_factory(
+        processors=("metadata_aggregator",),
+        formatters=("json",),
+    )
 
     # Act
     result = pipeline.process_file(sample_docx_file)
@@ -434,9 +444,11 @@ def test_e2e_metadata_propagation(sample_docx_file):
     assert result.processing_result.document_metadata is not None
 
 
+@pytest.mark.p1
+@pytest.mark.e2e("E2E-018")
 def test_e2e_batch_progress_tracking(batch_test_directory, configured_pipeline, progress_tracker):
     """
-    Test progress tracking across batch processing.
+    Test E2E-018: Progress tracking across batch processing.
 
     Verifies:
     - Progress updates for batch
@@ -470,7 +482,9 @@ def test_e2e_batch_progress_tracking(batch_test_directory, configured_pipeline, 
 # ==============================================================================
 
 
-def test_e2e_docx_with_tables(sample_docx_file):
+@pytest.mark.p2
+@pytest.mark.e2e("E2E-019")
+def test_e2e_docx_with_tables(sample_docx_file, pipeline_factory):
     """
     Test DOCX extraction handles tables correctly.
 
@@ -480,12 +494,7 @@ def test_e2e_docx_with_tables(sample_docx_file):
     - Table metadata extracted
     """
     # Arrange
-    pipeline = ExtractionPipeline()
-
-    from src.extractors import DocxExtractor
-
-    pipeline.register_extractor("docx", DocxExtractor())
-    pipeline.add_formatter(JsonFormatter())
+    pipeline = pipeline_factory(formatters=("json",))
 
     # Act
     result = pipeline.process_file(sample_docx_file)
@@ -500,7 +509,9 @@ def test_e2e_docx_with_tables(sample_docx_file):
     assert ContentType.TABLE in content_types or len(content_types) > 1
 
 
-def test_e2e_pdf_text_extraction(sample_pdf_file):
+@pytest.mark.p2
+@pytest.mark.e2e("E2E-020")
+def test_e2e_pdf_text_extraction(sample_pdf_file, pipeline_factory):
     """
     Test PDF extraction with native text.
 
@@ -510,12 +521,7 @@ def test_e2e_pdf_text_extraction(sample_pdf_file):
     - Page position tracking
     """
     # Arrange
-    pipeline = ExtractionPipeline()
-
-    from src.extractors import PdfExtractor
-
-    pipeline.register_extractor("pdf", PdfExtractor())
-    pipeline.add_formatter(JsonFormatter())
+    pipeline = pipeline_factory(extractors=("pdf",), formatters=("json",))
 
     # Act
     result = pipeline.process_file(sample_pdf_file)
@@ -537,9 +543,11 @@ def test_e2e_pdf_text_extraction(sample_pdf_file):
 # ==============================================================================
 
 
+@pytest.mark.p1
+@pytest.mark.e2e("E2E-021")
 def test_e2e_config_integration(sample_docx_file, config_file):
     """
-    Test pipeline configuration from file.
+    Test E2E-021: Pipeline configuration loaded from file.
 
     Verifies:
     - Config loaded correctly
@@ -554,8 +562,6 @@ def test_e2e_config_integration(sample_docx_file, config_file):
     # Create pipeline with config
     pipeline = ExtractionPipeline(config=config)
 
-    from src.extractors import DocxExtractor
-
     pipeline.register_extractor("docx", DocxExtractor())
     pipeline.add_formatter(JsonFormatter())
 
@@ -566,9 +572,11 @@ def test_e2e_config_integration(sample_docx_file, config_file):
     assert result.success is True
 
 
-def test_e2e_logging_integration(sample_docx_file, tmp_path):
+@pytest.mark.p2
+@pytest.mark.e2e("E2E-022")
+def test_e2e_logging_integration(sample_docx_file, tmp_path, pipeline_factory):
     """
-    Test logging framework integration.
+    Test E2E-022: Logging framework integration.
 
     Verifies:
     - Logs generated during processing
@@ -580,12 +588,7 @@ def test_e2e_logging_integration(sample_docx_file, tmp_path):
 
     logger = get_logger("integration_test")
 
-    pipeline = ExtractionPipeline()
-
-    from src.extractors import DocxExtractor
-
-    pipeline.register_extractor("docx", DocxExtractor())
-    pipeline.add_formatter(JsonFormatter())
+    pipeline = pipeline_factory(formatters=("json",))
 
     # Act
     result = pipeline.process_file(sample_docx_file)
@@ -597,9 +600,11 @@ def test_e2e_logging_integration(sample_docx_file, tmp_path):
     logger.info("Test log message")
 
 
-def test_e2e_error_handler_integration(corrupted_docx_file):
+@pytest.mark.p1
+@pytest.mark.e2e("E2E-023")
+def test_e2e_error_handler_integration(corrupted_docx_file, pipeline_factory):
     """
-    Test error handler integration with pipeline.
+    Test E2E-023: Error handler integration with pipeline.
 
     Verifies:
     - Errors formatted correctly
@@ -607,11 +612,7 @@ def test_e2e_error_handler_integration(corrupted_docx_file):
     - User messages clear
     """
     # Arrange
-    pipeline = ExtractionPipeline()
-
-    from src.extractors import DocxExtractor
-
-    pipeline.register_extractor("docx", DocxExtractor())
+    pipeline = pipeline_factory()
 
     # Act
     result = pipeline.process_file(corrupted_docx_file)

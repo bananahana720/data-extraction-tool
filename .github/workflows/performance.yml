@@ -1,24 +1,14 @@
-# Weekly Performance Testing Pipeline
+# Weekly Performance Testing Pipeline with Regression Enforcement
 # Story 2.5-2.1: Throughput Optimization with ProcessPoolExecutor
-#
-# Runs performance tests weekly to detect regressions:
-# - NFR-P1: 100-file batch throughput (<10 minutes, baseline: 6.86 min with 4 workers)
-# - NFR-P2: Memory usage (<2GB peak)
-# - Memory leak detection
-# - ADR-005 streaming architecture validation
-#
-# Baseline: 14.57 files/min (Story 2.5-2.1, ProcessPoolExecutor)
-# Schedule: Monday at 2:00 AM UTC (weekly)
-# Can also be triggered manually via workflow_dispatch
+# Validates NFR-P1 (throughput) and NFR-P2 (memory) on push to main, weekly schedule, or manual trigger.
 
 name: Performance Tests
 
 on:
-  # Weekly schedule: Monday at 2:00 AM UTC
+  push:
+    branches: [main]
   schedule:
     - cron: '0 2 * * 1'
-
-  # Allow manual trigger
   workflow_dispatch:
     inputs:
       verbose:
@@ -26,15 +16,27 @@ on:
         required: false
         default: 'false'
 
+env:
+  SPACY_MODEL_VERSION: "3.8.0"
+  BASELINE_THROUGHPUT: "14.57"
+  BASELINE_MEMORY_GB: "4.15"
+  MIN_THROUGHPUT: "13.1"
+  MAX_MEMORY_GB: "4.56"
+
 jobs:
   performance-tests:
     name: Performance Validation (NFR-P1, NFR-P2)
     runs-on: ubuntu-latest
-    timeout-minutes: 30  # Performance tests can take 10+ minutes
+    timeout-minutes: 60
+    outputs:
+      throughput: ${{ steps.analyze.outputs.throughput }}
+      memory: ${{ steps.analyze.outputs.memory }}
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Python 3.12
         uses: actions/setup-python@v5
@@ -49,10 +51,19 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pip-
 
+      - name: Cache spaCy models
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/spacy
+          key: ${{ runner.os }}-spacy-${{ env.SPACY_MODEL_VERSION }}
+          restore-keys: |
+            ${{ runner.os }}-spacy-
+
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -e ".[dev]"
+          python -m spacy download en_core_web_md==${SPACY_MODEL_VERSION}
 
       - name: Create 100-file performance batch
         run: |
@@ -60,29 +71,85 @@ jobs:
 
       - name: Run performance tests
         run: |
+          set -o pipefail
           pytest -m performance tests/performance/test_throughput.py \
             -v \
             --tb=short \
             --no-cov \
-            ${{ github.event.inputs.verbose == 'true' && '-s' || '' }}
+            ${{ github.event.inputs.verbose == 'true' && '-s' || '' }} 2>&1 | tee performance_output.txt
+
+      - name: Analyze performance metrics
+        id: analyze
+        run: |
+          python - <<'PY'
+import json
+import os
+import re
+import sys
+from pathlib import Path
+
+text = Path('performance_output.txt').read_text()
+throughput_matches = re.findall(r"Throughput:\s+([0-9]+(?:\.[0-9]+)?)\s+files/s", text)
+memory_matches = re.findall(r"Memory:\s+([0-9]+(?:\.[0-9]+)?)\s+MB", text)
+if not throughput_matches:
+    print("::error::Unable to parse throughput from performance output")
+    sys.exit(1)
+if not memory_matches:
+    print("::error::Unable to parse memory usage from performance output")
+    sys.exit(1)
+files_per_sec = float(throughput_matches[-1])
+files_per_min = files_per_sec * 60
+memory_gb = float(memory_matches[-1]) / 1024
+baseline_throughput = float(os.environ['BASELINE_THROUGHPUT'])
+baseline_memory = float(os.environ['BASELINE_MEMORY_GB'])
+min_throughput = float(os.environ['MIN_THROUGHPUT'])
+max_memory = float(os.environ['MAX_MEMORY_GB'])
+payload = {
+    'measured': {
+        'throughput_files_per_sec': files_per_sec,
+        'throughput_files_per_min': files_per_min,
+        'memory_gb': memory_gb,
+    },
+    'baseline': {
+        'throughput_files_per_min': baseline_throughput,
+        'memory_gb': baseline_memory,
+    },
+    'thresholds': {
+        'min_throughput_files_per_min': min_throughput,
+        'max_memory_gb': max_memory,
+    },
+}
+Path('perf-metrics.json').write_text(json.dumps(payload, indent=2))
+with open(os.environ['GITHUB_OUTPUT'], 'a', encoding='utf-8') as fh:
+    fh.write(f"throughput={files_per_min:.2f}\n")
+    fh.write(f"memory={memory_gb:.2f}\n")
+failures = []
+if files_per_min < min_throughput:
+    failures.append(
+        f"Throughput {files_per_min:.2f} files/min below minimum {min_throughput:.2f} files/min"
+    )
+if memory_gb > max_memory:
+    failures.append(
+        f"Memory {memory_gb:.2f} GB above maximum {max_memory:.2f} GB"
+    )
+if failures:
+    for failure in failures:
+        print(f"::error::{failure}")
+    sys.exit(1)
+PY
 
       - name: Upload performance results
-        uses: actions/upload-artifact@v4
         if: always()
+        uses: actions/upload-artifact@v4
         with:
           name: performance-results-${{ github.run_number }}
           path: |
+            performance_output.txt
+            perf-metrics.json
             tests/performance/
             !tests/performance/batch_100_files/
             !tests/performance/__pycache__/
           retention-days: 90
-
-      - name: Check for performance regressions
-        if: failure()
-        run: |
-          echo "::error::Performance regression detected! NFR-P1 or NFR-P2 targets not met."
-          echo "Review the test output above for details."
-          exit 1
 
   performance-summary:
     name: Performance Test Summary
@@ -91,26 +158,35 @@ jobs:
     if: always()
 
     steps:
-      - name: Check performance test status
+      - name: Download performance artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: performance-results-${{ github.run_number }}
+          path: perf-artifacts
+
+      - name: Show metrics
         run: |
-          if [ "${{ needs.performance-tests.result }}" == "success" ]; then
-            echo "✅ Performance tests PASSED"
-            echo "NFR-P1 (Throughput): PASS"
-            echo "NFR-P2 (Memory): PASS"
-            echo "Memory Leak Check: PASS"
-          elif [ "${{ needs.performance-tests.result }}" == "failure" ]; then
-            echo "❌ Performance tests FAILED"
-            echo "One or more NFRs not met. Review artifacts for details."
-            exit 1
-          else
-            echo "⚠️  Performance tests status: ${{ needs.performance-tests.result }}"
+          python - <<'PY'
+import json
+import sys
+from pathlib import Path
+metrics_path = Path('perf-artifacts/perf-metrics.json')
+if not metrics_path.exists():
+    print('::warning::perf-metrics.json missing; check performance job logs')
+    sys.exit(0 if '${{ needs.performance-tests.result }}' == 'success' else 1)
+data = json.loads(metrics_path.read_text())
+print('Measured throughput (files/min):', data['measured']['throughput_files_per_min'])
+print('Measured memory (GB):', data['measured']['memory_gb'])
+print('Baseline throughput (files/min):', data['baseline']['throughput_files_per_min'])
+print('Baseline memory (GB):', data['baseline']['memory_gb'])
+print('Threshold min throughput:', data['thresholds']['min_throughput_files_per_min'])
+print('Threshold max memory:', data['thresholds']['max_memory_gb'])
+PY
+
+      - name: Fail if performance job failed
+        run: |
+          if [ "${{ needs.performance-tests.result }}" != "success" ]; then
+            echo "❌ Performance tests failed"
             exit 1
           fi
-
-# Notes:
-# - Performance tests run weekly to avoid slowing down regular CI
-# - Tests validate NFR-P1 (<10 min for 100 files) and NFR-P2 (<2GB memory)
-# - Current baseline: 6.86 min duration with 4 workers (Story 2.5-2.1 optimizations)
-# - Artifacts retained for 90 days for trend analysis
-# - Manual trigger available for ad-hoc performance validation
-# - Timeout set to 30 minutes to prevent hanging on performance regressions
+          echo "✅ Performance tests passed"
