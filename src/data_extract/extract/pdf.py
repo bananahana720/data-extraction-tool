@@ -4,6 +4,10 @@ Wraps brownfield PdfExtractor and converts output to greenfield Document model.
 Preserves OCR confidence scores, page counts, and extraction metadata.
 """
 
+from typing import Dict
+
+from src.core.models import ExtractionResult as BrownfieldExtractionResult
+from src.data_extract.core.models import ValidationReport
 from src.data_extract.extract.adapter import ExtractorAdapter
 from src.extractors.pdf_extractor import PdfExtractor as BrownfieldPdfExtractor
 
@@ -33,8 +37,8 @@ class PdfExtractorAdapter(ExtractorAdapter):
         super().__init__(extractor, format_name="PDF")
 
     def _generate_validation_report(
-        self, result, ocr_confidence
-    ):  # type: ignore[override] - Brownfield adapter requires flexible params for OCR integration
+        self, result: BrownfieldExtractionResult, ocr_confidence: Dict[int, float]
+    ) -> ValidationReport:
         """Override to add PDF-specific validation logic.
 
         Extends base validation with scanned PDF detection.
@@ -54,7 +58,6 @@ class PdfExtractorAdapter(ExtractorAdapter):
         scanned_pdf_detected = any(conf < 1.0 for conf in ocr_confidence.values())
 
         # Create new report with updated fields (ValidationReport is immutable)
-        from src.data_extract.core.models import ValidationReport
 
         return ValidationReport(
             quarantine_recommended=report.quarantine_recommended,
