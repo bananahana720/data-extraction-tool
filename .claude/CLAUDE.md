@@ -201,7 +201,11 @@ Tests mirror `src/` structure exactly:
 ### Current: Epic 3 - Chunk & Output
 - ✅ Story 3.1: Semantic boundary-aware chunking engine (complete)
 - ✅ Story 3.2: Entity-aware chunking (complete)
-- 📋 Stories 3.3-3.7: Metadata, output formats, configuration (backlog)
+- ✅ Story 3.3: Chunk metadata and quality scoring (complete)
+- ✅ Story 3.4: JSON output format with full metadata (complete)
+- ✅ Story 3.5: Plain text output format for LLM upload (complete)
+- 🔍 Story 3.6: CSV output format for analysis and tracking (in review - BLUE phase complete)
+- 📋 Story 3.7: Configurable output organization strategies (backlog)
 
 ### Upcoming
 - **Epic 4**: Semantic analysis stage
@@ -427,6 +431,48 @@ pytest tests/performance/test_txt_performance.py -v
 2. **Audit Documentation**: Generate clean reports from messy corporate documents
 3. **Text Analysis**: Prepare corpus for downstream NLP tools
 4. **Human Review**: Readable format for manual QA workflows
+
+### CsvFormatter & CSV Output (Story 3.6)
+
+**Location**
+- Formatter implementation: `src/data_extract/output/formatters/csv_formatter.py`
+- Parser validator: `src/data_extract/output/validation/csv_parser.py`
+- Unit tests: `tests/unit/test_output/test_csv_formatter.py`, `tests/unit/test_output/test_csv_parser_validator.py`
+
+**Output Contract**
+- Canonical 10-column schema (chunk_id, source_file, section_context, chunk_text, entity_tags, quality_score, word_count, token_count, processing_version, warnings)
+- RFC 4180 compliant escaping (commas, quotes, newlines)
+- UTF-8-sig encoding with BOM (Windows Excel compatibility)
+- Optional text truncation with ellipsis indicator
+- Semicolon-delimited entity tags for spreadsheet filtering
+- Multi-engine parser validation (Python csv + pandas + csvkit)
+
+**Usage Patterns**
+```python
+from data_extract.output.formatters import CsvFormatter
+from pathlib import Path
+
+# Basic usage
+formatter = CsvFormatter()
+result = formatter.format_chunks(chunks, Path("output.csv"))
+
+# With truncation and validation disabled
+formatter = CsvFormatter(max_text_length=200, validate=False)
+result = formatter.format_chunks(chunks, Path("output.csv"))
+```
+
+**Validation Commands**
+```bash
+# Unit tests (13 tests - formatter + parser validator)
+pytest tests/unit/test_output/test_csv_formatter.py tests/unit/test_output/test_csv_parser_validator.py -v
+
+# Quality gates (BLUE phase - all pass)
+python -m black src/data_extract/output/ --check
+python -m ruff check src/data_extract/output/
+python -m mypy src/data_extract/output/
+```
+
+**Status**: Core formatter production-ready with RED→GREEN→BLUE TDD complete. OutputWriter/Organization/CLI integration deferred to Story 3.7 (shared infrastructure across JSON/TXT/CSV formatters).
 
 ### OutputWriter & Production Integration (Story 3.5 - Bucket 2)
 

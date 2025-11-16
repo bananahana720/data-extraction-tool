@@ -34,7 +34,7 @@ def app() -> None:
 @click.option(
     "--format",
     "format_type",
-    type=click.Choice(["json", "txt"], case_sensitive=False),
+    type=click.Choice(["json", "txt", "csv"], case_sensitive=False),
     default="txt",
     help="Output format (default: txt)",
 )
@@ -105,7 +105,11 @@ def process(
         # JSON output
         data-extract process input.pdf --format json --output output.json
 
-    Note: This is a minimal implementation for Story 3.5 UAT validation.
+        \b
+        # CSV output
+        data-extract process input.pdf --format csv --output output.csv
+
+    Note: This is a minimal implementation for Story 3.6 UAT validation.
     Full pipeline integration will be completed in Epic 5.
     """
     try:
@@ -149,6 +153,9 @@ def process(
             formatter_kwargs["per_chunk"] = per_chunk
             formatter_kwargs["include_metadata"] = include_metadata
             formatter_kwargs["delimiter"] = delimiter
+        elif format_type == "csv":
+            # CSV formatter accepts max_text_length and validate params
+            formatter_kwargs["validate"] = True  # Enable parser validation by default
 
         # Write output
         result = writer.write(

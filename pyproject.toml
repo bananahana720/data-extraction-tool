@@ -82,6 +82,8 @@ dev = [
     "memory-profiler>=0.61.0,<1.0",  # Line-by-line memory profiling (Story 2.5.1, optional)
     "reportlab>=3.5.0,<5.0",  # PDF fixture generation
     "types-PyYAML>=6.0.0",  # Type stubs for mypy
+    "pandas>=2.0.0,<3.0",  # Story 3.6: CSV parser validation
+    "csvkit>=2.0.0,<3.0",  # Story 3.6: CLI parser validation
 ]
 
 # All optional dependencies

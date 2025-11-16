@@ -72,3 +72,4 @@
 story-review-append.txt - moved to TRASH/ - temporary review content file
 docs/uat/test-context/3-2-test-context.xml - moved to TRASH/ - template placeholder, regenerating with actual content
 sample_output.txt - moved to TRASH/ - temporary test output for GREEN phase demonstration
+docs-descriptions.json - moved to TRASH/ - temporary file descriptions used for index generation

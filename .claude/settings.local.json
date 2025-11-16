@@ -15,7 +15,9 @@
       "SlashCommand(*)",
       "mcp__playwright",
       "SlashCommand(/bmad:bmm:workflows:dev-story)",
-      "SlashCommand(/commit:*)"
+      "SlashCommand(/commit:*)",
+      "SlashCommand(/bmad:core:tools:shard-doc)",
+      "SlashCommand(/bmad:core:tools:shard-doc:*)"
     ],
     "deny": [],
     "ask": []
