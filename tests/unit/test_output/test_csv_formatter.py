@@ -1,7 +1,7 @@
 """Unit tests for CsvFormatter (Story 3.6 - ATDD RED PHASE).
 
 Validates canonical CSV schema, RFC 4180 escaping, truncation indicators,
-entity serialization, FormatResult metadata, and parser validation hooks.
+entity serialization, FormattingResult metadata, and parser validation hooks.
 
 Test Coverage:
     - AC-3.6-1: Canonical column schema with stable ordering
@@ -25,11 +25,11 @@ import pytest
 
 # These imports WILL FAIL in RED phase - this is expected
 try:
-    from data_extract.output.formatters.base import FormatResult
+    from data_extract.output.formatters.base import FormattingResult
     from data_extract.output.formatters.csv_formatter import CsvFormatter
 except ImportError:  # pragma: no cover - CsvFormatter not implemented yet
     CsvFormatter = None  # type: ignore[assignment]
-    FormatResult = None  # type: ignore[assignment]
+    FormattingResult = None  # type: ignore[assignment]
 
 from data_extract.chunk.entity_preserver import EntityReference
 from data_extract.chunk.models import Chunk, ChunkMetadata
@@ -265,17 +265,17 @@ class TestCsvEscapingAndSerialization:
 
 
 class TestCsvFormatterResults:
-    """Validate FormatResult metadata and parser validation hook (AC-3.6-1, AC-3.6-7)."""
+    """Validate FormattingResult metadata and parser validation hook (AC-3.6-1, AC-3.6-7)."""
 
     def test_format_chunks_returns_format_result(
         self, csv_formatter: CsvFormatter, sample_chunks: Iterable[Chunk], tmp_path: Path
     ) -> None:
-        """Should return FormatResult populated with CSV metadata."""
+        """Should return FormattingResult populated with CSV metadata."""
         output_path = tmp_path / "chunks.csv"
 
         result = csv_formatter.format_chunks(sample_chunks, output_path)
 
-        assert isinstance(result, FormatResult)
+        assert isinstance(result, FormattingResult)
         assert result.format_type == "csv"
         assert result.output_path == output_path
         assert result.chunk_count == 2

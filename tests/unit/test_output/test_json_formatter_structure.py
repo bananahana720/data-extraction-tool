@@ -1,12 +1,12 @@
 """Unit tests for JsonFormatter structure and metadata (Story 3.4).
 
 Tests JSON formatter creation, JSON structure generation with metadata header,
-and FormatResult return values.
+and FormattingResult return values.
 
 Test Coverage:
     - AC-3.4-1: JSON structure with chunk text and metadata
     - AC-3.4-6: Configuration and version in JSON header
-    - FormatResult metadata
+    - FormattingResult metadata
 
 Part 1 of 3: JSON structure and configuration.
 """
@@ -20,11 +20,11 @@ import pytest
 
 # These imports WILL FAIL in RED phase - this is expected
 try:
-    from data_extract.output.formatters.base import FormatResult
+    from data_extract.output.formatters.base import FormattingResult
     from data_extract.output.formatters.json_formatter import JsonFormatter
 except ImportError:
     JsonFormatter = None
-    FormatResult = None
+    FormattingResult = None
 
 from data_extract.chunk.entity_preserver import EntityReference
 from data_extract.chunk.models import Chunk, ChunkMetadata
@@ -210,18 +210,18 @@ class TestJsonStructureGeneration:
         assert len(json_data["chunks"]) == 3
 
 
-class TestFormatResultMetadata:
-    """Test FormatResult return value with stats (AC-3.4-1)."""
+class TestFormattingResultMetadata:
+    """Test FormattingResult return value with stats (AC-3.4-1)."""
 
     def test_format_result_includes_stats(self, json_formatter, sample_chunks, tmp_path):
-        """Should return FormatResult with format_type, output_path, chunk_count, file_size."""
+        """Should return FormattingResult with format_type, output_path, chunk_count, file_size."""
         # GIVEN: JsonFormatter and sample chunks
         output_path = tmp_path / "output.json"
 
         # WHEN: Formatting chunks to JSON
         result = json_formatter.format_chunks(iter(sample_chunks), output_path)
 
-        # THEN: FormatResult should include required fields
+        # THEN: FormattingResult should include required fields
         assert result.format_type == "json"
         assert result.output_path == output_path
         assert result.chunk_count == 3
@@ -229,7 +229,7 @@ class TestFormatResultMetadata:
         assert result.duration_seconds >= 0
 
     def test_format_result_errors_empty_on_success(self, json_formatter, sample_chunks, tmp_path):
-        """Should return FormatResult with empty errors list on success."""
+        """Should return FormattingResult with empty errors list on success."""
         # GIVEN: JsonFormatter and valid chunks
         output_path = tmp_path / "output.json"
 

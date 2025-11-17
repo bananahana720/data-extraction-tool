@@ -14,6 +14,14 @@ class FormattingResult:
     chunk_count: int
     total_size: int
     metadata: dict
+    format_type: str = "txt"  # Default format type
+    duration_seconds: float = 0.0  # Duration of the formatting operation
+    errors: list = None  # List of any errors that occurred
+
+    def __post_init__(self):
+        # Initialize errors as empty list if None
+        if self.errors is None:
+            object.__setattr__(self, "errors", [])
 
 
 class BaseFormatter(ABC):
