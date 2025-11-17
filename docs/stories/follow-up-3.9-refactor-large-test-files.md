@@ -4,7 +4,7 @@
 **Story ID:** 3.9 (Quality Improvement)
 **Priority:** P1 (HIGH)
 **Effort:** 6 hours
-**Status:** todo
+**Status:** ready-for-dev
 
 ## Overview
 
@@ -191,6 +191,11 @@ This is a technical debt story to bring Epic 3 test suite to 100% DoD compliance
 - Improves reviewability (smaller diffs in PRs)
 - Improves IDE/test discovery performance
 - Brings Epic 3 to 100% TEA DoD compliance
+
+## Dev Agent Record
+
+**Context Reference:**
+- docs/stories/follow-up-3.9-refactor-large-test-files.context.xml (generated 2025-11-17)
 
 ---
 

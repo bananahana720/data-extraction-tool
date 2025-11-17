@@ -1,7 +1,4 @@
-"""Unit tests for ChunkingEngine core component (Story 3.1).
-
-Tests AC-3.1-1, AC-3.1-3, AC-3.1-4, AC-3.1-7.
-"""
+"""Unit tests for ChunkingEngine core component (Story 3.1). Tests AC-3.1-1, AC-3.1-3, AC-3.1-4, AC-3.1-7."""
 
 from datetime import datetime, timezone
 from pathlib import Path
@@ -23,7 +20,6 @@ except ImportError:
     Document = None
     Metadata = None
     ProcessingContext = None
-
 
 pytestmark = [pytest.mark.unit, pytest.mark.chunking]
 
@@ -303,7 +299,3 @@ def mock_context():
     return ProcessingContext(
         config={"chunk_size": 512, "overlap_pct": 0.15}, logger=Mock(), metrics={}
     )
-
-
-if __name__ == "__main__":
-    pytest.main([__file__, "-v"])
