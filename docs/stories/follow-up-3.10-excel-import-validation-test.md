@@ -4,7 +4,7 @@
 **Story ID:** 3.10 (Follow-up to Story 3.6)
 **Priority:** P1 (MEDIUM)
 **Effort:** 45 minutes
-**Status:** todo
+**Status:** done
 
 ## Overview
 
