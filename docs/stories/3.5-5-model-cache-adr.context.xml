@@ -1,0 +1,270 @@
+<story-context id="bmad/bmm/workflows/4-implementation/story-context/template" v="1.0">
+  <metadata>
+    <epicId>Epic 3.5</epicId>
+    <storyId>3.5.5</storyId>
+    <title>Model/Cache ADR</title>
+    <status>backlog</status>
+    <generatedAt>2025-11-17</generatedAt>
+    <generator>BMAD Story Context Workflow</generator>
+    <sourceStoryPath>docs/stories/3.5-5-model-cache-adr.md</sourceStoryPath>
+  </metadata>
+
+  <story>
+    <asA>architect designing Epic 4 semantic analysis infrastructure</asA>
+    <iWant>an Architecture Decision Record defining model cache storage paths, versioning, and CLI integration</iWant>
+    <soThat>TF-IDF/LSA model persistence follows consistent patterns and avoids cache invalidation issues</soThat>
+    <tasks>
+      <task id="1" name="Research cache requirements">
+        <subtask id="1a">Analyze Epic 4 semantic processor cache needs (TF-IDF, LSA, similarity matrices)</subtask>
+        <subtask id="1b">Estimate model sizes for typical corpus (1k-10k documents)</subtask>
+        <subtask id="1c">Review joblib documentation for persistence patterns</subtask>
+        <subtask id="1d">Identify cache invalidation scenarios (corpus changes, model version upgrades)</subtask>
+      </task>
+      <task id="2" name="Draft ADR content">
+        <subtask id="2a">Write Context section: Epic 4 model caching requirements, performance goals</subtask>
+        <subtask id="2b">Write Decision section: joblib persistence, storage paths, cache keys, size limits</subtask>
+        <subtask id="2c">Write Consequences section: speedup benefits, disk usage trade-offs, invalidation complexity</subtask>
+        <subtask id="2d">Write Alternatives section: SQLite, no caching, in-memory only (with rejection rationale)</subtask>
+        <subtask id="2e">Include code examples for cache key generation and invalidation</subtask>
+      </task>
+      <task id="3" name="CLI integration design">
+        <subtask id="3a">Document --clear-cache flag behavior (removes all cached models)</subtask>
+        <subtask id="3b">Design cache status reporting (disk usage, model count, oldest/newest models)</subtask>
+        <subtask id="3c">Define cache warming strategy (optional pre-computation for common corpora)</subtask>
+        <subtask id="3d">Document cache directory management (automatic creation, gitignore updates)</subtask>
+      </task>
+      <task id="4" name="Review and coordination">
+        <subtask id="4a">Coordinate with Epic 5 config system design for env var integration</subtask>
+        <subtask id="4b">Submit ADR for architect review</subtask>
+        <subtask id="4c">Address review feedback and update ADR</subtask>
+        <subtask id="4d">Ensure ADR is discoverable via docs/architecture/ directory</subtask>
+      </task>
+    </tasks>
+  </story>
+
+  <acceptanceCriteria>
+    <criterion id="AC-1" priority="critical">
+      <description>ADR created: docs/architecture/adr-012-semantic-model-cache.md committed following ADR template (Context, Decision, Consequences, Alternatives)</description>
+      <source>docs/tech-spec-epic-3.5.md#L186-L222</source>
+    </criterion>
+    <criterion id="AC-2" priority="high">
+      <description>Storage paths defined: Cache locations for development (.data-extract-cache/models/), CI (~/.cache/data-extract/models/), production (env var configurable)</description>
+      <source>docs/tech-spec-epic-3.5.md#L192-L195</source>
+    </criterion>
+    <criterion id="AC-3" priority="high">
+      <description>Cache key pattern: Defines hash-based keys with model version + corpus hash (e.g., tfidf_v1_{corpus_hash}.joblib)</description>
+      <source>docs/tech-spec-epic-3.5.md#L197-L201</source>
+    </criterion>
+    <criterion id="AC-4" priority="medium">
+      <description>Size limits: Specifies 500 MB max cache size with LRU eviction and 80% warning threshold</description>
+      <source>docs/tech-spec-epic-3.5.md#L203-L207</source>
+    </criterion>
+    <criterion id="AC-5" priority="medium">
+      <description>CLI integration: Documents --clear-cache flag and cache status reporting approach</description>
+      <source>docs/tech-spec-epic-3.5.md#L201, L209-L211</source>
+    </criterion>
+    <criterion id="AC-6" priority="critical">
+      <description>Architect review: ADR reviewed and approved by project architect before Epic 4 starts</description>
+      <source>docs/tech-spec-epic-3.5.md#L250-L251</source>
+    </criterion>
+  </acceptanceCriteria>
+
+  <artifacts>
+    <docs>
+      <artifact>
+        <path>docs/tech-spec-epic-3.5.md</path>
+        <title>Epic 3.5 Technical Specification</title>
+        <section>3.4 Model/Cache ADR Structure (Lines 256-300)</section>
+        <snippet>Provides complete ADR template with Context, Decision, Consequences sections. Defines cache locations (.data-extract-cache/models/ dev, ~/.cache/data-extract/models/ CI, env var production), cache keys (tfidf_v{version}_{corpus_hash}.joblib), invalidation strategy (SHA-256 corpus hash), size limits (500 MB max, LRU eviction, 80% warning), and CLI integration (--clear-cache flag). Performance goal: 10-100x speedup on repeated analysis.</snippet>
+      </artifact>
+      <artifact>
+        <path>docs/retrospectives/epic-3-retro-2025-11-16.md</path>
+        <title>Epic 3 Retrospective</title>
+        <section>10. Preparation Sprint Tasks (Line 57)</section>
+        <snippet>Identifies model/cache ADR as preparation task #2 for Epic 4. Owner: Winston, Estimate: 4h. Requires storage paths, versioning strategy, CLI integration. Blocks Epic 4 semantic processor implementation which requires caching to avoid unacceptable recomputation overhead.</snippet>
+      </artifact>
+      <artifact>
+        <path>docs/architecture/architecture-decision-records-adrs.md</path>
+        <title>Architecture Decision Records Template</title>
+        <section>Existing ADRs (ADR-001 through ADR-011)</section>
+        <snippet>Shows ADR format pattern: Status, Context, Decision, Consequences (with ✅/❌ bullets), and Alternatives Considered. ADR-005 example shows streaming pipeline pattern with memory management. ADR-011 shows spaCy integration with performance impact documentation. All ADRs include clear rationale and trade-offs.</snippet>
+      </artifact>
+      <artifact>
+        <path>docs/PRD.md</path>
+        <title>Product Requirements Document</title>
+        <section>FR-8.2: Metadata Persistence (Lines 994-1004)</section>
+        <snippet>Defines metadata persistence requirements: processing timestamp/version, configuration used, source file paths/hashes, entity extraction results, quality scores/flags. Metadata exported in machine-readable format (JSON). Domain constraint: Metadata enables full audit trail and reproducibility.</snippet>
+      </artifact>
+      <artifact>
+        <path>docs/PRD.md</path>
+        <title>Product Requirements Document</title>
+        <section>NFR-P2: Memory Efficiency (Lines 1035-1040)</section>
+        <snippet>Maximum memory footprint: 2GB RAM during batch processing. Streaming processing architecture (don't load all files into memory). Graceful handling of large files. Memory released after each file processed. Rationale: Enable processing on typical workstations without memory pressure.</snippet>
+      </artifact>
+      <artifact>
+        <path>docs/ci-cd-pipeline.md</path>
+        <title>CI/CD Pipeline Documentation</title>
+        <section>Caching Strategy</section>
+        <snippet>GitHub Actions uses actions/cache@v4 with paths like ~/.cache/pip and ~/.cache/spacy. Cache keys use hashFiles('pyproject.toml') and version strings. spaCy models cached with SPACY_MODEL_VERSION key. Pattern: path + key + restore-keys for cache hits.</snippet>
+      </artifact>
+    </docs>
+    <code>
+      <artifact>
+        <path>src/data_extract/utils/nlp.py</path>
+        <kind>utility module</kind>
+        <symbol>get_sentence_boundaries, _nlp_model</symbol>
+        <lines>1-92</lines>
+        <reason>Shows existing model caching pattern: global _nlp_model variable with lazy loading. Logs model metadata on first load (version, language, vocab_size). Pattern: load once, reuse for subsequent calls. Relevant for TF-IDF/LSA model caching strategy.</reason>
+      </artifact>
+      <artifact>
+        <path>src/infrastructure/config_manager.py</path>
+        <kind>configuration management</kind>
+        <symbol>ConfigManager</symbol>
+        <lines>1-501</lines>
+        <reason>Shows configuration cascade pattern: env vars > config file > defaults. Uses env_prefix pattern (e.g., DATA_EXTRACTOR_*). Thread-safe with RLock. Supports path navigation with dot-separated keys. Type coercion for env vars. Relevant for Epic 5 coordination on cache path configuration.</reason>
+      </artifact>
+      <artifact>
+        <path>src/data_extract/normalize/config.py</path>
+        <kind>configuration model</kind>
+        <symbol>NormalizationConfig, load_config</symbol>
+        <lines>1-319</lines>
+        <reason>Shows Pydantic configuration pattern: frozen=False for mutability, Field with descriptions/validation, Optional[Path] for file paths. Configuration cascade: CLI > env vars (DATA_EXTRACT_NORMALIZE_*) > YAML > defaults. Type coercion (bool, int, float). Relevant for cache config model design.</reason>
+      </artifact>
+      <artifact>
+        <path>.gitignore</path>
+        <kind>file</kind>
+        <symbol>N/A</symbol>
+        <lines>44-49, 79-86</lines>
+        <reason>Shows existing cache/temp patterns: .pytest_cache/, .mypy_cache/, .tmp/, output/. Does NOT include .data-extract-cache/ yet. NPL framework uses .npl/.cache/ pattern. Semantic model cache should follow similar conventions: .data-extract-cache/ gitignored, CI uses ~/.cache/data-extract/.</reason>
+      </artifact>
+      <artifact>
+        <path>.github/workflows/test.yml</path>
+        <kind>CI configuration</kind>
+        <symbol>N/A</symbol>
+        <lines>33-47</lines>
+        <reason>Shows GitHub Actions cache pattern: uses actions/cache@v4, paths (e.g., ~/.cache/pip, ~/.cache/spacy), keys with hashFiles() and version strings, restore-keys for fallback. Relevant for CI cache location (~/.cache/data-extract/models/) and versioning strategy.</reason>
+      </artifact>
+      <artifact>
+        <path>src/data_extract/config/__init__.py</path>
+        <kind>configuration module</kind>
+        <symbol>N/A</symbol>
+        <lines>1-4</lines>
+        <reason>Placeholder noting "Epic 5 will implement configuration cascade system." Coordination point: cache paths should integrate with Epic 5 config system. Use DATA_EXTRACT_CACHE_DIR env var pattern. ADR must align with Epic 5 architecture.</reason>
+      </artifact>
+    </code>
+    <dependencies>
+      <python>
+        <package name="joblib" version=">=1.3.0" reason="Model persistence (scikit-learn integration, pickle protocol)" />
+        <package name="scikit-learn" version=">=1.3.0,&lt;2.0.0" reason="TF-IDF, LSA models to be cached" />
+        <package name="pydantic" version=">=2.0.0" reason="Configuration validation (existing pattern)" />
+        <package name="pyyaml" version="existing" reason="Configuration file loading (existing pattern)" />
+        <package name="structlog" version="existing" reason="Structured logging for cache operations" />
+      </python>
+    </dependencies>
+  </artifacts>
+
+  <constraints>
+    <constraint type="architectural">Cache must integrate with Epic 5 configuration cascade (CLI > env vars > YAML > defaults). Use DATA_EXTRACT_CACHE_DIR env var for production override. Align with ConfigManager pattern from brownfield infrastructure.</constraint>
+    <constraint type="performance">Performance goal: 10-100x speedup on repeated analysis (0.1s vs 10s for TF-IDF fit). Cache read/write latency must be &lt;50ms for 10 MB model. Model fit/transform without cache: TF-IDF ~100ms, LSA ~200ms per 1k-word doc.</constraint>
+    <constraint type="security">All cache operations local (no external network calls). Cache paths user-only read/write permissions. No sensitive data in cache keys (use hashes, not raw content). Cache clearing must be thorough (no remnant data).</constraint>
+    <constraint type="reliability">Deterministic caching: same corpus + config → same cache key. Cache misses must gracefully recompute. Corrupted cache files detected and removed. Size limits enforced before disk full errors. LRU eviction maintains most-used models.</constraint>
+    <constraint type="auditability">Cache operations logged with structlog (cache hit/miss, evictions, invalidations). Cache metadata includes creation timestamp, model version, corpus hash. Reproduce results: cache key links to exact corpus + config.</constraint>
+    <constraint type="compatibility">Development: .data-extract-cache/models/ (gitignored, project-relative). CI: ~/.cache/data-extract/models/ (GitHub Actions cache). Production: $DATA_EXTRACT_CACHE_DIR or ~/.cache/data-extract/models/. Cross-platform paths (use pathlib).</constraint>
+  </constraints>
+
+  <interfaces>
+    <interface>
+      <name>Cache Key Generation</name>
+      <kind>function signature</kind>
+      <signature>def generate_cache_key(model_type: str, version: str, corpus_hash: str, **kwargs) -> str</signature>
+      <path>To be defined in Epic 4 semantic processor</path>
+      <description>Generates deterministic cache keys. Examples: tfidf_v1_{corpus_hash}.joblib, lsa_v1_{corpus_hash}_{num_topics}.joblib. Corpus hash: SHA-256 of sorted document IDs + content hashes. Model version: semantic versioning.</description>
+    </interface>
+    <interface>
+      <name>Cache Invalidation Strategy</name>
+      <kind>algorithm design</kind>
+      <signature>Hash-based invalidation: corpus change → new hash → cache miss → recompute</signature>
+      <path>ADR Section: Decision</path>
+      <description>Automatic invalidation via cache key mismatch. Manual invalidation: --clear-cache CLI flag. Version bump invalidation: increment model version in cache key. Size limit invalidation: LRU eviction when >500 MB.</description>
+    </interface>
+    <interface>
+      <name>CLI --clear-cache Flag</name>
+      <kind>CLI command</kind>
+      <signature>data-extract --clear-cache [--model-type tfidf|lsa|all]</signature>
+      <path>src/data_extract/cli.py (Epic 5 implementation)</path>
+      <description>Removes cached models. Default: all model types. Optional: target specific model type. Logs removed files and freed disk space. Confirmation prompt unless --yes flag. Integrates with Epic 5 CLI architecture.</description>
+    </interface>
+    <interface>
+      <name>Cache Status Reporting</name>
+      <kind>CLI command</kind>
+      <signature>data-extract cache-status [--format json|text]</signature>
+      <path>src/data_extract/cli.py (Epic 5 implementation)</path>
+      <description>Reports cache disk usage, model count, oldest/newest models, cache hit rate (if tracked). Warns if >80% of 500 MB limit. JSON format for scripting integration.</description>
+    </interface>
+    <interface>
+      <name>Joblib Persistence API</name>
+      <kind>external library API</kind>
+      <signature>joblib.dump(model, cache_path, compress=3); model = joblib.load(cache_path)</signature>
+      <path>External: scikit-learn integration</path>
+      <description>Standard joblib API for model serialization. compress=3 for balanced speed/size. Supports numpy arrays, scipy sparse matrices, scikit-learn models. Pickle protocol 5 (Python 3.12). Example in ADR code samples.</description>
+    </interface>
+  </interfaces>
+
+  <tests>
+    <standards>
+      ADRs are documentation artifacts, not code modules, so traditional unit/integration testing does not apply. However, the ADR must include:
+      1. Code examples that are syntactically valid and executable (can be tested as snippets)
+      2. Clear specification that enables Epic 4 developers to write tests for cache implementation
+      3. Cache key collision resistance (verified via code review and examples)
+      4. Size limit calculations validated against typical model sizes
+
+      Epic 4 implementation will include:
+      - Unit tests: cache key generation (determinism, uniqueness, collision resistance)
+      - Integration tests: cache write/read roundtrip, LRU eviction, size limit enforcement
+      - Performance tests: cache hit latency &lt;50ms, speedup validation (10-100x)
+      - Regression tests: cache behavior across corpus changes, version bumps
+    </standards>
+    <locations>
+      ADR location: docs/architecture/adr-012-semantic-model-cache.md
+      Future test location (Epic 4): tests/unit/test_semantic/test_model_cache.py
+      Future integration tests (Epic 4): tests/integration/test_semantic/test_cache_persistence.py
+    </locations>
+    <ideas>
+      <idea ac="AC-1,AC-2">
+        Test Idea 1: Code Review Validation
+        - Verify ADR includes all sections: Context, Decision, Consequences, Alternatives
+        - Confirm storage paths defined for dev/CI/production with env var override
+        - Check code examples compile and execute (manually test snippets)
+      </idea>
+      <idea ac="AC-3">
+        Test Idea 2: Cache Key Pattern Validation
+        - Review cache key examples for determinism (same input → same key)
+        - Verify collision resistance (different corpora → different keys)
+        - Confirm hash algorithm choice (SHA-256) and versioning pattern
+        - Check model-specific parameters included (e.g., num_topics for LSA)
+      </idea>
+      <idea ac="AC-4">
+        Test Idea 3: Size Limit Specification
+        - Calculate expected model sizes: TF-IDF (1k docs ~10 MB), LSA (1k docs ~20 MB)
+        - Verify 500 MB limit accommodates ~25-50 models (reasonable for batch processing)
+        - Confirm 80% warning threshold (400 MB) triggers logging before full
+        - Review LRU eviction strategy (least recently used, not least recently created)
+      </idea>
+      <idea ac="AC-5">
+        Test Idea 4: CLI Integration Design
+        - Verify --clear-cache flag behavior documented (removes all or specific models)
+        - Check cache status reporting includes: disk usage, model count, hit rate
+        - Confirm cache warming strategy (optional pre-computation) is practical
+        - Review cache directory management (auto-creation, gitignore updates)
+      </idea>
+      <idea ac="AC-6">
+        Test Idea 5: Architect Review Checklist
+        - ADR aligns with existing ADR format (ADR-001 through ADR-011)
+        - Coordinates with Epic 5 config system (env var pattern, path resolution)
+        - Addresses performance goals (10-100x speedup validated via baselines)
+        - Includes trade-off analysis (disk usage vs speed, invalidation complexity)
+        - Provides migration path from no caching to cached implementation
+      </idea>
+    </ideas>
+  </tests>
+</story-context>
