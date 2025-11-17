@@ -5,7 +5,8 @@
       "WebSearch",
       "Write",
       "Update",
-      "Edit"
+      "Edit",
+      "SlashCommand"
     ],
     "deny": [],
     "ask": []
