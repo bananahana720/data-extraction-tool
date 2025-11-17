@@ -73,3 +73,10 @@ story-review-append.txt - moved to TRASH/ - temporary review content file
 docs/uat/test-context/3-2-test-context.xml - moved to TRASH/ - template placeholder, regenerating with actual content
 sample_output.txt - moved to TRASH/ - temporary test output for GREEN phase demonstration
 docs-descriptions.json - moved to TRASH/ - temporary file descriptions used for index generation
+
+## Story 3.9 DoD Refactoring - 2025-11-17
+
+test_txt_formatter.py - moved to TRASH/ - Refactored into 3 smaller files per DoD compliance (<300 lines)
+test_json_formatter.py - moved to TRASH/ - Refactored into 3 smaller files per DoD compliance (<300 lines)
+test_json_output_pipeline.py - moved to TRASH/ - Refactored into 3 smaller files per DoD compliance (<300 lines)
+test_entity_preserver.py - moved to TRASH/ - Refactored into 3 smaller files per DoD compliance (<300 lines)
