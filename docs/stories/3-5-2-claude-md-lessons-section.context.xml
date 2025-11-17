@@ -1,0 +1,131 @@
+<story-context id="bmad/bmm/workflows/4-implementation/story-context/template" v="1.0">
+  <metadata>
+    <epicId>3.5</epicId>
+    <storyId>2</storyId>
+    <title>CLAUDE.md Lessons Section</title>
+    <status>todo</status>
+    <generatedAt>2025-11-17</generatedAt>
+    <generator>BMAD Story Context Workflow</generator>
+    <sourceStoryPath>docs/stories/3.5-2-claude-md-lessons-section.md</sourceStoryPath>
+  </metadata>
+
+  <story>
+    <asA>developer or Claude Code working on data-extraction-tool</asA>
+    <iWant>a dedicated Lessons Learned section in CLAUDE.md documenting epic retrospective insights</iWant>
+    <soThat>I can avoid repeating past mistakes and leverage proven patterns from previous epics</soThat>
+    <tasks>
+      <task id="1">Extract Lessons from Retrospectives (AC: 3.5.2-2, 3.5.2-3, 3.5.2-4)</task>
+      <task id="2">Write Epic 3 Lessons Section (AC: 3.5.2-2)</task>
+      <task id="3">Write Epic 2 and Epic 2.5 Lessons Sections (AC: 3.5.2-3)</task>
+      <task id="4">Write Epic 1 Lessons Section (AC: 3.5.2-4)</task>
+      <task id="5">Add Section to CLAUDE.md (AC: 3.5.2-1)</task>
+      <task id="6">Validate with Claude Code (AC: 3.5.2-5)</task>
+      <task id="7">Quality Gates and UAT</task>
+    </tasks>
+  </story>
+
+  <acceptanceCriteria>
+    <criterion id="AC-3.5.2-1" priority="P0">
+      <title>Lessons Learned Section Added to CLAUDE.md</title>
+      <description>New section "## Lessons Learned" added after "## Key Architecture Decisions" in CLAUDE.md with introduction and subsections for each completed epic (Epic 1, 2, 2.5, 3). Each epic subsection contains 3-5 key lessons in pattern language format (Do/Avoid/Consider)</description>
+      <validation>Manual review of CLAUDE.md structure, readability. UAT: Team reviews section, confirms lessons are clear and actionable</validation>
+    </criterion>
+    <criterion id="AC-3.5.2-2" priority="P0">
+      <title>Epic 3 Lessons Documented</title>
+      <description>Epic 3 subsection includes lessons extracted from Epic 3 retrospective (2025-11-16): Document AC evidence during implementation, use unified infrastructure patterns, create bridge epics, avoid backfilling AC evidence, avoid deferring prep tasks, consider investing in scriptable scaffolding. Each lesson includes concrete example from Epic 3 stories</description>
+      <validation>Cross-reference with Epic 3 retrospective document. UAT: Epic 3 participants validate accuracy</validation>
+    </criterion>
+    <criterion id="AC-3.5.2-3" priority="P1">
+      <title>Epic 2 and Epic 2.5 Lessons Documented</title>
+      <description>Epic 2 subsection: Establish performance baselines early, use frozen dataclasses for pipeline immutability, avoid skipping brownfield assessment. Epic 2.5 subsection: Automate quality gates with pre-commit, create UAT workflow framework, profile before optimizing, consider bridge epics for cross-cutting concerns</description>
+      <validation>Cross-reference with retrospective documents if available, infer from story documentation and CLAUDE.md existing content</validation>
+    </criterion>
+    <criterion id="AC-3.5.2-4" priority="P1">
+      <title>Epic 1 Lessons Documented</title>
+      <description>Epic 1 subsection: Assess brownfield code before greenfield work, establish testing framework and CI early, define core architecture patterns upfront, avoid starting greenfield without understanding brownfield</description>
+      <validation>Review Epic 1 stories and tech spec</validation>
+    </criterion>
+    <criterion id="AC-3.5.2-5" priority="P0">
+      <title>Section Formatted for Claude Code Consumption</title>
+      <description>Lessons written in clear, directive language optimized for LLM parsing. Use consistent pattern language (Do/Avoid/Consider). Include references to specific stories, ADRs, or retrospectives. Use markdown formatting. Section length: 200-400 lines</description>
+      <validation>Test with Claude Code - ask "What lessons did Epic 3 teach us?" and "What anti-patterns should I avoid based on Epic 2?"</validation>
+    </criterion>
+  </acceptanceCriteria>
+
+  <artifacts>
+    <docs>
+      <doc path="docs/retrospectives/epic-1-retro-20251110.md" title="Epic 1 Foundation Retrospective">
+        <section>Lessons Learned</section>
+        <snippet>Seven key lessons: Protocol-based design, Continue-on-error pattern, Test fixtures path-agnostic implementation, Brownfield code quality justifies adapt strategy, Code review cycles are teaching moments, Honest assessment enables realistic planning, #yolo mode accelerates retrospectives</snippet>
+      </doc>
+      <doc path="docs/retrospectives/epic-2-retro-20250111.md" title="Epic 2 Extract & Normalize Retrospective">
+        <section>Lessons Learned</section>
+        <snippet>Six technical + one process lesson: Automation beats documentation for quality enforcement, PipelineStage protocol scales without friction, Code review cycles are teaching moments, Test coverage growth validates architecture, Integration stories need extra validation, Bridge epics prevent downstream blockers, Epic 1 action item follow-through was partial</snippet>
+      </doc>
+      <doc path="docs/retrospectives/epic-2.5-retro-2025-11-13.md" title="Epic 2.5 Bridge Epic Retrospective">
+        <section>Anti-Patterns to Avoid</section>
+        <snippet>Four anti-patterns: Deferred validation fixes, Architecture validation after implementation, Assuming NFR compliance without measurement, Verbose documentation over concise guidance</snippet>
+      </doc>
+      <doc path="docs/retrospectives/epic-3-retro-2025-11-16.md" title="Epic 3 Chunk & Output Retrospective">
+        <section>Lessons & Insights</section>
+        <snippet>Four key lessons: Automation > Memory - template/scripts must encode guidelines; Evidence-First Reviews - AC matrices before ready-for-review; Bridge Epics Work - infrastructure sprints eliminate blockers; Documentation is a Deliverable - treat docs like code with owners/deadlines</snippet>
+      </doc>
+      <doc path="docs/epic-3.5-bridge-epic-summary.md" title="Epic 3.5 Bridge Epic Summary">
+        <section>Epic 3 Retrospective Context</section>
+        <snippet>Challenges: Story templates lacked reminders for provenance/logging/wiring, AC evidence often backfilled post-review causing rework, Dependency audit process still undocumented. Key Insights: Invest in scriptable scaffolding to embed development guidelines, Enforce completion via tooling</snippet>
+      </doc>
+      <doc path=".claude/CLAUDE.md" title="CLAUDE.md Project Guidance">
+        <section>Key Architecture Decisions</section>
+        <snippet>ADR-001: Immutable models, ADR-002: Pluggable extractors, ADR-003: ContentBlocks, ADR-004: Classical NLP only, ADR-005: Gradual brownfield modernization, ADR-011: Semantic boundary-aware chunking</snippet>
+      </doc>
+      <doc path="docs/epics.md" title="Epic Breakdown">
+        <section>Epic Summary</section>
+        <snippet>Five epics: Epic 1 Foundation, Epic 2 Robust Normalization, Epic 3 Intelligent Chunking, Epic 4 Foundational Semantic Analysis, Epic 5 Enhanced CLI UX. All following systematic story-driven development</snippet>
+      </doc>
+    </docs>
+    <code>
+      <artifact path=".claude/CLAUDE.md" kind="documentation" symbol="## Key Architecture Decisions" lines="708-717">
+        <reason>Target location for new Lessons Learned section - should be added after this section</reason>
+      </artifact>
+    </code>
+    <dependencies>
+      <python>
+        <package>No code dependencies - documentation story only</package>
+      </python>
+    </dependencies>
+  </artifacts>
+
+  <constraints>
+    <constraint>Section length target: 200-400 lines (substantial but not overwhelming)</constraint>
+    <constraint>Use pattern language: Do/Avoid/Consider for easy scanning</constraint>
+    <constraint>Include specific references to stories, ADRs, or retrospectives</constraint>
+    <constraint>Format with markdown: bold for emphasis, code blocks for examples</constraint>
+    <constraint>Optimize for LLM parsing: clear, directive language</constraint>
+    <constraint>No code quality gates needed (documentation only)</constraint>
+  </constraints>
+
+  <interfaces>
+    <interface name="CLAUDE.md Structure" kind="documentation">
+      <signature>## Lessons Learned (new section after ## Key Architecture Decisions)</signature>
+      <path>.claude/CLAUDE.md</path>
+    </interface>
+  </interfaces>
+
+  <tests>
+    <standards>
+      Manual review for documentation stories. Team validates content accuracy. Claude Code consumption tests verify LLM can extract relevant lessons
+    </standards>
+    <locations>
+      - Manual review: CLAUDE.md readability, formatting, length
+      - Cross-reference validation: Compare with retrospective documents
+      - Claude Code parsing: Test queries like "What lessons did Epic 3 teach us?"
+    </locations>
+    <ideas>
+      <idea ac="AC-3.5.2-1">Verify section structure: Introduction + Epic 1/2/2.5/3 subsections present</idea>
+      <idea ac="AC-3.5.2-2">Validate Epic 3 lessons match retrospective findings with concrete examples</idea>
+      <idea ac="AC-3.5.2-3">Verify Epic 2 and 2.5 lessons extracted from available sources</idea>
+      <idea ac="AC-3.5.2-4">Confirm Epic 1 lessons align with foundation retrospective</idea>
+      <idea ac="AC-3.5.2-5">Test Claude Code can answer: "What anti-patterns should I avoid?" and extract relevant lessons</idea>
+    </ideas>
+  </tests>
+</story-context>

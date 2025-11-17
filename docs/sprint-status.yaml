@@ -72,6 +72,16 @@ development_status:
   3-7-configurable-output-organization-strategies: done  # Story COMPLETE 2025-11-16: All 8 ACs validated, documentation complete (csv-format-reference.md, organizer-reference.md), performance baselines updated, sample outputs published, quality gates GREEN (Black/Ruff/Mypy 0 violations), 10/10 integration tests pass. Epic 3 COMPLETE.
   epic-3-retrospective: done  # Retrospective completed 2025-11-16: action plan + prep tasks captured
 
+  epic-3.5: backlog  # Bridge Epic - Tooling & Semantic Prep
+  3-5-1-story-review-template-generator: ready-for-dev  # Context generated 2025-11-17: Story/Review Template Generator with Jinja2 templates, CLI scaffolding, BMAD workflow integration
+  3-5-2-claude-md-lessons-section: ready-for-dev  # Context generated 2025-11-17: Story context XML created with retrospective lessons from Epics 1-4
+  3-5-3-test-dependency-audit-doc: ready-for-dev  # Story context generated 2025-11-17: Epic 3.5 dependency audit documentation with examples from Epic 2.5-3
+  3-5-4-semantic-dependencies-smoke-test: backlog
+  3-5-5-model-cache-adr: backlog
+  3-5-6-semantic-qa-fixtures: backlog
+  3-5-7-tfidf-lsa-playbook: backlog
+  epic-3.5-retrospective: optional
+
   epic-4: backlog
   4-1-tf-idf-vectorization-engine: backlog
   4-2-document-and-chunk-similarity-analysis: backlog
