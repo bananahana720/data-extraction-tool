@@ -12,12 +12,10 @@
       "PowerShell(./venv/Scripts/python.exe -m pytest:*)",
       "PowerShell(./venv/Scripts/python.exe -m pip:*)",
       "PowerShell(py -m venv venv)",
-      "SlashCommand(*)",
       "mcp__playwright",
-      "SlashCommand(/bmad:bmm:workflows:dev-story)",
+      "SlashCommand(/bmad:bmm:*)",
       "SlashCommand(/commit:*)",
-      "SlashCommand(/bmad:core:tools:shard-doc)",
-      "SlashCommand(/bmad:core:tools:shard-doc:*)"
+      "SlashCommand(/bmad:*)"
     ],
     "deny": [],
     "ask": []
