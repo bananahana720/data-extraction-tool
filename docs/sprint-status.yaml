@@ -83,6 +83,7 @@ development_status:
   epic-3.5-retrospective: optional
 
   follow-up-3.8-cross-chunk-entity-lookup-test: done  # P1 test coverage - cross-chunk entity lookup validation (Code review APPROVED 2025-11-17: All 3 ACs validated, test passing, closes Epic 3 Gap 1)
+  follow-up-3.9-refactor-large-test-files: ready-for-dev  # P1 technical debt - refactor 5 test files exceeding 300 lines for DoD compliance (context generated 2025-11-17)
 
   epic-4: backlog
   4-1-tf-idf-vectorization-engine: backlog
