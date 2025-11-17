@@ -5,7 +5,7 @@ and deterministic output generation.
 
 Test Coverage:
     - AC-3.5-2: Configurable delimiters with chunk numbering
-    - AC-3.5 Output Contract: FormatResult protocol compliance
+    - AC-3.5 Output Contract: FormattingResult protocol compliance
     - Deterministic output generation
 
 Part 1 of 3: Basic formatter functionality.
@@ -19,11 +19,11 @@ import pytest
 
 # These imports WILL FAIL in RED phase - this is expected
 try:
-    from data_extract.output.formatters.base import FormatResult
+    from data_extract.output.formatters.base import FormattingResult
     from data_extract.output.formatters.txt_formatter import TxtFormatter
 except ImportError:
     TxtFormatter = None
-    FormatResult = None
+    FormattingResult = None
 
 from data_extract.chunk.entity_preserver import EntityReference
 from data_extract.chunk.models import Chunk, ChunkMetadata
@@ -238,19 +238,19 @@ class TestDelimiterRendering:
         assert "CHUNK 000" not in content
 
 
-class TestFormatResultContract:
-    """Test FormatResult return value and BaseFormatter protocol (AC-3.5-2)."""
+class TestFormattingResultContract:
+    """Test FormattingResult return value and BaseFormatter protocol (AC-3.5-2)."""
 
     def test_format_chunks_returns_format_result(self, txt_formatter, sample_chunks, tmp_path):
-        """Should return FormatResult with format_type='txt'."""
+        """Should return FormattingResult with format_type='txt'."""
         # GIVEN: Chunks to format
         output_path = tmp_path / "output.txt"
 
         # WHEN: Formatting chunks
         result = txt_formatter.format_chunks(iter(sample_chunks), output_path)
 
-        # THEN: Should return FormatResult
-        assert isinstance(result, FormatResult)
+        # THEN: Should return FormattingResult
+        assert isinstance(result, FormattingResult)
         assert result.format_type == "txt"
 
     def test_format_result_includes_statistics(self, txt_formatter, sample_chunks, tmp_path):

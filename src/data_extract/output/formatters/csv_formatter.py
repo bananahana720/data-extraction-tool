@@ -31,8 +31,16 @@ class CsvFormatter(BaseFormatter):
         Returns:
             FormattingResult with operation details
         """
+        import time
+
+        start_time = time.time()
+
         output_path = Path(output_path)
         output_path.parent.mkdir(parents=True, exist_ok=True)
+
+        # Convert iterator to list if necessary
+        if not isinstance(chunks, list):
+            chunks = list(chunks)
 
         # Write CSV file with UTF-8-sig encoding
         with open(output_path, "w", encoding="utf-8-sig", newline="") as f:
@@ -54,11 +62,19 @@ class CsvFormatter(BaseFormatter):
             )
             # Write chunk data (simplified for stub)
             for i, chunk in enumerate(chunks, 1):
-                writer.writerow([f"chunk_{i:03d}", "", "", str(chunk), "", "", "", "", "", ""])
+                chunk_text = getattr(chunk, "text", str(chunk))
+                if self.max_text_length and len(chunk_text) > self.max_text_length:
+                    chunk_text = chunk_text[: self.max_text_length] + "..."
+                writer.writerow([f"chunk_{i:03d}", "", "", chunk_text, "", "", "", "", "", ""])
+
+        duration = time.time() - start_time
 
         return FormattingResult(
             output_path=output_path,
             chunk_count=len(chunks),
             total_size=output_path.stat().st_size if output_path.exists() else 0,
             metadata={},
+            format_type="csv",
+            duration_seconds=duration,
+            errors=[],
         )
