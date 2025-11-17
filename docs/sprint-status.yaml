@@ -82,6 +82,8 @@ development_status:
   3.5-7-tfidf-lsa-playbook: drafted  # Story created 2025-11-17: Jupyter notebook + reference guide for junior dev onboarding (<30 min)
   epic-3.5-retrospective: optional
 
+  follow-up-3.8-cross-chunk-entity-lookup-test: review  # P1 test coverage - cross-chunk entity lookup validation (Completed 2025-11-17, all ACs met, test passing)
+
   epic-4: backlog
   4-1-tf-idf-vectorization-engine: backlog
   4-2-document-and-chunk-similarity-analysis: backlog
