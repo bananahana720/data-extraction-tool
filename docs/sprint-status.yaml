@@ -84,6 +84,7 @@ development_status:
 
   follow-up-3.8-cross-chunk-entity-lookup-test: done  # P1 test coverage - cross-chunk entity lookup validation (Code review APPROVED 2025-11-17: All 3 ACs validated, test passing, closes Epic 3 Gap 1)
   follow-up-3.9-refactor-large-test-files: done  # P1 technical debt - refactor 5 test files exceeding 300 lines for DoD compliance (TEA agent executed with ATDD + YOLO mode 2025-11-17, all 5 files refactored, 100% DoD compliance achieved)
+  follow-up-3.10-excel-import-validation-test: done  # P1 test coverage - Excel import validation for CSV output (TEA agent executed with ATDD + YOLO mode 2025-11-17: All 4 ACs validated, 3 integration tests created, AC-3.6-4 upgraded PARTIAL→FULL, closes Epic 3 Gap 3)
 
   epic-4: backlog
   4-1-tf-idf-vectorization-engine: backlog
