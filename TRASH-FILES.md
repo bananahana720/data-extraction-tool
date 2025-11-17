@@ -80,3 +80,8 @@ test_txt_formatter.py - moved to TRASH/ - Refactored into 3 smaller files per Do
 test_json_formatter.py - moved to TRASH/ - Refactored into 3 smaller files per DoD compliance (<300 lines)
 test_json_output_pipeline.py - moved to TRASH/ - Refactored into 3 smaller files per DoD compliance (<300 lines)
 test_entity_preserver.py - moved to TRASH/ - Refactored into 3 smaller files per DoD compliance (<300 lines)
+
+## Epic 3 Test Review Resolution - 2025-11-17
+
+test_organization.py - moved to TRASH/ - Refactored into 4 smaller modules (test_organization_base.py, test_organization_by_document.py, test_organization_by_entity.py, test_organization_flat.py, test_organization_manifest.py) per P1 requirement (<300 lines each)
+test_entity_aware_chunking.py - moved to TRASH/ - Refactored into 4 smaller modules (test_entity_preservation.py, test_entity_boundaries.py, test_entity_relationships.py, test_entity_lookup.py) per P1 requirement
