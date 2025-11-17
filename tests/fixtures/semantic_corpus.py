@@ -18,19 +18,27 @@ def get_technical_corpus() -> List[str]:
     return [
         """The enterprise data extraction pipeline leverages modular architecture patterns
         to ensure scalability and maintainability. Each processing stage implements
-        well-defined interfaces that enable seamless integration and testing.""",
+        well-defined interfaces that enable seamless integration and testing. The system
+        supports both batch and streaming modes for flexible deployment options.""",
         """Machine learning algorithms transform unstructured text data into structured
         representations suitable for downstream analysis. Feature extraction techniques
-        include TF-IDF vectorization and latent semantic analysis.""",
+        include TF-IDF vectorization and latent semantic analysis. Advanced preprocessing
+        steps handle tokenization, normalization, and entity recognition tasks.""",
         """Document processing systems must handle diverse file formats including PDF,
         DOCX, XLSX, and PPTX. The extraction layer abstracts format-specific complexity
-        through a unified interface.""",
+        through a unified interface. Optical character recognition enables processing
+        of scanned documents and images with high accuracy rates.""",
         """Performance optimization strategies include caching frequently accessed data,
         implementing lazy evaluation patterns, and utilizing sparse matrix representations
-        for efficient memory usage.""",
+        for efficient memory usage. Parallel processing capabilities leverage multiple
+        cores to accelerate computation-intensive operations.""",
         """Quality assurance frameworks validate extraction accuracy through automated
         testing pipelines. Regression tests ensure consistent behavior across software
-        updates and dependency changes.""",
+        updates and dependency changes. Code coverage metrics guide test suite expansion
+        and identify areas requiring additional validation efforts. Continuous integration
+        processes trigger automated builds upon code commits, enabling rapid feedback cycles
+        and early detection of integration issues. Test orchestration platforms coordinate
+        execution across multiple environments.""",
     ]
 
 
@@ -109,7 +117,7 @@ def get_edge_case_corpus() -> List[str]:
         # Repeated content
         "Test test test. Testing testing testing. Tests tests tests.",
         # Numbers and symbols
-        "Revenue: $1,234,567.89 (Q4 2024). Growth: +15.3%. Target: 2025-Q1.",
+        "Revenue: $987654.21 (FY2024). Growth: +15.3%. Target: FY2025-Q1.",
         # Unicode and special characters
         "International data: 数据提取 (Chinese), données (French), δεδομένα (Greek).",
         # Very long single sentence
@@ -224,7 +232,7 @@ def generate_large_corpus(num_docs: int = 1000, words_per_doc: int = 100) -> Lis
 CORPUS_CHARACTERISTICS = {
     "technical": {
         "size": 5,
-        "avg_words": 45,
+        "avg_words": 60,
         "vocabulary": "technical, enterprise, architecture",
         "diversity": "medium",
     },
