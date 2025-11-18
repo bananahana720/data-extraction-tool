@@ -221,7 +221,10 @@ class StoryTemplateGenerator:
     def _generate_wiring_checklist(self) -> dict:
         """Generate wiring checklist template."""
         return {
-            "bom": ["TODO: List new dependencies/packages"],
+            "bom": [
+                "TODO: List new dependencies/packages",
+                "If adding dependencies, follow docs/processes/test-dependency-audit.md",
+            ],
             "logging": ["TODO: Add structured logging points"],
             "cli": ["TODO: Define CLI flags/commands"],
             "testing": ["TODO: List test requirements"],
