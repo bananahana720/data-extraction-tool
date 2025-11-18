@@ -1,10 +1,10 @@
 <story-context id="bmad/bmm/workflows/4-implementation/story-context/template" v="1.0">
   <metadata>
-    <epicId>Epic 3.5</epicId>
-    <storyId>3.5.6</storyId>
+    <epicId>3.5</epicId>
+    <storyId>3.5-6</storyId>
     <title>Semantic QA Fixtures</title>
-    <status>backlog</status>
-    <generatedAt>2025-11-17</generatedAt>
+    <status>drafted</status>
+    <generatedAt>2025-11-18</generatedAt>
     <generator>BMAD Story Context Workflow</generator>
     <sourceStoryPath>docs/stories/3.5-6-semantic-qa-fixtures.md</sourceStoryPath>
   </metadata>
@@ -47,308 +47,149 @@
 
   <acceptanceCriteria>
     - AC-1: Corpus size: ≥50 documents total, ≥250,000 words total, representative of production audit documents
-      Source: docs/tech-spec-epic-3.5.md#L236-L237
-
     - AC-2: Document types: Covers 3+ types (audit reports, risk matrices, compliance docs) with balanced distribution
-      Source: docs/tech-spec-epic-3.5.md#L236-L237
-
     - AC-3: PII sanitization: All documents reviewed and sanitized (no real names, SSNs, account numbers, sensitive data)
-      Source: docs/tech-spec-epic-3.5.md#L237
-
     - AC-4: Gold-standard annotations: JSON files with expected TF-IDF top terms, LSA topics, entity annotations, readability scores for ≥40 documents
-      Source: docs/tech-spec-epic-3.5.md#L239-L249
-
     - AC-5: Comparison harness: Scripts for regression testing (compare-tfidf.py, compare-lsa.py, compare-entities.py) with tolerance thresholds
-      Source: docs/tech-spec-epic-3.5.md#L228-L232
-
     - AC-6: Documentation: README.md documenting corpus statistics, annotation format, harness usage, and corpus creation process
-      Source: docs/tech-spec-epic-3.5.md#L233
   </acceptanceCriteria>
 
   <artifacts>
     <docs>
-      <!-- Epic 3.5 Technical Specification -->
-      <artifact>
+      <entry>
         <path>docs/tech-spec-epic-3.5.md</path>
-        <title>Epic 3.5 Technical Specification - Tooling &amp; Semantic Prep</title>
-        <section>Section 3.5: Semantic QA Fixtures Repository (Lines 302-346)</section>
-        <snippet>Defines semantic corpus structure with ≥50 documents, ≥250k words, 3+ document types. Includes gold-standard annotation schema (TF-IDF top terms, LSA topics, entity references, readability scores) and comparison harness architecture (compare-tfidf.py, compare-lsa.py, compare-entities.py).</snippet>
-      </artifact>
-
-      <!-- Epic 3 Retrospective -->
-      <artifact>
-        <path>docs/retrospectives/epic-3-retro-2025-11-16.md</path>
-        <title>Epic 3 Retrospective</title>
-        <section>Section 10: Preparation Sprint Tasks (Line 58)</section>
-        <snippet>Preparation task #3: Semantic QA fixtures + comparison harness (TF-IDF/LSA expected outputs) – 6h, Dana. Epic 4 blocker: Cannot validate semantic processor without test corpus and gold-standard outputs.</snippet>
-      </artifact>
-
-      <!-- Existing Fixture Patterns -->
-      <artifact>
-        <path>tests/fixtures/README.md</path>
-        <title>Test Fixtures README</title>
-        <section>All sections - fixture organization patterns</section>
-        <snippet>Documents fixture creation process, size guidelines (standard &lt;100KB, large &lt;50MB, total &lt;100MB), content sanitization requirements (no PII), naming conventions, and regeneration guidelines. Provides examples of generated fixtures (large PDF, Excel, scanned documents).</snippet>
-      </artifact>
-
-      <!-- Gold-Standard Annotation Example -->
-      <artifact>
-        <path>tests/fixtures/spacy_gold_standard.json</path>
-        <title>spaCy Gold Standard Corpus (Story 2.5.2)</title>
-        <section>Full file - annotation format example</section>
-        <snippet>Gold standard corpus for sentence boundary detection with 55 test cases covering abbreviations, acronyms, complex punctuation, numbers, URLs, dialogue, technical/legal/scientific text. Schema: test_id, category, text, expected_boundaries, sentence_count, notes. Provides template for semantic annotation format.</snippet>
-      </artifact>
-
-      <!-- Entity-Rich Documents -->
-      <artifact>
-        <path>tests/fixtures/entity_rich_documents/README.md</path>
-        <title>Entity-Rich Document Fixtures (Story 3.2)</title>
-        <section>All sections - entity annotation patterns</section>
-        <snippet>Documents 3 entity-rich fixtures (risk_register.md, policy_document.md, audit_mappings.md) with 161 total entities (RISK-*, CTRL-*, POL-*, CO-*, REQ-*, PROC-*), 66+ relationship patterns. Provides examples of audit document structure, entity ID patterns, and relationship keywords for semantic corpus.</snippet>
-      </artifact>
+        <title>Epic 3.5 Technical Specification</title>
+        <section>2.1 In Scope - Semantic QA Fixtures</section>
+        <snippet>50+ document test corpus (250k+ words) for semantic validation with gold-standard TF-IDF/LSA outputs</snippet>
+      </entry>
+      <entry>
+        <path>docs/qa-fixtures-maintenance-guide.md</path>
+        <title>QA Fixtures Maintenance Guide</title>
+        <section>Fixture Architecture</section>
+        <snippet>Comprehensive guide for maintaining QA fixtures infrastructure for Epic 4 semantic analysis testing</snippet>
+      </entry>
+      <entry>
+        <path>docs/automation-guide.md</path>
+        <title>Development Automation Guide</title>
+        <section>P0 Scripts</section>
+        <snippet>Story 3.5-4 smoke test semantic validates dependencies, Story 3.5-6 fixtures provide test corpus</snippet>
+      </entry>
+      <entry>
+        <path>docs/processes/test-dependency-audit.md</path>
+        <title>Test Dependency Audit Process</title>
+        <section>Phase 3: Fixture Dependencies</section>
+        <snippet>Process for auditing and documenting test fixture dependencies including semantic corpus requirements</snippet>
+      </entry>
     </docs>
-
     <code>
-      <!-- TF-IDF Test Specification -->
-      <artifact>
-        <path>tests/unit/test_semantic/test_tfidf_vectorizer.py</path>
-        <kind>test</kind>
-        <symbol>TestTfIdfVectorizerFoundation</symbol>
-        <lines>31-186</lines>
-        <reason>Preparatory tests for TF-IDF vectorization (Epic 4). Provides test case structure for vocabulary building, TF-IDF weight calculation, document vectorization, edge cases. These tests will guide generation of gold-standard TF-IDF annotations.</reason>
-      </artifact>
-
-      <!-- Similarity Test Specification -->
-      <artifact>
-        <path>tests/unit/test_semantic/test_tfidf_vectorizer.py</path>
-        <kind>test</kind>
-        <symbol>TestDocumentSimilarityFoundation</symbol>
-        <lines>188-279</lines>
-        <reason>Preparatory tests for document similarity (Epic 4). Provides test case structure for cosine similarity, similarity matrices, top-k retrieval. Relevant for LSA gold-standard generation and comparison harness design.</reason>
-      </artifact>
-
-      <!-- Existing Fixture Generation Scripts -->
-      <artifact>
-        <path>scripts/generate_large_pdf_fixture.py</path>
+      <entry>
+        <path>tests/fixtures/semantic_corpus.py</path>
+        <kind>fixture</kind>
+        <symbol>get_technical_corpus, get_business_corpus</symbol>
+        <lines>11-50</lines>
+        <reason>Existing semantic corpus generators that can be extended for gold-standard fixtures</reason>
+      </entry>
+      <entry>
+        <path>scripts/smoke_test_semantic.py</path>
         <kind>script</kind>
-        <symbol>generate_large_pdf</symbol>
-        <lines>N/A</lines>
-        <reason>Example of synthetic fixture generation with PII sanitization. Uses reportlab to generate 60+ page audit report with risk tables, control frameworks, compliance sections. Pattern applicable to semantic corpus generation.</reason>
-      </artifact>
-
-      <artifact>
-        <path>scripts/generate_large_excel_fixture.py</path>
+        <symbol>TestSemanticDependencies</symbol>
+        <lines>all</lines>
+        <reason>Validates semantic dependencies (scikit-learn, joblib, textstat) - use for gold-standard generation</reason>
+      </entry>
+      <entry>
+        <path>tests/integration/test_fixtures/test_semantic_corpus.py</path>
+        <kind>test</kind>
+        <symbol>TestSemanticCorpus</symbol>
+        <lines>all</lines>
+        <reason>Existing semantic corpus validation tests - pattern to follow for QA fixtures</reason>
+      </entry>
+      <entry>
+        <path>tests/integration/test_fixtures/validate_qa_fixtures.py</path>
         <kind>script</kind>
-        <symbol>generate_large_excel</symbol>
-        <lines>N/A</lines>
-        <reason>Example of synthetic data generation with realistic audit patterns (risk IDs, control descriptions, test results). Uses openpyxl to generate 10k+ row spreadsheet. Pattern applicable to semantic corpus generation.</reason>
-      </artifact>
-
-      <!-- Entity Extraction Patterns -->
-      <artifact>
-        <path>src/data_extract/normalize/entity_extractor.py</path>
-        <kind>service</kind>
-        <symbol>EntityExtractor</symbol>
-        <lines>N/A</lines>
-        <reason>Epic 2 entity extraction implementation. Extracts RISK-*, CTRL-*, POL-* entity patterns from normalized text. Will be used to generate entity annotations in gold-standard corpus.</reason>
-      </artifact>
+        <symbol>standalone validation runner</symbol>
+        <lines>all</lines>
+        <reason>Standalone validation runner for QA fixtures - use as baseline for comparison harness</reason>
+      </entry>
+      <entry>
+        <path>tests/fixtures/greenfield/pii_scanner.py</path>
+        <kind>utility</kind>
+        <symbol>PIIScanner</symbol>
+        <lines>all</lines>
+        <reason>PII detection utility for sanitizing corpus documents</reason>
+      </entry>
+      <entry>
+        <path>src/data_extract/semantic/__init__.py</path>
+        <kind>module</kind>
+        <symbol>semantic analysis placeholder</symbol>
+        <lines>1-14</lines>
+        <reason>Semantic module placeholder - defines Epic 4 implementation targets</reason>
+      </entry>
     </code>
-
     <dependencies>
-      <!-- Semantic Analysis Libraries (Story 3.5.4) -->
       <python>
-        <package name="scikit-learn" version=">=1.3.0,&lt;2.0.0" purpose="TF-IDF vectorization, LSA (TruncatedSVD), cosine similarity for gold-standard generation"/>
-        <package name="joblib" version=">=1.3.0" purpose="Model persistence for caching TF-IDF/LSA models"/>
-        <package name="textstat" version=">=0.7.3" purpose="Readability metrics (Flesch reading ease, Gunning fog) for gold-standard annotations"/>
-      </python>
-
-      <!-- Existing Dependencies -->
-      <python>
-        <package name="pytest" version=">=8.0.0,&lt;9.0" purpose="Test framework for comparison harness scripts"/>
-        <package name="pydantic" version=">=2.0.0,&lt;3.0" purpose="Data validation for gold-standard annotation schemas"/>
-        <package name="spacy" version=">=3.7.2,&lt;4.0" purpose="Sentence boundary detection (already integrated in Epic 2.5)"/>
-      </python>
-
-      <!-- Fixture Generation -->
-      <python>
-        <package name="reportlab" version="N/A" purpose="PDF generation for synthetic audit documents (existing pattern)"/>
-        <package name="openpyxl" version=">=3.0.10" purpose="Excel generation for risk matrices/compliance tables"/>
+        <scikit-learn>>=1.3.0,&lt;2.0</scikit-learn>
+        <joblib>>=1.3.0,&lt;2.0</joblib>
+        <textstat>>=0.7.3,&lt;1.0</textstat>
+        <pytest>>=7.4.0</pytest>
+        <spacy>>=3.6.0,&lt;4.0</spacy>
       </python>
     </dependencies>
   </artifacts>
 
   <constraints>
-    - Repository size limit: Total fixture size must stay under 100 MB (tests/fixtures/ currently ~36 MB, leaving 64 MB margin)
-    - PII sanitization: All documents must be reviewed and sanitized - no real names, SSNs, account numbers, addresses, or sensitive data
-    - Representativeness: Corpus must reflect production audit document characteristics (terminology, structure, readability per docs/tech-spec-epic-3.5.md#L238)
-    - Document diversity: Minimum 3 document types with balanced distribution to ensure generalization across formats
-    - Annotation accuracy: Gold-standard annotations must be manually reviewed for accuracy and consistency before use in regression tests
-    - Performance baselines: TF-IDF/LSA annotations must be generated using validated libraries (Story 3.5.4) with performance baselines documented
-    - Fixture organization: Follow existing tests/fixtures/ directory structure and naming conventions per tests/fixtures/README.md
-    - Test integration: Comparison harness scripts must integrate with pytest using markers (@pytest.mark.semantic, @pytest.mark.integration)
-    - Tolerance thresholds: Define reasonable thresholds for regression tests (e.g., 80% overlap for TF-IDF top terms, topic assignment stability for LSA)
-    - Documentation: README.md must document corpus statistics, annotation format, harness usage, and regeneration process (tests/fixtures/spacy_gold_standard.json provides example format)
+    <item>Classical NLP only - no transformer models per enterprise constraint</item>
+    <item>All documents must be PII-sanitized (no real names, SSNs, account numbers)</item>
+    <item>Minimum 20 words per document in corpus</item>
+    <item>Must follow existing test fixture patterns in tests/fixtures/</item>
+    <item>Comparison harness must integrate with pytest</item>
+    <item>Gold-standard annotations must use validated libraries from Story 3.5-4</item>
+    <item>Corpus must reflect production audit document characteristics</item>
   </constraints>
 
   <interfaces>
-    <!-- Gold-Standard Annotation Schema -->
-    <interface>
-      <name>Semantic Annotation JSON Schema</name>
-      <kind>Data format</kind>
-      <signature>
-        {
-          "document_id": "audit-001.pdf",
-          "entities": [
-            {"type": "RISK", "text": "RISK-001", "start": 127, "end": 135},
-            {"type": "CONTROL", "text": "CTRL-042", "start": 458, "end": 466}
-          ],
-          "tfidf_top_terms": ["audit", "compliance", "risk", "control", "assessment"],
-          "lsa_primary_topic": 2,
-          "readability_score": 45.3
-        }
-      </signature>
-      <path>docs/tech-spec-epic-3.5.md#L334-L345</path>
-    </interface>
-
-    <!-- Comparison Harness API -->
-    <interface>
-      <name>Comparison Harness Scripts</name>
-      <kind>CLI scripts</kind>
-      <signature>
-        compare-tfidf.py --gold-standard gold-standard/tfidf-expected.json --test-corpus corpus/
-        compare-lsa.py --gold-standard gold-standard/lsa-expected.json --test-corpus corpus/
-        compare-entities.py --gold-standard gold-standard/entities-expected.json --test-corpus corpus/
-
-        Returns: Exit code 0 if within tolerance, 1 if deviation exceeds threshold
-        Outputs: Comparison metrics (precision, recall, F1 for entities; overlap % for TF-IDF; topic stability for LSA)
-      </signature>
-      <path>docs/tech-spec-epic-3.5.md#L228-L232</path>
-    </interface>
-
-    <!-- Existing Entity Extraction Interface -->
-    <interface>
-      <name>EntityExtractor.extract_entities()</name>
-      <kind>Function</kind>
-      <signature>
-        def extract_entities(text: str) -> List[EntityReference]:
-            """Extract RISK-*, CTRL-*, POL-* entities from normalized text."""
-            # Returns list of EntityReference with type, text, start, end positions
-      </signature>
-      <path>src/data_extract/normalize/entity_extractor.py</path>
-    </interface>
-
-    <!-- TF-IDF Vectorizer Interface (Story 3.5.4) -->
-    <interface>
-      <name>TfidfVectorizer (scikit-learn)</name>
-      <kind>Class API</kind>
-      <signature>
-        from sklearn.feature_extraction.text import TfidfVectorizer
-
-        vectorizer = TfidfVectorizer(max_features=100, ngram_range=(1, 2))
-        vectorizer.fit(corpus)
-        vectors = vectorizer.transform(documents)
-        top_terms = vectorizer.get_feature_names_out()[:10]
-      </signature>
-      <path>Story 3.5.4 smoke test script (scripts/smoke-test-semantic.py)</path>
-    </interface>
-
-    <!-- LSA Interface (Story 3.5.4) -->
-    <interface>
-      <name>TruncatedSVD (scikit-learn LSA)</name>
-      <kind>Class API</kind>
-      <signature>
-        from sklearn.decomposition import TruncatedSVD
-
-        lsa = TruncatedSVD(n_components=10)
-        lsa.fit(tfidf_vectors)
-        topic_vectors = lsa.transform(tfidf_vectors)
-        primary_topic = topic_vectors.argmax(axis=1)
-      </signature>
-      <path>Story 3.5.4 smoke test script (scripts/smoke-test-semantic.py)</path>
-    </interface>
+    <item>
+      <name>get_technical_corpus</name>
+      <kind>function signature</kind>
+      <signature>def get_technical_corpus() -> List[str]</signature>
+      <path>tests/fixtures/semantic_corpus.py</path>
+    </item>
+    <item>
+      <name>get_business_corpus</name>
+      <kind>function signature</kind>
+      <signature>def get_business_corpus() -> List[str]</signature>
+      <path>tests/fixtures/semantic_corpus.py</path>
+    </item>
+    <item>
+      <name>PIIScanner</name>
+      <kind>class interface</kind>
+      <signature>class PIIScanner: scan_text(text: str) -> List[PIIMatch]</signature>
+      <path>tests/fixtures/greenfield/pii_scanner.py</path>
+    </item>
   </interfaces>
 
   <tests>
     <standards>
-      Epic 3.5 follows standard testing approach:
-      - Unit tests: Fast, isolated tests for individual components (fixture validation, annotation schema)
-      - Integration tests: End-to-end harness scripts testing (compare-tfidf.py, compare-lsa.py, compare-entities.py)
-      - Coverage target: ≥80% for harness scripts and validation utilities
-      - Markers: @pytest.mark.semantic, @pytest.mark.integration, @pytest.mark.slow (for full corpus validation)
-      - Fixture organization: Mirror existing tests/fixtures/ structure with semantic/ subdirectory
-      - Test data: Use subset of semantic corpus for fast unit tests, full corpus for integration tests
+      Use pytest framework for all tests. Follow existing patterns in tests/integration/test_fixtures/.
+      QA fixtures validation uses 8 test cases: corpus size, document quality, PII absence, cross-format consistency,
+      edge case handling, performance baselines, gold-standard availability, maintenance documentation.
+      Comparison scripts should support tolerance thresholds (e.g., 80% overlap for top terms).
     </standards>
-
     <locations>
-      - tests/fixtures/semantic/ - Main semantic corpus and annotations
-      - tests/fixtures/semantic/corpus/ - Document corpus organized by type
-      - tests/fixtures/semantic/gold-standard/ - Expected TF-IDF/LSA/entity outputs
-      - tests/fixtures/semantic/harness/ - Comparison scripts (compare-*.py)
-      - tests/unit/test_semantic/ - Unit tests for semantic features (Epic 4)
-      - tests/integration/test_semantic/ - Integration tests for semantic pipeline
+      <item>tests/fixtures/ - corpus and fixture definitions</item>
+      <item>tests/fixtures/semantic/ - new semantic corpus location (to be created)</item>
+      <item>tests/fixtures/semantic/harness/ - comparison harness scripts</item>
+      <item>tests/integration/test_fixtures/ - integration tests</item>
+      <item>tests/unit/test_semantic/ - unit tests for semantic features</item>
     </locations>
-
     <ideas>
-      <!-- Corpus Validation Tests -->
-      - Test: Validate corpus size meets AC-1 (≥50 documents, ≥250k words)
-        AC: AC-1
-        Approach: Scan tests/fixtures/semantic/corpus/, count files and total word count, assert thresholds met
-
-      - Test: Validate document type distribution meets AC-2 (3+ types, balanced)
-        AC: AC-2
-        Approach: Count documents per subdirectory (audit-reports/, risk-matrices/, compliance-docs/), assert ≥3 types with reasonable distribution (e.g., each type ≥20% of total)
-
-      - Test: Validate PII sanitization meets AC-3 (no real names, SSNs, account numbers)
-        AC: AC-3
-        Approach: Scan corpus with regex patterns for common PII indicators (SSN format \d{3}-\d{2}-\d{4}, email patterns, real company names from blocklist), assert zero matches
-
-      <!-- Gold-Standard Annotation Tests -->
-      - Test: Validate annotation schema matches specification (AC-4)
-        AC: AC-4
-        Approach: Load all gold-standard JSON files, validate against Pydantic schema (document_id, entities, tfidf_top_terms, lsa_primary_topic, readability_score), assert all required fields present
-
-      - Test: Validate annotation coverage meets AC-4 (≥40 documents annotated)
-        AC: AC-4
-        Approach: Count gold-standard JSON files, assert ≥40 files present
-
-      - Test: Validate entity annotations match extraction patterns
-        AC: AC-4
-        Approach: For sample documents, run EntityExtractor.extract_entities() and compare with gold-standard entity annotations, assert high overlap (≥90%)
-
-      <!-- Comparison Harness Tests -->
-      - Test: TF-IDF comparison harness detects deviations (AC-5)
-        AC: AC-5
-        Approach: Run compare-tfidf.py with gold-standard vs. intentionally modified corpus, assert exit code 1 when deviation exceeds threshold
-
-      - Test: LSA comparison harness validates topic stability (AC-5)
-        AC: AC-5
-        Approach: Run compare-lsa.py with gold-standard vs. same corpus (should pass with exit code 0), then with different corpus (should fail)
-
-      - Test: Entity comparison harness calculates precision/recall (AC-5)
-        AC: AC-5
-        Approach: Run compare-entities.py with gold-standard vs. test extraction results, assert precision/recall metrics calculated correctly
-
-      - Test: Harness tolerance thresholds configurable
-        AC: AC-5
-        Approach: Run compare-tfidf.py with --threshold flag, verify behavior changes based on tolerance setting
-
-      <!-- Documentation Tests -->
-      - Test: README.md documents all required sections (AC-6)
-        AC: AC-6
-        Approach: Parse tests/fixtures/semantic/README.md, assert presence of sections: Corpus Statistics, Annotation Format, Harness Usage, Regeneration Process
-
-      - Test: metadata.json contains corpus statistics (AC-6)
-        AC: AC-6
-        Approach: Load tests/fixtures/semantic/metadata.json, validate schema (doc_count, word_count, type_distribution), assert values match actual corpus
-
-      <!-- Regression Test Examples -->
-      - Test: TF-IDF top terms stable across runs (regression baseline)
-        AC: AC-5
-        Approach: Generate TF-IDF vectors from corpus, compare top 10 terms with gold-standard, assert ≥80% overlap
-
-      - Test: LSA topic assignments stable across runs (regression baseline)
-        AC: AC-5
-        Approach: Run LSA on corpus, compare primary topic assignments with gold-standard, assert ≥90% agreement
+      <item>AC-1: Test corpus reaches 50+ documents and 250k+ words total</item>
+      <item>AC-2: Verify balanced distribution across 3+ document types</item>
+      <item>AC-3: Run PII scanner on all documents to ensure sanitization</item>
+      <item>AC-4: Validate JSON schema for gold-standard annotations</item>
+      <item>AC-5: Test comparison harness scripts with known inputs/outputs</item>
+      <item>AC-6: Verify README completeness and accuracy</item>
+      <item>Performance: TF-IDF should process corpus in &lt;1s</item>
+      <item>Regression: Compare outputs against previous baselines</item>
     </ideas>
   </tests>
 </story-context>

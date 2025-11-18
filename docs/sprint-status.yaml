@@ -77,13 +77,13 @@ development_status:
   3.5-2-claude-md-lessons-section: done  # COMPLETE 2025-11-18: EXPANDED SCOPE - Added "Lessons & Reminders" section (52 lines) AND "Development Automation Tools" section. AGGRESSIVE RESTRUCTURE executed: 73% size reduction (959→256 lines), extracted 3 reference docs (epic-3-reference.md, automation-guide.md, retrospective-lessons.md), added module boundaries + priority markers.
   3.5-3-test-dependency-audit-doc: done  # APPROVED 2025-11-18: Process doc created (278 lines, 7-phase checklist), pre-commit hook implemented, Story 3.5.1 integration, all 5 ACs satisfied, code review APPROVED (exemplary implementation, 0 critical/high findings)
   3.5-4-semantic-dependencies-smoke-test: done  # P0-2 implementation 2025-11-17: Dependencies added (scikit-learn/joblib/textstat), smoke test script created (6/6 tests pass), performance validated (<100ms TF-IDF)
-  3.5-5-model-cache-adr: drafted  # Story created 2025-11-17: ADR for semantic model cache strategy (joblib, hash-based keys, 500MB limit)
-  3.5-6-semantic-qa-fixtures: drafted  # Story created 2025-11-17: ≥50 docs semantic corpus with gold-standard annotations, comparison harness
-  3.5-7-tfidf-lsa-playbook: drafted  # Story created 2025-11-17: Jupyter notebook + reference guide for junior dev onboarding (<30 min)
-  3.5-8-dependency-test-automation: drafted  # Story created 2025-11-18: P1 scripts for dependency auditor and test generator (follow-up from 3.5-1 enhancement)
-  3.5-9-environment-performance-automation: drafted  # Story created 2025-11-18: P1 scripts for environment setup and performance validator (follow-up from 3.5-1 enhancement)
-  3.5-10-documentation-fixture-generators: drafted  # Story created 2025-11-18: P2 scripts for documentation and fixture generation (follow-up from 3.5-1 enhancement)
-  3.5-11-sprint-security-automation: drafted  # Story created 2025-11-18: P2 scripts for sprint management and security scanning (follow-up from 3.5-1 enhancement)
+  3.5-5-model-cache-adr: ready-for-dev  # Story context generated 2025-11-18: ADR for semantic model cache strategy (joblib, hash-based keys, 500MB limit)
+  3.5-6-semantic-qa-fixtures: ready-for-dev  # Story context assembled 2025-11-18: ≥50 docs semantic corpus with gold-standard annotations, comparison harness
+  3.5-7-tfidf-lsa-playbook: ready-for-dev  # Context generated 2025-11-18: Jupyter notebook + reference guide for junior dev onboarding (<30 min)
+  3.5-8-dependency-test-automation: ready-for-dev  # Story created 2025-11-18: P1 scripts for dependency auditor and test generator (follow-up from 3.5-1 enhancement)
+  3.5-9-environment-performance-automation: ready-for-dev  # Story created 2025-11-18: P1 scripts for environment setup and performance validator (follow-up from 3.5-1 enhancement); Context generated 2025-11-18
+  3.5-10-documentation-fixture-generators: ready-for-dev  # Story context assembled 2025-11-18: P2 scripts for documentation and fixture generation (follow-up from 3.5-1 enhancement)
+  3.5-11-sprint-security-automation: ready-for-dev  # Story created 2025-11-18: P2 scripts for sprint management and security scanning (follow-up from 3.5-1 enhancement); Context generated 2025-11-18
   epic-3.5-test-design-assessment: done  # TEA agent assessment completed 2025-11-17: Comprehensive test design analysis identifying 48 test cases needed across 3 priority levels (P0/P1/P2), critical gaps in template generator/smoke test/QA fixtures coverage, UAT readiness 25%, requires 18h effort to close gaps before Epic 4
   epic-3.5-retrospective: optional
 

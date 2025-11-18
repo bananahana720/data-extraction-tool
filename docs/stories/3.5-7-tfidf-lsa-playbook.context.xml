@@ -3,8 +3,8 @@
     <epicId>3.5</epicId>
     <storyId>3.5.7</storyId>
     <title>TF-IDF/LSA Playbook</title>
-    <status>backlog</status>
-    <generatedAt>2025-11-17</generatedAt>
+    <status>drafted</status>
+    <generatedAt>2025-11-18</generatedAt>
     <generator>BMAD Story Context Workflow</generator>
     <sourceStoryPath>docs/stories/3.5-7-tfidf-lsa-playbook.md</sourceStoryPath>
   </metadata>
@@ -145,6 +145,28 @@
         <section>Technology Stack</section>
         <snippet>Semantic analysis: scikit-learn (TF-IDF, LSA, cosine similarity), gensim (Word2Vec, LDA optional), textstat (readability metrics). Enterprise Constraint: Classical NLP only - no transformer models allowed. Documentation: ADRs are code - require owners and deadlines.</snippet>
       </doc>
+
+      <!-- Automation and Guidance Documentation -->
+      <doc>
+        <path>docs/automation-guide.md</path>
+        <title>Development Automation Guide</title>
+        <section>P0 Scripts</section>
+        <snippet>P0 automation scripts provide 60% token reduction and 75% faster development. Includes generate_story_template.py, run_quality_gates.py, and init_claude_session.py for streamlined workflow automation.</snippet>
+      </doc>
+
+      <doc>
+        <path>docs/retrospective-lessons.md</path>
+        <title>Comprehensive Retrospective Lessons</title>
+        <section>Testing and Quality</section>
+        <snippet>Lessons from Epics 1-3 including quality gate enforcement (Black/Ruff/Mypy), test structure mirroring src/, and importance of integration tests for catching memory/NFR issues.</snippet>
+      </doc>
+
+      <doc>
+        <path>docs/epic-3-reference.md</path>
+        <title>Epic 3 Complete Implementation Reference</title>
+        <section>Semantic-aware chunking</section>
+        <snippet>Implementation patterns for semantic-aware chunking with entity preservation, performance baselines (~0.19s per 1,000 words, 255 MB peak memory), and output organization strategies.</snippet>
+      </doc>
     </docs>
 
     <code>
@@ -191,6 +213,49 @@
         <symbol>N/A</symbol>
         <lines>N/A</lines>
         <reason>Performance testing pattern for establishing baselines. Playbook should reference similar approach for TF-IDF/LSA performance considerations (Section 7).</reason>
+      </artifact>
+
+      <!-- Semantic Smoke Test Implementation -->
+      <artifact>
+        <path>scripts/smoke_test_semantic.py</path>
+        <kind>script</kind>
+        <symbol>test_tfidf_performance, test_lsa_functionality, test_textstat_metrics</symbol>
+        <lines>1-200</lines>
+        <reason>Working implementation of TF-IDF and LSA tests from Story 3.5.4. Demonstrates performance baselines (&lt;100ms TF-IDF, &lt;200ms LSA), proper usage patterns, and can serve as code examples for the playbook.</reason>
+      </artifact>
+
+      <!-- Semantic Test Corpus -->
+      <artifact>
+        <path>tests/fixtures/semantic_corpus.py</path>
+        <kind>test-fixture</kind>
+        <symbol>SEMANTIC_TEST_CORPUS</symbol>
+        <lines>1-500</lines>
+        <reason>Test corpus from Story 3.5.6 containing audit documents for realistic examples. Playbook will use this corpus for demonstrating TF-IDF vectorization, LSA topic extraction, and similarity calculations.</reason>
+      </artifact>
+
+      <!-- P0 Automation Scripts -->
+      <artifact>
+        <path>scripts/generate_story_template.py</path>
+        <kind>script</kind>
+        <symbol>N/A</symbol>
+        <lines>N/A</lines>
+        <reason>P0-1 script that demonstrates documentation generation patterns. Playbook creation could follow similar template-based approach for consistency.</reason>
+      </artifact>
+
+      <artifact>
+        <path>scripts/run_quality_gates.py</path>
+        <kind>script</kind>
+        <symbol>N/A</symbol>
+        <lines>N/A</lines>
+        <reason>P0-2 quality gate runner that enforces Black/Ruff/Mypy standards. All playbook code examples should pass these quality gates.</reason>
+      </artifact>
+
+      <artifact>
+        <path>scripts/init_claude_session.py</path>
+        <kind>script</kind>
+        <symbol>N/A</symbol>
+        <lines>N/A</lines>
+        <reason>P0-3 session initializer that sets up development environment. Junior developers using the playbook should run this first to ensure proper environment setup.</reason>
       </artifact>
     </code>
 
