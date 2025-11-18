@@ -59,6 +59,16 @@ jobs:
           python scripts/smoke-test-semantic.py
           echo "✅ Semantic dependencies validated"
 
+      - name: Audit test dependencies
+        run: |
+          echo "Auditing test dependencies against pyproject.toml..."
+          python scripts/audit_dependencies.py --output markdown || {
+            echo "⚠️ Dependency audit found issues (see report above)"
+            # Don't fail the build, just warn
+            true
+          }
+          echo "✅ Dependency audit completed"
+
       - name: Detect changed test specs
         id: changed-tests
         run: |
@@ -136,6 +146,16 @@ jobs:
           echo "Validating semantic dependencies (scikit-learn, joblib, textstat)..."
           python scripts/smoke-test-semantic.py
           echo "✅ Semantic dependencies validated"
+
+      - name: Audit test dependencies
+        run: |
+          echo "Auditing test dependencies against pyproject.toml..."
+          python scripts/audit_dependencies.py --output markdown || {
+            echo "⚠️ Dependency audit found issues (see report above)"
+            # Don't fail the build, just warn
+            true
+          }
+          echo "✅ Dependency audit completed"
 
       - name: Run full test suite
         run: |
