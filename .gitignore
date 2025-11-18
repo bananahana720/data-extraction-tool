@@ -51,6 +51,10 @@ output/
 # Semantic model cache (Epic 3.5 - ADR-012)
 .data-extract-cache/
 
+# Automation script caches and reports (Epic 3.5)
+.cache/
+docs/reports/
+
 # Build artifacts
 dist/
 build/
