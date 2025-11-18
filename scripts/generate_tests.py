@@ -21,7 +21,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
-import structlog
+import structlog  # type: ignore[import-not-found]
 
 # Configure structured logging
 logger = structlog.get_logger()
@@ -49,7 +49,7 @@ PERFORMANCE_KEYWORDS = {
 class StoryTestGenerator:
     """Generates test files from story specifications."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize the test generator."""
         self.story_content = ""
         self.story_key = ""
@@ -100,7 +100,7 @@ class StoryTestGenerator:
 
         return True
 
-    def _extract_story_key(self, story_path: Path):
+    def _extract_story_key(self, story_path: Path) -> None:
         """
         Extract story key from filename or content.
 
@@ -131,7 +131,7 @@ class StoryTestGenerator:
 
         logger.debug("extracted_story_key", key=self.story_key, epic=self.epic_number)
 
-    def _extract_acceptance_criteria(self):
+    def _extract_acceptance_criteria(self) -> None:
         """Extract acceptance criteria from story content."""
         self.acceptance_criteria = []
 
@@ -169,7 +169,7 @@ class StoryTestGenerator:
 
         logger.debug("extracted_acceptance_criteria", count=len(self.acceptance_criteria))
 
-    def _extract_tasks(self):
+    def _extract_tasks(self) -> None:
         """Extract tasks from story content."""
         self.tasks = []
 
@@ -192,7 +192,7 @@ class StoryTestGenerator:
 
         logger.debug("extracted_tasks", count=len(self.tasks))
 
-    def _check_performance_requirements(self):
+    def _check_performance_requirements(self) -> None:
         """Check if story has performance/NFR requirements."""
         content_lower = self.story_content.lower()
 
@@ -695,7 +695,7 @@ class StoryTestGenerator:
         return "\n".join(lines)
 
 
-def main():
+def main() -> None:
     """Main entry point for the test generator."""
     parser = argparse.ArgumentParser(
         description="Generate test files from story specifications",

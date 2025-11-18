@@ -5,9 +5,13 @@ Tests story parsing, AC extraction, test stub generation,
 fixture creation, and marker assignment.
 """
 
-from unittest.mock import patch
+import sys
+from unittest.mock import MagicMock, patch
 
 import pytest
+
+# Mock structlog before importing the script
+sys.modules["structlog"] = MagicMock()
 
 from scripts.generate_tests import main
 

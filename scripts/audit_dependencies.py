@@ -24,7 +24,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Set, Tuple
 
-import structlog
+import structlog  # type: ignore[import-not-found]
 
 # Configure structured logging
 logger = structlog.get_logger()
@@ -142,7 +142,14 @@ class DependencyAuditor:
                 self.cache[cache_key] = {"mtime": file_mtime, "imports": imports}
                 logger.debug("parsed_imports", file=str(test_file), count=len(imports))
 
-            self.test_imports[str(test_file.relative_to(PROJECT_ROOT))] = imports
+            # Try to make path relative to PROJECT_ROOT, otherwise use absolute path
+            try:
+                relative_path = test_file.relative_to(PROJECT_ROOT)
+            except ValueError:
+                # File is outside PROJECT_ROOT (e.g., in tests), use absolute path
+                relative_path = test_file
+
+            self.test_imports[str(relative_path)] = imports
 
         # Save cache
         self._save_cache()
@@ -205,7 +212,7 @@ class DependencyAuditor:
         logger.info("loading_declared_dependencies", pyproject_path=str(pyproject_path))
 
         try:
-            import toml
+            import toml  # type: ignore[import-untyped]
         except ImportError:
             # Fallback to parsing manually
             logger.warning("toml_not_installed_using_manual_parser")
@@ -324,9 +331,9 @@ class DependencyAuditor:
         Returns:
             Normalized name
         """
-        # Common mappings
+        # Common mappings (keys should be lowercase)
         mappings = {
-            "PIL": "pillow",
+            "pil": "pillow",
             "cv2": "opencv_python",
             "sklearn": "scikit_learn",
             "yaml": "pyyaml",
@@ -461,7 +468,7 @@ class DependencyAuditor:
 
         return "\n".join(md_lines)
 
-    def update_documentation(self, report: str, docs_dir: Path = DOCS_DIR):
+    def update_documentation(self, report: str, docs_dir: Path = DOCS_DIR) -> None:
         """
         Update test dependency documentation.
 
@@ -473,7 +480,7 @@ class DependencyAuditor:
 
         # Create processes directory if needed
         processes_dir = docs_dir / "processes"
-        processes_dir.mkdir(exist_ok=True)
+        processes_dir.mkdir(parents=True, exist_ok=True)
 
         # Write audit report
         report_path = processes_dir / "test-dependency-audit-report.md"
@@ -482,7 +489,7 @@ class DependencyAuditor:
 
         logger.info("documentation_updated", path=str(report_path))
 
-    def _save_cache(self):
+    def _save_cache(self) -> None:
         """Save cache to disk."""
         cache_file = self.cache_dir / "import_cache.json"
         try:
@@ -492,7 +499,7 @@ class DependencyAuditor:
         except Exception as e:
             logger.warning("failed_to_save_cache", error=str(e))
 
-    def _load_cache(self):
+    def _load_cache(self) -> None:
         """Load cache from disk."""
         cache_file = self.cache_dir / "import_cache.json"
         if cache_file.exists():
@@ -507,7 +514,7 @@ class DependencyAuditor:
             self.cache = {}
 
 
-def main():
+def main() -> None:
     """Main entry point for the dependency auditor."""
     parser = argparse.ArgumentParser(
         description="Audit test dependencies against pyproject.toml",

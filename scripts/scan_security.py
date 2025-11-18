@@ -51,6 +51,14 @@ except ImportError:
 # tomli not currently used, but kept for future TOML config support
 HAS_TOMLI = False
 
+try:
+    from bandit.core import config as bandit_config
+    from bandit.core import manager as bandit_manager
+
+    HAS_BANDIT = True
+except ImportError:
+    HAS_BANDIT = False
+
 # Configure structured logging
 logger = structlog.get_logger()
 console = Console()
@@ -594,6 +602,103 @@ class SecurityScanner:
         self.stats["permission_issues"] = len(findings)
         return findings
 
+    def scan_with_sast(self) -> List[SecurityFinding]:
+        """Integrate with Static Application Security Testing (SAST) tools like Bandit."""
+        findings = []
+
+        if HAS_BANDIT:
+            findings.extend(self._scan_with_bandit())
+        else:
+            logger.warning("bandit_not_installed", message="Install bandit for SAST scanning")
+
+        # Check for other SAST tools in the future
+        # Could add support for:
+        # - semgrep
+        # - pylint security checks
+        # - flake8-bandit
+
+        self.findings.extend(findings)
+        self.stats["sast_findings"] = len(findings)
+        return findings
+
+    def _scan_with_bandit(self) -> List[SecurityFinding]:
+        """Run Bandit security linter."""
+        findings = []
+
+        try:
+            # Configure Bandit
+            conf = bandit_config.BanditConfig()
+            manager = bandit_manager.BanditManager(conf, "file")
+
+            # Discover Python files to scan
+            python_files = []
+            for ext in [".py"]:
+                for file_path in self.project_root.rglob(f"*{ext}"):
+                    if self._should_scan_file(file_path):
+                        python_files.append(str(file_path))
+
+            if not python_files:
+                logger.info("no_python_files_to_scan")
+                return findings
+
+            # Run Bandit on discovered files
+            manager.discover_files(python_files)
+            manager.run_tests()
+
+            # Convert Bandit results to our format
+            for issue in manager.get_issue_list():
+                severity_map = {
+                    "HIGH": "HIGH",
+                    "MEDIUM": "MEDIUM",
+                    "LOW": "LOW",
+                    "UNDEFINED": "INFO",
+                }
+
+                findings.append(
+                    SecurityFinding(
+                        finding_type="sast",
+                        severity=severity_map.get(issue.severity, "INFO"),
+                        description=f"{issue.test}: {issue.text}",
+                        file_path=issue.fname,
+                        line_number=issue.lineno,
+                        matched_pattern=issue.code if hasattr(issue, "code") else None,
+                        remediation=f"Review and fix: {issue.test_id} - {issue.issue_text}",
+                    )
+                )
+
+            logger.info("bandit_scan_completed", findings_count=len(findings))
+
+        except Exception as e:
+            logger.error("bandit_scan_failed", error=str(e))
+
+            # Fallback: Try running bandit as CLI command
+            try:
+                result = subprocess.run(
+                    ["bandit", "-r", str(self.project_root), "-f", "json"],
+                    capture_output=True,
+                    text=True,
+                )
+
+                if result.stdout:
+                    bandit_output = json.loads(result.stdout)
+                    for issue in bandit_output.get("results", []):
+                        findings.append(
+                            SecurityFinding(
+                                finding_type="sast",
+                                severity=issue.get("issue_severity", "INFO"),
+                                description=f"{issue.get('test_name', 'Unknown')}: {issue.get('issue_text', 'Security issue')}",
+                                file_path=issue.get("filename"),
+                                line_number=issue.get("line_number"),
+                                remediation=f"Fix issue: {issue.get('test_id', 'Unknown')}",
+                            )
+                        )
+                    logger.info("bandit_cli_scan_completed", findings_count=len(findings))
+
+            except Exception as cli_error:
+                logger.error("bandit_cli_scan_failed", error=str(cli_error))
+
+        return findings
+
     def scan_git_history(self, max_commits: int = 100) -> List[SecurityFinding]:
         """Scan git history for previously committed secrets."""
         findings = []
@@ -868,6 +973,7 @@ def main():
     parser.add_argument(
         "--permissions-only", action="store_true", help="Only check file permissions"
     )
+    parser.add_argument("--sast-only", action="store_true", help="Only run SAST analysis")
     parser.add_argument("--history", action="store_true", help="Scan git history for secrets")
     parser.add_argument(
         "--max-commits", type=int, default=100, help="Maximum commits to scan in history"
@@ -895,6 +1001,8 @@ def main():
             scanner.scan_dependencies()
         elif args.permissions_only:
             scanner.scan_permissions()
+        elif args.sast_only:
+            scanner.scan_with_sast()
         elif args.history:
             scanner.scan_git_history(max_commits=args.max_commits)
         else:
@@ -908,6 +1016,9 @@ def main():
 
                 status.update("Validating permissions...")
                 scanner.scan_permissions()
+
+                status.update("Running SAST analysis...")
+                scanner.scan_with_sast()
 
         # Display results
         scanner.display_findings()

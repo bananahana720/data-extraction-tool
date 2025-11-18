@@ -293,4 +293,4 @@ See [API Documentation](docs/api/) for complete reference.
 
 ## Test Coverage
 
-Coverage data not available. coverage module not installed
+Coverage data not available. No coverage data found. Run tests with coverage first.

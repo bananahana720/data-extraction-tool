@@ -140,7 +140,7 @@ class TestSprintStatusManager:
     def test_identify_blockers(self, manager):
         """Test blocker identification."""
         manager.load_status()
-        blockers = manager._identify_blockers(manager.data["development_status"])
+        _ = manager._identify_blockers(manager.data["development_status"])
 
         # Should identify review queue if > 2 stories
         review_count = sum(1 for v in manager.data["development_status"].values() if v == "review")
@@ -164,7 +164,7 @@ class TestSprintStatusManager:
     def test_generate_markdown_report_ac3(self, manager, tmp_path):
         """AC-3: Generate markdown sprint report."""
         output_file = tmp_path / "report.md"
-        report = manager.generate_report("markdown", output_file)
+        _ = manager.generate_report("markdown", output_file)
 
         assert output_file.exists()
         content = output_file.read_text()
@@ -182,7 +182,7 @@ class TestSprintStatusManager:
         mock_template_instance.render.return_value = "<html>Report</html>"
 
         output_file = tmp_path / "report.html"
-        report = manager.generate_report("html", output_file)
+        _ = manager.generate_report("html", output_file)
 
         assert output_file.exists()
         assert "<html>" in output_file.read_text()
@@ -226,12 +226,11 @@ class TestSprintStatusManager:
         # Verify story was updated
         manager.load_status()
         # The first non-epic, non-retrospective story should be updated
-        stories = {
+        _ = {
             k: v
             for k, v in manager.data["development_status"].items()
             if not k.startswith("epic-") and not k.endswith("-retrospective")
         }
-        first_story = list(stories.keys())[0]
         # Note: The mock doesn't actually update, so we just verify the flow
 
     def test_valid_status_transitions(self):
@@ -271,14 +270,38 @@ class TestSprintStatusManager:
             saved_data = json.loads(history_file.read_text())
             assert saved_data["test"]["velocity"] == 10
 
-    def test_notification_integration_ac6(self):
-        """AC-6: Notification integration structure (not fully implemented)."""
-        # This would test Slack/Teams integration
-        # For now, verify the structure exists for future implementation
+    @patch.dict("os.environ", {"SPRINT_SLACK_WEBHOOK": "https://hooks.slack.com/test"})
+    @patch("requests.post")
+    def test_notification_integration_ac6(self, mock_post):
+        """AC-6: Notification integration with Slack/Teams webhooks."""
+        # Setup
+        mock_response = MagicMock()
+        mock_response.status_code = 200
+        mock_post.return_value = mock_response
+
         manager = SprintStatusManager()
-        # Notification methods would be added here
-        assert hasattr(manager, "update_story_status")
-        # Future: assert hasattr(manager, "send_notification")
+
+        # Test that notification configuration is loaded
+        assert manager.notification_enabled is True
+        assert manager.slack_webhook == "https://hooks.slack.com/test"
+
+        # Test send_notification method
+        assert hasattr(manager, "send_notification")
+        result = manager.send_notification("Test Title", "Test Message", "info")
+        assert result is True
+        mock_post.assert_called_once()
+
+        # Verify Slack payload structure
+        call_args = mock_post.call_args
+        assert "https://hooks.slack.com/test" in str(call_args)
+        payload = call_args[1]["json"]
+        assert "attachments" in payload
+        assert payload["attachments"][0]["title"] == "Test Title"
+        assert payload["attachments"][0]["text"] == "Test Message"
+
+        # Test notification helper methods
+        assert hasattr(manager, "check_and_notify_blockers")
+        assert hasattr(manager, "notify_sprint_completion")
 
     def test_display_epic_breakdown(self, manager):
         """Test epic breakdown display."""

@@ -6,11 +6,16 @@ report generation, and caching functionality.
 """
 
 import json
+import sys
 import tempfile
 from pathlib import Path
-from unittest.mock import patch
+from unittest.mock import MagicMock, patch
 
 import pytest
+
+# Mock structlog and toml before importing the script
+sys.modules["structlog"] = MagicMock()
+sys.modules["toml"] = MagicMock()
 
 from scripts.audit_dependencies import DependencyAuditor, main
 
@@ -150,22 +155,39 @@ dev = [
         assert "mypy" in deps
 
     @pytest.mark.unit
-    @patch("scripts.audit_dependencies.toml")
-    def test_load_declared_dependencies_with_toml(self, mock_toml, auditor, tmp_path):
+    def test_load_declared_dependencies_with_toml(self, auditor, tmp_path):
         """Test loading dependencies with toml library available."""
-        # Setup mock toml
-        mock_toml.load.return_value = {
-            "project": {
-                "dependencies": ["numpy>=1.20.0", "pandas>=1.3.0"],
-                "optional-dependencies": {"dev": ["pytest>=7.0.0", "black>=22.0.0"]},
-            }
-        }
-
+        # Create a test pyproject.toml file with content
         pyproject = tmp_path / "pyproject.toml"
-        pyproject.touch()
+        pyproject.write_text(
+            """
+[project]
+dependencies = ["numpy>=1.20.0", "pandas>=1.3.0"]
 
-        # Load dependencies
-        deps = auditor.load_declared_dependencies(pyproject)
+[project.optional-dependencies]
+dev = ["pytest>=7.0.0", "black>=22.0.0"]
+"""
+        )
+
+        # Mock toml.load to return expected data
+        with patch("builtins.__import__") as mock_import:
+            mock_toml = MagicMock()
+            mock_toml.load.return_value = {
+                "project": {
+                    "dependencies": ["numpy>=1.20.0", "pandas>=1.3.0"],
+                    "optional-dependencies": {"dev": ["pytest>=7.0.0", "black>=22.0.0"]},
+                }
+            }
+
+            def import_side_effect(name, *args, **kwargs):
+                if name == "toml":
+                    return mock_toml
+                return __import__(name, *args, **kwargs)
+
+            mock_import.side_effect = import_side_effect
+
+            # Load dependencies
+            deps = auditor.load_declared_dependencies(pyproject)
 
         # Verify
         assert "numpy" in deps
@@ -174,20 +196,24 @@ dev = [
         assert "black" in deps
 
     @pytest.mark.unit
-    @patch("scripts.audit_dependencies.toml")
-    def test_load_declared_dependencies_without_toml(
-        self, mock_toml, auditor, tmp_path, sample_pyproject
-    ):
+    def test_load_declared_dependencies_without_toml(self, auditor, tmp_path, sample_pyproject):
         """Test loading dependencies when toml library is not available."""
-        # Simulate toml import failure
-        mock_toml.side_effect = ImportError("No module named 'toml'")
-
         # Create pyproject file
         pyproject = tmp_path / "pyproject.toml"
         pyproject.write_text(sample_pyproject)
 
-        # Load dependencies (should fall back to manual parsing)
-        deps = auditor.load_declared_dependencies(pyproject)
+        # Mock the import to fail for toml
+        with patch("builtins.__import__") as mock_import:
+
+            def import_side_effect(name, *args, **kwargs):
+                if name == "toml":
+                    raise ImportError("No module named 'toml'")
+                return __import__(name, *args, **kwargs)
+
+            mock_import.side_effect = import_side_effect
+
+            # Load dependencies (should fall back to manual parsing)
+            deps = auditor.load_declared_dependencies(pyproject)
 
         # Verify dependencies still found
         assert "numpy" in deps
@@ -340,6 +366,15 @@ dev = [
         (tmp_path / "tests" / "test_sample.py").write_text("import pytest")
         (tmp_path / "pyproject.toml").write_text('[project]\ndependencies = ["pytest>=7.0"]')
 
+        # Patch PROJECT_ROOT and related constants to use tmp_path
+        import scripts.audit_dependencies as audit_module
+
+        monkeypatch.setattr(audit_module, "PROJECT_ROOT", tmp_path)
+        monkeypatch.setattr(audit_module, "TEST_DIR", tmp_path / "tests")
+        monkeypatch.setattr(audit_module, "PYPROJECT_PATH", tmp_path / "pyproject.toml")
+        monkeypatch.setattr(audit_module, "CACHE_DIR", tmp_path / ".cache" / "dependency_audit")
+        monkeypatch.setattr(audit_module, "DOCS_DIR", tmp_path / "docs")
+
         # Run main
         with patch("sys.exit") as mock_exit:
             main()
@@ -355,6 +390,15 @@ dev = [
         (tmp_path / "tests").mkdir()
         (tmp_path / "tests" / "test.py").write_text("import requests")  # Not declared
         (tmp_path / "pyproject.toml").write_text("[project]\ndependencies = []")
+
+        # Patch PROJECT_ROOT and related constants to use tmp_path
+        import scripts.audit_dependencies as audit_module
+
+        monkeypatch.setattr(audit_module, "PROJECT_ROOT", tmp_path)
+        monkeypatch.setattr(audit_module, "TEST_DIR", tmp_path / "tests")
+        monkeypatch.setattr(audit_module, "PYPROJECT_PATH", tmp_path / "pyproject.toml")
+        monkeypatch.setattr(audit_module, "CACHE_DIR", tmp_path / ".cache" / "dependency_audit")
+        monkeypatch.setattr(audit_module, "DOCS_DIR", tmp_path / "docs")
 
         # Run main - should exit with error
         with patch("sys.exit") as mock_exit:
