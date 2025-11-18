@@ -12,6 +12,7 @@ from typing import List
 
 import pytest
 
+from src.data_extract.chunk.models import Chunk
 from src.data_extract.core.models import ProcessingContext
 
 pytestmark = [

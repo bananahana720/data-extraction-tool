@@ -37,7 +37,7 @@ class TestQualityMetricsIntegration:
         import textstat
 
         for chunk in chunked_documents[:3]:  # Test subset
-            text = chunk.content
+            text = chunk.text
 
             # Calculate readability metrics
             flesch_reading_ease = textstat.flesch_reading_ease(text)
@@ -140,7 +140,7 @@ class TestQualityMetricsIntegration:
         chunk_qualities = []
         for chunk in chunked_documents:
             # Simple quality score based on readability
-            flesch_score = textstat.flesch_reading_ease(chunk.content)
+            flesch_score = textstat.flesch_reading_ease(chunk.text)
             # Normalize to 0-1 (higher is better)
             # Flesch: 0-30 = very difficult, 30-50 = difficult, 50-60 = fairly difficult,
             # 60-70 = standard, 70-80 = fairly easy, 80-90 = easy, 90-100 = very easy
@@ -232,11 +232,11 @@ class TestQualityMetricsIntegration:
         for chunk in entity_rich_chunks[:5]:
             # Calculate entity density
             entities = chunk.metadata.get("entities", [])
-            word_count = textstat.lexicon_count(chunk.content, removepunct=True)
+            word_count = textstat.lexicon_count(chunk.text, removepunct=True)
             entity_density = len(entities) / max(word_count, 1)
 
             # Calculate base quality score
-            flesch = textstat.flesch_reading_ease(chunk.content)
+            flesch = textstat.flesch_reading_ease(chunk.text)
             base_quality = min(max(flesch / 100.0, 0), 1)
 
             # Apply entity density adjustment (simple boost)
@@ -294,7 +294,7 @@ class TestQualityMetricsIntegration:
         ]
 
         for chunk in test_chunks:
-            text = chunk.content
+            text = chunk.text
 
             # For English text, apply full metrics
             if "english" in text.lower() or "fox" in text.lower() or "dog" in text.lower():
@@ -338,11 +338,11 @@ class TestQualityMetricsIntegration:
 
         for chunk in chunked_documents:
             # Calculate multiple metrics (typical workflow)
-            _ = textstat.flesch_reading_ease(chunk.content)
-            _ = textstat.flesch_kincaid_grade(chunk.content)
-            _ = textstat.smog_index(chunk.content)
-            _ = textstat.automated_readability_index(chunk.content)
-            _ = textstat.text_standard(chunk.content)
+            _ = textstat.flesch_reading_ease(chunk.text)
+            _ = textstat.flesch_kincaid_grade(chunk.text)
+            _ = textstat.smog_index(chunk.text)
+            _ = textstat.automated_readability_index(chunk.text)
+            _ = textstat.text_standard(chunk.text)
 
         elapsed_time = time.time() - start_time
 
@@ -390,11 +390,11 @@ class TestQualityMetricsIntegration:
 
             for chunk in doc_chunks:
                 # Calculate quality score
-                flesch = textstat.flesch_reading_ease(chunk.content)
+                flesch = textstat.flesch_reading_ease(chunk.text)
                 score = min(max(flesch / 100.0, 0), 1)
 
                 # Weight by chunk length
-                weight = textstat.lexicon_count(chunk.content, removepunct=True)
+                weight = textstat.lexicon_count(chunk.text, removepunct=True)
 
                 chunk_scores.append(score)
                 chunk_weights.append(weight)
@@ -447,31 +447,103 @@ class TestQualityEdgeCases:
         When: Computing quality metrics
         Then: Returns zero/null scores gracefully
         """
+        import datetime
+        from pathlib import Path
+
         import textstat
 
         from src.data_extract.chunk.models import Chunk
+        from src.data_extract.core.models import Metadata
 
         # Create empty chunks
         empty_chunks = [
-            Chunk(content="", metadata={"id": 1}),
-            Chunk(content="   ", metadata={"id": 2}),
-            Chunk(content="\n\n\n", metadata={"id": 3}),
-            Chunk(content="\t\t", metadata={"id": 4}),
+            Chunk(
+                id="empty_1",
+                text="",
+                document_id="doc_empty",
+                position_index=0,
+                token_count=0,
+                word_count=0,
+                quality_score=0.1,
+                metadata=Metadata(
+                    source_file=Path("/test/empty1.txt"),
+                    file_hash='a' * 64,  # Mock hash
+                    processing_timestamp=datetime.datetime.now(),
+                    # file_size=0,
+                    # page_count=1,
+                    tool_version="1.0.0",
+                    config_version="1.0.0",
+                ),
+            ),
+            Chunk(
+                id="empty_2",
+                text="   ",
+                document_id="doc_whitespace",
+                position_index=0,
+                token_count=0,
+                word_count=0,
+                quality_score=0.1,
+                metadata=Metadata(
+                    source_file=Path("/test/empty2.txt"),
+                    file_hash='a' * 64,  # Mock hash
+                    processing_timestamp=datetime.datetime.now(),
+                    # file_size=3,
+                    # page_count=1,
+                    tool_version="1.0.0",
+                    config_version="1.0.0",
+                ),
+            ),
+            Chunk(
+                id="empty_3",
+                text="\n\n\n",
+                document_id="doc_newlines",
+                position_index=0,
+                token_count=0,
+                word_count=0,
+                quality_score=0.1,
+                metadata=Metadata(
+                    source_file=Path("/test/empty3.txt"),
+                    file_hash='a' * 64,  # Mock hash
+                    processing_timestamp=datetime.datetime.now(),
+                    # file_size=3,
+                    # page_count=1,
+                    tool_version="1.0.0",
+                    config_version="1.0.0",
+                ),
+            ),
+            Chunk(
+                id="empty_4",
+                text="\t\t",
+                document_id="doc_tabs",
+                position_index=0,
+                token_count=0,
+                word_count=0,
+                quality_score=0.1,
+                metadata=Metadata(
+                    source_file=Path("/test/empty4.txt"),
+                    file_hash='a' * 64,  # Mock hash
+                    processing_timestamp=datetime.datetime.now(),
+                    # file_size=2,
+                    # page_count=1,
+                    tool_version="1.0.0",
+                    config_version="1.0.0",
+                ),
+            ),
         ]
 
         for chunk in empty_chunks:
             # Should not crash on empty text
             try:
-                flesch = textstat.flesch_reading_ease(chunk.content)
+                flesch = textstat.flesch_reading_ease(chunk.text)
                 # Empty text typically returns 0 or very low score
                 assert (
                     flesch <= 0 or flesch == 206.835
                 ), f"Empty text Flesch score unexpected: {flesch}"
 
-                syllables = textstat.syllable_count(chunk.content)
+                syllables = textstat.syllable_count(chunk.text)
                 assert syllables == 0, "Empty text should have 0 syllables"
 
-                word_count = textstat.lexicon_count(chunk.content)
+                word_count = textstat.lexicon_count(chunk.text)
                 assert word_count == 0, "Empty text should have 0 words"
 
             except ZeroDivisionError:
@@ -487,38 +559,91 @@ class TestQualityEdgeCases:
         When: Computing readability
         Then: Handles edge case appropriately
         """
+        import datetime
+        from pathlib import Path
+
         import textstat
 
         from src.data_extract.chunk.models import Chunk
+        from src.data_extract.core.models import Metadata
 
         # Create single-sentence chunks
         single_sentences = [
-            Chunk(content="This is a simple sentence.", metadata={"id": 1}),
-            Chunk(content="The algorithm processes data efficiently.", metadata={"id": 2}),
             Chunk(
-                content="Complex paradigmatic shifts necessitate reevaluation.", metadata={"id": 3}
+                id="single_1",
+                text="This is a simple sentence.",
+                document_id="doc_simple",
+                position_index=0,
+                token_count=6,
+                word_count=5,
+                quality_score=0.8,
+                metadata=Metadata(
+                    source_file=Path("/test/single1.txt"),
+                    file_hash='a' * 64,  # Mock hash
+                    processing_timestamp=datetime.datetime.now(),
+                    # file_size=26,
+                    # page_count=1,
+                    tool_version="1.0.0",
+                    config_version="1.0.0",
+                ),
+            ),
+            Chunk(
+                id="single_2",
+                text="The algorithm processes data efficiently.",
+                document_id="doc_algo",
+                position_index=0,
+                token_count=8,
+                word_count=5,
+                quality_score=0.85,
+                metadata=Metadata(
+                    source_file=Path("/test/single2.txt"),
+                    file_hash='a' * 64,  # Mock hash
+                    processing_timestamp=datetime.datetime.now(),
+                    # file_size=40,
+                    # page_count=1,
+                    tool_version="1.0.0",
+                    config_version="1.0.0",
+                ),
+            ),
+            Chunk(
+                id="single_3",
+                text="Complex paradigmatic shifts necessitate reevaluation.",
+                document_id="doc_complex",
+                position_index=0,
+                token_count=10,
+                word_count=5,
+                quality_score=0.6,
+                metadata=Metadata(
+                    source_file=Path("/test/single3.txt"),
+                    file_hash='a' * 64,  # Mock hash
+                    processing_timestamp=datetime.datetime.now(),
+                    # file_size=53,
+                    # page_count=1,
+                    tool_version="1.0.0",
+                    config_version="1.0.0",
+                ),
             ),
         ]
 
         for chunk in single_sentences:
             # Should handle single sentences without errors
-            flesch = textstat.flesch_reading_ease(chunk.content)
+            flesch = textstat.flesch_reading_ease(chunk.text)
             assert isinstance(flesch, (int, float)), "Should return numeric score"
 
             # Single sentences should still have valid metrics
-            sentence_count = textstat.sentence_count(chunk.content)
+            sentence_count = textstat.sentence_count(chunk.text)
             assert sentence_count == 1, "Should detect single sentence"
 
             # SMOG might need special handling for single sentences
             try:
-                smog = textstat.smog_index(chunk.content)
+                smog = textstat.smog_index(chunk.text)
                 assert isinstance(smog, (int, float)), "SMOG should be numeric"
             except:
                 # SMOG requires 30+ sentences ideally, so might fail
                 pass
 
             # Grade level should still work
-            grade = textstat.flesch_kincaid_grade(chunk.content)
+            grade = textstat.flesch_kincaid_grade(chunk.text)
             assert -5 <= grade <= 30, f"Grade level out of range: {grade}"
 
     def test_qual011_unicode_text_quality(self, semantic_processing_context: ProcessingContext):
@@ -529,30 +654,102 @@ class TestQualityEdgeCases:
         When: Computing quality metrics
         Then: Handles unicode correctly
         """
+        import datetime
+        from pathlib import Path
+
         import textstat
 
         from src.data_extract.chunk.models import Chunk
+        from src.data_extract.core.models import Metadata
 
         # Create chunks with unicode
         unicode_chunks = [
-            Chunk(content="Café résumé naïve señor", metadata={"id": 1}),
-            Chunk(content="Testing with emojis 😀 and symbols ✓ ✗", metadata={"id": 2}),
-            Chunk(content="Mathematical: α + β = γ, ∑x²", metadata={"id": 3}),
-            Chunk(content="Currency: €100 £50 ¥1000 $25", metadata={"id": 4}),
+            Chunk(
+                id="unicode_1",
+                text="Café résumé naïve señor",
+                document_id="doc_accents",
+                position_index=0,
+                token_count=5,
+                word_count=4,
+                quality_score=0.8,
+                metadata=Metadata(
+                    source_file=Path("/test/unicode1.txt"),
+                    file_hash='a' * 64,  # Mock hash
+                    processing_timestamp=datetime.datetime.now(),
+                    # file_size=25,
+                    # page_count=1,
+                    tool_version="1.0.0",
+                    config_version="1.0.0",
+                ),
+            ),
+            Chunk(
+                id="unicode_2",
+                text="Testing with emojis 😀 and symbols ✓ ✗",
+                document_id="doc_emoji",
+                position_index=0,
+                token_count=9,
+                word_count=7,
+                quality_score=0.7,
+                metadata=Metadata(
+                    source_file=Path("/test/unicode2.txt"),
+                    file_hash='a' * 64,  # Mock hash
+                    processing_timestamp=datetime.datetime.now(),
+                    # file_size=40,
+                    # page_count=1,
+                    tool_version="1.0.0",
+                    config_version="1.0.0",
+                ),
+            ),
+            Chunk(
+                id="unicode_3",
+                text="Mathematical: α + β = γ, ∑x²",
+                document_id="doc_math",
+                position_index=0,
+                token_count=8,
+                word_count=6,
+                quality_score=0.6,
+                metadata=Metadata(
+                    source_file=Path("/test/unicode3.txt"),
+                    file_hash='a' * 64,  # Mock hash
+                    processing_timestamp=datetime.datetime.now(),
+                    # file_size=30,
+                    # page_count=1,
+                    tool_version="1.0.0",
+                    config_version="1.0.0",
+                ),
+            ),
+            Chunk(
+                id="unicode_4",
+                text="Currency: €100 £50 ¥1000 $25",
+                document_id="doc_currency",
+                position_index=0,
+                token_count=7,
+                word_count=5,
+                quality_score=0.75,
+                metadata=Metadata(
+                    source_file=Path("/test/unicode4.txt"),
+                    file_hash='a' * 64,  # Mock hash
+                    processing_timestamp=datetime.datetime.now(),
+                    # file_size=29,
+                    # page_count=1,
+                    tool_version="1.0.0",
+                    config_version="1.0.0",
+                ),
+            ),
         ]
 
         for chunk in unicode_chunks:
             # Should handle unicode without crashing
             try:
-                flesch = textstat.flesch_reading_ease(chunk.content)
+                flesch = textstat.flesch_reading_ease(chunk.text)
                 assert isinstance(flesch, (int, float)), "Should return numeric score"
 
                 # Character/word counting should work
-                char_count = textstat.char_count(chunk.content)
+                char_count = textstat.char_count(chunk.text)
                 assert char_count > 0, "Should count characters"
 
                 # Lexicon count might exclude some unicode
-                word_count = textstat.lexicon_count(chunk.content, removepunct=True)
+                word_count = textstat.lexicon_count(chunk.text, removepunct=True)
                 assert word_count >= 0, "Word count should be non-negative"
 
             except Exception as e:
@@ -569,19 +766,71 @@ class TestQualityEdgeCases:
         When: Processing quality metrics
         Then: Outliers detected and handled
         """
+        import datetime
+        from pathlib import Path
+
         import numpy as np
         import textstat
 
         from src.data_extract.chunk.models import Chunk
+        from src.data_extract.core.models import Metadata
 
         # Add some extreme chunks
         extreme_chunks = [
-            Chunk(content="a " * 500, metadata={"id": 1001}),  # Repetitive
-            Chunk(content="." * 100, metadata={"id": 1002}),  # Only punctuation
             Chunk(
-                content="Antidisestablishmentarianism pneumonoultramicroscopicsilicovolcanoconiosis "
+                id="extreme_1",
+                text="a " * 500,
+                document_id="doc_repetitive",
+                position_index=0,
+                token_count=500,
+                word_count=500,
+                quality_score=0.1,
+                metadata=Metadata(
+                    source_file=Path("/test/extreme1.txt"),
+                    file_hash='a' * 64,  # Mock hash
+                    processing_timestamp=datetime.datetime.now(),
+                    # file_size=1000,
+                    # page_count=1,
+                    tool_version="1.0.0",
+                    config_version="1.0.0",
+                ),
+            ),  # Repetitive
+            Chunk(
+                id="extreme_2",
+                text="." * 100,
+                document_id="doc_punctuation",
+                position_index=0,
+                token_count=25,
+                word_count=0,
+                quality_score=0.05,
+                metadata=Metadata(
+                    source_file=Path("/test/extreme2.txt"),
+                    file_hash='a' * 64,  # Mock hash
+                    processing_timestamp=datetime.datetime.now(),
+                    # file_size=100,
+                    # page_count=1,
+                    tool_version="1.0.0",
+                    config_version="1.0.0",
+                ),
+            ),  # Only punctuation
+            Chunk(
+                id="extreme_3",
+                text="Antidisestablishmentarianism pneumonoultramicroscopicsilicovolcanoconiosis "
                 "hippopotomonstrosesquippedaliophobia",
-                metadata={"id": 1003},
+                document_id="doc_longwords",
+                position_index=0,
+                token_count=25,
+                word_count=3,
+                quality_score=0.2,
+                metadata=Metadata(
+                    source_file=Path("/test/extreme3.txt"),
+                    file_hash='a' * 64,  # Mock hash
+                    processing_timestamp=datetime.datetime.now(),
+                    # file_size=115,
+                    # page_count=1,
+                    tool_version="1.0.0",
+                    config_version="1.0.0",
+                ),
             ),  # Very long words
         ]
 
@@ -591,7 +840,7 @@ class TestQualityEdgeCases:
         quality_scores = []
         for chunk in all_chunks:
             try:
-                flesch = textstat.flesch_reading_ease(chunk.content)
+                flesch = textstat.flesch_reading_ease(chunk.text)
                 quality_scores.append(flesch)
             except:
                 quality_scores.append(0)  # Default for problematic text

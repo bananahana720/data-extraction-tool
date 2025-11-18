@@ -39,7 +39,7 @@ class TestSimilarityIntegration:
         from sklearn.metrics.pairwise import cosine_similarity
 
         # Extract text from chunks
-        texts = [chunk.content for chunk in chunked_documents]
+        texts = [chunk.text for chunk in chunked_documents]
 
         # Create TF-IDF vectors
         vectorizer = TfidfVectorizer(
@@ -90,7 +90,7 @@ class TestSimilarityIntegration:
         test_chunks.append(test_chunks[0])  # Add duplicate
 
         # Extract text and compute vectors
-        texts = [chunk.content for chunk in test_chunks]
+        texts = [chunk.text for chunk in test_chunks]
         vectorizer = TfidfVectorizer(
             max_features=semantic_processing_context.config.get("tfidf", {}).get(
                 "max_features", 1000
@@ -127,7 +127,7 @@ class TestSimilarityIntegration:
         from sklearn.metrics.pairwise import cosine_similarity
 
         # Extract text from chunks
-        texts = [chunk.content for chunk in chunked_documents]
+        texts = [chunk.text for chunk in chunked_documents]
 
         # Create TF-IDF vectors
         vectorizer = TfidfVectorizer(
@@ -169,7 +169,7 @@ class TestSimilarityIntegration:
         from sklearn.metrics.pairwise import cosine_similarity
 
         # Extract text and compute vectors
-        texts = [chunk.content for chunk in chunked_documents]
+        texts = [chunk.text for chunk in chunked_documents]
         vectorizer = TfidfVectorizer(
             max_features=semantic_processing_context.config.get("tfidf", {}).get(
                 "max_features", 1000
@@ -281,7 +281,7 @@ class TestSimilarityIntegration:
         # Extract text with entity boost (simple approach)
         texts = []
         for chunk in test_chunks:
-            text = chunk.content
+            text = chunk.text
             # Boost entity terms by repeating them
             entities = chunk.metadata.get("entities", [])
             for entity in entities:
@@ -299,7 +299,7 @@ class TestSimilarityIntegration:
         similarity_with_entities = cosine_similarity(vectors)
 
         # Compare with non-entity similarity
-        plain_texts = [chunk.content for chunk in test_chunks]
+        plain_texts = [chunk.text for chunk in test_chunks]
         plain_vectors = vectorizer.fit_transform(plain_texts)
         similarity_without_entities = cosine_similarity(plain_vectors)
 
@@ -336,7 +336,7 @@ class TestSimilarityIntegration:
         from sklearn.metrics.pairwise import cosine_similarity
 
         # Extract text from chunks
-        texts = [chunk.content for chunk in chunked_documents]
+        texts = [chunk.text for chunk in chunked_documents]
 
         # Create vectors (not timed)
         vectorizer = TfidfVectorizer(
@@ -440,22 +440,92 @@ class TestSimilarityEdgeCases:
         When: Computing similarity
         Then: Handles gracefully (0 similarity)
         """
+        import datetime
+        from pathlib import Path
+
         import numpy as np
         from sklearn.feature_extraction.text import TfidfVectorizer
         from sklearn.metrics.pairwise import cosine_similarity
 
         # Create chunks that will produce zero/empty vectors
         from src.data_extract.chunk.models import Chunk
+        from src.data_extract.core.models import Metadata
 
         test_chunks = [
-            Chunk(content="", metadata={"id": 1}),  # Empty
-            Chunk(content="   ", metadata={"id": 2}),  # Whitespace
-            Chunk(content="the the the", metadata={"id": 3}),  # Only stopwords
-            Chunk(content="machine learning algorithms", metadata={"id": 4}),  # Normal
+            Chunk(
+                id="chunk_1",
+                text="",
+                document_id="doc_1",
+                position_index=0,
+                token_count=0,
+                word_count=0,
+                quality_score=0.5,
+                metadata=Metadata(
+                    source_file=Path("/test/doc1.txt"),
+                    file_hash="a" * 64,  # Mock hash
+                    processing_timestamp=datetime.datetime.now(),
+                    tool_version="1.0.0",
+                    config_version="1.0.0",
+                ),
+            ),  # Empty
+            Chunk(
+                id="chunk_2",
+                text="   ",
+                document_id="doc_2",
+                position_index=0,
+                token_count=0,
+                word_count=0,
+                quality_score=0.5,
+                metadata=Metadata(
+                    source_file=Path("/test/doc2.txt"),
+                    file_hash="a" * 64,  # Mock hash
+                    processing_timestamp=datetime.datetime.now(),
+                    # file_size=3,
+                    # page_count=1,
+                    tool_version="1.0.0",
+                    config_version="1.0.0",
+                ),
+            ),  # Whitespace
+            Chunk(
+                id="chunk_3",
+                text="the the the",
+                document_id="doc_3",
+                position_index=0,
+                token_count=3,
+                word_count=3,
+                quality_score=0.3,
+                metadata=Metadata(
+                    source_file=Path("/test/doc3.txt"),
+                    file_hash="a" * 64,  # Mock hash
+                    processing_timestamp=datetime.datetime.now(),
+                    # file_size=11,
+                    # page_count=1,
+                    tool_version="1.0.0",
+                    config_version="1.0.0",
+                ),
+            ),  # Only stopwords
+            Chunk(
+                id="chunk_4",
+                text="machine learning algorithms",
+                document_id="doc_4",
+                position_index=0,
+                token_count=7,
+                word_count=3,
+                quality_score=0.9,
+                metadata=Metadata(
+                    source_file=Path("/test/doc4.txt"),
+                    file_hash="a" * 64,  # Mock hash
+                    processing_timestamp=datetime.datetime.now(),
+                    # file_size=27,
+                    # page_count=1,
+                    tool_version="1.0.0",
+                    config_version="1.0.0",
+                ),
+            ),  # Normal
         ]
 
         # Extract texts (handle empty)
-        texts = [chunk.content if chunk.content.strip() else " " for chunk in test_chunks]
+        texts = [chunk.text if chunk.text.strip() else " " for chunk in test_chunks]
 
         # Create TF-IDF vectors
         vectorizer = TfidfVectorizer(max_features=1000, min_df=1, stop_words="english")
@@ -587,7 +657,7 @@ class TestSimilarityEdgeCases:
         from sklearn.metrics.pairwise import cosine_similarity, euclidean_distances
 
         # Extract text from chunks
-        texts = [chunk.content for chunk in chunked_documents]
+        texts = [chunk.text for chunk in chunked_documents]
 
         # Create TF-IDF vectors
         vectorizer = TfidfVectorizer(

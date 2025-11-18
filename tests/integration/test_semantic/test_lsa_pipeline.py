@@ -37,7 +37,7 @@ class TestLSAIntegration:
         from sklearn.feature_extraction.text import TfidfVectorizer
 
         # Extract text from chunks
-        texts = [chunk.content for chunk in chunked_documents]
+        texts = [chunk.text for chunk in chunked_documents]
 
         # Create TF-IDF vectors (high-dimensional)
         vectorizer = TfidfVectorizer(
@@ -166,7 +166,7 @@ class TestLSAIntegration:
         from sklearn.feature_extraction.text import TfidfVectorizer
 
         # Extract text from chunks
-        texts = [chunk.content for chunk in chunked_documents]
+        texts = [chunk.text for chunk in chunked_documents]
 
         # Create sparse TF-IDF matrix
         vectorizer = TfidfVectorizer(max_features=1000, min_df=1, max_df=0.95)
@@ -216,7 +216,7 @@ class TestLSAIntegration:
         from sklearn.feature_extraction.text import TfidfVectorizer
 
         # Extract text from chunks
-        texts = [chunk.content for chunk in chunked_documents]
+        texts = [chunk.text for chunk in chunked_documents]
 
         # Create TF-IDF vectors
         vectorizer = TfidfVectorizer(max_features=500)
@@ -267,7 +267,7 @@ class TestLSAIntegration:
         from sklearn.feature_extraction.text import TfidfVectorizer
 
         # Split documents into batches
-        texts = [chunk.content for chunk in chunked_documents]
+        texts = [chunk.text for chunk in chunked_documents]
         mid = len(texts) // 2
         batch1 = texts[:mid]
         batch2 = texts[mid:]
@@ -325,7 +325,7 @@ class TestLSAIntegration:
         from sklearn.feature_extraction.text import TfidfVectorizer
 
         # Extract text from chunks
-        texts = [chunk.content for chunk in chunked_documents]
+        texts = [chunk.text for chunk in chunked_documents]
 
         # Create TF-IDF vectors
         vectorizer = TfidfVectorizer(max_features=500)
@@ -385,7 +385,7 @@ class TestLSAIntegration:
         from sklearn.feature_extraction.text import TfidfVectorizer
 
         # Extract text from chunks
-        texts = [chunk.content for chunk in chunked_documents]
+        texts = [chunk.text for chunk in chunked_documents]
 
         # Create TF-IDF vectors (not timed)
         vectorizer = TfidfVectorizer(max_features=500)
@@ -429,7 +429,7 @@ class TestLSAIntegration:
         from sklearn.feature_extraction.text import TfidfVectorizer
 
         # Extract text from chunks
-        texts = [chunk.content for chunk in chunked_documents]
+        texts = [chunk.text for chunk in chunked_documents]
 
         # Create TF-IDF vectors
         vectorizer = TfidfVectorizer(max_features=200)
@@ -577,7 +577,7 @@ class TestLSAEdgeCases:
         from sklearn.feature_extraction.text import TfidfVectorizer
 
         # Extract text from chunks
-        texts = [chunk.content for chunk in chunked_documents]
+        texts = [chunk.text for chunk in chunked_documents]
 
         # Create TF-IDF vectors
         vectorizer = TfidfVectorizer(max_features=200)
