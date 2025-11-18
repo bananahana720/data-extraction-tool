@@ -77,6 +77,28 @@ python -m spacy download en_core_web_md
 python -m spacy validate
 ```
 
+### Semantic Dependencies Setup (Required for Epic 4)
+```bash
+# Dependencies are installed via pip install -e ".[dev]"
+# Verify installation with smoke test:
+python scripts/smoke-test-semantic.py
+```
+
+**Semantic Stack:**
+- **scikit-learn** (≥1.3.0) - TF-IDF vectorization, LSA, cosine similarity
+- **joblib** (≥1.3.0) - Model serialization and caching
+- **textstat** (≥0.7.3) - Readability metrics (Flesch, SMOG, etc.)
+
+**Performance Baselines:**
+- TF-IDF fit/transform: <100ms for 1k-word document
+- Full pipeline: <500ms for 10 documents
+- CI validation: Smoke test runs automatically after dependency installation
+
+**Learning Resources:**
+- **TF-IDF/LSA Playbook**: `docs/playbooks/semantic-analysis-intro.ipynb` - Interactive Jupyter notebook for junior developers
+- **Quick Reference**: `docs/playbooks/semantic-analysis-reference.md` - API reference and troubleshooting guide
+- **Test Corpus**: `tests/fixtures/semantic_corpus.py` - Pre-built corpus for examples
+
 ### Testing
 ```bash
 pytest                      # Run all tests
@@ -234,6 +256,10 @@ See `docs/architecture.md` for full details.
 - `docs/tech-spec-epic-*.md` - Epic technical specifications
 - `docs/stories/` - Story-level implementation specs
 - `docs/performance-baselines-epic-*.md` - Performance benchmarks
+
+### Playbooks and Guides
+- `docs/playbooks/semantic-analysis-intro.ipynb` - TF-IDF/LSA interactive tutorial (Epic 4 prep)
+- `docs/playbooks/semantic-analysis-reference.md` - Quick API reference for semantic analysis
 
 ### Configuration
 - `pyproject.toml` - Project configuration and dependencies

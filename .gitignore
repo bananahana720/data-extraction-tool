@@ -48,6 +48,9 @@ output/
 .env
 .env.local
 
+# Semantic model cache (Epic 3.5 - ADR-012)
+.data-extract-cache/
+
 # Build artifacts
 dist/
 build/
