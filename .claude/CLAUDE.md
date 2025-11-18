@@ -81,7 +81,7 @@ python -m spacy validate
 ```bash
 # Dependencies are installed via pip install -e ".[dev]"
 # Verify installation with smoke test:
-python scripts/smoke-test-semantic.py
+python scripts/smoke_test_semantic.py
 ```
 
 **Semantic Stack:**
@@ -200,7 +200,7 @@ data-extract    # Typer-based CLI (full implementation in Epic 5)
 - **Epic 3.5**: Tooling & Automation (11 stories - COMPLETE 2025-11-18)
 
 ### Current Focus
-Epic 3.5 complete - comprehensive automation suite delivered. Ready for Epic 4.
+Epic 3.5 complete - quality sprint finished. **READY FOR EPIC 4**.
 
 **Epic 3.5 Achievements:**
 - 11 automation scripts (P0/P1/P2 priorities) for development acceleration
@@ -209,6 +209,13 @@ Epic 3.5 complete - comprehensive automation suite delivered. Ready for Epic 4.
 - Dependency auditing, test generation, performance validation
 - Documentation and fixture generators
 - 60% token reduction, 75% faster development cycles
+
+**Quality Sprint Complete (2025-11-18):**
+- All Mypy violations resolved (39 total across Stories 3.5-9, 3.5-11)
+- Script pruning: 65% complexity reduction (20 scripts moved to TRASH/)
+- Semantic test infrastructure created (60 test templates for Epic 4)
+- Virtual environment setup complete with all dependencies
+- All 11 Epic 3.5 stories: DONE
 
 **Pipeline Achievements (Epics 2-3):**
 - Semantic-aware chunking with entity preservation

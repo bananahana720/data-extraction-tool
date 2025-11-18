@@ -23,26 +23,31 @@ import sys
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, List, Optional, Set
+from typing import Any, Dict, List, Optional, Set
 
-import structlog
-from rich import box
-from rich.console import Console
-from rich.panel import Panel
-from rich.progress import BarColumn, Progress, SpinnerColumn, TextColumn
-from rich.table import Table
-from rich.text import Text
+import structlog  # type: ignore[import-not-found]
+from rich import box  # type: ignore[import-not-found]
+from rich.console import Console  # type: ignore[import-not-found]
+from rich.panel import Panel  # type: ignore[import-not-found]
+from rich.progress import (  # type: ignore[import-not-found]
+    BarColumn,
+    Progress,
+    SpinnerColumn,
+    TextColumn,
+)
+from rich.table import Table  # type: ignore[import-not-found]
+from rich.text import Text  # type: ignore[import-not-found]
 
 # Try to import optional dependencies
 try:
-    import git
+    import git  # type: ignore[import-not-found]
 
     HAS_GITPYTHON = True
 except ImportError:
     HAS_GITPYTHON = False
 
 try:
-    from safety import check as safety_check
+    from safety import check as safety_check  # type: ignore[import-not-found]
 
     HAS_SAFETY = True
 except ImportError:
@@ -52,8 +57,8 @@ except ImportError:
 HAS_TOMLI = False
 
 try:
-    from bandit.core import config as bandit_config
-    from bandit.core import manager as bandit_manager
+    from bandit.core import config as bandit_config  # type: ignore[import-not-found]
+    from bandit.core import manager as bandit_manager  # type: ignore[import-not-found]
 
     HAS_BANDIT = True
 except ImportError:
@@ -179,7 +184,7 @@ SCAN_EXTENSIONS = {
 }
 
 # Sensitive file patterns
-SENSITIVE_FILES = {
+SENSITIVE_FILES: Dict[str, Dict[str, str | int]] = {
     ".env": {"severity": "HIGH", "permissions": 0o600},
     ".env.*": {"severity": "HIGH", "permissions": 0o600},
     "*.key": {"severity": "CRITICAL", "permissions": 0o600},
@@ -571,7 +576,7 @@ class SecurityScanner:
 
     def scan_permissions(self) -> List[SecurityFinding]:
         """Validate file permissions for sensitive files."""
-        findings = []
+        findings: List[SecurityFinding] = []
 
         if os.name != "posix":
             logger.info("permission_scan_skipped", reason="Not a POSIX system")
@@ -585,13 +590,13 @@ class SecurityScanner:
                 # Get current permissions
                 stat_info = file_path.stat()
                 current_mode = stat_info.st_mode & 0o777
-                expected_mode = info["permissions"]
+                expected_mode = int(info["permissions"])
 
                 if current_mode > expected_mode:  # More permissive than expected
                     findings.append(
                         SecurityFinding(
                             finding_type="permission",
-                            severity=info["severity"],
+                            severity=str(info["severity"]),
                             description="Overly permissive file permissions",
                             file_path=str(file_path.relative_to(self.project_root)),
                             remediation=f"Change permissions to {oct(expected_mode)} (chmod {oct(expected_mode)[2:]} {file_path})",
@@ -623,7 +628,7 @@ class SecurityScanner:
 
     def _scan_with_bandit(self) -> List[SecurityFinding]:
         """Run Bandit security linter."""
-        findings = []
+        findings: List[SecurityFinding] = []
 
         try:
             # Configure Bandit
@@ -701,7 +706,7 @@ class SecurityScanner:
 
     def scan_git_history(self, max_commits: int = 100) -> List[SecurityFinding]:
         """Scan git history for previously committed secrets."""
-        findings = []
+        findings: List[SecurityFinding] = []
 
         if not HAS_GITPYTHON:
             logger.warning("git_history_scan_skipped", reason="GitPython not installed")
@@ -859,7 +864,7 @@ class SecurityScanner:
 
     def _generate_json_report(self, findings_by_severity: Dict) -> str:
         """Generate JSON format security report."""
-        report_data = {
+        report_data: Dict[str, Any] = {
             "metadata": {
                 "generated": datetime.now().isoformat(),
                 "project": self.project_root.name,
@@ -965,7 +970,7 @@ Breakdown by Type:
                 console.print(f"\n[dim]... and {len(self.findings) - 20} more findings[/dim]")
 
 
-def main():
+def main() -> None:
     """Main entry point for security scanner."""
     parser = argparse.ArgumentParser(description="Security Scanner")
     parser.add_argument("--secrets-only", action="store_true", help="Only scan for secrets")

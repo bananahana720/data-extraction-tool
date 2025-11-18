@@ -25,7 +25,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Dict, List
 
-import structlog
+import structlog  # type: ignore[import-not-found]
 
 # Configure structured logging
 logger = structlog.get_logger()

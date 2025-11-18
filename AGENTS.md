@@ -81,7 +81,7 @@ python -m spacy validate
 ```bash
 # Dependencies are installed via pip install -e ".[dev]"
 # Verify installation with smoke test:
-python scripts/smoke-test-semantic.py
+python scripts/smoke_test_semantic.py
 ```
 
 **Semantic Stack:**
