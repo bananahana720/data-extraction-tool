@@ -276,6 +276,21 @@ For questions or issues:
 - Run Story 1.2 (Brownfield Assessment)
 - Implement Story 1.3 (Testing Framework)
 - Build Story 1.4 (Core Pipeline Architecture)
-#   b m m - d a t a - e x t r a c t i o n - t o o l  
- #   d a t a - e x t r a c t i o n - t o o l  
+#   b m m - d a t a - e x t r a c t i o n - t o o l 
  
+ #   d a t a - e x t r a c t i o n - t o o l 
+ 
+ 
+## API Documentation
+
+The Data Extraction Tool provides 1 modules with 1 classes and 0 functions.
+
+### Key Modules:
+
+- `test_module`
+
+See [API Documentation](docs/api/) for complete reference.
+
+## Test Coverage
+
+Coverage data not available. coverage module not installed

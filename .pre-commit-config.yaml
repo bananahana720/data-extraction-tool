@@ -52,3 +52,33 @@ repos:
         pass_filenames: true
         always_run: false
         stages: [commit]
+
+      - id: security-scan
+        name: Security Scanner - Check for secrets
+        entry: python scripts/scan_security.py --secrets-only --pre-commit
+        language: python
+        types: [text]
+        exclude: ^(\.git|\.venv|venv|node_modules|__pycache__|\.pytest_cache|\.mypy_cache|dist|build|\.tox)/
+        pass_filenames: false
+        always_run: true
+        stages: [commit]
+        description: Scans for hardcoded secrets and credentials
+
+      - id: audit-dependencies
+        name: Audit test dependencies
+        entry: python scripts/audit_dependencies.py --output json
+        language: python
+        pass_filenames: false
+        always_run: false
+        stages: [commit]
+        files: ^(tests/.*\.py|pyproject\.toml)$
+        description: Audits test imports against declared dependencies
+
+      - id: generate-tests-reminder
+        name: Reminder to generate tests for new stories
+        entry: echo "Remember to run 'python scripts/generate_tests.py --story <story-file>' for new stories"
+        language: system
+        files: ^docs/stories/.*\.md$
+        pass_filenames: false
+        always_run: false
+        stages: [commit]
