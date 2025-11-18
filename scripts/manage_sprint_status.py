@@ -22,32 +22,32 @@ from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-import structlog
-from rich import box
-from rich.console import Console
-from rich.panel import Panel
-from rich.prompt import Confirm, Prompt
-from rich.table import Table
+import structlog  # type: ignore[import-not-found]
+from rich import box  # type: ignore[import-not-found]
+from rich.console import Console  # type: ignore[import-not-found]
+from rich.panel import Panel  # type: ignore[import-not-found]
+from rich.prompt import Confirm, Prompt  # type: ignore[import-not-found]
+from rich.table import Table  # type: ignore[import-not-found]
 
 # Try to import optional dependencies
 try:
-    from ruamel.yaml import YAML
+    from ruamel.yaml import YAML  # type: ignore[import-not-found]
 
     HAS_RUAMEL = True
 except ImportError:
-    import yaml
+    import yaml  # type: ignore[import-untyped]
 
     HAS_RUAMEL = False
 
 try:
-    import plotly.graph_objects as go
+    import plotly.graph_objects as go  # type: ignore[import-not-found]
 
     HAS_PLOTLY = True
 except ImportError:
     HAS_PLOTLY = False
 
 try:
-    from jinja2 import Template
+    from jinja2 import Template  # type: ignore[import-not-found]
 
     HAS_JINJA2 = True
 except ImportError:
@@ -83,7 +83,7 @@ class SprintStatusManager:
     def __init__(self, status_file: Path = SPRINT_STATUS_FILE):
         """Initialize the sprint status manager."""
         self.status_file = status_file
-        self.data = {}
+        self.data: Dict[str, Any] = {}
         self.yaml = None
 
         # Setup YAML handler with comment preservation
@@ -151,7 +151,7 @@ class SprintStatusManager:
         dev_status = self.data.get("development_status", {})
 
         # Count statuses
-        status_counts = Counter()
+        status_counts: Counter[str] = Counter()
         epic_status = {}
 
         for key, status in dev_status.items():
@@ -399,7 +399,7 @@ Status Breakdown:
         status_counts = Counter(stories.values())
 
         # Epic metrics
-        epic_metrics = defaultdict(lambda: {"total": 0, "done": 0})
+        epic_metrics: Dict[str, Dict[str, int]] = defaultdict(lambda: {"total": 0, "done": 0})
         for key, status in stories.items():
             if "-" in key:
                 epic_num = key.split("-")[0]
@@ -521,10 +521,12 @@ Status Breakdown:
         """
         )
 
-        return template.render(
-            **metrics,
-            chart_html=chart_html,
-            generated_at=datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        return str(
+            template.render(
+                **metrics,
+                chart_html=chart_html,
+                generated_at=datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            )
         )
 
     def _generate_text_report(self, metrics: Dict[str, Any]) -> str:
@@ -557,7 +559,7 @@ Status Breakdown:
             height=400,
         )
 
-        return fig.to_html(include_plotlyjs="cdn", div_id="burndown-chart")
+        return str(fig.to_html(include_plotlyjs="cdn", div_id="burndown-chart"))
 
     def calculate_velocity(self, sprints: int = 3) -> Dict[str, Any]:
         """Calculate team velocity over recent sprints."""
@@ -604,7 +606,8 @@ Status Breakdown:
         if VELOCITY_HISTORY_FILE.exists():
             try:
                 with open(VELOCITY_HISTORY_FILE, "r") as f:
-                    return json.load(f)
+                    data: Dict[str, Any] = json.load(f)
+                    return data
             except Exception as e:
                 logger.warning("failed_to_load_velocity_history", error=str(e))
         return {}
@@ -659,7 +662,7 @@ Recent Sprint Performance:"""
 
         # Import requests here to avoid dependency if not using notifications
         try:
-            import requests
+            import requests  # type: ignore[import-untyped]
         except ImportError:
             logger.warning("requests_not_installed", message="Install requests for notifications")
             return False
@@ -777,7 +780,7 @@ Recent Sprint Performance:"""
             )
 
 
-def main():
+def main() -> None:
     """Main entry point for the sprint status manager."""
     parser = argparse.ArgumentParser(description="Sprint Status Manager")
     parser.add_argument("--status", action="store_true", help="Display current sprint status")

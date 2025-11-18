@@ -56,7 +56,7 @@ jobs:
       - name: Run semantic dependencies smoke test
         run: |
           echo "Validating semantic dependencies (scikit-learn, joblib, textstat)..."
-          python scripts/smoke-test-semantic.py
+          python scripts/smoke_test_semantic.py
           echo "✅ Semantic dependencies validated"
 
       - name: Audit test dependencies
@@ -144,7 +144,7 @@ jobs:
       - name: Run semantic dependencies smoke test
         run: |
           echo "Validating semantic dependencies (scikit-learn, joblib, textstat)..."
-          python scripts/smoke-test-semantic.py
+          python scripts/smoke_test_semantic.py
           echo "✅ Semantic dependencies validated"
 
       - name: Audit test dependencies

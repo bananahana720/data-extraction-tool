@@ -92,6 +92,7 @@ dev = [
     "types-reportlab>=3.0.0",  # Type stubs for mypy (Story 3.5-10)
     "types-openpyxl>=3.0.0",  # Type stubs for mypy (Story 3.5-10)
     "types-toml>=0.10.0",  # Type stubs for toml library (Story 3.5-8)
+    "types-requests>=2.31.0",  # Type stubs for requests library (Story 3.5-11)
     "structlog>=24.0.0",  # Structured logging for automation scripts (Story 3.5-8)
     "toml>=0.10.0",  # TOML parsing for dependency auditor (Story 3.5-8)
     "pandas>=2.0.0,<3.0",  # Story 3.6: CSV parser validation
