@@ -19,8 +19,8 @@ import time
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-import structlog
-import yaml
+import structlog  # type: ignore[import-not-found]
+import yaml  # type: ignore[import-untyped]
 
 # Configure structured logging
 logger = structlog.get_logger()
@@ -59,10 +59,12 @@ class DocumentationGenerator:
         """Load configuration from YAML or JSON file."""
         if config_file.suffix in [".yaml", ".yml"]:
             with open(config_file) as f:
-                return yaml.safe_load(f)
+                result = yaml.safe_load(f)
+                return result if isinstance(result, dict) else {}
         elif config_file.suffix == ".json":
             with open(config_file) as f:
-                return json.load(f)
+                result = json.load(f)
+                return result if isinstance(result, dict) else {}
         else:
             logger.warning("unsupported_config_format", file=str(config_file))
             return {}
@@ -86,7 +88,7 @@ class DocumentationGenerator:
             logger.error("ast_parse_error", file=str(file_path), error=str(e))
             return {}
 
-        module_info = {
+        module_info: Dict[str, Any] = {
             "path": str(file_path.relative_to(self.source_dir)),
             "module_docstring": ast.get_docstring(tree) or "",
             "classes": [],
@@ -112,7 +114,7 @@ class DocumentationGenerator:
 
     def _extract_class_info(self, node: ast.ClassDef) -> Dict[str, Any]:
         """Extract information from a class definition."""
-        class_info = {
+        class_info: Dict[str, Any] = {
             "name": node.name,
             "docstring": ast.get_docstring(node) or "",
             "bases": [self._get_name(base) for base in node.bases],
@@ -139,7 +141,7 @@ class DocumentationGenerator:
         self, node: ast.FunctionDef | ast.AsyncFunctionDef
     ) -> Dict[str, Any]:
         """Extract information from a function definition."""
-        func_info = {
+        func_info: Dict[str, Any] = {
             "name": node.name,
             "docstring": ast.get_docstring(node) or "",
             "async": isinstance(node, ast.AsyncFunctionDef),
@@ -150,7 +152,7 @@ class DocumentationGenerator:
 
         # Extract arguments and type hints
         for arg in node.args.args:
-            arg_info = {"name": arg.arg, "type": None, "default": None}
+            arg_info: Dict[str, Any] = {"name": arg.arg, "type": None, "default": None}
             if arg.annotation:
                 arg_info["type"] = self._get_annotation(arg.annotation)
             func_info["args"].append(arg_info)
@@ -225,7 +227,10 @@ class DocumentationGenerator:
         elif isinstance(node, (ast.List, ast.Tuple)):
             return [self._get_value(e) for e in node.elts]
         elif isinstance(node, ast.Dict):
-            return {self._get_value(k): self._get_value(v) for k, v in zip(node.keys, node.values)}
+            return {
+                self._get_value(k) if k else None: self._get_value(v)
+                for k, v in zip(node.keys, node.values)
+            }
         else:
             return ast.unparse(node)
 
@@ -407,7 +412,7 @@ class DocumentationGenerator:
         logger.info("generating_coverage_report")
 
         try:
-            import coverage
+            import coverage  # type: ignore[import-not-found]
         except ImportError:
             logger.error("coverage_module_not_installed")
             return {"error": "coverage module not installed"}
@@ -458,17 +463,26 @@ class DocumentationGenerator:
             logger.warning("no_coverage_data", file=str(COVERAGE_FILE))
             return {"error": "No coverage data found. Run tests with coverage first."}
 
-    def update_readme_sections(self, sections: List[str]) -> None:
+    def update_readme_sections(
+        self, sections: List[str], readme_path: Optional[Path] = None
+    ) -> None:
         """
         Update specific sections in README.md.
 
         Args:
             sections: List of section names to update (e.g., ["API", "Coverage"])
+            readme_path: Optional path to README.md (defaults to project root)
         """
-        readme_path = PROJECT_ROOT / "README.md"
+        if readme_path is None:
+            readme_path = PROJECT_ROOT / "README.md"
         if not readme_path.exists():
-            logger.error("readme_not_found", path=str(readme_path))
-            return
+            # Try parent directory (for test compatibility)
+            parent_readme = self.source_dir.parent / "README.md"
+            if parent_readme.exists():
+                readme_path = parent_readme
+            else:
+                logger.error("readme_not_found", path=str(readme_path))
+                return
 
         with open(readme_path, "r") as f:
             readme_content = f.read()

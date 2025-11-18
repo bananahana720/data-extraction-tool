@@ -7,7 +7,7 @@ name = "data-extraction-tool"
 version = "0.1.0"
 description = "Enterprise data extraction tool with modular pipeline architecture for document processing"
 readme = "README.md"
-requires-python = ">=3.12"
+requires-python = ">=3.11"
 license = {text = "Proprietary"}
 authors = [
     {name = "Andrew", email = "andrew@example.com"},
@@ -28,6 +28,7 @@ classifiers = [
     "Topic :: Office/Business",
     "Topic :: Text Processing",
     "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
     "Operating System :: OS Independent",
@@ -86,7 +87,13 @@ dev = [
     "psutil>=5.9.0,<6.0",  # Performance monitoring (Story 2.5.1)
     "memory-profiler>=0.61.0,<1.0",  # Line-by-line memory profiling (Story 2.5.1, optional)
     "reportlab>=3.5.0,<5.0",  # PDF fixture generation
+    "coverage>=7.0.0,<8.0",  # Code coverage for generate_docs.py
     "types-PyYAML>=6.0.0",  # Type stubs for mypy
+    "types-reportlab>=3.0.0",  # Type stubs for mypy (Story 3.5-10)
+    "types-openpyxl>=3.0.0",  # Type stubs for mypy (Story 3.5-10)
+    "types-toml>=0.10.0",  # Type stubs for toml library (Story 3.5-8)
+    "structlog>=24.0.0",  # Structured logging for automation scripts (Story 3.5-8)
+    "toml>=0.10.0",  # TOML parsing for dependency auditor (Story 3.5-8)
     "pandas>=2.0.0,<3.0",  # Story 3.6: CSV parser validation
     "csvkit>=2.0.0,<3.0",  # Story 3.6: CLI parser validation
 ]
@@ -133,19 +140,19 @@ markers = [
 
 [tool.black]
 line-length = 100
-target-version = ['py312']
+target-version = ['py311']
 include = '\.pyi?$'
 
 [tool.ruff]
 line-length = 100
-target-version = "py312"
+target-version = "py311"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "N", "W"]
 ignore = ["E501"]  # Line too long (handled by black)
 
 [tool.mypy]
-python_version = "3.12"
+python_version = "3.11"
 warn_return_any = true
 warn_unused_configs = true
 disallow_untyped_defs = true

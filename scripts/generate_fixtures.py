@@ -20,30 +20,30 @@ from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
-import structlog
-import yaml
+import structlog  # type: ignore[import-not-found]
+import yaml  # type: ignore[import-untyped]
 
 # Document generation libraries
 try:
-    from reportlab.lib.pagesizes import letter
-    from reportlab.lib.units import inch
-    from reportlab.pdfgen import canvas
+    from reportlab.lib.pagesizes import letter  # type: ignore[import-untyped]
+    from reportlab.lib.units import inch  # type: ignore[import-untyped]
+    from reportlab.pdfgen import canvas  # type: ignore[import-untyped]
 
     REPORTLAB_AVAILABLE = True
 except ImportError:
     REPORTLAB_AVAILABLE = False
 
 try:
-    from docx import Document
-    from docx.shared import Pt
+    from docx import Document  # type: ignore[import-not-found]
+    from docx.shared import Pt  # type: ignore[import-not-found]
 
     DOCX_AVAILABLE = True
 except ImportError:
     DOCX_AVAILABLE = False
 
 try:
-    from openpyxl import Workbook
-    from openpyxl.styles import Font, PatternFill
+    from openpyxl import Workbook  # type: ignore[import-untyped]
+    from openpyxl.styles import Font, PatternFill  # type: ignore[import-untyped]
 
     OPENPYXL_AVAILABLE = True
 except ImportError:
@@ -180,10 +180,12 @@ class FixtureGenerator:
         """Load configuration from YAML or JSON file."""
         if config_file.suffix in [".yaml", ".yml"]:
             with open(config_file) as f:
-                return yaml.safe_load(f)
+                result = yaml.safe_load(f)
+                return result if isinstance(result, dict) else {}
         elif config_file.suffix == ".json":
             with open(config_file) as f:
-                return json.load(f)
+                result = json.load(f)
+                return result if isinstance(result, dict) else {}
         else:
             logger.warning("unsupported_config_format", file=str(config_file))
             return {}

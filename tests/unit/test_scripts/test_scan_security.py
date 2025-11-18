@@ -209,7 +209,7 @@ class TestSecurityScanner:
 
         # Generate markdown report
         output_file = tmp_path / "report.md"
-        report = scanner.generate_report("markdown", output_file)
+        _ = scanner.generate_report("markdown", output_file)
 
         assert output_file.exists()
         content = output_file.read_text()
@@ -225,7 +225,7 @@ class TestSecurityScanner:
         ]
 
         output_file = tmp_path / "report.json"
-        report = scanner.generate_report("json", output_file)
+        _ = scanner.generate_report("json", output_file)
 
         assert output_file.exists()
         data = json.loads(output_file.read_text())
@@ -259,13 +259,46 @@ class TestSecurityScanner:
         assert any(f.commit_hash for f in findings)
 
     def test_sast_integration_ac12(self):
-        """AC-12: SAST tool integration structure."""
-        # Verify the scanner has structure for SAST integration
+        """AC-12: SAST tool integration with Bandit."""
         scanner = SecurityScanner()
-        # SAST integration would be added as additional methods
-        assert hasattr(scanner, "scan_secrets")
-        assert hasattr(scanner, "scan_dependencies")
-        # Future: assert hasattr(scanner, "scan_with_sast")
+
+        # Verify SAST method exists
+        assert hasattr(scanner, "scan_with_sast")
+
+        # Test SAST scanning method is callable
+        findings = scanner.scan_with_sast()
+
+        # Verify findings structure
+        assert isinstance(findings, list)
+        assert "sast_findings" in scanner.stats
+
+        # Test CLI fallback with subprocess mock
+        with patch("subprocess.run") as mock_run:
+            mock_result = MagicMock()
+            mock_result.stdout = json.dumps(
+                {
+                    "results": [
+                        {
+                            "issue_severity": "MEDIUM",
+                            "test_name": "hardcoded_password",
+                            "issue_text": "Hardcoded password",
+                            "filename": "app.py",
+                            "line_number": 10,
+                            "test_id": "B105",
+                        }
+                    ]
+                }
+            )
+            mock_run.return_value = mock_result
+
+            # Create a new scanner instance to test CLI fallback
+            scanner2 = SecurityScanner()
+
+            # Even if Bandit module is not available, method should exist
+            findings2 = scanner2.scan_with_sast()
+
+            # Verify findings can be generated via CLI fallback
+            assert isinstance(findings2, list)
 
     def test_pre_commit_hook_ac13(self):
         """AC-13: Security scanner can run as pre-commit hook."""

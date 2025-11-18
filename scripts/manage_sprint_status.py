@@ -14,7 +14,9 @@ Usage:
 
 import argparse
 import json
+import os
 import sys
+import time
 from collections import Counter, defaultdict
 from datetime import datetime, timedelta
 from pathlib import Path
@@ -91,7 +93,16 @@ class SprintStatusManager:
             self.yaml.width = 200
             self.yaml.indent(mapping=2, sequence=2, offset=0)
 
-        logger.info("initialized_sprint_manager", status_file=str(status_file))
+        # Load notification configuration from environment variables
+        self.slack_webhook = os.environ.get("SPRINT_SLACK_WEBHOOK")
+        self.teams_webhook = os.environ.get("SPRINT_TEAMS_WEBHOOK")
+        self.notification_enabled = bool(self.slack_webhook or self.teams_webhook)
+
+        logger.info(
+            "initialized_sprint_manager",
+            status_file=str(status_file),
+            notifications_enabled=self.notification_enabled,
+        )
 
     def load_status(self) -> Dict[str, Any]:
         """Load sprint status from YAML file."""
@@ -275,6 +286,14 @@ Status Breakdown:
             old_status=current_status,
             new_status=new_status,
         )
+
+        # Send notification for status change
+        self.send_notification(
+            "Story Status Updated",
+            f"**{story_key}**: {current_status} → {new_status}",
+            "info",
+        )
+
         return True
 
     def interactive_update(self) -> None:
@@ -619,6 +638,143 @@ Recent Sprint Performance:"""
             )
 
         console.print(Panel(panel_content, title="📈 Velocity Tracking", border_style="green"))
+
+    def send_notification(
+        self, title: str, message: str, notification_type: str = "info", retries: int = 3
+    ) -> bool:
+        """
+        Send notification to configured webhooks (Slack/Teams).
+
+        Args:
+            title: Notification title
+            message: Notification message body
+            notification_type: Type of notification (info, warning, error, success)
+            retries: Number of retry attempts for failed requests
+
+        Returns:
+            True if notification sent successfully, False otherwise
+        """
+        if not self.notification_enabled:
+            return False
+
+        # Import requests here to avoid dependency if not using notifications
+        try:
+            import requests
+        except ImportError:
+            logger.warning("requests_not_installed", message="Install requests for notifications")
+            return False
+
+        success = False
+
+        # Color mapping for notification types
+        color_map = {
+            "info": "#36a64f",  # Green
+            "warning": "#ff9900",  # Orange
+            "error": "#ff0000",  # Red
+            "success": "#00ff00",  # Bright green
+        }
+        color = color_map.get(notification_type, "#808080")
+
+        # Send to Slack
+        if self.slack_webhook:
+            slack_payload = {
+                "attachments": [
+                    {
+                        "color": color,
+                        "title": title,
+                        "text": message,
+                        "footer": "Sprint Status Manager",
+                        "ts": int(datetime.now().timestamp()),
+                    }
+                ]
+            }
+
+            for attempt in range(retries):
+                try:
+                    response = requests.post(self.slack_webhook, json=slack_payload, timeout=5)
+                    if response.status_code == 200:
+                        logger.info("slack_notification_sent", title=title)
+                        success = True
+                        break
+                except requests.exceptions.RequestException as e:
+                    logger.warning(
+                        "slack_notification_failed",
+                        attempt=attempt + 1,
+                        error=str(e),
+                    )
+                    if attempt < retries - 1:
+                        time.sleep(2**attempt)  # Exponential backoff
+
+        # Send to Microsoft Teams
+        if self.teams_webhook:
+            teams_payload = {
+                "@type": "MessageCard",
+                "@context": "http://schema.org/extensions",
+                "themeColor": color.replace("#", ""),
+                "summary": title,
+                "sections": [
+                    {
+                        "activityTitle": title,
+                        "text": message,
+                        "markdown": True,
+                    }
+                ],
+            }
+
+            for attempt in range(retries):
+                try:
+                    response = requests.post(self.teams_webhook, json=teams_payload, timeout=5)
+                    if response.status_code == 200:
+                        logger.info("teams_notification_sent", title=title)
+                        success = True
+                        break
+                except requests.exceptions.RequestException as e:
+                    logger.warning(
+                        "teams_notification_failed",
+                        attempt=attempt + 1,
+                        error=str(e),
+                    )
+                    if attempt < retries - 1:
+                        time.sleep(2**attempt)  # Exponential backoff
+
+        return success
+
+    def check_and_notify_blockers(self) -> None:
+        """Check for blockers and send notifications if found."""
+        self.load_status()
+        dev_status = self.data.get("development_status", {})
+        blockers = self._identify_blockers(dev_status)
+
+        if blockers:
+            message = "**Sprint Blockers Detected:**\n"
+            for blocker in blockers:
+                message += f"• {blocker}\n"
+
+            self.send_notification(
+                "⚠️ Sprint Blockers",
+                message,
+                "warning",
+            )
+
+    def notify_sprint_completion(self) -> None:
+        """Send notification when sprint is completed."""
+        self.load_status()
+        dev_status = self.data.get("development_status", {})
+        metrics = self._calculate_metrics(dev_status)
+
+        if metrics["completion_pct"] >= 100:
+            message = (
+                f"**Sprint Completed!**\n\n"
+                f"• Completed Stories: {metrics['completed']}\n"
+                f"• Total Points: {metrics.get('total_points', 'N/A')}\n"
+                f"• Duration: {metrics.get('sprint_days', 14)} days"
+            )
+
+            self.send_notification(
+                "🎉 Sprint Completed",
+                message,
+                "success",
+            )
 
 
 def main():
