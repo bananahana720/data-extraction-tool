@@ -254,10 +254,25 @@ class QualityGateRunner:
         test_files = []
 
         for source in source_files:
-            # Convert src/module/file.py to tests/unit/test_module/test_file.py
+            # Convert src/module/file.py to tests/unit/data_extract/module/test_file.py
             if source.is_relative_to(SRC_DIR):
                 rel_path = source.relative_to(SRC_DIR)
-                test_path = TESTS_DIR / "unit" / f"test_{rel_path.parent}" / f"test_{rel_path.name}"
+                # Check if it's a data_extract module
+                if str(rel_path).startswith("data_extract/"):
+                    # New structure: tests/unit/data_extract/module/test_file.py
+                    module_path = rel_path.relative_to("data_extract")
+                    test_path = (
+                        TESTS_DIR
+                        / "unit"
+                        / "data_extract"
+                        / module_path.parent
+                        / f"test_{module_path.name}"
+                    )
+                else:
+                    # Old structure for brownfield: tests/unit/test_module/test_file.py
+                    test_path = (
+                        TESTS_DIR / "unit" / f"test_{rel_path.parent}" / f"test_{rel_path.name}"
+                    )
                 if test_path.exists():
                     test_files.append(test_path)
 

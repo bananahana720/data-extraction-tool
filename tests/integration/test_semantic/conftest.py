@@ -116,19 +116,32 @@ def chunked_documents(semantic_corpus_documents) -> List[Chunk]:
                 controls = re.findall(r"CTRL-\d+", sentence)
                 entities.extend([{"type": "CONTROL", "value": c} for c in controls])
 
+            # Create metadata object
+            import datetime
+            import hashlib
+            from pathlib import Path
+
+            from src.data_extract.core.models import Metadata
+
+            metadata = Metadata(
+                source_file=Path(f"/docs/doc_{doc_idx}.txt"),
+                file_hash=hashlib.sha256(doc_content.encode()).hexdigest(),
+                processing_timestamp=datetime.datetime.now(),
+                tool_version="1.0.0",
+                config_version="1.0.0",
+                entity_tags=[e["value"] for e in entities],
+            )
+
             chunk = Chunk(
-                content=sentence,
-                chunk_id=f"doc{doc_idx}_chunk{chunk_idx}",
-                sequence_number=chunk_idx,
-                start_index=sum(len(s) for s in sentences[:chunk_idx]),
-                end_index=sum(len(s) for s in sentences[: chunk_idx + 1]),
-                metadata={
-                    "source_doc": f"doc_{doc_idx}",
-                    "total_chunks": len(sentences),
-                    "entities": entities,
-                },
+                id=f"doc{doc_idx}_chunk{chunk_idx}",
+                text=sentence,
+                document_id=f"doc_{doc_idx}",
+                position_index=chunk_idx,
+                token_count=len(sentence) // 4,  # Simple estimation
+                word_count=len(sentence.split()),
                 quality_score=0.85 + (0.1 if entities else 0.0),  # Higher score for entity-rich
-                entities=entities,
+                entities=[],  # Will be populated later if needed
+                metadata=metadata,
             )
             chunks.append(chunk)
 
@@ -157,15 +170,32 @@ def entity_rich_chunks() -> List[Chunk]:
         entities.extend([{"type": "RISK", "value": r} for r in risks])
         entities.extend([{"type": "CONTROL", "value": c} for c in controls])
 
+        # Create metadata object
+        import datetime
+        import hashlib
+        from pathlib import Path
+
+        from src.data_extract.core.models import Metadata
+
+        metadata = Metadata(
+            source_file=Path(f"/docs/entity_doc_{idx}.txt"),
+            file_hash=hashlib.sha256(content.encode()).hexdigest(),
+            processing_timestamp=datetime.datetime.now(),
+            tool_version="1.0.0",
+            config_version="1.0.0",
+            entity_tags=[e["value"] for e in entities],
+        )
+
         chunk = Chunk(
-            content=content,
-            chunk_id=f"entity_chunk_{idx}",
-            sequence_number=idx,
-            start_index=0,
-            end_index=len(content),
-            metadata={"source": "entity_test", "entities": entities},
+            id=f"entity_chunk_{idx}",
+            text=content,
+            document_id=f"entity_doc_{idx}",
+            position_index=idx,
+            token_count=len(content) // 4,
+            word_count=len(content.split()),
             quality_score=0.95,  # High quality for entity-rich content
-            entities=entities,
+            entities=[],  # Will be populated later if needed
+            metadata=metadata,
         )
         chunks.append(chunk)
 

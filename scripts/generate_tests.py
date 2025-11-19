@@ -10,7 +10,7 @@ files directly from story specifications.
 
 Usage:
     python scripts/generate_tests.py --story docs/stories/4-1-tf-idf.md
-    python scripts/generate_tests.py --story docs/stories/4-1-tf-idf.md --output tests/unit/test_semantic/
+    python scripts/generate_tests.py --story docs/stories/4-1-tf-idf.md --output tests/unit/data_extract/semantic/
     python scripts/generate_tests.py --story docs/stories/4-1-tf-idf.md --markers auto
 """
 

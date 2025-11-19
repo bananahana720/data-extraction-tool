@@ -201,3 +201,46 @@ def vector_comparator():
         return np.allclose(v1, v2, rtol=tolerance, atol=tolerance)
 
     return compare
+
+
+# ============================================================================
+# VALIDATION FIXTURES
+# ============================================================================
+
+
+@pytest.fixture
+def semantic_validator():
+    """Provide semantic validator for tests."""
+    from tests.validation.semantic_validator import SemanticValidator
+
+    return SemanticValidator()
+
+
+@pytest.fixture
+def validate_with_gold_standard(tmp_path):
+    """Create validator with temporary gold standard files."""
+    import json
+
+    from tests.validation.semantic_validator import SemanticValidator
+
+    # Create temporary gold standard directory
+    gold_dir = tmp_path / "gold_standard"
+    gold_dir.mkdir()
+
+    # Create sample gold standard files
+    tfidf_gold = {
+        "vocabulary_size": 100,
+        "top_terms": ["risk", "control", "assessment", "audit", "compliance"],
+        "avg_doc_length": 250,
+    }
+    lsa_gold = {
+        "num_topics": 10,
+        "explained_variance": 0.75,
+        "coherence_score": 0.65,
+    }
+
+    (gold_dir / "tfidf_expected.json").write_text(json.dumps(tfidf_gold))
+    (gold_dir / "lsa_expected.json").write_text(json.dumps(lsa_gold))
+
+    validator = SemanticValidator(gold_standard_path=gold_dir)
+    return validator

@@ -90,3 +90,7 @@ uv.lock
 .npl/personas/*/session-*.md
 .npl/.cache/
 tests/outputs/
+
+# Epic 4 Prep Sprint - Test Migration (2025-11-18)
+TRASH/
+.claude*.flag
