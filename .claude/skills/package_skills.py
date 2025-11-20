@@ -56,6 +56,15 @@ def main():
         "infrastructure-orchestration",
         "file-organization",
         "change-tracking",
+        "async-python-patterns",
+        "langchain-architecture",
+        "llm-evaluation",
+        "ml-pipeline-workflow",
+        "prompt-engineering-patterns",
+        "python-packaging",
+        "python-performance-optimization",
+        "python-testing-patterns","rag-implementation",
+        "uv-package-manager"
     ]
 
     print("Packaging Claude Code Skills")
