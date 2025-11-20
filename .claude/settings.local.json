@@ -15,7 +15,8 @@
       "mcp__playwright",
       "SlashCommand(/bmad:bmm:*)",
       "SlashCommand(/commit:*)",
-      "SlashCommand(/bmad:*)"
+      "SlashCommand(/bmad:*)",
+      "Skill(skill-creator)"
     ],
     "deny": [],
     "ask": []
