@@ -13,7 +13,7 @@ from uuid import uuid4
 
 import pytest
 
-from core.models import (
+from src.core.models import (
     ContentBlock,
     ContentType,
     DocumentMetadata,
