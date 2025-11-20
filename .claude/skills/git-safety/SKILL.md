@@ -1,6 +1,6 @@
 ---
 name: git-safety
-description: Enforces mandatory git commit safety protocols and pre-commit hook compliance. Use when: (1) Making git commits, (2) Encountering pre-commit hook failures, (3) Working with git operations, (4) Need to ensure code quality before commits. CRITICAL: This skill prevents bypassing of pre-commit hooks which is an absolute prohibition.
+description: Enforces mandatory git commit safety protocols and pre-commit hook compliance. Use when - (1) Making git commits, (2) Encountering pre-commit hook failures, (3) Working with git operations, (4) Need to ensure code quality before commits. CRITICAL - This skill prevents bypassing of pre-commit hooks which is an absolute prohibition.
 ---
 
 # Git Safety Protocol

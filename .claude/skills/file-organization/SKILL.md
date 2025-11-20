@@ -1,6 +1,6 @@
 ---
 name: file-organization
-description: Enforces proper file placement standards for project organization. Use when: (1) Creating new files, (2) Generating documentation, (3) Adding scripts or tools, (4) Creating artifacts or reports, (5) Any file creation task. Ensures consistent project structure and prevents file sprawl.
+description: Enforces proper file placement standards for project organization. Use when - (1) Creating new files, (2) Generating documentation, (3) Adding scripts or tools, (4) Creating artifacts or reports, (5) Any file creation task. Ensures consistent project structure and prevents file sprawl.
 ---
 
 # File Organization Protocol

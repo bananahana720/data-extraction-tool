@@ -1,6 +1,6 @@
 ---
 name: infrastructure-orchestration
-description: Ensures proper service management using orchestration scripts instead of individual commands. Use when: (1) Starting/stopping services, (2) Docker operations, (3) Deployment tasks, (4) Service dependencies exist, (5) Multiple services need coordination. Prevents service management errors and ensures proper startup/shutdown sequences.
+description: Ensures proper service management using orchestration scripts instead of individual commands. Use when - (1) Starting/stopping services, (2) Docker operations, (3) Deployment tasks, (4) Service dependencies exist, (5) Multiple services need coordination. Prevents service management errors and ensures proper startup/shutdown sequences.
 ---
 
 # Infrastructure Orchestration Protocol

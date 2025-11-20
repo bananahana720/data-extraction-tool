@@ -1,6 +1,6 @@
 ---
 name: change-tracking
-description: Ensures proper change documentation through CHANGELOG updates and commit tracking. Use when: (1) Before making commits, (2) After implementing features, (3) Preparing releases, (4) Documenting bug fixes, (5) Any significant code changes. Maintains project history and facilitates collaboration.
+description: Ensures proper change documentation through CHANGELOG updates and commit tracking. Use when - (1) Before making commits, (2) After implementing features, (3) Preparing releases, (4) Documenting bug fixes, (5) Any significant code changes. Maintains project history and facilitates collaboration.
 ---
 
 # Change Tracking Protocol

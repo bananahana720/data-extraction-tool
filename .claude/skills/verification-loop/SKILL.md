@@ -1,6 +1,6 @@
 ---
 name: verification-loop
-description: Enforces mandatory verification loops for all changes to ensure quality and prevent incomplete work. Use when: (1) After making any code changes, (2) Implementing features or fixes, (3) Before declaring tasks complete, (4) Running test suites, (5) Need to ensure all tests and linters pass. CRITICAL: Never declare complete without ALL verifications passing.
+description: Enforces mandatory verification loops for all changes to ensure quality and prevent incomplete work. Use when - (1) After making any code changes, (2) Implementing features or fixes, (3) Before declaring tasks complete, (4) Running test suites, (5) Need to ensure all tests and linters pass. CRITICAL - Never declare complete without ALL verifications passing.
 ---
 
 # Verification Loop Protocol

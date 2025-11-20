@@ -1,6 +1,6 @@
 ---
 name: modern-tools
-description: Enforces use of modern, performant tools (fd instead of find, rg instead of grep). Use when: (1) File searching operations, (2) Pattern matching in code, (3) Codebase exploration, (4) Performance-critical searches, (5) Any find/grep usage. Automatically substitutes legacy tools with modern equivalents.
+description: Enforces use of modern, performant tools (fd instead of find, rg instead of grep). Use when - (1) File searching operations, (2) Pattern matching in code, (3) Codebase exploration, (4) Performance-critical searches, (5) Any find/grep usage. Automatically substitutes legacy tools with modern equivalents.
 ---
 
 # Modern Tools Protocol

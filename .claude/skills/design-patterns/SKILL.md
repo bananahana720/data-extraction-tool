@@ -1,6 +1,6 @@
 ---
 name: design-patterns
-description: Enforces design consistency by studying and reusing existing patterns before creating new components. Use when: (1) Creating UI components, (2) Implementing new features, (3) Architecture decisions, (4) Writing new modules, (5) Need to maintain consistency. Prevents reinventing the wheel and ensures design coherence.
+description: Enforces design consistency by studying and reusing existing patterns before creating new components. Use when - (1) Creating UI components, (2) Implementing new features, (3) Architecture decisions, (4) Writing new modules, (5) Need to maintain consistency. Prevents reinventing the wheel and ensures design coherence.
 ---
 
 # Design Patterns Protocol

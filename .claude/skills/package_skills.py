@@ -11,7 +11,7 @@ from pathlib import Path
 def package_skill(skill_dir, output_dir):
     """Package a skill directory into a .skill file."""
     skill_name = os.path.basename(skill_dir)
-    skill_file = os.path.join(output_dir, f"{skill_name}.skill")
+    skill_file = os.path.join(output_dir, f"{skill_name}.skill.zip")
 
     print(f"Packaging {skill_name}...")
 
@@ -35,7 +35,9 @@ def package_skill(skill_dir, output_dir):
 
 def main():
     """Package all skills."""
-    skills_dir = Path.home() / ".claude" / "skills"
+    # Use project's .claude/skills directory
+    script_dir = Path(__file__).parent
+    skills_dir = script_dir
     output_dir = skills_dir / "packaged"
 
     # Ensure output directory exists

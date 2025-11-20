@@ -1,6 +1,6 @@
 ---
 name: scope-completeness
-description: Ensures complete scope coverage for batch operations and systematic processing. Use when: (1) Processing multiple files or items, (2) Batch operations like refactoring or updates, (3) Search and replace across codebase, (4) Cleaning up or organizing projects, (5) Need to ensure nothing is missed. Prevents incomplete processing and missing edge cases.
+description: Ensures complete scope coverage for batch operations and systematic processing. Use when - (1) Processing multiple files or items, (2) Batch operations like refactoring or updates, (3) Search and replace across codebase, (4) Cleaning up or organizing projects, (5) Need to ensure nothing is missed. Prevents incomplete processing and missing edge cases.
 ---
 
 # Scope Completeness Protocol

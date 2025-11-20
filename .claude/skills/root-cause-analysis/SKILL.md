@@ -1,6 +1,6 @@
 ---
 name: root-cause-analysis
-description: Systematic root cause analysis using 5 Whys methodology for debugging and fixing issues properly. Use when: (1) Debugging errors or bugs, (2) Fixing test failures, (3) Resolving system issues, (4) Investigating unexpected behavior, (5) Need to find and fix ALL instances of a problem. Prevents symptom-fixing and ensures complete resolution.
+description: Systematic root cause analysis using 5 Whys methodology for debugging and fixing issues properly. Use when - (1) Debugging errors or bugs, (2) Fixing test failures, (3) Resolving system issues, (4) Investigating unexpected behavior, (5) Need to find and fix ALL instances of a problem. Prevents symptom-fixing and ensures complete resolution.
 ---
 
 # Root Cause Analysis Protocol

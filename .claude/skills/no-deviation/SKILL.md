@@ -1,6 +1,6 @@
 ---
 name: no-deviation
-description: TIER 0 CRITICAL - Enforces absolute prohibition against switching to alternative solutions when encountering issues. Use when: (1) Dependency installation fails, (2) Integration errors occur, (3) Configuration issues arise, (4) Library conflicts happen, (5) ANY temptation to switch technologies. This is a NON-NEGOTIABLE safety protocol that prevents deviation from user intent.
+description: TIER 0 CRITICAL - Enforces absolute prohibition against switching to alternative solutions when encountering issues. Use when - (1) Dependency installation fails, (2) Integration errors occur, (3) Configuration issues arise, (4) Library conflicts happen, (5) ANY temptation to switch technologies. This is a NON-NEGOTIABLE safety protocol that prevents deviation from user intent.
 ---
 
 # No Deviation Protocol

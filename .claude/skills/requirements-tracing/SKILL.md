@@ -1,6 +1,6 @@
 ---
 name: requirements-tracing
-description: Ensures complete implementation across all layers (UI → API → Validation → Business Logic → Database). Use when: (1) Implementing new features, (2) Adding form fields or UI components, (3) Creating API endpoints, (4) Database schema changes, (5) Need to verify full-stack completeness. Prevents partial implementations and ensures every UI element has proper backend support.
+description: Ensures complete implementation across all layers (UI → API → Validation → Business Logic → Database). Use when - (1) Implementing new features, (2) Adding form fields or UI components, (3) Creating API endpoints, (4) Database schema changes, (5) Need to verify full-stack completeness. Prevents partial implementations and ensures every UI element has proper backend support.
 ---
 
 # Requirements Tracing Protocol
