@@ -329,6 +329,35 @@ Remaining: Q tasks
 5. **Not Following Established Patterns:** Creating new when patterns exist
    - **Fix:** Search for existing scripts/components/procedures first
 
+### CRITICAL LESSONS (Story 4.1 - 2025-11-20)
+
+**Multi-Agent Orchestration:**
+- Phase-based waves (Context → Implementation → Verification) prevent premature completion
+- Parallel non-destructive, sequential destructive tasks maximize efficiency while maintaining safety
+- 9 agents across 4 iterations caught issues single-agent flow would miss
+
+**Verification Loop Supremacy:**
+- Agent 2A declared "complete" without tests - 39% failure rate discovered in Agent 3A review
+- Iteration 2 fixed infrastructure (92.8% pass) - revealed REAL implementation bugs
+- Iteration 3 fixed accuracy (100% pass) - ngram config wrong for semantic duplicates
+- **Never trust "looks good" - run tests immediately after ANY change**
+
+**Behavioral Testing Value:**
+- Test failures revealed 40% recall (need 80%) - not test bug, implementation bug
+- Root cause: `ngram_range=(1,2)` inappropriate for word reordering in duplicates
+- Fix: unigrams only, disable sublinear_tf, adjust threshold → 100% precision/recall
+- **Behavioral tests catch correctness issues, not just syntax**
+
+**Singleton Test Pollution:**
+- CacheManager singleton caused cross-test pollution
+- Required explicit `_reset()` method for test isolation
+- **All stateful singletons need test reset mechanisms**
+
+**Configuration Must Match Use Case:**
+- Generic TF-IDF defaults (bigrams, sublinear_tf) failed semantic similarity
+- Small test corpora need `min_df=1`, not `min_df=2`
+- **Tune parameters for actual data characteristics, not assumptions**
+
 ### USAGE INSTRUCTIONS
 
 #### When to Reference Specific Protocols

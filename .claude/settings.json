@@ -6,6 +6,7 @@
       "Write",
       "Update",
       "Edit",
+      "Skill",
       "SlashCommand"
     ],
     "deny": [],
