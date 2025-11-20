@@ -161,3 +161,14 @@ explicit_package_bases = true
 exclude = [
     "src/(cli|extractors|processors|formatters|core|pipeline|infrastructure)/",
 ]
+
+# Third-party libraries without type stubs
+[[tool.mypy.overrides]]
+module = [
+    "numpy.*",
+    "scipy.*",
+    "sklearn.*",
+    "joblib.*",
+    "pydantic.*",
+]
+ignore_missing_imports = true
