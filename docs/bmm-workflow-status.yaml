@@ -36,7 +36,7 @@ workflow_status:
   create-design: skipped  # agent: ux-designer
 
   # Phase 2: Solutioning
-  create-architecture: docs/architecture.md  # agent: architect
+  create-architecture: docs/architecture/epic-4-knowledge-curation-architecture.md  # agent: architect - REASSESSED for Epic 4 (2025-11-20)
   test-design: docs/test-design-epic-3.md  # agent: tea
   validate-architecture: skipped  # agent: architect
   solutioning-gate-check: completed  # agent: architect
