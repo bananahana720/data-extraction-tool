@@ -374,7 +374,7 @@ class LsaReductionStage(PipelineStage[SemanticResult, SemanticResult]):
         # Normalize rows to sum to 1
         row_sums = np.sum(shifted, axis=1, keepdims=True)
         row_sums[row_sums == 0] = 1  # Avoid division by zero
-        distributions = shifted / row_sums
+        distributions: np.ndarray = shifted / row_sums
 
         return distributions
 
@@ -525,7 +525,8 @@ class LsaReductionStage(PipelineStage[SemanticResult, SemanticResult]):
             Explained variance ratio array or None if not fitted
         """
         if self._svd is not None and hasattr(self._svd, "explained_variance_ratio_"):
-            return self._svd.explained_variance_ratio_
+            variance: np.ndarray = self._svd.explained_variance_ratio_
+            return variance
         return None
 
     def get_topics(self) -> Optional[Dict[int, List[str]]]:
