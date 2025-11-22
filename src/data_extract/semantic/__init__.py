@@ -22,10 +22,14 @@ __all__ = [
     "TfidfConfig",
     "SemanticResult",
     "CacheManager",
+    "SimilarityAnalysisStage",
+    "SimilarityConfig",
+    "SimilarityResult",
 ]
 
 # Lazy imports to avoid circular dependencies
 if TYPE_CHECKING:
     from .cache import CacheManager
-    from .models import SemanticResult
-    from .tfidf import TfidfConfig, TfidfVectorizationStage
+    from .models import SemanticResult, TfidfConfig
+    from .similarity import SimilarityAnalysisStage, SimilarityConfig, SimilarityResult
+    from .tfidf import TfidfVectorizationStage
